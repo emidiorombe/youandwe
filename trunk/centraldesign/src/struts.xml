@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<include file="struts-default.xml"></include>
+<package name="member" namespace="/member" extends="struts-default">
+		<action name="login">
+			<result>/login.jsp</result>
+		</action>
+		<action name="home" method="login" class="br.com.yaw.struts2.action.LoginAction">
+			<result>/home.jsp</result>
+			<result name="input">/login.jsp</result>
+		</action>
+	</package>
+</struts>
