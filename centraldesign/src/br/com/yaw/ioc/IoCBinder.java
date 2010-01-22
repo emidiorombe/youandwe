@@ -1,7 +1,5 @@
 package br.com.yaw.ioc;
 
-import br.com.yaw.guice.Notifier;
-import br.com.yaw.guice.SendMail;
 import br.com.yaw.repository.UserRepository;
 import br.com.yaw.repository.UserRepositoryDAO;
 import br.com.yaw.service.UserService;
@@ -17,12 +15,10 @@ import com.google.inject.Module;
  */
 public class IoCBinder implements Module{
 	public void configure(Binder binder) {
-        binder.bind(Notifier.class).to(SendMail.class);
-        
         //Service Binders
         binder.bind(UserService.class).to(UserServiceImpl.class);
         
-        //Repository/DAO Binders
+        //Repository Binders
         binder.bind(UserRepository.class).to(UserRepositoryDAO.class);
     }
 

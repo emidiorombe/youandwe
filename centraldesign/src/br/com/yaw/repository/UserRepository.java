@@ -1,6 +1,7 @@
 package br.com.yaw.repository;
 
 import br.com.yaw.entity.User;
+import br.com.yaw.exception.RepositoryException;
 
 /**
  * Persistence operations for users.
@@ -16,4 +17,6 @@ public interface UserRepository {
 	 * @return
 	 */
 	User getUserByLoginAndPassword(String username, String password);
+
+	void addUser(User user) throws RepositoryException;
 }
