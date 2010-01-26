@@ -21,7 +21,7 @@ public class BaseDAO<Entity, Id extends Serializable> {
 	private Class<Entity> getEntity(){
 		if(entity == null) {
 			ParameterizedType type = (ParameterizedType) getClass().getGenericSuperclass();
-			entity = (Class<Entity>) type.getActualTypeArguments()[1];
+			entity = (Class<Entity>) type.getActualTypeArguments()[0];
 		}
 		
 		return entity;

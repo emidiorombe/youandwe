@@ -1,5 +1,7 @@
 package br.com.yaw.repository;
 
+import java.util.List;
+
 import br.com.yaw.entity.User;
 import br.com.yaw.exception.RepositoryException;
 
@@ -19,4 +21,6 @@ public interface UserRepository {
 	User getUserByLoginAndPassword(String username, String password);
 
 	void addUser(User user) throws RepositoryException;
+	
+	List<User> getAll() throws RepositoryException;
 }

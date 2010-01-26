@@ -1,8 +1,11 @@
 package br.com.yaw.service;
 
 
+import java.util.List;
+
 import br.com.yaw.entity.User;
 import br.com.yaw.exception.RepositoryException;
+import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.repository.UserRepository;
 
@@ -24,20 +27,31 @@ public class UserServiceImpl implements UserService {
 	 * @see br.com.yaw.service.UserService#addUser(br.com.yaw.entity.User)
 	 */
 	@Override
-	public void addUser(User user) {
+	public void addUser(User user) throws ServiceException {
 		try {
 			userRepository = ServiceFactory.getService(UserRepository.class);
 			userRepository.addUser(user);
 		} catch (RepositoryException e) {
-			// TODO Tratamento de erros apropriado dessa vez, por favor.
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+			//TODO log this
+			throw new ServiceException(e);
 		}
 		
 	}
-	
-	
-	
-	
+
+	/* (non-Javadoc)
+	 * @see br.com.yaw.service.UserService#getAll()
+	 */
+	@Override
+	public List<User> getAll() throws ServiceException {
+		List<User> users = null;
+		try {
+			userRepository = ServiceFactory.getService(UserRepository.class);
+			users = userRepository.getAll();
+		} catch (RepositoryException re) {
+			//TODO log this
+			throw new ServiceException(re);
+		}
+		return users;
+	}
 
 }
