@@ -29,6 +29,7 @@ public class User {
 	
 	private String userType;
 	
+	private Portfolio portfolio;
 	
 
 	/**
@@ -114,8 +115,19 @@ public class User {
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
-	
-	
-	
+
+	/**
+	 * @return the portfolio
+	 */
+	public Portfolio getPortfolio() {
+		return portfolio;
+	}
+
+	/**
+	 * @param portfolio the portfolio to set
+	 */
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
+	}
 	
 }

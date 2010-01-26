@@ -1,6 +1,9 @@
 package br.com.yaw.service;
 
+import java.util.List;
+
 import br.com.yaw.entity.User;
+import br.com.yaw.exception.ServiceException;
 
 /**
  * Interface that handle the services for users.
@@ -11,7 +14,9 @@ public interface UserService {
 	
 	boolean authenticate(String username, String password);
 	
-	void addUser(User user);
+	void addUser(User user) throws ServiceException;
+	
+	List<User> getAll() throws ServiceException;
 	
 	
 }

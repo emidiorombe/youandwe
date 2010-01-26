@@ -21,7 +21,7 @@ public class LoginAction extends ActionSupport {
 			user.setName(username);
 			user.setPassword(password);
 			user.setContactEmail("email@yaw.com.br");
-			userService.addUser(user);
+			//userService.addUser(user);
 			
 			addActionMessage("Login com sucesso!");
 			return SUCCESS;

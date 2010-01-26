@@ -144,7 +144,7 @@ public class DatanucleusCRUDUtils {
 	public static List getAll(String entityName) throws RepositoryException {
 		EntityManager em = DatanucleusTransactionUtils.getEntityManager();
 		try {
-			String hql = "from " + entityName + " x";
+			String hql = "select x from " + entityName + " x";
 			Query query = em.createQuery(hql);
 			List retorno = query.getResultList();
 			return retorno;
