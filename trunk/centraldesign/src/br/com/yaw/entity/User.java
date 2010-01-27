@@ -1,9 +1,13 @@
 package br.com.yaw.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -21,17 +25,51 @@ public class User {
 	
 	private String name;
 	
-	private String username;
-	
 	private String password;
 	
 	private String contactEmail;
 	
-	private String userType;
+	private String description;
+	
+	private String url;
 	
 	private Portfolio portfolio;
 	
+	private Integer perfil;
+	
+	@ManyToOne
+	private List<JobTag> jobTags;
+	
+	public User() {}
+	
+	
+	
+	public User(String name, String password, String contactEmail, String description,
+			String url, Integer perfil) {
+		super();
+		this.name = name;
+		this.password = password;
+		this.contactEmail = contactEmail;
+		this.description = description;
+		this.url = url;
+		this.perfil = perfil;
+	}
 
+	/**
+	 * Add tags to the user 
+	 * @param tags
+	 */
+	public void addTags(String tags) {
+		if(jobTags == null) {
+			jobTags = new ArrayList<JobTag>();
+		}
+		
+		for(String tag : tags.split(" ")) {
+			jobTags.add(new JobTag(tag));
+		}
+	}
+
+	
 	/**
 	 * @return the id
 	 */
@@ -58,20 +96,6 @@ public class User {
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @return the username
-	 */
-	public String getUsername() {
-		return username;
-	}
-
-	/**
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	/**
@@ -103,20 +127,6 @@ public class User {
 	}
 
 	/**
-	 * @return the userType
-	 */
-	public String getUserType() {
-		return userType;
-	}
-
-	/**
-	 * @param userType the userType to set
-	 */
-	public void setUserType(String userType) {
-		this.userType = userType;
-	}
-
-	/**
 	 * @return the portfolio
 	 */
 	public Portfolio getPortfolio() {
@@ -129,5 +139,73 @@ public class User {
 	public void setPortfolio(Portfolio portfolio) {
 		this.portfolio = portfolio;
 	}
+
+	/**
+	 * @return the perfil
+	 */
+	public Integer getPerfil() {
+		return perfil;
+	}
+
+	/**
+	 * @param perfil the perfil to set
+	 */
+	public void setPerfil(Integer perfil) {
+		this.perfil = perfil;
+	}
+
+
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+
+
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+
+
+	/**
+	 * @param url the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	/**
+	 * @return the jobTags
+	 */
+	public List<JobTag> getJobTags() {
+		return jobTags;
+	}
+
+
+
+	/**
+	 * @param jobTags the jobTags to set
+	 */
+	public void setJobTags(List<JobTag> jobTags) {
+		this.jobTags = jobTags;
+	}
+	
+	
 	
 }
