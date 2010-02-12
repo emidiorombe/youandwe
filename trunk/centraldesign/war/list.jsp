@@ -10,8 +10,11 @@
 <body>
 <s:actionerror />
 <h1>Listagem de Portfólios</h1>
-<s:iterator value="all">
-    <s:property value="name"/> is the <s:property value="username"/><br>
+<s:iterator value="all" var="user">
+    <s:property value="name"/>
+    <s:iterator value="jobTags">
+    	<s:property value="tag"/>
+    </s:iterator><br>
 </s:iterator>
 </body>
 </html>

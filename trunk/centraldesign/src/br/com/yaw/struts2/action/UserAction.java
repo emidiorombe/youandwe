@@ -1,6 +1,13 @@
 package br.com.yaw.struts2.action;
 
+import java.util.Map;
+
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+
 import br.com.yaw.entity.User;
+import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.service.UserService;
 import br.com.yaw.util.UserUtilities;
@@ -38,11 +45,29 @@ private UserService userService;
 		return INPUT;
 	}
 	
-	public void addUser() {
+	public String addUser() {
 		User user = new User(name, UserUtilities.generatePassword(), mail, desc, url, 1);
 		//user.setPortfolio(new Portfolio());
 		user.addTags(tags);
-		userService = ServiceFactory.getService(UserService.class);
+		try {
+			userService = ServiceFactory.getService(UserService.class);
+		
+			userService.addUser(user);
+			addActionMessage("Inclusão com sucesso!");
+			return SUCCESS;
+		} catch (ServiceException e) {
+			addActionError("Erro ao inserir usuário." + e.getMessage());
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
+	
+	public String upload() {
+		BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+		Map<String, BlobKey> blobs = blobstoreService.getUploadedBlobs(request);
+		BlobKey bKey = blobs.get("photoUrl");
+		System.out.println(bKey);
+		return SUCCESS;
 	}
 
 	/**
