@@ -9,12 +9,15 @@
 </head>
 <body>
 <s:actionerror />
+<s:actionmessage/>
 <h1>Adicionar Usuario</h1>
 <s:form action="add" method="post">
 	<s:textfield name="name" label="Name"></s:textfield>
-	<s:textfield name="username" label="UserName"></s:textfield>
-	<s:textfield name="password" label="Password"></s:textfield>
-	<s:submit name="login" value="login"></s:submit>
+	<s:textfield name="desc" label="Description"></s:textfield>
+	<s:textfield name="mail" label="E-mail"></s:textfield>
+	<s:textfield name="url" label="Site"></s:textfield>
+	<s:textfield name="tags" label="Tags"></s:textfield>
+	<s:submit name="Salvar" value="Salvar"></s:submit>
 </s:form>
 </body>
 </html>

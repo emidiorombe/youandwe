@@ -3,7 +3,11 @@ package br.com.yaw.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.FetchGroup;
+import javax.jdo.annotations.Persistent;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,7 +41,7 @@ public class User {
 	
 	private Integer perfil;
 	
-	@ManyToOne
+	@Persistent
 	private List<JobTag> jobTags;
 	
 	public User() {}

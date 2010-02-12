@@ -37,9 +37,11 @@ public class TransactionFilter implements javax.servlet.Filter{
 			isTransactionComplete = true;
 		}catch(ServletException se) {
 			//log.error(":::::: Excecao no filtro de transacoes do HBM - ServletException\n" + se.getMessage());
+			se.printStackTrace();
 			
 		}catch(IOException ioe) {
 			//log.error(":::::: Excecao no filtro de transacoes do HBM - IOException" + ioe.getMessage());
+			System.out.println(ioe.getMessage());
 		}finally {
 			EntityTransaction tx = DatanucleusTransactionUtils.getEntityManager().getTransaction(); 
 			if(tx.isActive()) {
