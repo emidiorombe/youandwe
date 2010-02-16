@@ -1,14 +1,11 @@
 package br.com.yaw.servlet;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,12 +32,6 @@ public class BlobstoreServlet extends HttpServlet{
 			response.sendRedirect("blobstore-servlet?action=getPhoto&blob-key="+bKey.getKeyString());
 		}else if("getPhoto".equals(action)) {
 			BlobKey blobKey = new BlobKey(request.getParameter("blob-key"));
-			
-			ImagesService imgService = ImagesServiceFactory.getImagesService();
-			Image oldImage = ImagesServiceFactory.makeImageFromBlob(blobKey);
-			Transform resize = ImagesServiceFactory.makeResize(340, 226);
-			
-			Image imgNew = imgService.applyTransform(resize, oldImage);
 			
 			blobstoreService.serve(blobKey, response);
 		}else if("resize".equals(action)) {
