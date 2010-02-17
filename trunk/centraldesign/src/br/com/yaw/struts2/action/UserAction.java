@@ -18,6 +18,7 @@ import br.com.yaw.util.UserUtilities;
  *
  */
 public class UserAction extends BaseAction {
+	private long 	id;
 	private String photoUrl;
 	private String name;
 	private String desc;
@@ -25,6 +26,7 @@ public class UserAction extends BaseAction {
 	private String url;
 	private String tags;
 	private String password;
+	private User   user;
 	
 private UserService userService;
 	
@@ -47,7 +49,6 @@ private UserService userService;
 	
 	public String addUser() {
 		User user = new User(name, UserUtilities.generatePassword(), mail, desc, url, 1);
-		//user.setPortfolio(new Portfolio());
 		user.addTags(tags);
 		try {
 			userService = ServiceFactory.getService(UserService.class);
@@ -58,6 +59,57 @@ private UserService userService;
 		} catch (ServiceException e) {
 			addActionError("Erro ao inserir usuário." + e.getMessage());
 			e.printStackTrace();
+			return ERROR;
+		}
+	}
+	
+	public String updateUser() {
+		try {
+			userService = ServiceFactory.getService(UserService.class);
+		
+			User user2 = userService.getUserById(id);
+			user2.setContactEmail(mail);
+			user2.setDescription(desc);
+			user2.setName(name);
+			user2.setUrl(url);
+			user2.getJobTags().clear();
+			user2.addTags(tags);
+			
+			userService.addUser(user2);
+			
+			return SUCCESS;
+		} catch (ServiceException e) {
+			addActionError("Erro ao inserir usuário." + e.getMessage());
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
+	
+	public String removeUser() {
+		try {
+			userService = ServiceFactory.getService(UserService.class);
+		
+			User user2 = userService.getUserById(id);
+			
+			userService.removeUser(user2);
+			
+			return SUCCESS;
+		} catch (ServiceException e) {
+			addActionError("Erro ao inserir usuário." + e.getMessage());
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
+	
+	
+	public String editUser() {
+		try{
+			userService = ServiceFactory.getService(UserService.class);
+			
+			user = userService.getUserById(id);
+			return SUCCESS;
+		}catch (ServiceException se) {
+			addActionError("Erro ao recuperar usuário.");
 			return ERROR;
 		}
 	}
@@ -167,6 +219,33 @@ private UserService userService;
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(User user) {
+		this.user = user;
+	}
 	
 }

@@ -17,6 +17,9 @@ public interface UserService {
 	void addUser(User user) throws ServiceException;
 	
 	List<User> getAll() throws ServiceException;
-	
-	
+
+	User getUserById(long id) throws ServiceException;
+
+	void removeUser(User user2) throws ServiceException;
+
 }

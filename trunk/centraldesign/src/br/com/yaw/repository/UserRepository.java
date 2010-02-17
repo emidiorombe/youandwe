@@ -23,4 +23,8 @@ public interface UserRepository {
 	void addUser(User user) throws RepositoryException;
 	
 	List<User> getAll() throws RepositoryException;
+
+	User getUserById(long id) throws RepositoryException;
+
+	void removeUser(User user2) throws RepositoryException;
 }
