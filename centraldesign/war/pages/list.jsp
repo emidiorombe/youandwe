@@ -11,10 +11,17 @@
 <s:actionerror />
 <h1>Listagem de Portfólios</h1>
 <s:iterator value="all" var="user">
-    <s:property value="name"/>
+	<s:url id="url" value="/struts/editUser">
+		<s:param name="id" value="%{key.id}"></s:param>
+	</s:url>
+    <a href="<s:property value="#url"/>"><s:property value="name"/></a>
     <s:iterator value="jobTags">
     	<s:property value="tag"/>
-    </s:iterator><br>
+    </s:iterator>
+    <s:url id="urlDel" value="/struts/remove">
+		<s:param name="id" value="%{key.id}"></s:param>
+	</s:url>
+	<a href="<s:property value="#urlDel"/>">Excluir</a><br>
 </s:iterator>
 </body>
 </html>

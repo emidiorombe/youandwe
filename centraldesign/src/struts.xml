@@ -28,6 +28,25 @@
 			<result name="error">/pages/addUser.jsp</result>
 		</action>
 		
+		<action name="editUser" method="editUser" class="br.com.yaw.struts2.action.UserAction">
+			<result>/pages/editUser.jsp</result>
+			<result name="error">/pages/editUser.jsp</result>
+		</action>
+		
+		<action name="update" method="updateUser" class="br.com.yaw.struts2.action.UserAction">
+			<result name="success" type="redirect">
+				/struts/list
+			</result>
+			<result name="error">/pages/editUser.jsp</result>
+		</action>
+		
+		<action name="remove" method="removeUser" class="br.com.yaw.struts2.action.UserAction">
+			<result name="success" type="redirect">
+				/struts/list
+			</result>
+			<result name="error">/pages/list.jsp</result>
+		</action>
+		
 		<action name="upFile">
 			<result>/pages/upload.jsp</result>
 		</action>

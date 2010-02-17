@@ -54,4 +54,38 @@ public class UserServiceImpl implements UserService {
 		return users;
 	}
 
+	/* (non-Javadoc)
+	 * @see br.com.yaw.service.UserService#getUserById(long)
+	 */
+	@Override
+	public User getUserById(long id) throws ServiceException {
+		User user = null;
+		try {
+			userRepository = ServiceFactory.getService(UserRepository.class);
+			user = userRepository.getUserById(id);
+		} catch (RepositoryException re) {
+			// TODO: log this
+			throw new ServiceException(re);
+		}
+		return user;
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see br.com.yaw.service.UserService#removeUser(br.com.yaw.entity.User)
+	 */
+	@Override
+	public void removeUser(User user2) throws ServiceException {
+		try {
+			userRepository = ServiceFactory.getService(UserRepository.class);
+			userRepository.removeUser(user2);
+		} catch (RepositoryException e) {
+			//TODO log this
+			throw new ServiceException(e);
+		}
+		
+	}
+	
+	
+	
 }
