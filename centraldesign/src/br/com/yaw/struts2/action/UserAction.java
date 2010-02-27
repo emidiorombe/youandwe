@@ -54,7 +54,6 @@ private UserService userService;
 			userService = ServiceFactory.getService(UserService.class);
 		
 			userService.addUser(user);
-			addActionMessage("Inclusão com sucesso!");
 			return SUCCESS;
 		} catch (ServiceException e) {
 			addActionError("Erro ao inserir usuário." + e.getMessage());
