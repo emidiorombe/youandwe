@@ -162,7 +162,7 @@ public class User {
 	public void setKey(Key key) {
 		this.key = key;
 	}
-
+ 
 	public void setTags(String tags) {
 		this.tags = tags;
 	}

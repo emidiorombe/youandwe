@@ -21,7 +21,7 @@ public class GeneralContextListener implements ServletContextListener {
 	 */
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
-		
+		System.out.println("Inicializou o CentralDesign");
 		
 	}
 	
