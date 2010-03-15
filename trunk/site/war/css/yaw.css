@@ -99,6 +99,7 @@ table.stats td.hedBlue
 
 #destaques #inner #imagem5 {padding: 5px 0;}
 #destaques #inner #textos5 {padding: 5px 130px; width: 380px;}
+#destaques #inner p {font-family: Arial; font-size: 14px; line-height: 20px; }
 
 #agendaTurmas, #agendaMiniCursos {position: absolute; top:0; width: 370px; height:300px; left:590px; background-image: url(../images/fundo_verde.png); background-repeat:no-repeat;}
 #agendaTurmas div, #agendaTurmas2 div, #agendaMiniCursos div { margin-top: 5px; padding: 4px 10px; margin-right: 10px; }
