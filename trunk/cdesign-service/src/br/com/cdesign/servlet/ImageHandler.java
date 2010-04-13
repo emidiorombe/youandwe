@@ -32,10 +32,12 @@ public class ImageHandler extends HttpServlet{
 			throws ServletException, IOException {
 		String action = req.getParameter("action");
 		if("entry".equals(action)){
+			System.out.println(req.getParameter("file_name"));
 			InputStream is = req.getInputStream();
+			System.out.println(is.available());
 			byte bts[] = new byte[is.available()];
 			is.read(bts);
-			
+			/*
 			ImagesService imagesService = ImagesServiceFactory.getImagesService();
 			Image imgDefault = ImagesServiceFactory.makeImage(bts);
 			
@@ -46,7 +48,7 @@ public class ImageHandler extends HttpServlet{
 			
 			Image imgPeq = imagesService.applyTransform(peqT, imgDefault);
 			Image imgMed = imagesService.applyTransform(medT, imgDefault);
-			Image imgGrd = imagesService.applyTransform(grdT, imgDefault);
+			Image imgGrd = imagesService.applyTransform(grdT, imgDefault);*/
 			
 		
 		}
