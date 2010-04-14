@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from cdesign.app.views import v_general;
 from cdesign.app.views import v_user
+from cdesign import general_conf
 
 from django.contrib import admin
 admin.autodiscover()
@@ -16,6 +17,13 @@ urlpatterns += patterns('',
     ('^user/profile/(\d+)/$', v_user.view_profile),
     ('^user/portfolio/(\d+)/$', v_user.view_portfolio),
 )
+
+#Infrastructure services
+urlpatterns += patterns('',
+   (r'^infra/photo/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': general_conf.TMP_PHOTO_DIR}),
+)
+
 
 
 #Admin Mapping
