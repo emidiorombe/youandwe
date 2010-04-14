@@ -1,12 +1,10 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 
-import urllib
-import urllib2
-
 from cdesign.app.forms import NewUserForm, UploadFileForm
 from cdesign.app.models import User
-from cdesign.general_conf import *
+from cdesign import general_conf
+from cdesign.app.utils import image_utilities
 
 
 def add_user(request):
@@ -22,33 +20,26 @@ def add_user(request):
     
 def view_portfolio(request, id_user):
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            handle_upload(request.FILES, id_user)
-            return HttpResponseRedirect('/user/profile/%s' %id_user)
-    else:
-        form = UploadFileForm()
-    return render_to_response('user_portfolio.html', {'form': form, 'id_user': id_user}) 
+        handle_upload(request.FILES, id_user)
+        return HttpResponseRedirect('/user/profile/%s' %id_user)
+    return render_to_response('user_portfolio.html', {'id_user': id_user}) 
 
 def view_profile(request, id_user):
     user = User.objects.get(pk=id_user)
     return render_to_response('user_profile.html', locals())
 
 def handle_upload(files, id_user):
-    names = save_on_disk(files)
-    url = URL_IMG_HANDLER_APP + "?action=entry"
-    data = urllib.urlencode(names)
-    req = urllib2.Request(url, data)
-    urllib2.urlopen(req)
+    names = save_original(files, id_user)
+    image_utilities.resize_image(names)
     
-def save_on_disk(files):
-    file = files['file']
-    destination = open(TMP_PHOTO_DIR.__add__(file._name), 'wb+')
-    names = {'file_name': file._name}
-    for chunk in file.chunks():
-        destination.write(chunk)
-    destination.close()
-    
+def save_original(files, id_user):
+    names = []
+    for k in files:
+        v = files[k]
+        file_name = id_user + '_' + v._name 
+        dest = open(general_conf.TMP_PHOTO_DIR.__add__(file_name), 'wb+')
+        for chunk in v.chunks():
+            dest.write(chunk)
+        dest.close()
+        names.append(file_name)
     return names
-   
-    
