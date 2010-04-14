@@ -35,10 +35,20 @@ def view_profile(request, id_user):
     return render_to_response('user_profile.html', locals())
 
 def handle_upload(files, id_user):
+    names = save_on_disk(files)
     url = URL_IMG_HANDLER_APP + "?action=entry"
-    values = {'file':files['file']}
-    data = urllib.urlencode(values)
+    data = urllib.urlencode(names)
     req = urllib2.Request(url, data)
     urllib2.urlopen(req)
+    
+def save_on_disk(files):
+    file = files['file']
+    destination = open(TMP_PHOTO_DIR.__add__(file._name), 'wb+')
+    names = {'file_name': file._name}
+    for chunk in file.chunks():
+        destination.write(chunk)
+    destination.close()
+    
+    return names
    
     
