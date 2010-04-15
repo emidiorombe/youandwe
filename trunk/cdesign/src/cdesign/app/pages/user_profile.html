@@ -4,5 +4,8 @@
 </head>
 <body>
      <h1>{{user.name}}</h1>
+     {%for img in user_images%}
+     	<img src="http://localhost:8000/infra/photo/PEQ_{{img}}"><br/>
+     {%endfor%}
 </body>
 </html>

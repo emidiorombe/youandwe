@@ -9,3 +9,12 @@ class User(models.Model):
     
     def __unicode__(self):
         return self.name
+    
+class PortfolioEntry(models.Model):
+    img = models.CharField(max_length=200)
+    user = models.ForeignKey(User)
+    
+    def __unicode__(self):
+        return self.img
+
+    

@@ -1,8 +1,8 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 
-from cdesign.app.forms import NewUserForm, UploadFileForm
-from cdesign.app.models import User
+from cdesign.app.forms import NewUserForm
+from cdesign.app.models import User, PortfolioEntry
 from cdesign import general_conf
 from cdesign.app.utils import image_utilities
 
@@ -20,17 +20,20 @@ def add_user(request):
     
 def view_portfolio(request, id_user):
     if request.method == 'POST':
-        handle_upload(request.FILES, id_user)
+        names = handle_upload(request.FILES, id_user)
+        save_images(names, id_user)
         return HttpResponseRedirect('/user/profile/%s' %id_user)
     return render_to_response('user_portfolio.html', {'id_user': id_user}) 
 
 def view_profile(request, id_user):
     user = User.objects.get(pk=id_user)
+    user_images = PortfolioEntry.objects.all()
     return render_to_response('user_profile.html', locals())
 
 def handle_upload(files, id_user):
     names = save_original(files, id_user)
     image_utilities.resize_image(names)
+    return names
     
 def save_original(files, id_user):
     names = []
@@ -43,3 +46,11 @@ def save_original(files, id_user):
         dest.close()
         names.append(file_name)
     return names
+
+def save_images(names, id_user):
+    user = User.objects.get(pk=id_user)
+    for name in names:
+        pEntry = PortfolioEntry()
+        pEntry.user = user
+        pEntry.img = name
+        pEntry.save() 
