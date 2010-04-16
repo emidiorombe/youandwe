@@ -1,9 +1,23 @@
+{%load i18n %}
+{% get_available_languages as LANGUAGES %}
 <html>
 <head>
-    <title>Central Design</title>
+	<title>Central Design</title>
 </head>
 <body>
-    <h1>{{myvar}}</h1>
-    <a href="/user/add/">AddUser</a>
+	<h1>{{myvar}}</h1>
+	{% trans "frase_internacional" %}
+	<br />
+	<a href="/user/add/">AddUser</a>
+	<form action="/i18n/setlang/" method="post">
+		<input name="next" type="hidden" value="/index" /> 
+		<select name="language">
+				<option value="99">Selecione...</option>
+			{% for lang in LANGUAGES %}
+				<option value="{{ lang.0 }}">{{ lang.1 }}</option>
+			{% endfor %}
+		</select>
+		 <input type="submit" value="Go" />
+	 </form>
 </body>
 </html>
