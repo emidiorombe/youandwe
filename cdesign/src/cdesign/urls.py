@@ -9,6 +9,8 @@ admin.autodiscover()
 #General Mapping
 urlpatterns = patterns('',
     ('^$', v_general.index),
+    ('^index/$', v_general.index),
+    (r'^i18n/', include('django.conf.urls.i18n')),
 )
 
 #User Mapping

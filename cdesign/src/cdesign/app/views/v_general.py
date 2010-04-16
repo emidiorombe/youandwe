@@ -1,7 +1,8 @@
 from django.shortcuts import render_to_response
+from django.utils.translation import ugettext as msg
 
 def index(request):
-    myvar = 'Olaaaaaaa enfermeira!'
+    myvar = msg('ola_enfermeira')
     return render_to_response('index.html', locals())
 
 def erro404(request):
