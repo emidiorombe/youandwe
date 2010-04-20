@@ -1,5 +1,7 @@
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.utils import simplejson
+
 
 from cdesign.app.forms import NewUserForm
 from cdesign.app.models import User, PortfolioEntry
@@ -29,6 +31,19 @@ def view_profile(request, id_user):
     user = User.objects.get(pk=id_user)
     user_images = PortfolioEntry.objects.all()
     return render_to_response('user_profile.html', locals())
+
+def find_user(request):
+    # Default return list
+    results = []
+    if request.method == "GET":
+        if request.GET.has_key(u'query'):
+            value = request.GET[u'query']
+            # Ignore queries shorter than length 3
+            if len(value) > 2:
+                model_results = User.objects.filter(name__icontains=value)
+                results = [ x.name for x in model_results ]
+    json = simplejson.dumps(results)
+    return HttpResponse(json, mimetype='application/json')
 
 def handle_upload(files, id_user):
     names = save_original(files, id_user)

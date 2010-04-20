@@ -24,6 +24,12 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
    (r'^infra/photo/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': general_conf.TMP_PHOTO_DIR}),
+   (r'^infra/css/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': general_conf.CSS_DIR}),
+   (r'^infra/js/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': general_conf.JS_DIR}),
+
+    ('^ajax/$', v_user.find_user),
 )
 
 
