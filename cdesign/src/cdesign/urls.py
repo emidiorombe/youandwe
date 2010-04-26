@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from cdesign.app.views import v_general;
+from cdesign.app.views import v_general
 from cdesign.app.views import v_user
 from cdesign import general_conf
 
