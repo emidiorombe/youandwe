@@ -1,5 +1,9 @@
 package br.com.yaw.ioc;
 
+import br.com.yaw.repository.CommentDAO;
+import br.com.yaw.repository.CommentRepository;
+import br.com.yaw.repository.CompanyDAO;
+import br.com.yaw.repository.CompanyRepository;
 import br.com.yaw.repository.UserRepository; 
 import br.com.yaw.repository.UserRepositoryDAO;
 import br.com.yaw.service.CompanyService;
@@ -26,6 +30,8 @@ public class IoCBinder implements Module{
         
         //Repository Binders
         binder.bind(UserRepository.class).to(UserRepositoryDAO.class);
+        binder.bind(CompanyRepository.class).to(CompanyDAO.class);
+        binder.bind(CommentRepository.class).to(CommentDAO.class);
         
     }
 
