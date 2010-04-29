@@ -15,4 +15,8 @@ public interface CompanyRepository {
 	
 	Company getById(long id) throws RepositoryException;
 	
+	void addCompany(Company company) throws RepositoryException;
+
+	List<Company> getAllCompanies() throws RepositoryException;
+	
 }

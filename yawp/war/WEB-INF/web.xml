@@ -4,7 +4,7 @@ xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-	<filter>
+	<!-- filter>
 		<filter-name>transaction_filter</filter-name>
 		<filter-class>br.com.yaw.servlet.filter.TransactionFilter</filter-class>
 	</filter>
@@ -15,7 +15,17 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	
 	<listener>
 		<listener-class>br.com.yaw.servlet.listener.GeneralContextListener</listener-class>
-	</listener>
+	</listener-->
+	
+	<servlet>
+		<servlet-name>company</servlet-name>
+		<servlet-class>br.com.yaw.servlet.action.CompanyActionServlet</servlet-class>	
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>company</servlet-name>
+		<url-pattern>/company/*</url-pattern>
+	</servlet-mapping>
 	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
