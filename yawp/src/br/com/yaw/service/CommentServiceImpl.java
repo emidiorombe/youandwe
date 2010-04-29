@@ -11,5 +11,9 @@ public class CommentServiceImpl implements CommentService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public void addComment(Comment comment){
+		
+	}
 
 }
