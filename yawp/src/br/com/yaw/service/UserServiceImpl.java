@@ -75,10 +75,10 @@ public class UserServiceImpl implements UserService {
 	 * @see br.com.yaw.service.UserService#removeUser(br.com.yaw.entity.User)
 	 */
 	@Override
-	public void removeUser(User user2) throws ServiceException {
+	public void removeUser(User userToDel) throws ServiceException {
 		try {
 			userRepository = ServiceFactory.getService(UserRepository.class);
-			userRepository.removeUser(user2);
+			userRepository.removeUser(userToDel);
 		} catch (RepositoryException e) {
 			//TODO log this
 			throw new ServiceException(e);
