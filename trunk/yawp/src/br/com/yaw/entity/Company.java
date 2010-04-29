@@ -1,5 +1,7 @@
 package br.com.yaw.entity;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +31,8 @@ public class Company {
 	private String url;
 	
 	private String logo;
+	
+	private List<Comment> comments;
 
 	public Key getKey() {
 		return key;
@@ -85,6 +89,13 @@ public class Company {
 	public void setLogo(String logo) {
 		this.logo = logo;
 	}
-	
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
 	
 }

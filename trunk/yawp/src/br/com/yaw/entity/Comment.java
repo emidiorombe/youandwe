@@ -14,11 +14,11 @@ public class Comment {
 	
 	private User owner;
 	
-	private Company company;
-	
 	private Text comment;
 	
 	private int rating;
+	
+	private Company company;
 
 	public Key getKey() {
 		return key;
@@ -59,7 +59,6 @@ public class Comment {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
-	
 	
 	
 }

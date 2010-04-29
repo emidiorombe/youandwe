@@ -1,5 +1,8 @@
 package br.com.yaw.repository;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+
 import br.com.yaw.entity.User;
 import br.com.yaw.exception.RepositoryException;
 
@@ -8,7 +11,7 @@ import br.com.yaw.exception.RepositoryException;
  * @author Rafael Nunes
  *
  */
-public class UserRepositoryDAO extends BaseDAO<User, Long> implements UserRepository{
+public class UserRepositoryDAO extends BaseDAO<User, Key> implements UserRepository{
 
 	@Override
 	public User getUserByLoginAndPassword(String username, String password) {
@@ -29,7 +32,8 @@ public class UserRepositoryDAO extends BaseDAO<User, Long> implements UserReposi
 	 */
 	@Override
 	public User getUserById(long id) throws RepositoryException {
-		return getByPrimaryKey(id);
+		
+		return getByPrimaryKey(KeyFactory.createKey("user", id));
 	}
 
 	/* (non-Javadoc)
