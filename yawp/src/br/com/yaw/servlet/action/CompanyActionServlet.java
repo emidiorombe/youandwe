@@ -8,8 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+import com.google.gson.Gson;
 
 import br.com.yaw.entity.Address;
 import br.com.yaw.entity.Company;
@@ -37,10 +36,9 @@ public class CompanyActionServlet extends HttpServlet {
 					listAll(response, service);
 				}else{
 					Company c = service.getCompanyById(Long.parseLong(tokens[3]));
-					XStream xs = new XStream(new JsonHierarchicalStreamDriver());
-					xs.setMode(XStream.NO_REFERENCES);
-			        xs.alias("company", Company.class);
-					String jsonString = xs.toXML(c);
+					Gson gson = new Gson();
+					c.getAddr(); //Appengine não suportar JOIN en queries nem relacionamentos EAGER 
+					String jsonString = gson.toJson(c);
 					response.getWriter().write(jsonString);
 				}
 			} catch (ServiceException e) {
