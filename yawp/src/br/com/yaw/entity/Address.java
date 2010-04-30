@@ -1,5 +1,7 @@
 package br.com.yaw.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,7 +15,7 @@ import com.google.appengine.api.datastore.Key;
  *
  */
 @Entity
-public class Address {
+public class Address implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

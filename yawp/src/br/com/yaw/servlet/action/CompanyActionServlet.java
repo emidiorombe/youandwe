@@ -33,10 +33,15 @@ public class CompanyActionServlet extends HttpServlet {
 		
 		if("list".equals(action)) {
 			try {
-				List<Company> lista = service.getAllCompanies();
-				
-				for (Company co : lista) {
-					response.getWriter().write("<a href='/company/" + co.getKey().getId() +"/' />Empresa " + co.getKey().getId() + "</a><br/>");
+				if(tokens[3].equals("all")){
+					listAll(response, service);
+				}else{
+					Company c = service.getCompanyById(Long.parseLong(tokens[3]));
+					XStream xs = new XStream(new JsonHierarchicalStreamDriver());
+					xs.setMode(XStream.NO_REFERENCES);
+			        xs.alias("company", Company.class);
+					String jsonString = xs.toXML(c);
+					response.getWriter().write(jsonString);
 				}
 			} catch (ServiceException e) {
 				response.getWriter().write(e.getMessage());
@@ -65,18 +70,21 @@ public class CompanyActionServlet extends HttpServlet {
 				c.setUrl("SITEEMPRESA");
 				
 				service.addCompany(c);
-				
-				XStream xs = new XStream(new JsonHierarchicalStreamDriver());
-				xs.setMode(XStream.NO_REFERENCES);
-		        xs.alias("company", Company.class);
-				String jsonString = xs.toXML(c);
-				response.getWriter().write(jsonString);
+				response.sendRedirect("/company/list/all");
 			}catch (ServiceException e) {
 				response.getWriter().write(e.getMessage());
 				e.printStackTrace();
 			}
 			
-			response.getWriter().close();
+		}
+	}
+
+	private void listAll(HttpServletResponse response, CompanyService service)
+			throws ServiceException, IOException {
+		List<Company> lista = service.getAllCompanies();
+		
+		for (Company co : lista) {
+			response.getWriter().write("<a href='/company/list/" + co.getKey().getId() +"/' />Empresa " + co.getKey().getId() + "</a><br/>");
 		}
 	}
 }

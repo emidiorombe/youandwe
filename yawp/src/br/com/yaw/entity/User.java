@@ -2,10 +2,13 @@ package br.com.yaw.entity;
 
 import java.util.List;
 
+import javax.jdo.annotations.Persistent;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -28,6 +31,8 @@ public class User {
 	
 	private String description;
 	
+	@Persistent
+	@OneToMany(cascade=CascadeType.PERSIST)
 	private List<User> contacts;
 	
 	private String avatar;

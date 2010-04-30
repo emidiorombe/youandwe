@@ -1,11 +1,16 @@
 package br.com.yaw.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.jdo.annotations.Persistent;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -15,7 +20,7 @@ import com.google.appengine.api.datastore.Key;
  *
  */
 @Entity
-public class Company {
+public class Company implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Key key;
@@ -26,6 +31,8 @@ public class Company {
 	
 	private String mail;
 	
+	@Persistent
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private Address addr;
 	
 	private String url;
