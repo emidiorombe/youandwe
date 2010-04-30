@@ -3,6 +3,7 @@ package br.com.yaw.servlet.action;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import br.com.yaw.entity.Company;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.service.CompanyService;
+import br.com.yaw.servlet.bean.BeanMapper;
 
 public class CompanyActionServlet extends HttpServlet {
 	
@@ -29,6 +31,7 @@ public class CompanyActionServlet extends HttpServlet {
 		String tokens[] = request.getRequestURI().split("/");
 		String action = tokens[2];
 		CompanyService service = ServiceFactory.getService(CompanyService.class);
+		Gson gson = new Gson();
 		
 		if("list".equals(action)) {
 			try {
@@ -36,7 +39,6 @@ public class CompanyActionServlet extends HttpServlet {
 					listAll(response, service);
 				}else{
 					Company c = service.getCompanyById(Long.parseLong(tokens[3]));
-					Gson gson = new Gson();
 					c.getAddr(); //Appengine não suportar JOIN en queries nem relacionamentos EAGER 
 					String jsonString = gson.toJson(c);
 					response.getWriter().write(jsonString);
@@ -50,25 +52,16 @@ public class CompanyActionServlet extends HttpServlet {
 			
 		}else if("add".equals(action)) {
 			try {
-				Company c = new Company();
+				String param = request.getParameter("edit");
 				
-				Address addr = new Address();
-				addr.setBairro("BAIRRO");
-				addr.setCity("CIDADE");
-				addr.setCountry("PAIS");
-				addr.setNumber(666);
-				addr.setState("ESTADO");
-				addr.setStreet("RUA");
-				
-				c.setAddr(addr);
-				c.setDescription("DESCRICAO");
-				c.setLogo("URLLOGO");
-				c.setMail("EMAIL");
-				c.setName("NOMEEMPRESA");
-				c.setUrl("SITEEMPRESA");
-				
-				service.addCompany(c);
-				response.sendRedirect("/company/list/all");
+				if(param == null) {
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/addCompany.jsp");
+					dispatcher.forward(request, response);
+				}else {
+					Company c = BeanMapper.createCompany(request); //TODO Copiar instanciação do Struts/Webwork
+					service.addCompany(c);
+					response.sendRedirect("/company/list/all");
+				}
 			}catch (ServiceException e) {
 				response.getWriter().write(e.getMessage());
 				e.printStackTrace();
