@@ -15,7 +15,7 @@
 	</tr>
 	<tr>
 		<td><label>Site:</label></td>
-		<td><input type="text" name="site" /></td>
+		<td><input type="text" name="url" /></td>
 	</tr>
 	<tr>
 		<td><label>Logotipo:</label></td>
@@ -23,7 +23,7 @@
 	</tr>
 	<tr>
 		<td><label>Descricao:</label></td>
-		<td><textarea rows="5" cols="17" name="desc">
+		<td><textarea rows="5" cols="17" name="description">
 							</textarea></td>
 	<tr>
 		<td><label>Categoria:</label></td>

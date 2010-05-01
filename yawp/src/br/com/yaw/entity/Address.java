@@ -56,6 +56,10 @@ public class Address implements Serializable{
 	public void setNumber(int number) {
 		this.number = number;
 	}
+	
+	public void setNumber(String number) {
+		this.number = Integer.parseInt(number);
+	}
 
 	public String getBairro() {
 		return bairro;
