@@ -102,6 +102,22 @@ public class DatanucleusCRUDUtils {
 	}
 	
 	/**
+	 * Commit the actual transaction
+	 * @param obj
+	 * @throws RepositoryException
+	 */
+	public static void commitTransaction() throws RepositoryException {
+		EntityManager em = DatanucleusTransactionUtils.getEntityManager();
+		try {
+			em.getTransaction().commit();
+		}catch(Exception he) {
+			he.printStackTrace();
+			throw new RepositoryException(he);
+		}finally {
+		}
+	}
+	
+	/**
 	 * Returns an object by its ID/PK
 	 * @param klass
 	 * @param id

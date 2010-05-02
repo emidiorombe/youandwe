@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import br.com.yaw.entity.Address;
 import br.com.yaw.entity.Company;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
@@ -58,9 +57,9 @@ public class CompanyActionServlet extends HttpServlet {
 					RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/addCompany.jsp");
 					dispatcher.forward(request, response);
 				}else {
-					Company c = BeanMapper.createCompany(request); //TODO Copiar instanciação do Struts/Webwork
+					Company c = BeanMapper.createCompany(request); 
 					service.addCompany(c);
-					response.sendRedirect("/company/list/all");
+					response.sendRedirect("/company/list/" + c.getKey().getId());
 				}
 			}catch (ServiceException e) {
 				response.getWriter().write(e.getMessage());

@@ -19,62 +19,36 @@ import br.com.yaw.entity.Company;
  */
 public class BeanMapper {
 
-	/*public static Company createCompany(HttpServletRequest request) {
-		Company c = new Company();
-		for(Object o : request.getParameterMap().entrySet()) {
-			Map.Entry e = (Map.Entry) o;
-			String key = e.getKey().toString();
-			if(key.startsWith("c_")) {
-				try {
-					PropertyUtils.setSimpleProperty(c, key.substring(2), e.getValue().toString());
-				}catch (Exception ex) {
-					//TODO log de property não encontrada
-					ex.printStackTrace();
-				}
-			}
-		}
-		c.setAddr(createAddress(request));
-		
-		return c;
-	}*/
-	
 	public static Company createCompany(HttpServletRequest request) {
-		Company c = new Company();
-		HashMap map = new HashMap();
-		Enumeration names = request.getParameterNames();
-		
-		while(names.hasMoreElements()) {
-			String name = (String) names.nextElement();
-			map.put(name, request.getParameterValues(name));
-		}
-		
-		try {
-			BeanUtils.populate(c, map);
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		
+		Company c = createObject(Company.class, request);
 		c.setAddr(createAddress(request));
 		
 		return c;
 	}
 	
 	public static Address createAddress(HttpServletRequest request) {
-		Address addr = new Address();
-		HashMap map = new HashMap();
-		Enumeration names = request.getParameterNames();
+		Address addr = createObject(Address.class, request);
 		
-		while(names.hasMoreElements()) {
-			String name = (String) names.nextElement();
-			map.put(name, request.getParameterValues(name));
-		}
-		
-		try {
-			BeanUtils.populate(addr, map);
+		return addr;
+	}
+	
+	private static <T>T createObject(Class<T> klass, HttpServletRequest request){
+		T newInstance = null;
+		try{
+			newInstance = klass.newInstance();
+			HashMap map = new HashMap();
+			Enumeration names = request.getParameterNames();
+			
+			while(names.hasMoreElements()) {
+				String name = (String) names.nextElement();
+				map.put(name, request.getParameterValues(name));
+			}
+			BeanUtils.populate(newInstance, map);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return addr;
+		
+		return newInstance;
 	}
 	
 }

@@ -43,6 +43,15 @@ public class BaseDAO<Entity, Id extends Serializable> {
 		DatanucleusCRUDUtils.save(entity);
 	}
 	
+	/**
+	 * Commit actual transaction
+	 * @param entity
+	 * @throws RepositoryException
+	 */
+	public void commitTransaction() throws RepositoryException {
+		DatanucleusCRUDUtils.commitTransaction();	
+	}
+	
 	
 	/**
 	 * Removes an entity
