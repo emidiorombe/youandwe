@@ -12,6 +12,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import br.com.yaw.entity.Address;
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.Company;
+import br.com.yaw.entity.User;
 
 /**
  * Faz mapeamento dos parâmetros de request para Java Beans. 
@@ -35,6 +36,11 @@ public class BeanMapper {
 	public static Comment createComment(HttpServletRequest request) {
 		Comment com = createObject(Comment.class, request);
 		return com;
+	}
+	
+	public static User createUser(HttpServletRequest request) {
+		User user = createObject(User.class, request);
+		return user;
 	}
 	
 	private static <T>T createObject(Class<T> klass, HttpServletRequest request){
