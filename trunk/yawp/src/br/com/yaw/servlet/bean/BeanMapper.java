@@ -10,6 +10,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 
 import br.com.yaw.entity.Address;
+import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.Company;
 
 /**
@@ -28,8 +29,12 @@ public class BeanMapper {
 	
 	public static Address createAddress(HttpServletRequest request) {
 		Address addr = createObject(Address.class, request);
-		
 		return addr;
+	}
+	
+	public static Comment createComment(HttpServletRequest request) {
+		Comment com = createObject(Comment.class, request);
+		return com;
 	}
 	
 	private static <T>T createObject(Class<T> klass, HttpServletRequest request){
@@ -50,5 +55,5 @@ public class BeanMapper {
 		
 		return newInstance;
 	}
-	
+
 }

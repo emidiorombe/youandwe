@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.Company;
+import br.com.yaw.exception.RepositoryException;
 
 public interface CommentRepository {
 
@@ -14,5 +15,7 @@ public interface CommentRepository {
 	 * @param fimPaginacao
 	 * @return
 	 */
-	List<Comment> getCommentsByCompany(Company company, int initPaginacao, int fimPaginacao);
+	List<Comment> getCommentsByCompany(long companyId, int initPaginacao, int fimPaginacao) throws RepositoryException;
+	
+	void addComment(Comment comment) throws RepositoryException;
 }

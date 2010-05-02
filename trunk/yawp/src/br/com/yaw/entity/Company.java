@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.google.appengine.api.datastore.Key;
@@ -39,7 +40,7 @@ public class Company implements Serializable {
 	
 	private String logo;
 	
-	private List<Comment> comments;
+	private List<Key> comments;
 
 	public Key getKey() {
 		return key;
@@ -97,11 +98,11 @@ public class Company implements Serializable {
 		this.logo = logo;
 	}
 
-	public List<Comment> getComments() {
+	public List<Key> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comment> comments) {
+	public void setComments(List<Key> comments) {
 		this.comments = comments;
 	}
 	
