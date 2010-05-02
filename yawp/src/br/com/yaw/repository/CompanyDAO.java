@@ -18,6 +18,7 @@ public class CompanyDAO extends BaseDAO<Company, Key> implements CompanyReposito
 	@Override
 	public void addCompany(Company company) throws RepositoryException {
 		save(company);
+		commitTransaction();
 	}
 
 	@Override
