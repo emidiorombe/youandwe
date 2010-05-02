@@ -6,8 +6,8 @@
 <body>
 <h3>Adicionar Empresa</h3>
 <hr />
-<form action="/company/add" method="post"><input type="hidden"
-	name="edit" />
+<form action="/company/add" method="post">
+<input type="hidden" name="edit" />
 <fieldset><legend>Empresa</legend>
 <table>
 	<tr>
