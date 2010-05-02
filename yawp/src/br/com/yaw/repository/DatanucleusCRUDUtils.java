@@ -49,6 +49,35 @@ public class DatanucleusCRUDUtils {
 	}
 	
 	/**
+	 * Exceutes a query with a given jql and its parameters with paginantion
+	 * @param hql
+	 * @param params
+	 * @return
+	 */
+	public static List executeQuery(String jql, Map params, int init, int end) throws RepositoryException {
+		EntityManager em = DatanucleusTransactionUtils.getEntityManager();
+		try {
+			Query query = em.createQuery(jql);
+			if(params != null && params.size() > 0) {
+				Iterator it = params.keySet().iterator();
+				while(it.hasNext()) {
+					String key = (String) it.next();
+					Object value = params.get(key);
+					query.setParameter(key, value);
+				}
+			}
+			query.setFirstResult(init);
+			query.setMaxResults(end);
+			List retorno  = query.getResultList();
+			return retorno;
+		}catch (Exception he) {
+			he.printStackTrace();
+			throw new RepositoryException(he);
+		}finally {
+		}
+	}
+	
+	/**
 	 * Execute a query with a given jql returning just one result.
 	 * @param hql
 	 * @return

@@ -82,6 +82,26 @@ public class BaseDAO<Entity, Id extends Serializable> {
 	}
 	
 	/**
+	 * Executes an generic query
+	 * @param hql
+	 * @return
+	 * @throws RepositoryException
+	 */
+	public List executeQuery(String hql, int init, int end) throws RepositoryException {
+		return DatanucleusCRUDUtils.executeQuery(hql, null, init, end);
+	}
+	
+	/**
+	 * Executes an generic query
+	 * @param hql
+	 * @return
+	 * @throws RepositoryException
+	 */
+	public List executeQuery(String hql, Map params, int init, int end) throws RepositoryException {
+		return DatanucleusCRUDUtils.executeQuery(hql, params, init, end);
+	}
+	
+	/**
 	 * Executes a generic query with parameters
 	 * @param hql
 	 * @param params

@@ -17,7 +17,7 @@ public class CommentDAO extends BaseDAO<Comment, Key> implements CommentReposito
 		StringBuilder jql = new StringBuilder();
 		jql.append("select c from Comment c where company = :coId");
 		addParamToQuery("coId", KeyFactory.createKey("Company", companyId));
-		return executeQuery(jql.toString(), paramsToQuery);
+		return executeQuery(jql.toString(), paramsToQuery, initPaginacao, fimPaginacao);
 	}
 
 	@Override
