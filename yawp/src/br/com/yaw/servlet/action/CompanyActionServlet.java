@@ -11,13 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
+import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.Company;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
+import br.com.yaw.service.CommentService;
 import br.com.yaw.service.CompanyService;
 import br.com.yaw.servlet.bean.BeanMapper;
 
-public class CompanyActionServlet extends HttpServlet {
+public class CompanyActionServlet extends BaseActionServlet {
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -30,17 +32,25 @@ public class CompanyActionServlet extends HttpServlet {
 		String tokens[] = request.getRequestURI().split("/");
 		String action = tokens[2];
 		CompanyService service = ServiceFactory.getService(CompanyService.class);
+		CommentService commentService = ServiceFactory.getService(CommentService.class);
 		Gson gson = new Gson();
 		
 		if("list".equals(action)) {
 			try {
-				if(tokens[3].equals("all")){
+				if(tokens[3].equals("category")){
 					listAll(response, service);
 				}else{
-					Company c = service.getCompanyById(Long.parseLong(tokens[3]));
-					c.getAddr(); //Appengine não suportar JOIN en queries nem relacionamentos EAGER 
-					String jsonString = gson.toJson(c);
-					response.getWriter().write(jsonString);
+					long companyId = Long.parseLong(tokens[3]);
+					Company company = service.getCompanyById(companyId);
+					company.getAddr(); //Appengine não suportar JOIN en queries nem relacionamentos EAGER 
+					company.getComments().size();  //Appengine não suportar JOIN en queries nem relacionamentos EAGER 
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewCompany.jsp");
+					request.setAttribute("company", company);
+					
+					List<Comment> commentsByCompany = commentService.getCommentsByCompany(companyId);
+					request.setAttribute("c_comments", commentsByCompany);
+					request.setAttribute("qtdeComments", commentsByCompany.size());
+					dispatcher.forward(request, response);
 				}
 			} catch (ServiceException e) {
 				response.getWriter().write(e.getMessage());
