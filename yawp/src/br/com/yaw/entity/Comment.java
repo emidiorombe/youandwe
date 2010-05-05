@@ -15,7 +15,7 @@ public class Comment {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Key key;
 	
-	private User owner;
+	private Key owner;
 	
 	private Text text;
 	
@@ -31,11 +31,11 @@ public class Comment {
 		this.key = key;
 	}
 
-	public User getOwner() {
+	public Key getOwner() {
 		return owner;
 	}
 
-	public void setOwner(User owner) {
+	public void setOwner(Key owner) {
 		this.owner = owner;
 	}
 

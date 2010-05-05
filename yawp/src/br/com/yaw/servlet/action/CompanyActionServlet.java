@@ -30,7 +30,7 @@ public class CompanyActionServlet extends BaseActionServlet {
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		String tokens[] = request.getRequestURI().split("/");
-		String action = tokens[2];
+		String action = getAction(tokens);
 		CompanyService service = ServiceFactory.getService(CompanyService.class);
 		CommentService commentService = ServiceFactory.getService(CommentService.class);
 		Gson gson = new Gson();

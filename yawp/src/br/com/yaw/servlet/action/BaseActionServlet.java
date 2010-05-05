@@ -11,4 +11,15 @@ import com.google.gson.Gson;
  */
 public class BaseActionServlet extends HttpServlet{
 	protected Gson gson = new Gson();
+	
+	protected String getAction(String[] tokens) {
+		String action = "";
+		try{
+			action = tokens[2];
+			return action;
+		}catch(ArrayIndexOutOfBoundsException ae) {
+			throw new IllegalArgumentException("url.request.inexistente");
+		}
+	}
+	
 }

@@ -7,6 +7,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.Company;
+import br.com.yaw.entity.User;
 import br.com.yaw.exception.RepositoryException;
 
 public class CommentDAO extends BaseDAO<Comment, Key> implements CommentRepository{
@@ -32,6 +33,14 @@ public class CommentDAO extends BaseDAO<Comment, Key> implements CommentReposito
 		Company co = companyDAO.getById(company.getId());
 		co.getComments().add(comment.getKey());
 		companyDAO.addCompany(co);
+	}
+
+	@Override
+	public List<Comment> getCommentsByUser(User user, int init, int end) throws RepositoryException {
+		StringBuilder jql = new StringBuilder();
+		jql.append("select c from Comment c where owner = :owId");
+		addParamToQuery("owId", user.getKey());
+		return executeQuery(jql.toString(), paramsToQuery, init, end);
 	}
 
 }
