@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.yaw.entity.Comment;
+import br.com.yaw.entity.User;
 import br.com.yaw.exception.RepositoryException;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
@@ -31,6 +32,18 @@ public class CommentServiceImpl implements CommentService {
 		}catch (RepositoryException re) {
 			throw new ServiceException("impossivel.incluir.comentario",re);
 		}
+	}
+
+	@Override
+	public List<Comment> getCommentsByUser(User user) throws ServiceException {
+		List<Comment> lista = new ArrayList<Comment>();
+		try {
+			repository = ServiceFactory.getService(CommentRepository.class);
+			lista = repository.getCommentsByUser(user, 0, 1000);
+		}catch (RepositoryException re) {
+			throw new ServiceException("impossivel.buscar.comentarios",re);
+		}
+		return lista;
 	}
 
 }

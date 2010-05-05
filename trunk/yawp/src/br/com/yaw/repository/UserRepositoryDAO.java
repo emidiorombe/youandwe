@@ -25,6 +25,7 @@ public class UserRepositoryDAO extends BaseDAO<User, Key> implements UserReposit
 	@Override
 	public void addUser(User user) throws RepositoryException {
 		save(user);
+		commitTransaction();
 	}
 
 	/* (non-Javadoc)
@@ -33,7 +34,7 @@ public class UserRepositoryDAO extends BaseDAO<User, Key> implements UserReposit
 	@Override
 	public User getUserById(long id) throws RepositoryException {
 		
-		return getByPrimaryKey(KeyFactory.createKey("user", id));
+		return getByPrimaryKey(KeyFactory.createKey("User", id));
 	}
 
 	/* (non-Javadoc)

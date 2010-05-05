@@ -1,12 +1,15 @@
 package br.com.yaw.servlet.action;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.yaw.entity.Comment;
+import br.com.yaw.entity.Company;
 import br.com.yaw.entity.User;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
@@ -26,7 +29,7 @@ public class UserActionServlet extends BaseActionServlet{
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		String tokens[] = request.getRequestURI().split("/");
-		String action = tokens[2];
+		String action = getAction(tokens);
 		CompanyService companyService = ServiceFactory.getService(CompanyService.class);
 		CommentService commentService = ServiceFactory.getService(CommentService.class);
 		UserService service = ServiceFactory.getService(UserService.class);
@@ -48,8 +51,25 @@ public class UserActionServlet extends BaseActionServlet{
 				e.printStackTrace();
 			}
 			
+		}else if("list".equals(action)) {
+			try {
+				long userId = Long.parseLong(tokens[3]);
+				User user = service.getUserById(userId);
+				
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewUser.jsp");
+				
+				request.setAttribute("user", user);
+				
+				List<Comment> commentsByUser = commentService.getCommentsByUser(user);
+				request.setAttribute("c_comments", commentsByUser);
+				dispatcher.forward(request, response);
+				
+			}catch (ServiceException se) {
+				response.getWriter().write(se.getMessage());
+				se.printStackTrace();
+			}
 		}
 		
 	}
-	
+
 }
