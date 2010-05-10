@@ -31,6 +31,8 @@ public class User {
 	
 	private String description;
 	
+	private List<Key> friends;
+	
 	@Persistent
 	@OneToMany(cascade=CascadeType.PERSIST)
 	private List<User> contacts;
@@ -92,5 +94,15 @@ public class User {
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
+
+	public List<Key> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(List<Key> friends) {
+		this.friends = friends;
+	}
+	
+	
 	
 }

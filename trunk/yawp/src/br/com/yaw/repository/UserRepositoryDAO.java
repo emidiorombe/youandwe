@@ -14,9 +14,12 @@ import br.com.yaw.exception.RepositoryException;
 public class UserRepositoryDAO extends BaseDAO<User, Key> implements UserRepository{
 
 	@Override
-	public User getUserByLoginAndPassword(String username, String password) {
-		
-		return null;
+	public User getUserByLoginAndPassword(String username, String password) throws RepositoryException {
+		StringBuilder jql = new StringBuilder();
+		jql.append("select u from User u where u.contactEmail = :username and u.password = :pass");
+		addParamToQuery("username", username);
+		addParamToQuery("pass", password);
+		return (User) executeQueryOneResult(jql.toString(), paramsToQuery);
 	}
 
 	/* (non-Javadoc)
@@ -45,7 +48,18 @@ public class UserRepositoryDAO extends BaseDAO<User, Key> implements UserReposit
 		delete(user2);
 		
 	}
-	
-	
+
+	@Override
+	public User getUserByEmail(String contactEmail) throws RepositoryException {
+		StringBuilder jql = new StringBuilder();
+		jql.append("select u from User u where u.contactEmail = :username");
+		addParamToQuery("username", contactEmail);
+		return (User) executeQueryOneResult(jql.toString(), paramsToQuery);	
+	}
+
+	@Override
+	public void reloadUser(User user) throws RepositoryException {
+		reloadEntity(user);
+	}
 
 }

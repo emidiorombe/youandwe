@@ -8,10 +8,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.KeyFactory;
+
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.Company;
 import br.com.yaw.entity.User;
 import br.com.yaw.exception.ServiceException;
+import br.com.yaw.exception.UsuarioExistenteException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.service.CommentService;
 import br.com.yaw.service.CompanyService;
@@ -49,6 +52,11 @@ public class UserActionServlet extends BaseActionServlet{
 			}catch (ServiceException e) {
 				response.getWriter().write(e.getMessage());
 				e.printStackTrace();
+				
+			}catch(UsuarioExistenteException uee) {
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/addUser.jsp");
+				request.setAttribute("msgErro", uee.getMessage());
+				dispatcher.forward(request, response);
 			}
 			
 		}else if("list".equals(action)) {
@@ -62,11 +70,42 @@ public class UserActionServlet extends BaseActionServlet{
 				
 				List<Comment> commentsByUser = commentService.getCommentsByUser(user);
 				request.setAttribute("c_comments", commentsByUser);
+				Object friends = user.getFriends();
+				request.setAttribute("c_friends", friends);
 				dispatcher.forward(request, response);
 				
 			}catch (ServiceException se) {
 				response.getWriter().write(se.getMessage());
 				se.printStackTrace();
+			}
+		}else if("add_contact".equals(action)) {
+			String friendId = tokens[3];
+			User logged = (User) request.getSession(false).getAttribute("loggedUser");
+			try {
+				logged = service.getUserById(logged.getKey().getId());
+				logged.getFriends().add(KeyFactory.createKey("User", Long.parseLong(friendId)));
+				request.getSession(false).setAttribute("loggedUser", logged);
+			}catch (Exception se) {
+				response.getWriter().write(se.getMessage());
+				se.printStackTrace();
+			}
+			
+			
+		}else if("login".equals(action)) {
+			try {
+				User user = BeanMapper.createUser(request);
+				User userAuth = service.authenticate(user.getContactEmail(), user.getPassword());
+				
+				if(userAuth != null) {
+					request.getSession().setAttribute("loggedUser", userAuth);
+				}else {
+					RequestDispatcher dispatch = request.getRequestDispatcher("/pages/login.jsp");
+					dispatch.forward(request, response);
+				}
+				
+				response.sendRedirect("/index.html");
+			}catch (Exception e) {
+				response.getWriter().println(e.getMessage());
 			}
 		}
 		

@@ -4,6 +4,7 @@
 <title>YaWP!</title>
 </head>
 <body>
+${msgErro}
 <h3>Adicionar Usuário</h3>
 <hr />
 

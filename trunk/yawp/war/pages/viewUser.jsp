@@ -6,7 +6,10 @@
 </head>
 <body>
 <h3>Usuario: ${user.name}</h3>
-Email: ${user.contactEmail}
+<h4>Email: ${user.contactEmail}</h4>
+<c:if test="${user.key.id != loggedUser.key.id}">
+	<a href="/user/add_contact/${user.key.id}">Adicionar aos meus amigos</a>
+</c:if>
 <br />
 <hr />
 
@@ -16,8 +19,8 @@ Email: ${user.contactEmail}
 </c:forEach>
 
 <h4>Comentários da Rede(${qtdeComments})</h4>
-<c:forEach var="com" items="${c_comments}">
-	${com.text.value} / rating: ${com.rating}<br/>
+<c:forEach var="fr" items="${c_friends}">
+	Comentario / Contato-${fr.id}<br/>
 </c:forEach>
 
 </body>

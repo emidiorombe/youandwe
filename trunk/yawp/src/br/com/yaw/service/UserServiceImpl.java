@@ -6,6 +6,7 @@ import java.util.List;
 import br.com.yaw.entity.User;
 import br.com.yaw.exception.RepositoryException;
 import br.com.yaw.exception.ServiceException;
+import br.com.yaw.exception.UsuarioExistenteException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.repository.UserRepository;
 
@@ -18,9 +19,14 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 	
 	@Override
-	public boolean authenticate(String username, String password) {
-		
-		return false;
+	public User authenticate(String username, String password) throws ServiceException {
+		try {
+			userRepository = ServiceFactory.getService(UserRepository.class);
+			return userRepository.getUserByLoginAndPassword(username, password);
+			
+		}catch(RepositoryException re) {
+			throw new ServiceException("login.invalido", re);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -30,6 +36,11 @@ public class UserServiceImpl implements UserService {
 	public void addUser(User user) throws ServiceException {
 		try {
 			userRepository = ServiceFactory.getService(UserRepository.class);
+			
+			if(userRepository.getUserByEmail(user.getContactEmail()) != null){
+				throw new UsuarioExistenteException("usuario.existente");
+			}
+			
 			userRepository.addUser(user);
 		} catch (RepositoryException e) {
 			//TODO log this
@@ -84,6 +95,17 @@ public class UserServiceImpl implements UserService {
 			throw new ServiceException(e);
 		}
 		
+	}
+
+	@Override
+	public void reloadUser(User user) throws ServiceException {
+		try {
+			userRepository = ServiceFactory.getService(UserRepository.class);
+			userRepository.reloadUser(user);
+		} catch (RepositoryException e) {
+			//TODO log this
+			throw new ServiceException(e);
+		}
 	}
 	
 	
