@@ -12,7 +12,7 @@ import br.com.yaw.exception.ServiceException;
  */
 public interface UserService {
 	
-	boolean authenticate(String username, String password);
+	User authenticate(String username, String password) throws ServiceException;
 	
 	void addUser(User user) throws ServiceException;
 	
@@ -21,5 +21,7 @@ public interface UserService {
 	User getUserById(long id) throws ServiceException;
 
 	void removeUser(User user2) throws ServiceException;
+
+	void reloadUser(User logged) throws ServiceException;
 
 }

@@ -17,8 +17,9 @@ public interface UserRepository {
 	 * @param username
 	 * @param password
 	 * @return
+	 * @throws RepositoryException 
 	 */
-	User getUserByLoginAndPassword(String username, String password);
+	User getUserByLoginAndPassword(String username, String password) throws RepositoryException;
 
 	void addUser(User user) throws RepositoryException;
 	
@@ -27,4 +28,8 @@ public interface UserRepository {
 	User getUserById(long id) throws RepositoryException;
 
 	void removeUser(User user2) throws RepositoryException;
+
+	User getUserByEmail(String contactEmail) throws RepositoryException;
+
+	void reloadUser(User user) throws RepositoryException;
 }
