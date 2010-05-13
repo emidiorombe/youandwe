@@ -35,6 +35,13 @@ public class BaseDAO<Entity, Id extends Serializable> {
 	}
 	
 	/**
+	 * Returns the Generic Entity by its primary key
+	 */
+	public Object getGenericEntityByPrimaryKey(Class ent, Serializable key) throws RepositoryException{
+		return DatanucleusCRUDUtils.getById(ent, key);
+	}
+	
+	/**
 	 * Insert or update an entity
 	 * @param entity
 	 * @throws RepositoryException
@@ -182,5 +189,18 @@ public class BaseDAO<Entity, Id extends Serializable> {
 	public void flushSession() throws RepositoryException{
 		DatanucleusCRUDUtils.flushSession();
 	}
+	
+	public void beginTransaction() throws RepositoryException{
+		DatanucleusCRUDUtils.beginTransaction();
+	}
+	
+	public void rollbackTransaction() throws RepositoryException{
+		DatanucleusCRUDUtils.rollBackTransaction();
+	}
+
+	public void finishTransaction() throws RepositoryException{
+		DatanucleusTransactionUtils.closeAllSession();
+	}
+
 
 }

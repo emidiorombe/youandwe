@@ -17,4 +17,6 @@ public interface CommentService {
 	void addComment(Comment comment) throws ServiceException;
 
 	List<Comment> getCommentsByUser(User user) throws ServiceException;
+
+	List<Comment> getCommentsByNetwork(long companyId, User attribute) throws ServiceException;
 }

@@ -19,7 +19,13 @@ Description: ${company.description}
 	<br/>
 	<input type="submit" value="Registrar">
 </form>
-<h4>Comentários (${qtdeComments})</h4>
+<h4>Comentários (${qtdeComments})</h4> 
+<c:if test="${empty param.all &&  !(empty loggedUser)}">
+	<a href="/company/list/${company.key.id}/?all=1">ver todos</a><br/>
+</c:if>
+<c:if test="${!empty param.all &&  !(empty loggedUser)}">
+	<a href="/company/list/${company.key.id}/">ver somente contatos</a><br/>
+</c:if>
 <c:forEach var="com" items="${c_comments}">
 	${com.text.value} / rating: ${com.rating}<br/>
 </c:forEach>

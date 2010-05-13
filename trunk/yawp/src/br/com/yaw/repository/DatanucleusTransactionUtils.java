@@ -2,7 +2,6 @@ package br.com.yaw.repository;
 
 import javax.persistence.EntityManager;
 
-import br.com.yaw.entity.User;
 
 /**
  * Util operations for transaction handle
@@ -10,7 +9,6 @@ import br.com.yaw.entity.User;
  *
  */
 public class DatanucleusTransactionUtils {
-	public static ThreadLocal<User> tlUser = new ThreadLocal<User>();
 	private static final ThreadLocal<EntityManager> tlSession = new ThreadLocal<EntityManager> ();
 	
 	/**
@@ -27,7 +25,7 @@ public class DatanucleusTransactionUtils {
 	}
 	
 	/**
-	 * MÈtodo respons·vel por fechar uma conex„o com o Hibernate
+	 * M√©todo respons√°vel por fechar uma conex√£o com o JPA
 	 * @throws HibernateException
 	 */
 	public static void closeEntityManager(){
@@ -38,7 +36,7 @@ public class DatanucleusTransactionUtils {
         			s.close();
         		}
         	}catch (Exception se) {
-				//log.warn("::::::N„o conseguiu fechar a conex„o");
+				//log.warn("::::::N√£o conseguiu fechar a conex√£o");
 			}
         }
         tlSession.set(null);

@@ -32,4 +32,10 @@ public interface UserRepository {
 	User getUserByEmail(String contactEmail) throws RepositoryException;
 
 	void reloadUser(User user) throws RepositoryException;
+
+	List<Long> getFriends(User user)throws RepositoryException;
+
+	List<User> getUserListByIds(List<Long> network) throws RepositoryException;
+
+	void addContact(User logged, long contactId) throws RepositoryException;
 }

@@ -1,6 +1,7 @@
 package br.com.yaw.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.yaw.entity.User;
@@ -106,6 +107,34 @@ public class UserServiceImpl implements UserService {
 			//TODO log this
 			throw new ServiceException(e);
 		}
+	}
+
+	@Override
+	public List<User> getUserNetwork(User user) throws ServiceException {
+		List<User> network = new ArrayList<User>();
+		try {
+			userRepository = ServiceFactory.getService(UserRepository.class);
+			List<Long> friends = userRepository.getFriends(user);
+			if(friends.size() > 0)
+				network = userRepository.getUserListByIds(friends);
+			return network;
+		} catch (RepositoryException re) {
+			//TODO log this
+			throw new ServiceException(re);
+		}
+		
+	}
+
+	@Override
+	public void addContact(User logged, long contactId) throws ServiceException {
+		try {
+			userRepository = ServiceFactory.getService(UserRepository.class);
+			userRepository.addContact(logged, contactId);
+		}catch(RepositoryException re) {
+			//TODO log this
+			throw new ServiceException(re);
+		}
+		
 	}
 	
 	

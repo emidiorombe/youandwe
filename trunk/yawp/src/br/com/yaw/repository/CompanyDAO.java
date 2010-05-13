@@ -1,5 +1,6 @@
 package br.com.yaw.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.appengine.api.datastore.Key;
@@ -12,18 +13,48 @@ public class CompanyDAO extends BaseDAO<Company, Key> implements CompanyReposito
 
 	@Override
 	public Company getById(long id) throws RepositoryException {
-		return getByPrimaryKey(KeyFactory.createKey("Company", id));
+		Company c = null;
+		try{
+			beginTransaction();
+			c = getByPrimaryKey(KeyFactory.createKey("Company", id));
+			commitTransaction();
+		}catch (RepositoryException re) {
+			rollbackTransaction();
+			throw re;
+		}finally {
+			finishTransaction();
+		}
+		return c;
 	}
 
 	@Override
 	public void addCompany(Company company) throws RepositoryException {
-		save(company);
-		commitTransaction();
+		try {
+			beginTransaction();
+			save(company);
+			commitTransaction();
+		}catch (RepositoryException re) {
+			rollbackTransaction();
+			throw re;
+		}finally {
+			finishTransaction();
+		}
 	}
 
 	@Override
 	public List<Company> getAllCompanies() throws RepositoryException {
-		return getAll();
+		List<Company> list = new ArrayList<Company>();
+		try{
+			beginTransaction();
+			list = getAll();
+			commitTransaction();
+		}catch (RepositoryException re) {
+			rollbackTransaction();
+			throw re;
+		}finally {
+			finishTransaction();
+		}
+		return list;
 	}
 	
 	

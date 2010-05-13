@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import br.com.yaw.exception.RepositoryException;
@@ -44,7 +45,6 @@ public class DatanucleusCRUDUtils {
 		}catch (Exception he) {
 			he.printStackTrace();
 			throw new RepositoryException(he);
-		}finally {
 		}
 	}
 	
@@ -73,7 +73,6 @@ public class DatanucleusCRUDUtils {
 		}catch (Exception he) {
 			he.printStackTrace();
 			throw new RepositoryException(he);
-		}finally {
 		}
 	}
 	
@@ -107,10 +106,11 @@ public class DatanucleusCRUDUtils {
 			}
 			Object retorno  = query.getSingleResult();
 			return retorno;
+		}catch(NoResultException nre) {
+			return null;
 		}catch (Exception he) {
 			he.printStackTrace();
 			throw new RepositoryException(he);
-		}finally {
 		}
 	}
 	
@@ -126,7 +126,6 @@ public class DatanucleusCRUDUtils {
 		}catch(Exception he) {
 			he.printStackTrace();
 			throw new RepositoryException(he);
-		}finally {
 		}
 	}
 	
@@ -146,8 +145,24 @@ public class DatanucleusCRUDUtils {
 		}
 	}
 	
+	
 	/**
-	 * Commit the actual transaction
+	 * Rollback the actual transaction
+	 * @param obj
+	 * @throws RepositoryException
+	 */
+	public static void rollBackTransaction() throws RepositoryException {
+		EntityManager em = DatanucleusTransactionUtils.getEntityManager();
+		try {
+			em.getTransaction().rollback();
+		}catch(Exception he) {
+			he.printStackTrace();
+			throw new RepositoryException(he);
+		}finally {
+		}
+	}
+	/**
+	 * Restart the actual transaction
 	 * @param obj
 	 * @throws RepositoryException
 	 */
@@ -155,6 +170,22 @@ public class DatanucleusCRUDUtils {
 		EntityManager em = DatanucleusTransactionUtils.getEntityManager();
 		try {
 			em.getTransaction().commit();
+			em.getTransaction().begin();
+		}catch(Exception he) {
+			he.printStackTrace();
+			throw new RepositoryException(he);
+		}finally {
+		}
+	}
+	
+	/**
+	 * Restart the actual transaction
+	 * @param obj
+	 * @throws RepositoryException
+	 */
+	public static void beginTransaction() throws RepositoryException {
+		EntityManager em = DatanucleusTransactionUtils.getEntityManager();
+		try {
 			em.getTransaction().begin();
 		}catch(Exception he) {
 			he.printStackTrace();
@@ -178,7 +209,6 @@ public class DatanucleusCRUDUtils {
 		}catch(Exception he) {
 			he.printStackTrace();
 			throw new RepositoryException(he);
-		}finally {
 		}
 	}
 	
@@ -252,7 +282,7 @@ public class DatanucleusCRUDUtils {
 	public static void flushSession() throws RepositoryException {
 		EntityManager em = DatanucleusTransactionUtils.getEntityManager();
 		try {
-			em.clear();
+			em.flush();
 		}catch(Exception he) {
 			he.printStackTrace();
 			throw new RepositoryException(he);

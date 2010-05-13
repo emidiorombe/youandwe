@@ -40,7 +40,7 @@ public class Company implements Serializable {
 	
 	private String logo;
 	
-	private List<Key> comments;
+	private List<Long> comments;
 
 	public Key getKey() {
 		return key;
@@ -98,11 +98,11 @@ public class Company implements Serializable {
 		this.logo = logo;
 	}
 
-	public List<Key> getComments() {
+	public List<Long> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Key> comments) {
+	public void setComments(List<Long> comments) {
 		this.comments = comments;
 	}
 	

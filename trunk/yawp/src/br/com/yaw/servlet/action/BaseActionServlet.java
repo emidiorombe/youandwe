@@ -11,6 +11,7 @@ import com.google.gson.Gson;
  */
 public class BaseActionServlet extends HttpServlet{
 	protected Gson gson = new Gson();
+	protected static final String LOGGED_USER = "loggedUser";
 	
 	protected String getAction(String[] tokens) {
 		String action = "";
