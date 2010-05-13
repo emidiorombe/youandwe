@@ -2,6 +2,8 @@ package br.com.yaw.repository;
 
 import java.util.List;
 
+import com.google.appengine.api.datastore.Key;
+
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.Company;
 import br.com.yaw.entity.User;
@@ -21,4 +23,6 @@ public interface CommentRepository {
 	void addComment(Comment comment) throws RepositoryException;
 
 	List<Comment> getCommentsByUser(User user, int i, int j) throws RepositoryException;
+
+	List<Comment> getCommentsByNetwork(long companyId, List<Long> list, int init, int end) throws RepositoryException;
 }

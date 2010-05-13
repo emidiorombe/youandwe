@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.Company;
+import br.com.yaw.entity.User;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.service.CommentService;
@@ -42,12 +43,13 @@ public class CompanyActionServlet extends BaseActionServlet {
 				}else{
 					long companyId = Long.parseLong(tokens[3]);
 					Company company = service.getCompanyById(companyId);
-					company.getAddr(); //Appengine não suportar JOIN en queries nem relacionamentos EAGER 
-					company.getComments().size();  //Appengine não suportar JOIN en queries nem relacionamentos EAGER 
 					RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewCompany.jsp");
 					request.setAttribute("company", company);
-					
-					List<Comment> commentsByCompany = commentService.getCommentsByCompany(companyId);
+					List<Comment> commentsByCompany = null;
+					if(request.getParameter("all") == null && request.getSession(false) != null && request.getSession(false).getAttribute(LOGGED_USER) != null)
+						commentsByCompany = commentService.getCommentsByNetwork(companyId, (User)request.getSession(false).getAttribute(LOGGED_USER));
+					else
+						commentsByCompany = commentService.getCommentsByCompany(companyId);
 					request.setAttribute("c_comments", commentsByCompany);
 					request.setAttribute("qtdeComments", commentsByCompany.size());
 					dispatcher.forward(request, response);

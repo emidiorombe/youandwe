@@ -9,9 +9,11 @@ import br.com.yaw.exception.RepositoryException;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.repository.CommentRepository;
+import br.com.yaw.repository.UserRepository;
 
 public class CommentServiceImpl implements CommentService {
 	private CommentRepository repository;
+	private UserRepository userRepository;
 	
 	@Override
 	public List<Comment> getCommentsByCompany(long companyId) throws ServiceException {
@@ -40,6 +42,22 @@ public class CommentServiceImpl implements CommentService {
 		try {
 			repository = ServiceFactory.getService(CommentRepository.class);
 			lista = repository.getCommentsByUser(user, 0, 1000);
+		}catch (RepositoryException re) {
+			throw new ServiceException("impossivel.buscar.comentarios",re);
+		}
+		return lista;
+	}
+
+	@Override
+	public List<Comment> getCommentsByNetwork(long companyId, User user)
+			throws ServiceException {
+		List<Comment> lista = new ArrayList<Comment>();
+		try {
+			repository = ServiceFactory.getService(CommentRepository.class);
+			userRepository = ServiceFactory.getService(UserRepository.class);
+			List<Long> network = userRepository.getFriends(user); 
+			if(network.size() > 0)
+				lista = repository.getCommentsByNetwork(companyId, network, 0, 1000);
 		}catch (RepositoryException re) {
 			throw new ServiceException("impossivel.buscar.comentarios",re);
 		}

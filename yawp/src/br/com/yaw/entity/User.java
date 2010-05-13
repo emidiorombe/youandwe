@@ -31,11 +31,8 @@ public class User {
 	
 	private String description;
 	
-	private List<Key> friends;
-	
-	@Persistent
-	@OneToMany(cascade=CascadeType.PERSIST)
-	private List<User> contacts;
+	@OneToMany(cascade=CascadeType.REMOVE)
+	private List<Long> contacts;
 	
 	private String avatar;
 
@@ -79,11 +76,11 @@ public class User {
 		this.description = description;
 	}
 
-	public List<User> getContacts() {
+	public List<Long> getContacts() {
 		return contacts;
 	}
 
-	public void setContacts(List<User> contacts) {
+	public void setContacts(List<Long> contacts) {
 		this.contacts = contacts;
 	}
 
@@ -95,14 +92,4 @@ public class User {
 		this.avatar = avatar;
 	}
 
-	public List<Key> getFriends() {
-		return friends;
-	}
-
-	public void setFriends(List<Key> friends) {
-		this.friends = friends;
-	}
-	
-	
-	
 }

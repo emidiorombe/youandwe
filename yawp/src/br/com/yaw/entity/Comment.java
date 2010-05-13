@@ -15,13 +15,13 @@ public class Comment {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Key key;
 	
-	private Key owner;
+	private Long owner;
 	
 	private Text text;
 	
 	private int rating;
 	
-	private Key company;
+	private Long company;
 
 	public Key getKey() {
 		return key;
@@ -31,11 +31,11 @@ public class Comment {
 		this.key = key;
 	}
 
-	public Key getOwner() {
+	public Long getOwner() {
 		return owner;
 	}
 
-	public void setOwner(Key owner) {
+	public void setOwner(Long owner) {
 		this.owner = owner;
 	}
 
@@ -47,11 +47,11 @@ public class Comment {
 		this.rating = rating;
 	}
 
-	public Key getCompany() {
+	public Long getCompany() {
 		return company;
 	}
 
-	public void setCompany(Key company) {
+	public void setCompany(Long company) {
 		this.company = company;
 	}
 

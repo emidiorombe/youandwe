@@ -24,4 +24,8 @@ public interface UserService {
 
 	void reloadUser(User logged) throws ServiceException;
 
+	List<User> getUserNetwork(User user)throws ServiceException;
+
+	void addContact(User logged, long contactId)throws ServiceException;
+
 }

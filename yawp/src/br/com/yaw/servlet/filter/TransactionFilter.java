@@ -31,7 +31,7 @@ public class TransactionFilter implements javax.servlet.Filter{
 		try {
 			HttpSession session = ((HttpServletRequest)request).getSession(false);
 			User user = session != null ? (User)session.getAttribute("loggedUser") : null;
-			DatanucleusTransactionUtils.tlUser.set(user);
+			//DatanucleusTransactionUtils.tlUser.set(user);
 			if(DatanucleusTransactionUtils.getEntityManager().getTransaction() == null || !DatanucleusTransactionUtils.getEntityManager().getTransaction().isActive())
 				DatanucleusTransactionUtils.getEntityManager().getTransaction().begin();
 			chain.doFilter(request, response);

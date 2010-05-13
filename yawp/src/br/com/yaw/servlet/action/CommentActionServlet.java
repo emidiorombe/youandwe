@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.Company;
+import br.com.yaw.entity.User;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.service.CommentService;
@@ -41,8 +42,11 @@ public class CommentActionServlet extends BaseActionServlet{
 				c.setRating(Integer.parseInt(request.getParameter("rating")));
 				c.setText(new Text(request.getParameter("text")));
 				
+				User u = (User) request.getSession(false).getAttribute(LOGGED_USER);
+				c.setOwner(u.getKey().getId());
+				
 				long companyId = Long.parseLong(request.getParameter("id_company"));
-				c.setCompany(KeyFactory.createKey("Company", companyId));
+				c.setCompany(companyId);
 				
 				service.addComment(c);
 				

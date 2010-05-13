@@ -2,6 +2,7 @@ package br.com.yaw.servlet.action;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,7 +23,8 @@ import br.com.yaw.service.UserService;
 import br.com.yaw.servlet.bean.BeanMapper;
 
 public class UserActionServlet extends BaseActionServlet{
-
+	private static final Logger log = Logger.getLogger(UserActionServlet.class.getName());
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -33,7 +35,6 @@ public class UserActionServlet extends BaseActionServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		String tokens[] = request.getRequestURI().split("/");
 		String action = getAction(tokens);
-		CompanyService companyService = ServiceFactory.getService(CompanyService.class);
 		CommentService commentService = ServiceFactory.getService(CommentService.class);
 		UserService service = ServiceFactory.getService(UserService.class);
 		
@@ -70,7 +71,7 @@ public class UserActionServlet extends BaseActionServlet{
 				
 				List<Comment> commentsByUser = commentService.getCommentsByUser(user);
 				request.setAttribute("c_comments", commentsByUser);
-				Object friends = user.getFriends();
+				List<User> friends = service.getUserNetwork(user);
 				request.setAttribute("c_friends", friends);
 				dispatcher.forward(request, response);
 				
@@ -82,8 +83,7 @@ public class UserActionServlet extends BaseActionServlet{
 			String friendId = tokens[3];
 			User logged = (User) request.getSession(false).getAttribute("loggedUser");
 			try {
-				logged = service.getUserById(logged.getKey().getId());
-				logged.getFriends().add(KeyFactory.createKey("User", Long.parseLong(friendId)));
+				service.addContact(logged, Long.parseLong(friendId));
 				request.getSession(false).setAttribute("loggedUser", logged);
 			}catch (Exception se) {
 				response.getWriter().write(se.getMessage());
@@ -95,9 +95,11 @@ public class UserActionServlet extends BaseActionServlet{
 			try {
 				User user = BeanMapper.createUser(request);
 				User userAuth = service.authenticate(user.getContactEmail(), user.getPassword());
+				log.info(":::::::::::::::::::::::LOGIN INFO " + userAuth.getContactEmail());
+				log.severe(":::::::::::::::::::::::LOGIN SEVERE " + userAuth.getContactEmail());
 				
 				if(userAuth != null) {
-					request.getSession().setAttribute("loggedUser", userAuth);
+					request.getSession().setAttribute(LOGGED_USER, userAuth);
 				}else {
 					RequestDispatcher dispatch = request.getRequestDispatcher("/pages/login.jsp");
 					dispatch.forward(request, response);
