@@ -9,16 +9,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.KeyFactory;
 
 import br.com.yaw.entity.Comment;
-import br.com.yaw.entity.Company;
 import br.com.yaw.entity.User;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.exception.UsuarioExistenteException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.service.CommentService;
-import br.com.yaw.service.CompanyService;
 import br.com.yaw.service.UserService;
 import br.com.yaw.servlet.bean.BeanMapper;
 
