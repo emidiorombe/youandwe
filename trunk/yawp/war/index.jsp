@@ -8,7 +8,9 @@
 
 <body>
 	<div id="header">
-		<img alt="" src="/media/img/eqtal_logo1_q.png">
+		<div id="img_logo">
+			<img alt="" src="/media/img/eqtal_logo1_q.png">
+		</div>
 	</div>
 	<div id="nav">
 		<div id="nav_search">
@@ -28,7 +30,9 @@
 	<div id="center">
 		<div id="home_center">
 			<div id="home_center_head"><h3>home center head</h3></div>
-			<div id="home_center_body"></div>
+			<div id="home_center_body">
+				<img alt="" src="/media/img/personagem_01.jpg" style="width:220px; height:340;">
+			</div>
 		</div>
 	</div>
 	<div id="latest">
