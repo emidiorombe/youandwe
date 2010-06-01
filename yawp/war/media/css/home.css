@@ -67,6 +67,15 @@ margin-top: 0px;
 height: 80px;
 }
 
+#home_center_body
+{
+width: 970px;
+background-color: #FF00FF;
+margin-left: 280px;
+margin-top: 0px;
+height: 380px;
+}
+
 #foot
 {
 background-color: #F28B32;
