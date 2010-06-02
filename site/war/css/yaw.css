@@ -32,6 +32,8 @@ a:hover {color: #61350A; text-decoration: underline;}
 #cabecalho div p {padding-bottom: 7px; color: #fefefe; font: bold 1.6em/1 "Trebuchet MS", Helvetica, Jamrul, sans-serif;}
 #cabecalho div ul li {padding-bottom: 6px; color: #f4f4ed; font-size: 13px; font-weight: bold;}
 
+/*provisorio*/
+#cabecalho .profissao {position: absolute; left: 210px;}
 
 /* div para conteudo principal - ajustar */
 #content {float: left; position: relative; width: 650px; margin-top: 168px; padding: 12px 0 30px 5px; border-color: #9FA19D}
