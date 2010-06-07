@@ -11,6 +11,20 @@
 		<div id="img_logo">
 			<img alt="" src="/media/img/eqtal_logo1_q.png">
 		</div>
+		<div id="imglogin">
+			<img alt="" src="/media/img/form_back.png">
+		</div>
+		<div id="dvlog">
+			<form>
+				<ul>
+					<li>Login / Registrar</li>
+					<li> </li>
+					<li><label>E-mail: </label><input type="text" size="9" name="txtMail"></li>
+					<li><label>Senha: &nbsp;</label><input type="text" size="9" name="txtSenha"></li>
+					<li><input type="submit" value="Enviar"></input></li>
+				</ul>
+			</form>
+		</div>
 	</div>
 	<div id="nav">
 		<div id="nav_search">
@@ -29,9 +43,21 @@
 	</div>
 	<div id="center">
 		<div id="home_center">
-			<div id="home_center_head"><h3>home center head</h3></div>
+			<div id="home_center_head">
+				<div id="sp1">
+					<h4>Gostou? Recomenda?</h4>
+					
+				</div>
+				<div id="sp2">
+					<h4>Conta pra gente!!!</h4>
+				</div>
+				<img id="img1" alt="" src="/media/img/speech_meio.png" style="width:320px; height:200;">
+				<img id="speech_2" alt="" src="/media/img/speech.png" style="width:320px; height:200;">
+			</div>
 			<div id="home_center_body">
-				<img alt="" src="/media/img/personagem_01.jpg" style="width:220px; height:340;">
+				<img alt="" src="/media/img/personagem_01.jpg" style="width:220px; height:340;z-index:2;">
+				<img alt="" src="/media/img/personagem_02.jpg" style="width:220px; height:340;z-index:3;">
+				<img alt="" src="/media/img/personagem_03.jpg" style="width:220px; height:340;z-index:4;">
 			</div>
 		</div>
 	</div>
