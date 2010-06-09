@@ -9,6 +9,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.channel.ChannelServicePb;
+import com.google.appengine.api.channel.ChannelServicePb.CreateChannelRequest;
+
 
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.User;
@@ -34,6 +37,7 @@ public class UserActionServlet extends BaseActionServlet{
 		String action = getAction(tokens);
 		CommentService commentService = ServiceFactory.getService(CommentService.class);
 		UserService service = ServiceFactory.getService(UserService.class);
+		
 		
 		if("add".equals(action)) {
 			try {

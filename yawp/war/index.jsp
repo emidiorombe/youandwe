@@ -4,6 +4,7 @@
 <head>
 	<title></title>
 	<link rel="stylesheet" href="/media/css/home.css" type="text/css" />
+	<link rel="stylesheet" href="/media/css/custom_classes.css" type="text/css" />
 </head>
 
 <body>
@@ -28,6 +29,10 @@
 	</div>
 	<div id="nav">
 		<div id="nav_search">
+			<form>
+				<input type="text" name="txtBusca" class="input_search">
+				<input type="image" src="/media/img/search.gif" style="width: 50px; height: 50px;">
+			</form>
 		</div>
 		<div id="nav_link">
 			<ul>
@@ -61,7 +66,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="latest">
+	<div id="latest" style="border: 1px; border-color: #FFFFFF;">
 			<div id="head_latest">
 			</div>
 			<div id="body_latest">
