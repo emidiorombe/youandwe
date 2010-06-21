@@ -17,6 +17,7 @@ public class CompanyDAO extends BaseDAO<Company, Key> implements CompanyReposito
 		try{
 			beginTransaction();
 			c = getByPrimaryKey(KeyFactory.createKey("Company", id));
+			c.getAddr();
 			commitTransaction();
 		}catch (RepositoryException re) {
 			rollbackTransaction();

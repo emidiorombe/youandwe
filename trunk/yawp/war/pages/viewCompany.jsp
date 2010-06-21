@@ -10,6 +10,9 @@ Site: ${company.url}
 <br />
 Description: ${company.description}
 <br />
+<c:if test="${loggedUser != null && company.owner == loggedUser.key.id}">
+ <a href="/company/edit/${company.key.id}">Editar</a>
+</c:if> 
 <hr />
 <form action="/comment/add" method="post">
 	<input type="hidden" name="id_company" value="${company.key.id}">

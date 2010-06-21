@@ -3,6 +3,7 @@ package br.com.yaw.service;
 import java.util.List;
 
 import br.com.yaw.entity.User;
+import br.com.yaw.exception.RepositoryException;
 import br.com.yaw.exception.ServiceException;
 
 /**
@@ -27,5 +28,9 @@ public interface UserService {
 	List<User> getUserNetwork(User user)throws ServiceException;
 
 	void addContact(User logged, long contactId)throws ServiceException;
+	
+	public User getUserByEmail(String email) throws ServiceException;
+
+	void updateUser(User user) throws ServiceException;
 
 }

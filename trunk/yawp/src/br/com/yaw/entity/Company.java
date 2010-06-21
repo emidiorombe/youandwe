@@ -41,6 +41,8 @@ public class Company implements Serializable {
 	private String logo;
 	
 	private List<Long> comments;
+	
+	private Long owner;
 
 	public Key getKey() {
 		return key;
@@ -104,6 +106,14 @@ public class Company implements Serializable {
 
 	public void setComments(List<Long> comments) {
 		this.comments = comments;
+	}
+
+	public Long getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Long owner) {
+		this.owner = owner;
 	}
 	
 }

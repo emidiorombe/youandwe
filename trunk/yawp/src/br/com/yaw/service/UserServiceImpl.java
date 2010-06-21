@@ -49,6 +49,31 @@ public class UserServiceImpl implements UserService {
 		}
 		
 	}
+	
+	/* (non-Javadoc)
+	 * @see br.com.yaw.service.UserService#updateUser(br.com.yaw.entity.User)
+	 */
+	@Override
+	public void updateUser(User user) throws ServiceException {
+		try {
+			userRepository = ServiceFactory.getService(UserRepository.class);
+			
+			userRepository.addUser(user);
+		} catch (RepositoryException e) {
+			throw new ServiceException(e);
+		}
+		
+	}
+	
+	public User getUserByEmail(String email) throws ServiceException {
+		try {
+			userRepository = ServiceFactory.getService(UserRepository.class);
+			return userRepository.getUserByEmail(email);
+			
+		} catch (RepositoryException e) {
+			throw new ServiceException(e);
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see br.com.yaw.service.UserService#getAll()
