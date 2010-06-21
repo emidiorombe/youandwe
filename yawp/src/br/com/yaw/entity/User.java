@@ -35,6 +35,16 @@ public class User {
 	private List<Long> contacts;
 	
 	private String avatar;
+	
+	private String twit;
+	
+	private String fcbook;
+	
+	private String orkut;
+	
+	private Integer tipoCadastro;
+	
+	private String tipoUsuario;
 
 	public Key getKey() {
 		return key;
@@ -92,4 +102,46 @@ public class User {
 		this.avatar = avatar;
 	}
 
+	public String getTwit() {
+		return twit;
+	}
+
+	public void setTwit(String twit) {
+		this.twit = twit;
+	}
+
+	public String getFcbook() {
+		return fcbook;
+	}
+
+	public void setFcbook(String fcbook) {
+		this.fcbook = fcbook;
+	}
+
+	public String getOrkut() {
+		return orkut;
+	}
+
+	public void setOrkut(String orkut) {
+		this.orkut = orkut;
+	}
+
+	public Integer getTipoCadastro() {
+		return tipoCadastro;
+	}
+
+	public void setTipoCadastro(Integer tipoCadastro) {
+		this.tipoCadastro = tipoCadastro;
+	}
+
+	public String getTipoUsuario() {
+		return tipoUsuario;
+	}
+
+	public void setTipoUsuario(String tipoUsuario) {
+		this.tipoUsuario = tipoUsuario;
+	}
+	
+	
+	
 }

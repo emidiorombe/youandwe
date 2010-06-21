@@ -41,14 +41,19 @@ public class UserActionServlet extends BaseActionServlet{
 		
 		if("add".equals(action)) {
 			try {
-				String param = request.getParameter("edit");
+				String paramEdt = request.getParameter("edit");
 				
-				if(param == null) {
-					RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/addUser.jsp");
-					dispatcher.forward(request, response);
-				}else {
-					User user = BeanMapper.createUser(request); 
+				if(paramEdt == null) {
+					User user = new User();
+					user.setContactEmail(request.getParameter("mail"));
+					user.setPassword(request.getParameter("pass1"));
 					service.addUser(user);
+					request.getSession().setAttribute(LOGGED_USER, user);
+					response.sendRedirect("/user/list/" + user.getKey().getId());
+				}else {
+					User user = service.getUserByEmail(request.getParameter("contactEmail"));
+					user.setName(request.getParameter("name"));
+					service.updateUser(user);
 					response.sendRedirect("/user/list/" + user.getKey().getId());
 				}
 			}catch (ServiceException e) {
@@ -56,7 +61,7 @@ public class UserActionServlet extends BaseActionServlet{
 				e.printStackTrace();
 				
 			}catch(UsuarioExistenteException uee) {
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/addUser.jsp");
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/edtUser.jsp");
 				request.setAttribute("msgErro", uee.getMessage());
 				dispatcher.forward(request, response);
 			}
@@ -96,20 +101,61 @@ public class UserActionServlet extends BaseActionServlet{
 			try {
 				User user = BeanMapper.createUser(request);
 				User userAuth = service.authenticate(user.getContactEmail(), user.getPassword());
-				log.info(":::::::::::::::::::::::LOGIN INFO " + userAuth.getContactEmail());
-				log.severe(":::::::::::::::::::::::LOGIN SEVERE " + userAuth.getContactEmail());
 				
 				if(userAuth != null) {
 					request.getSession().setAttribute(LOGGED_USER, userAuth);
+					response.sendRedirect("/user/list/" + userAuth.getKey().getId());
 				}else {
 					RequestDispatcher dispatch = request.getRequestDispatcher("/pages/login.jsp");
 					dispatch.forward(request, response);
 				}
 				
-				response.sendRedirect("/index.html");
 			}catch (Exception e) {
 				response.getWriter().println(e.getMessage());
 			}
+		}else if("login_ext".equals(action)) {
+			try {
+				User user = service.getUserByEmail(request.getUserPrincipal().getName());
+				
+				if(user != null) {
+					request.getSession().setAttribute(LOGGED_USER, user);
+					response.sendRedirect("/user/list/" + user.getKey().getId());
+				}else {
+					//Adiciona usuário pois ainda não existia no cadastro.
+					user = new User();
+					user.setContactEmail(request.getUserPrincipal().getName());
+					user.setTipoCadastro(2);
+					service.addUser(user);
+					
+					request.getSession().setAttribute(LOGGED_USER, user);
+					response.sendRedirect("/user/list/" + user.getKey().getId());
+				}
+				
+				
+				
+			}catch (Exception e) {
+				response.getWriter().println(e.getMessage());
+			}
+		}else if("edit".equals(action)) {
+			try {
+				long userId = Long.parseLong(tokens[3]);
+				User user = service.getUserById(userId);
+				
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/edtUser.jsp");
+				
+				request.setAttribute("user", user);
+				dispatcher.forward(request, response);
+			}catch(ServiceException se) {
+				
+			}
+			
+			
+		
+		}else if("logout".equals(action)) {
+				request.getSession(false).invalidate();
+				RequestDispatcher dispatch = request.getRequestDispatcher("/index.jsp");
+				dispatch.forward(request, response);
+			
 		}
 		
 	}

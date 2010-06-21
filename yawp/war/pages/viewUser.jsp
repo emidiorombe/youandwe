@@ -7,10 +7,13 @@
 <body>
 <h3>Usuario: ${user.name}</h3>
 <h4>Email: ${user.contactEmail}</h4>
-<c:if test="${user.key.id != loggedUser.key.id}">
+<c:if test="${loggedUser != null && user.key.id != loggedUser.key.id}">
 	<a href="/user/add_contact/${user.key.id}">Adicionar aos meus amigos</a>
 </c:if>
 <br />
+<c:if test="${loggedUser != null && user.key.id == loggedUser.key.id}">
+<a href="/user/edit/${loggedUser.key.id}">Edit</a>
+</c:if>
 <hr />
 
 <h4>Comentários Feitos(${qtdeComments})</h4>

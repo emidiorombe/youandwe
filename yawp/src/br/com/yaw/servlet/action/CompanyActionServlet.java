@@ -66,10 +66,12 @@ public class CompanyActionServlet extends BaseActionServlet {
 				String param = request.getParameter("edit");
 				
 				if(param == null) {
-					RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/addCompany.jsp");
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/edtCompany.jsp");
 					dispatcher.forward(request, response);
 				}else {
 					Company c = BeanMapper.createCompany(request); 
+					User user = (User)request.getSession().getAttribute(LOGGED_USER);
+					c.setOwner(user.getKey().getId());
 					service.addCompany(c);
 					response.sendRedirect("/company/list/" + c.getKey().getId());
 				}
@@ -78,6 +80,18 @@ public class CompanyActionServlet extends BaseActionServlet {
 				e.printStackTrace();
 			}
 			
+		}else if("edit".equals(action)) {
+			try {
+				long companyId = Long.parseLong(tokens[3]);
+				Company company = service.getCompanyById(companyId);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/edtCompany.jsp");
+				request.setAttribute("company", company);
+				dispatcher.forward(request, response);
+				
+			} catch (ServiceException se) {
+				response.getWriter().write(se.getMessage());
+				se.printStackTrace();
+			}
 		}
 	}
 

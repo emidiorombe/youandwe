@@ -13,20 +13,20 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 <!--		<url-pattern>/*</url-pattern>-->
 <!--	</filter-mapping>-->
 	
-	<filter>
-		<filter-name>session_filter</filter-name>
-		<filter-class>br.com.yaw.servlet.filter.SessionFilter</filter-class>
-		<init-param>
-			<param-name>urls_no_session</param-name>
-			<param-value>
-				/index.html,/company/add,/user/add,/user/add_contact			
-			</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>session_filter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+<!--	<filter>-->
+<!--		<filter-name>session_filter</filter-name>-->
+<!--		<filter-class>br.com.yaw.servlet.filter.SessionFilter</filter-class>-->
+<!--		<init-param>-->
+<!--			<param-name>urls_no_session</param-name>-->
+<!--			<param-value>-->
+<!--				/index.html,/company/add,/user/add,/user/add_contact			-->
+<!--			</param-value>-->
+<!--		</init-param>-->
+<!--	</filter>-->
+<!--	<filter-mapping>-->
+<!--		<filter-name>session_filter</filter-name>-->
+<!--		<url-pattern>/*</url-pattern>-->
+<!--	</filter-mapping>-->
 
 	
 	<listener>
