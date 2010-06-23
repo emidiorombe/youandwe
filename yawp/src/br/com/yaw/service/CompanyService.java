@@ -3,6 +3,7 @@ package br.com.yaw.service;
 import java.util.List;
 
 import br.com.yaw.entity.Company;
+import br.com.yaw.entity.CompanyTag;
 import br.com.yaw.exception.ServiceException;
 
 public interface CompanyService {
@@ -17,4 +18,10 @@ public interface CompanyService {
 	void addCompany(Company c) throws ServiceException;
 
 	List<Company> getAllCompanies() throws ServiceException;
+
+	void addTags(String parameter, Long companyId) throws ServiceException;
+
+	List<CompanyTag> getCompanyTags(long id) throws ServiceException;
+
+	void updateCompany(Company c) throws ServiceException;
 }

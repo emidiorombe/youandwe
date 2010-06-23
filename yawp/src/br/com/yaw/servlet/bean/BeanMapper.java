@@ -1,5 +1,6 @@
 package br.com.yaw.servlet.bean;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +42,10 @@ public class BeanMapper {
 	public static User createUser(HttpServletRequest request) {
 		User user = createObject(User.class, request);
 		return user;
+	}
+	
+	public static void cloneAttributes(Object dest, Object origem) throws IllegalAccessException, InvocationTargetException {
+		BeanUtils.copyProperties(dest, origem);
 	}
 	
 	private static <T>T createObject(Class<T> klass, HttpServletRequest request){

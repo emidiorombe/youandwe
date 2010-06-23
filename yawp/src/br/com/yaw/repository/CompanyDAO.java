@@ -7,6 +7,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
 import br.com.yaw.entity.Company;
+import br.com.yaw.entity.CompanyTag;
 import br.com.yaw.exception.RepositoryException;
 
 public class CompanyDAO extends BaseDAO<Company, Key> implements CompanyRepository{
@@ -57,7 +58,5 @@ public class CompanyDAO extends BaseDAO<Company, Key> implements CompanyReposito
 		}
 		return list;
 	}
-	
-	
 
 }

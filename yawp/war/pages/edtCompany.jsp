@@ -27,7 +27,7 @@
 		<td><textarea rows="5" cols="17" name="description">${company.description}</textarea>	</td>
 	<tr>
 		<td><label>Categoria:</label></td>
-		<td><input type="text" name="category" value="${company.name}"/></td>
+		<td><input type="text" name="category" value="${c_tags}"/></td>
 	</tr>
 	</tr>
 </table>
@@ -61,6 +61,7 @@
 </table>
 </fieldset>
 <div align="center"><input type="submit" value="Cadastrar"/></div>
+<input type="hidden" name="id_c" value="${company.key.id}">
 </form>
 
 </body>
