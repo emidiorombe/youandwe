@@ -4,6 +4,8 @@ import br.com.yaw.repository.CommentDAO;
 import br.com.yaw.repository.CommentRepository;
 import br.com.yaw.repository.CompanyDAO;
 import br.com.yaw.repository.CompanyRepository;
+import br.com.yaw.repository.CompanyTagDAO;
+import br.com.yaw.repository.CompanyTagRepository;
 import br.com.yaw.repository.UserRepository; 
 import br.com.yaw.repository.UserRepositoryDAO;
 import br.com.yaw.service.CompanyService;
@@ -32,6 +34,7 @@ public class IoCBinder implements Module{
         binder.bind(UserRepository.class).to(UserRepositoryDAO.class);
         binder.bind(CompanyRepository.class).to(CompanyDAO.class);
         binder.bind(CommentRepository.class).to(CommentDAO.class);
+        binder.bind(CompanyTagRepository.class).to(CompanyTagDAO.class);
         
     }
 

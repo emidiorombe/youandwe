@@ -99,6 +99,16 @@ public class BaseDAO<Entity, Id extends Serializable> {
 	}
 	
 	/**
+	 * Executes an generic update query
+	 * @param hql
+	 * @return
+	 * @throws RepositoryException
+	 */
+	public void executeUpdateQuery(String hql) throws RepositoryException {
+		DatanucleusCRUDUtils.executeUpdateQuery(hql);
+	}
+	
+	/**
 	 * Executes an generic query
 	 * @param hql
 	 * @return
@@ -119,6 +129,18 @@ public class BaseDAO<Entity, Id extends Serializable> {
 		List retorno = DatanucleusCRUDUtils.executeQuery(hql, params); 
 		params.clear();
 		return retorno;
+	}
+	
+	/**
+	 * Executes a generic update query with parameters
+	 * @param hql
+	 * @param params
+	 * @return
+	 * @throws RepositoryException
+	 */
+	public void executeUpdateQuery(String hql, Map params) throws RepositoryException {
+		DatanucleusCRUDUtils.executeUpdateQuery(hql, params); 
+		params.clear();
 	}
 	
 	/**

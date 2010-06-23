@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.Company;
+import br.com.yaw.entity.CompanyTag;
 import br.com.yaw.exception.RepositoryException;
 
 /**
@@ -18,5 +19,5 @@ public interface CompanyRepository {
 	void addCompany(Company company) throws RepositoryException;
 
 	List<Company> getAllCompanies() throws RepositoryException;
-	
+
 }

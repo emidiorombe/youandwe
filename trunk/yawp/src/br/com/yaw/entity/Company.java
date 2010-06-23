@@ -115,5 +115,5 @@ public class Company implements Serializable {
 	public void setOwner(Long owner) {
 		this.owner = owner;
 	}
-	
+
 }

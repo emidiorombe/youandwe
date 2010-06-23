@@ -23,6 +23,16 @@ public class DatanucleusCRUDUtils {
 	}
 	
 	/**
+	 * Exceutes an update query with a given jql
+	 * @param hql
+	 * @return
+	 * @throws RepositoryException
+	 */
+	public static void executeUpdateQuery(String jql) throws RepositoryException {
+		executeUpdateQuery(jql, null);
+	}
+	
+	/**
 	 * Exceutes a query with a given jql and its parameters
 	 * @param hql
 	 * @param params
@@ -42,6 +52,31 @@ public class DatanucleusCRUDUtils {
 			}
 			List retorno  = query.getResultList();
 			return retorno;
+		}catch (Exception he) {
+			he.printStackTrace();
+			throw new RepositoryException(he);
+		}
+	}
+	
+	/**
+	 * Exceutes an update query with a given jql and its parameters
+	 * @param hql
+	 * @param params
+	 * @return
+	 */
+	public static void executeUpdateQuery(String jql, Map params) throws RepositoryException {
+		EntityManager em = DatanucleusTransactionUtils.getEntityManager();
+		try {
+			Query query = em.createQuery(jql);
+			if(params != null && params.size() > 0) {
+				Iterator it = params.keySet().iterator();
+				while(it.hasNext()) {
+					String key = (String) it.next();
+					Object value = params.get(key);
+					query.setParameter(key, value);
+				}
+			}
+			query.executeUpdate();
 		}catch (Exception he) {
 			he.printStackTrace();
 			throw new RepositoryException(he);
@@ -137,7 +172,8 @@ public class DatanucleusCRUDUtils {
 	public static void commitTransaction() throws RepositoryException {
 		EntityManager em = DatanucleusTransactionUtils.getEntityManager();
 		try {
-			em.getTransaction().commit();
+			if(em.getTransaction().isActive())
+				em.getTransaction().commit();
 		}catch(Exception he) {
 			he.printStackTrace();
 			throw new RepositoryException(he);
@@ -154,7 +190,8 @@ public class DatanucleusCRUDUtils {
 	public static void rollBackTransaction() throws RepositoryException {
 		EntityManager em = DatanucleusTransactionUtils.getEntityManager();
 		try {
-			em.getTransaction().rollback();
+			if(em.getTransaction().isActive())
+				em.getTransaction().rollback();
 		}catch(Exception he) {
 			he.printStackTrace();
 			throw new RepositoryException(he);
@@ -169,8 +206,10 @@ public class DatanucleusCRUDUtils {
 	public static void restartTransaction() throws RepositoryException {
 		EntityManager em = DatanucleusTransactionUtils.getEntityManager();
 		try {
-			em.getTransaction().commit();
-			em.getTransaction().begin();
+			if(em.getTransaction().isActive()) {
+				em.getTransaction().commit();
+				em.getTransaction().begin();
+			}
 		}catch(Exception he) {
 			he.printStackTrace();
 			throw new RepositoryException(he);

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
 
 import br.com.yaw.entity.Comment;
@@ -19,6 +20,7 @@ import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.service.CommentService;
 import br.com.yaw.service.CompanyService;
 import br.com.yaw.servlet.bean.BeanMapper;
+import br.com.yaw.utils.StringUtilities;
 
 public class CompanyActionServlet extends BaseActionServlet {
 	
@@ -44,14 +46,19 @@ public class CompanyActionServlet extends BaseActionServlet {
 					long companyId = Long.parseLong(tokens[3]);
 					Company company = service.getCompanyById(companyId);
 					RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewCompany.jsp");
+					
 					request.setAttribute("company", company);
+					
 					List<Comment> commentsByCompany = null;
 					if(request.getParameter("all") == null && request.getSession(false) != null && request.getSession(false).getAttribute(LOGGED_USER) != null)
 						commentsByCompany = commentService.getCommentsByNetwork(companyId, (User)request.getSession(false).getAttribute(LOGGED_USER));
 					else
 						commentsByCompany = commentService.getCommentsByCompany(companyId);
+					
 					request.setAttribute("c_comments", commentsByCompany);
 					request.setAttribute("qtdeComments", commentsByCompany.size());
+					request.setAttribute("c_tags", StringUtilities.listTagToString(service.getCompanyTags(company.getKey().getId())));
+					
 					dispatcher.forward(request, response);
 				}
 			} catch (ServiceException e) {
@@ -63,19 +70,36 @@ public class CompanyActionServlet extends BaseActionServlet {
 			
 		}else if("add".equals(action)) {
 			try {
-				String param = request.getParameter("edit");
-				
-				if(param == null) {
-					RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/edtCompany.jsp");
-					dispatcher.forward(request, response);
+				if(request.getParameter("edit") == null) {
+					RequestDispatcher rd = request.getRequestDispatcher("/pages/edtCompany.jsp");
+					rd.forward(request, response);
 				}else {
-					Company c = BeanMapper.createCompany(request); 
-					User user = (User)request.getSession().getAttribute(LOGGED_USER);
-					c.setOwner(user.getKey().getId());
-					service.addCompany(c);
+					
+					Company c = BeanMapper.createCompany(request);
+					
+					String id_c = request.getParameter("id_c");
+						
+					if(id_c == null || "".equals(id_c) ) {
+						User user = (User)request.getSession().getAttribute(LOGGED_USER);
+						c.setOwner(user.getKey().getId());
+						service.addCompany(c);
+					}else {
+						Integer companyId = Integer.parseInt(id_c != null ? id_c : "0");
+						Company fromBase = service.getCompanyById(companyId);
+						c.setKey(fromBase.getKey());
+						c.setOwner(18l);
+						c.getAddr().setKey(fromBase.getAddr().getKey());
+						service.addCompany(c);
+						
+					}
+					
+					service.addTags(request.getParameter("category"), c.getKey().getId());
 					response.sendRedirect("/company/list/" + c.getKey().getId());
 				}
 			}catch (ServiceException e) {
+				response.getWriter().write(e.getMessage());
+				e.printStackTrace();
+			}catch(Exception e){
 				response.getWriter().write(e.getMessage());
 				e.printStackTrace();
 			}
@@ -86,6 +110,8 @@ public class CompanyActionServlet extends BaseActionServlet {
 				Company company = service.getCompanyById(companyId);
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/edtCompany.jsp");
 				request.setAttribute("company", company);
+				request.setAttribute("c_tags", StringUtilities.listTagToString(service.getCompanyTags(company.getKey().getId())));
+				
 				dispatcher.forward(request, response);
 				
 			} catch (ServiceException se) {

@@ -10,6 +10,8 @@ Site: ${company.url}
 <br />
 Description: ${company.description}
 <br />
+Categorias: ${c_tags}
+<br/>
 <c:if test="${loggedUser != null && company.owner == loggedUser.key.id}">
  <a href="/company/edit/${company.key.id}">Editar</a>
 </c:if> 

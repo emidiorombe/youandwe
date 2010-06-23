@@ -1,6 +1,9 @@
 package br.com.yaw.utils;
 
+import java.util.Iterator;
 import java.util.List;
+
+import br.com.yaw.entity.CompanyTag;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -41,6 +44,17 @@ public class StringUtilities {
 		in.append(")");
 		
 		return in.toString();
+	}
+
+	public static String listTagToString(List<CompanyTag> companyTags) {
+		StringBuilder str = new StringBuilder();
+		for (int i = 0; i < companyTags.size(); i++) {
+			str.append(companyTags.get(i).getName());
+			if(i <= companyTags.size() -1) {
+				str.append(", ");
+			}
+		}
+		return str.toString();
 	}
 
 }
