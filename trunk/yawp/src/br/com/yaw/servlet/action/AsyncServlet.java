@@ -24,6 +24,8 @@ public class AsyncServlet extends BaseActionServlet{
 		if("compass_rebuild".equals(action)) {
 			CompassFactory.rebuildIndex();
 			
+		}else if("search_log".equals(action)){
+			
 		}
 	}
 	

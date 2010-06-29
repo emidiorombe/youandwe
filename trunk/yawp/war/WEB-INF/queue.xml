@@ -4,5 +4,10 @@
 		<name>compass-index</name>
 		<rate>5/s</rate>
 	</queue>
+	
+	<queue>
+		<name>search-logs</name>
+		<rate>1/s</rate>
+	</queue>
 
 </queue-entries>
