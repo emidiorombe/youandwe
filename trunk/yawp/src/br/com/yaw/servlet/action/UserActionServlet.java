@@ -9,10 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.channel.ChannelServicePb;
-import com.google.appengine.api.channel.ChannelServicePb.CreateChannelRequest;
-
-
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.User;
 import br.com.yaw.exception.ServiceException;
