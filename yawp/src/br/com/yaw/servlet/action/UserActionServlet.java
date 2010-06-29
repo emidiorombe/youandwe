@@ -118,7 +118,7 @@ public class UserActionServlet extends BaseActionServlet{
 				User user = service.getUserByEmail(request.getUserPrincipal().getName());
 				
 				if(user != null) {
-					request.getSession().setAttribute(LOGGED_USER, user);
+					request.getSession(false).setAttribute(LOGGED_USER, user);
 					response.sendRedirect("/user/list/" + user.getKey().getId());
 				}else {
 					//Adiciona usuário pois ainda não existia no cadastro.
