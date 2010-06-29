@@ -33,7 +33,7 @@
 	</div>
 	<div id="nav">
 		<div id="nav_search">
-			<form>
+			<form action="/company/search" method="post">
 				<input type="text" name="txtBusca" class="input_search">
 				<input type="image" src="/media/img/search.gif" style="width: 50px; height: 50px;">
 			</form>
@@ -41,7 +41,7 @@
 		<div id="nav_link">
 			<ul>
 				<li><a href="/company/add">Cadastrar Empresa</a></li>
-				<li><a href="#nogo">Item two</a></li>
+				<li><a href="/company/list/all">Listar Empresas</a></li>
 				<li><a href="#nogo">Item three</a></li>
 				<li><a href="#nogo">Item four</a></li>
 				<li><a href="#nogo">Item five</a></li>

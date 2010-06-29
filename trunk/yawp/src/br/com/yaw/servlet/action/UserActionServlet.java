@@ -156,7 +156,9 @@ public class UserActionServlet extends BaseActionServlet{
 				RequestDispatcher dispatch = request.getRequestDispatcher("/index.jsp");
 				dispatch.forward(request, response);
 			
-		}
+		}else {
+			response.sendRedirect("/pages/404.jsp");	
+		} 
 		
 	}
 

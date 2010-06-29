@@ -23,5 +23,7 @@ public interface CompanyService {
 
 	List<CompanyTag> getCompanyTags(long id) throws ServiceException;
 
-	void updateCompany(Company c) throws ServiceException;
+	void remove(long companyId) throws ServiceException;
+
+	List<Company> findCompanies(String query)throws ServiceException;
 }

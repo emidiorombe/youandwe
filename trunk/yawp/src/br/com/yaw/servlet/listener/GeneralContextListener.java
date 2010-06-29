@@ -3,6 +3,9 @@ package br.com.yaw.servlet.listener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import br.com.yaw.repository.CompassFactory;
+import br.com.yaw.repository.EMFactory;
+
 /**
  * General initializations
  * @author Rafael Nunes
@@ -21,8 +24,9 @@ public class GeneralContextListener implements ServletContextListener {
 	 */
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
+		EMFactory.initialize();
+		CompassFactory.initialize(EMFactory.get());
 		System.out.println("Inicializou o YaWP");
-		
 	}
 	
 }

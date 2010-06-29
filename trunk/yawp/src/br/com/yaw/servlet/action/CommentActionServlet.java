@@ -56,6 +56,8 @@ public class CommentActionServlet extends BaseActionServlet{
 				e.printStackTrace();
 			}
 			
-		}
+		}else {
+			response.sendRedirect("/pages/404.jsp");	
+		} 
 	}
 }
