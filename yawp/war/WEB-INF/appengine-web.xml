@@ -3,9 +3,23 @@
 <application>appyawp</application>
 	<version>1</version>
 	<sessions-enabled>true</sessions-enabled>
+	
+	<inbound-services>
+    	<service>xmpp_message</service>
+    	<service>mail</service>
+  	</inbound-services>
+  
 	<!-- Configure java.util.logging -->
 	<system-properties>
 		<property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
 	</system-properties>
+	
+    <static-files>
+        <include path="/**.png" expiration="180d"/>
+        <include path="/**.jpg" expiration="180d"/>
+        <include path="/**.gif" expiration="180d"/>
+        <include path="/**.js" expiration="7d"/>
+        <include path="/**.css" expiration="7d"/>
+    </static-files>
 	
 </appengine-web-app>
