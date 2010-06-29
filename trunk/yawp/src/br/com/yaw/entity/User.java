@@ -1,5 +1,6 @@
 package br.com.yaw.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.jdo.annotations.Persistent;
@@ -18,7 +19,7 @@ import com.google.appengine.api.datastore.Key;
  *
  */
 @Entity
-public class User {
+public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Key key;
