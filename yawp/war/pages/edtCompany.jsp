@@ -1,4 +1,6 @@
 <%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
+
+<%@page import="br.com.yaw.entity.Company"%>
 <html>
 <head>
 <title>YaWP!</title>
@@ -35,28 +37,33 @@
 <fieldset><legend>Endereço</legend>
 <table>
 	<tr>
-		<td><label>Rua:</label></td>
-		<td><input type="text" name="street" value="${company.addr.street}" /></td>
+		<td><label>Pais:</label></td>
+		<td><input type="text" name="country" value="${company.addr.country != null ? company.addr.country : "Brasil"}"/></td>
 	</tr>
 	<tr>
-		<td><label>Numero:</label></td>
-		<td><input type="text" name="number" value="${company.addr.number}"/></td>
-	</tr>
-	<tr>
-		<td><label>Bairro:</label></td>
-		<td><input type="text" name="bairro" value="${company.addr.bairro}"/></td>
+		<td><label>Estado:</label></td>
+		<td>
+			<select name="state">
+				<option value="0">Selecione...</option>
+				<option value="SP" ${company.addr.state == "SP" ? "selected" : company.addr.state}>SP</option>
+			</select>
+		</td>
 	</tr>
 	<tr>
 		<td><label>Cidade:</label></td>
 		<td><input type="text" name="city" value="${company.addr.city}"/></td>
 	</tr>
 	<tr>
-		<td><label>Estado:</label></td>
-		<td><input type="text" name="state" value="${company.addr.state}"/></td>
+		<td><label>Bairro:</label></td>
+		<td><input type="text" name="bairro" value="${company.addr.bairro}"/></td>
 	</tr>
 	<tr>
-		<td><label>Pais:</label></td>
-		<td><input type="text" name="country" value="${company.addr.country}"/></td>
+		<td><label>Rua:</label></td>
+		<td><input type="text" name="street" value="${company.addr.street}" /></td>
+	</tr>
+	<tr>
+		<td><label>Numero:</label></td>
+		<td><input type="text" name="number" value="${company.addr.number}"/></td>
 	</tr>
 </table>
 </fieldset>
