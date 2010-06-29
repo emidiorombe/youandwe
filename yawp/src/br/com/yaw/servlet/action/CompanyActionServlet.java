@@ -5,11 +5,9 @@ import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
 
 import br.com.yaw.entity.Comment;
@@ -40,7 +38,7 @@ public class CompanyActionServlet extends BaseActionServlet {
 		
 		if("list".equals(action)) {
 			try {
-				if(tokens[3].equals("category")){
+				if(tokens[3].equals("all")){
 					listAll(response, service);
 				}else{
 					long companyId = Long.parseLong(tokens[3]);
@@ -87,7 +85,7 @@ public class CompanyActionServlet extends BaseActionServlet {
 						Integer companyId = Integer.parseInt(id_c != null ? id_c : "0");
 						Company fromBase = service.getCompanyById(companyId);
 						c.setKey(fromBase.getKey());
-						c.setOwner(18l);
+						c.setOwner(fromBase.getOwner());
 						c.getAddr().setKey(fromBase.getAddr().getKey());
 						service.addCompany(c);
 						
@@ -118,7 +116,34 @@ public class CompanyActionServlet extends BaseActionServlet {
 				response.getWriter().write(se.getMessage());
 				se.printStackTrace();
 			}
-		}
+		}else if("delete".equals(action)) {
+			try {
+				long companyId = Long.parseLong(tokens[3]);
+				
+				service.remove(companyId);
+				response.sendRedirect("/company/list/all");
+				
+			} catch (ServiceException se) {
+				response.getWriter().write(se.getMessage());
+				se.printStackTrace();
+			}
+		}else if("search".equals(action)) {
+			try {
+				String query = request.getParameter("txtBusca");
+				List<Company> lista = service.findCompanies(query);
+				
+				RequestDispatcher rd = request.getRequestDispatcher("/pages/listCompanies.jsp");
+				request.setAttribute("lista_co", lista);
+				
+				rd.forward(request, response);
+			}catch (Exception e) {
+				response.getWriter().write(e.getMessage());
+				e.printStackTrace();
+			}
+			
+		}else {
+			response.sendRedirect("/pages/404.jsp");	
+		} 
 	}
 
 	private void listAll(HttpServletResponse response, CompanyService service)

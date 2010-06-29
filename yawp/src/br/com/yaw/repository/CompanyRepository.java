@@ -1,5 +1,6 @@
 package br.com.yaw.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import br.com.yaw.entity.Comment;
@@ -19,5 +20,9 @@ public interface CompanyRepository {
 	void addCompany(Company company) throws RepositoryException;
 
 	List<Company> getAllCompanies() throws RepositoryException;
+
+	void removeCompany(long companyId)throws RepositoryException;
+
+	Collection<Company> getByName(String query) throws RepositoryException;
 
 }
