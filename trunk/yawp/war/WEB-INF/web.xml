@@ -53,6 +53,11 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-class>br.com.yaw.servlet.action.AsyncServlet</servlet-class>	
 	</servlet>
 	
+	<servlet>
+		<servlet-name>blob</servlet-name>
+		<servlet-class>br.com.yaw.servlet.action.BlobServlet</servlet-class>	
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>company</servlet-name>
 		<url-pattern>/company/*</url-pattern>
@@ -71,6 +76,11 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<servlet-mapping>
 		<servlet-name>async</servlet-name>
 		<url-pattern>/async/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>blob</servlet-name>
+		<url-pattern>/blob/*</url-pattern>
 	</servlet-mapping>
 	
 	<welcome-file-list>
