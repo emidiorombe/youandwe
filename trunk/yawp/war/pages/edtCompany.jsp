@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@page import="br.com.yaw.entity.Company"%>
 <html>
 <head>
 <title>YaWP!</title>
@@ -45,7 +45,9 @@
 		<td>
 			<select name="state">
 				<option value="0">Selecione...</option>
-				<option value="SP" ${company.addr.state == "SP" ? "selected" : company.addr.state}>SP</option>
+				<c:forEach var="state" items="${l_states}">
+					<option value="${state.key}" ${company.addr.state == state.key ? "selected" : company.addr.state}>${state.value}</option>
+				</c:forEach>
 			</select>
 		</td>
 	</tr>

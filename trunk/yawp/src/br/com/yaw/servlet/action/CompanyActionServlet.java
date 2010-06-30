@@ -18,6 +18,7 @@ import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.service.CommentService;
 import br.com.yaw.service.CompanyService;
 import br.com.yaw.servlet.bean.BeanMapper;
+import br.com.yaw.utils.States;
 import br.com.yaw.utils.StringUtilities;
 
 public class CompanyActionServlet extends BaseActionServlet {
@@ -69,7 +70,10 @@ public class CompanyActionServlet extends BaseActionServlet {
 		}else if("add".equals(action)) {
 			try {
 				if(request.getParameter("edit") == null) {
+					
+					
 					RequestDispatcher rd = request.getRequestDispatcher("/pages/edtCompany.jsp");
+					request.setAttribute("l_states", States.getListStates());
 					rd.forward(request, response);
 				}else {
 					
@@ -109,6 +113,7 @@ public class CompanyActionServlet extends BaseActionServlet {
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/edtCompany.jsp");
 				request.setAttribute("company", company);
 				request.setAttribute("c_tags", StringUtilities.listTagToString(service.getCompanyTags(company.getKey().getId())));
+				request.setAttribute("l_states", States.getListStates());
 				
 				dispatcher.forward(request, response);
 				
