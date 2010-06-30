@@ -2,13 +2,12 @@ package br.com.yaw.servlet.action;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.gson.Gson;
 
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.Company;
@@ -20,6 +19,11 @@ import br.com.yaw.service.CompanyService;
 import br.com.yaw.servlet.bean.BeanMapper;
 import br.com.yaw.utils.States;
 import br.com.yaw.utils.StringUtilities;
+
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.gson.Gson;
 
 public class CompanyActionServlet extends BaseActionServlet {
 	
@@ -146,6 +150,23 @@ public class CompanyActionServlet extends BaseActionServlet {
 				e.printStackTrace();
 			}
 			
+		}else if("update_logo".equals(action)) {
+			try {
+				BlobstoreService blobS = BlobstoreServiceFactory.getBlobstoreService();
+				Map<String, BlobKey> blobs = blobS.getUploadedBlobs(request);
+				
+				BlobKey blobKey = blobs.get("logoFile");
+				String idReq = request.getParameter("id_c");
+				long id_c = Integer.parseInt(idReq);
+				
+				Company company = service.getCompanyById(id_c);
+				company.setLogo(blobKey.getKeyString());
+				service.addCompany(company);
+	
+			    response.sendRedirect("/company/list/"+idReq);
+			}catch (Exception e) {
+				response.getWriter().write(e.getMessage());
+			}
 		}else {
 			response.sendRedirect("/pages/404.jsp");	
 		} 

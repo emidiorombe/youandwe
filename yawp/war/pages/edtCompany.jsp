@@ -8,7 +8,7 @@
 <body>
 <h3>Adicionar Empresa</h3>
 <hr />
-<form action="/company/add" method="post">
+<form action="/company/add" method="post" >
 <input type="hidden" name="edit" />
 <fieldset><legend>Empresa</legend>
 <table>
@@ -21,16 +21,12 @@
 		<td><input type="text" name="url" value="${company.url}"/></td>
 	</tr>
 	<tr>
-		<td><label>Logotipo:</label></td>
-		<td><input type="text" name="logo" value="${company.logo}"/></td>
-	</tr>
-	<tr>
 		<td><label>Descricao:</label></td>
-		<td><textarea rows="5" cols="17" name="description">${company.description}</textarea>	</td>
+		<td><textarea rows="5" cols="17" name="description">${company.description}</textarea></td>
+	</tr>
 	<tr>
 		<td><label>Categoria:</label></td>
 		<td><input type="text" name="category" value="${c_tags}"/></td>
-	</tr>
 	</tr>
 </table>
 </fieldset>

@@ -1,11 +1,25 @@
 <%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory"%>
+<%@page import="com.google.appengine.api.blobstore.BlobstoreService"%>
+
+<%BlobstoreService blobS =  BlobstoreServiceFactory.getBlobstoreService(); %>
+
 <html>
 <head>
 <title>YaWP!</title>
 </head>
 <body>
-<h3>Empresa: ${company.name}</h3>
+<h3>
+	Empresa: ${company.name}<br/>
+	<img alt="${company.name}" src="/blob/img/${company.logo}">	
+	<form method="post" action="<%=blobS.createUploadUrl("/company/update_logo/") %>" enctype="multipart/form-data">
+		<input type="file" name="logoFile"><br/>
+		<input type="hidden" name="id_c" value="${company.key.id}">
+		<input type="submit" value="Salvar">
+	</form>
+</h3>
 Site: ${company.url}
 <br />
 Description: ${company.description}
