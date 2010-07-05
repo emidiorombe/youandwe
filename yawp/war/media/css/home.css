@@ -5,12 +5,11 @@ div#header
 {
 height:140px;
 width:960px;
-
 }
 
 #img_logo
 {
-	margin-left: 80px;	
+	margin-left: 40px;	
 }
 
 div#dvlog
@@ -39,10 +38,9 @@ div#nav_link
 color:#000;
 font-family: arial, helvetica, sans-serif;
 list-style-type:none;
-float:left;
-margin-top:-55px;
-margin-left: 470px;
-width: 740px;
+float:right;
+margin-top:-70px;
+
 }
 
 #nav_link li {display:inline;}
@@ -51,7 +49,7 @@ width: 740px;
 {
 padding:0.2em 1em;
 border-right: 1px solid;
-	
+font-size: 1.2em;	
 }
 
 #nav_link li a:visited
@@ -68,8 +66,9 @@ text-decoration: underline;
 
 #nav_search
 {
-width: 280px;
+width: 600px;
 height: 60px;
+padding-top: 30px;
 }
 
 /*
