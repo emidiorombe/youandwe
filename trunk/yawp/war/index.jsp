@@ -12,17 +12,16 @@
 </head>
 
 <body>
+	
 	<div id="header">
 		<div id="img_logo">
-			<img alt="" src="/media/img/eqtal_logo1_q.png">
+			<a title="Página Inicial" href="/"><img src="/media/img/logo7.png"></a>
 		</div>
 		<c:if test="${loggedUser == null}">
 			<div id="dvlog">
-				<form action="user/login" method="POST">
 					<ul>
 						<li><a href="#" class='logmodal'>Login</a> / <a href="#" class="regmodal">Registrar</a> </li>
 					</ul>
-				</form>
 			</div>
 		</c:if>
 		<c:if test="${loggedUser != null}">
@@ -31,11 +30,13 @@
 			</div>
 		</c:if>
 	</div>
+	
 	<div id="nav">
 		<div id="nav_search">
 			<form action="/company/search" method="post">
-				<input type="text" name="txtBusca" class="input_search">
-				<input type="image" src="/media/img/search.gif" style="width: 50px; height: 50px;">
+				<input type="text" name="q_cat" class="input_search" value="ex: Empresa, Categoria" onclick="this.value=''"> em
+				<input type="text" name="q_onde" class="input_search" value="ex: São Paulo, Curitiba" onclick="this.value=''">
+				<input type="submit" vame="btnSearch" value=">>"/>
 			</form>
 		</div>
 		<div id="nav_link">
@@ -44,9 +45,6 @@
 				<li><a href="/company/list/all">Listar Empresas</a></li>
 				<li><a href="#nogo">Item three</a></li>
 				<li><a href="#nogo">Item four</a></li>
-				<li><a href="#nogo">Item five</a></li>
-				<li><a href="#nogo">Item six</a></li>
-	
 			</ul>
 		</div>
 	</div>
@@ -74,7 +72,6 @@
 			<div id="body_latest">
 			</div>
 		</div>
-	<div id="foot">
 	</div>
 
 	<!-- Modal Login -->
@@ -115,4 +112,5 @@
 <script type="text/javascript" src="/media/js/modal_login_osx.js"></script>
 <script type="text/javascript" src="/media/js/modal_register_osx.js"></script>
 <script type="text/javascript" src="/media/js/validators.js"></script>
+<script type="text/javascript" src="/media/js/generic.js"></script>
 </html>
