@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Rafael Nunes subscriptions in Google Reader</title>
+    </head>
+    <body>
+        <outline text="AkitaOnRails.com" title="AkitaOnRails.com"
+            type="rss" xmlUrl="http://feeds.feedburner.com/AkitaOnRails" htmlUrl="http://www.akitaonrails.com/posts"/>
+        <outline text="Ankiewsky Blog" title="Ankiewsky Blog" type="rss"
+            xmlUrl="http://edgarsilva.com.br/feed/" htmlUrl="http://edgarsilva.com.br"/>
+        <outline text="aXmagno" title="aXmagno" type="rss"
+            xmlUrl="http://amagno.blogspot.com/feeds/posts/default" htmlUrl="http://amagno.blogspot.com/"/>
+        <outline text="blog.caelum.com.br" title="blog.caelum.com.br"
+            type="rss" xmlUrl="http://blog.caelum.com.br/feed/" htmlUrl="http://blog.caelum.com.br"/>
+        <outline text="BOAGLIO.COM" title="BOAGLIO.COM" type="rss"
+            xmlUrl="http://www.boaglio.com/index.php/feed/" htmlUrl="http://www.boaglio.com"/>
+        <outline text="Dear Old Love" title="Dear Old Love" type="rss"
+            xmlUrl="http://dearoldlove.tumblr.com/rss" htmlUrl="http://dearoldlove.tumblr.com/"/>
+        <outline text="Desenvolvimento Ágil - Blog da Improve It"
+            title="Desenvolvimento Ágil - Blog da Improve It" type="rss"
+            xmlUrl="http://blog.improveit.com.br/xml/rss20/feed.xml" htmlUrl="http://blog.improveit.com.br"/>
+        <outline text="Diego Plentz" title="Diego Plentz" type="rss"
+            xmlUrl="http://feeds.feedburner.com/plentz" htmlUrl="http://plentz.org"/>
+        <outline text="Dilbert Daily Strip" title="Dilbert Daily Strip"
+            type="rss"
+            xmlUrl="http://feeds.feedburner.com/DilbertDailyStrip" htmlUrl="http://dilbert.com/"/>
+        <outline text="Débito Técnico" title="Débito Técnico" type="rss"
+            xmlUrl="http://blog.aspercom.com.br/feed/" htmlUrl="http://blog.aspercom.com.br"/>
+        <outline text="Elétron Livre" title="Elétron Livre" type="rss"
+            xmlUrl="http://www.eletronlivre.com.br/feeds/posts/default" htmlUrl="http://www.eletronlivre.com.br/"/>
+        <outline text="Feed InfoQ personalizado para Rafael Nunes"
+            title="Feed InfoQ personalizado para Rafael Nunes"
+            type="rss"
+            xmlUrl="http://www.infoq.com/br/rss/rss.action?token=nLItNoSZiZ2YMNFtBuh7EbEcuRw6qqpc" htmlUrl="http://www.infoq.com"/>
+        <outline text="Fernando Meyer" title="Fernando Meyer" type="rss"
+            xmlUrl="http://fmeyer.org/feed/" htmlUrl="http://blog.fmeyer.org/"/>
+        <outline text="Fragmental" title="Fragmental" type="rss"
+            xmlUrl="http://blog.fragmental.com.br/feed/" htmlUrl="http://blog.fragmental.com.br"/>
+        <outline text="Fragmental.tw" title="Fragmental.tw" type="rss"
+            xmlUrl="http://feeds.feedburner.com/fragmental/tw" htmlUrl="http://fragmental.tw/"/>
+        <outline text="Globalcoders" title="Globalcoders" type="rss"
+            xmlUrl="http://blog.globalcode.com.br/feeds/posts/default" htmlUrl="http://blog.globalcode.com.br/"/>
+        <outline text="Guilherme Chapiewski"
+            title="Guilherme Chapiewski" type="rss"
+            xmlUrl="http://gc.blog.br/feed/" htmlUrl="http://gc.blog.br"/>
+        <outline text="InfoQ Personalized Feed for Rafael Nunes"
+            title="InfoQ Personalized Feed for Rafael Nunes" type="rss"
+            xmlUrl="http://www.infoq.com/rss/rss.action?token=nLItNoSZiZ2YMNFtBuh7EbEcuRw6qqpc" htmlUrl="http://www.infoq.com"/>
+        <outline text="José Papo Weblog" title="José Papo Weblog"
+            type="rss"
+            xmlUrl="http://josepaulopapo.blogspot.com/feeds/posts/default" htmlUrl="http://josepaulopapo.blogspot.com/"/>
+        <outline text="lixo.org" title="lixo.org" type="rss"
+            xmlUrl="http://www.lixo.org/feed/" htmlUrl="http://www.lixo.org"/>
+        <outline text="ongoing by Tim Bray" title="ongoing by Tim Bray"
+            type="rss"
+            xmlUrl="http://www.tbray.org/ongoing/ongoing.atom" htmlUrl="http://www.tbray.org/ongoing/"/>
+        <outline text="PostSecret" title="PostSecret" type="rss"
+            xmlUrl="http://www.postsecret.com/feeds/posts/default" htmlUrl="http://www.postsecret.com/"/>
+        <outline text="Rodrigo Kumpera Weblog"
+            title="Rodrigo Kumpera Weblog" type="rss"
+            xmlUrl="http://www.kumpera.net/blog/index.php/feed/" htmlUrl="http://www.kumpera.net/blog"/>
+        <outline text="Signal vs. Noise" title="Signal vs. Noise"
+            type="rss"
+            xmlUrl="http://feeds.feedburner.com/37signals/beMH" htmlUrl="http://37signals.com/svn/posts"/>
+        <outline text="TEDTalks (video)" title="TEDTalks (video)"
+            type="rss"
+            xmlUrl="http://feeds.feedburner.com/tedtalks_video" htmlUrl="http://www.ted.com/talks/browse"/>
+    </body>
+</opml>
