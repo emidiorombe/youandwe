@@ -37,5 +37,4 @@ public interface UserRepository {
 
 	List<User> getUserListByIds(List<Long> network) throws RepositoryException;
 
-	void addContact(User logged, long contactId) throws RepositoryException;
 }

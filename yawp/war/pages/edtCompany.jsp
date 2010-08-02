@@ -3,14 +3,16 @@
 
 <html>
 <head>
-<title>YaWP!</title>
-</head>
+	<title>EQtal? - Editar Empresa</title>
+	<jsp:include page="/pages/template/styles.jsp"></jsp:include>
+	<link rel="stylesheet" href="/media/css/user.css" type="text/css" media='screen'/>
+	</head>
 <body>
-<h3>Adicionar Empresa</h3>
+<jsp:include page="/pages/template/head.jsp"></jsp:include>
+<h3>Editar Empresa</h3>
 <hr />
 <form action="/company/add" method="post" >
 <input type="hidden" name="edit" />
-<fieldset><legend>Empresa</legend>
 <table>
 	<tr>
 		<td><label>Nome:</label></td>
@@ -29,8 +31,6 @@
 		<td><input type="text" name="category" value="${c_tags}"/></td>
 	</tr>
 </table>
-</fieldset>
-<fieldset><legend>Endereço</legend>
 <table>
 	<tr>
 		<td><label>Pais:</label></td>
@@ -64,10 +64,12 @@
 		<td><input type="text" name="number" value="${company.addr.number}"/></td>
 	</tr>
 </table>
-</fieldset>
 <div align="center"><input type="submit" value="Cadastrar"/></div>
 <input type="hidden" name="id_c" value="${company.key.id}">
 </form>
 
+<jsp:include page="/pages/template/foot.jsp"></jsp:include>
 </body>
+<jsp:include page="/pages/template/scripts.jsp"></jsp:include>
+<script type='text/javascript' src='/media/js/basic.js'></script>
 </html>

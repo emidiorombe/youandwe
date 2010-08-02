@@ -26,6 +26,7 @@ public class CompassFactory {
     	compassGps = new  SingleCompassGps(compass);
     	compassGps.addGpsDevice(new JpaGpsDevice("appengine", emfInstance));
     	compassGps.start();
+    	compassGps.index();
     }
     
     public static Compass getCompass(){

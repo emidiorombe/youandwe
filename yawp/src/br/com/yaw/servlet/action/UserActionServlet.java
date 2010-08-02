@@ -1,7 +1,9 @@
 package br.com.yaw.servlet.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -9,8 +11,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.images.Image;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.Transform;
+
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.User;
+import br.com.yaw.entity.UserImage;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.exception.UsuarioExistenteException;
 import br.com.yaw.ioc.ServiceFactory;
@@ -49,6 +61,19 @@ public class UserActionServlet extends BaseActionServlet{
 				}else {
 					User user = service.getUserByEmail(request.getParameter("contactEmail"));
 					user.setName(request.getParameter("name"));
+					user.setTwit(request.getParameter("twit"));
+					user.setFcbook(request.getParameter("fcbook"));
+					user.setOrkut(request.getParameter("orkut"));
+					
+					BlobstoreService bService = BlobstoreServiceFactory.getBlobstoreService();
+					Map<String, BlobKey> blobs = bService.getUploadedBlobs(request);
+					BlobKey avatarKey = blobs.get("avatar");
+					
+					if(avatarKey != null) {
+						user.setAvatar(avatarKey.getKeyString());
+						createUserAvatar(avatarKey, user.getKey().getId());
+					}
+
 					service.updateUser(user);
 					response.sendRedirect("/user/list/" + user.getKey().getId());
 				}
@@ -66,28 +91,36 @@ public class UserActionServlet extends BaseActionServlet{
 			try {
 				long userId = Long.parseLong(tokens[3]);
 				User user = service.getUserById(userId);
-				
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewUser.jsp");
-				
-				request.setAttribute("user", user);
-				
-				List<Comment> commentsByUser = commentService.getCommentsByUser(user);
-				request.setAttribute("c_comments", commentsByUser);
-				List<User> friends = service.getUserNetwork(user);
-				request.setAttribute("c_friends", friends);
-				dispatcher.forward(request, response);
-				
+				User logged = (User) request.getSession().getAttribute(LOGGED_USER);
+				if(user != null){
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewUser.jsp");
+					
+					request.setAttribute("user", user);
+					
+					List<Comment> commentsByUser = commentService.getCommentsByUser(user);
+					request.setAttribute("c_comments", commentsByUser);
+					request.setAttribute("c_comments_size", commentsByUser.size());
+					List<User> friends = service.getUserNetwork(user);
+					request.setAttribute("c_friends", friends);
+					if(logged != null && logged.getContacts() != null)
+						request.setAttribute("already_friend", logged.getContacts().contains(userId));
+					dispatcher.forward(request, response);
+				}else{
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/404.jsp");
+					dispatcher.forward(request, response);
+				}
 			}catch (ServiceException se) {
 				response.getWriter().write(se.getMessage());
 				se.printStackTrace();
 			}
 		}else if("add_contact".equals(action)) {
-			String friendId = tokens[3];
+			long userId = Long.parseLong(tokens[3]);
 			User logged = (User) request.getSession(false).getAttribute("loggedUser");
 			try {
-				service.addContact(logged, Long.parseLong(friendId));
+				service.addContact(logged,userId);
 				request.getSession(false).setAttribute("loggedUser", logged);
-			}catch (Exception se) {
+				response.sendRedirect("/user/list/"+ userId);
+			}catch (ServiceException se) {
 				response.getWriter().write(se.getMessage());
 				se.printStackTrace();
 			}
@@ -106,7 +139,7 @@ public class UserActionServlet extends BaseActionServlet{
 					dispatch.forward(request, response);
 				}
 				
-			}catch (Exception e) {
+			}catch (ServiceException e) {
 				response.getWriter().println(e.getMessage());
 			}
 		}else if("login_ext".equals(action)) {
@@ -129,26 +162,67 @@ public class UserActionServlet extends BaseActionServlet{
 				
 				
 				
-			}catch (Exception e) {
+			}catch (ServiceException e) {
 				response.getWriter().println(e.getMessage());
 			}
 		}else if("edit".equals(action)) {
 			try {
 				long userId = Long.parseLong(tokens[3]);
 				User user = service.getUserById(userId);
+				User logged = request.getSession(false) == null ? null : (User) request.getSession(false).getAttribute("loggedUser");
 				
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/edtUser.jsp");
-				
-				request.setAttribute("user", user);
-				dispatcher.forward(request, response);
+				if(logged != null && (logged.getKey().getId() == userId)) {
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/edtUser.jsp");
+					
+					request.setAttribute("user", user);
+					dispatcher.forward(request, response);
+						
+				}else {
+					response.sendRedirect("/index.jsp");
+				}
 			}catch(ServiceException se) {
-				
+				throw new RuntimeException();
 			}
 			
 			
 		
+		}else if("search".equals(action)) {
+			try {
+				String mail = request.getParameter("txtmail");
+				String name = request.getParameter("txtBusca");
+				List<User> lista = new ArrayList<User>(1);
+				
+				if(name != null) {
+					lista = service.getUserByName(name);
+				}
+				if(mail != null) {
+					User user = service.getUserByEmail(mail);
+					lista.add(user);
+				}
+				
+				
+				for (User user2 : lista) {
+					response.getWriter().println(user2.getContactEmail());
+				}
+				response.getWriter().close();
+			}catch (ServiceException se) {
+
+			}
+		}else if("remove_contact".equals(action)) {
+			long userId = Long.parseLong(tokens[3]);
+			User logged = (User) request.getSession(false).getAttribute("loggedUser");
+			try {
+				service.removeContact(logged, userId);
+				request.getSession(false).setAttribute("loggedUser", logged);
+				response.sendRedirect("/user/list/"+ userId);
+			}catch (ServiceException se) {
+				response.getWriter().write(se.getMessage());
+				se.printStackTrace();
+			}
+		
 		}else if("logout".equals(action)) {
-				request.getSession(false).invalidate();
+		
+				request.getSession().invalidate();
 				RequestDispatcher dispatch = request.getRequestDispatcher("/index.jsp");
 				dispatch.forward(request, response);
 			
@@ -156,6 +230,23 @@ public class UserActionServlet extends BaseActionServlet{
 			response.sendRedirect("/pages/404.jsp");	
 		} 
 		
+	}
+
+	private void createUserAvatar(BlobKey avatarKey, long uid) throws ServiceException {
+		UserService service = ServiceFactory.getService(UserService.class); 
+		
+		ImagesService imgS = ImagesServiceFactory.getImagesService();
+		Transform trs = ImagesServiceFactory.makeResize(120, 120);
+		Image newImg = imgS.applyTransform(trs, ImagesServiceFactory.makeImageFromBlob(avatarKey));
+		
+		UserImage avatar = service.getUserAvatar(uid);
+		
+		if(avatar != null) {
+			avatar.setPhoto(new Blob(newImg.getImageData()));
+		}else {
+			avatar = new UserImage(uid, new Blob(newImg.getImageData()));
+		}
+		service.addUserAvatar(avatar);
 	}
 
 }

@@ -5,6 +5,7 @@ import javax.servlet.ServletContextListener;
 
 import br.com.yaw.repository.CompassFactory;
 import br.com.yaw.repository.EMFactory;
+import br.com.yaw.resource.ResourceBundleFactory;
 
 /**
  * General initializations
@@ -23,9 +24,18 @@ public class GeneralContextListener implements ServletContextListener {
 	 * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
 	 */
 	@Override
-	public void contextInitialized(ServletContextEvent arg0) {
+	public void contextInitialized(ServletContextEvent ctxEv) {
+		//Cria o EntityManagerFactory
 		EMFactory.initialize();
+		
+		//Cria o indexador para full-text-search
 		CompassFactory.initialize(EMFactory.get());
+		
+		
+		//Cria a factory de resourceBundle para I18N, e insere o default no contexto da app
+		ResourceBundleFactory.loadBundles("pt", "es", "en");
+		ctxEv.getServletContext().setAttribute("msg", ResourceBundleFactory.getBundleByLanguage("pt"));
+		
 		System.out.println("Inicializou o YaWP");
 	}
 	

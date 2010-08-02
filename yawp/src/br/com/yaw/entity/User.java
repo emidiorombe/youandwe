@@ -3,13 +3,16 @@ package br.com.yaw.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.jdo.annotations.Persistent;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableId;
+import org.compass.annotations.SearchableProperty;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -19,15 +22,19 @@ import com.google.appengine.api.datastore.Key;
  *
  */
 @Entity
+@Searchable
 public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Key key;
+	@SearchableId
+	private Key key ;
 	
+	@SearchableProperty
 	private String name;
 	
 	private String password;
 	
+	@SearchableProperty
 	private String contactEmail;
 	
 	private String description;
@@ -46,6 +53,8 @@ public class User implements Serializable{
 	private Integer tipoCadastro;
 	
 	private String tipoUsuario;
+	
+	private Integer qtdeContatos;
 
 	public Key getKey() {
 		return key;
@@ -141,6 +150,26 @@ public class User implements Serializable{
 
 	public void setTipoUsuario(String tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
+	}
+
+	public int getQtdeContatos() {
+		return qtdeContatos == null ? 0 : qtdeContatos;
+	}
+
+	public void removeContact(long userId) {
+		int index = contacts.indexOf(userId);
+		if(index >= 0) {
+			contacts.remove(index);
+			qtdeContatos--;
+		}
+		
+	}
+
+	public void addContact(long contactId) {
+		if(!contacts.contains(contactId)){
+			contacts.add(contactId);
+			qtdeContatos++;
+		}
 	}
 	
 	

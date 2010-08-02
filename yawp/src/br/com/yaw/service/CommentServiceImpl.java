@@ -1,6 +1,7 @@
 package br.com.yaw.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import br.com.yaw.entity.Comment;
@@ -55,13 +56,25 @@ public class CommentServiceImpl implements CommentService {
 		try {
 			repository = ServiceFactory.getService(CommentRepository.class);
 			userRepository = ServiceFactory.getService(UserRepository.class);
-			List<Long> network = userRepository.getFriends(user); 
-			if(network.size() > 0)
-				lista = repository.getCommentsByNetwork(companyId, network, 0, 1000);
+			List<Long> network = userRepository.getFriends(user);
+			network.add(user.getKey().getId());
+			
+			lista = repository.getCommentsByNetwork(companyId, network, 0, 1000);
 		}catch (RepositoryException re) {
 			throw new ServiceException("impossivel.buscar.comentarios",re);
 		}
 		return lista;
+	}
+
+	@Override
+	public Collection<Comment> getLatestComments(int quantidade) throws ServiceException {
+		try {
+			repository = ServiceFactory.getService(CommentRepository.class);
+			Collection<Comment> lat = repository.getLatest(quantidade);
+			return lat;
+		}catch(RepositoryException re) {
+			throw new ServiceException(re);
+		}
 	}
 
 }

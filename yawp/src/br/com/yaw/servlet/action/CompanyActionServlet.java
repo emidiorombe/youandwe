@@ -105,9 +105,6 @@ public class CompanyActionServlet extends BaseActionServlet {
 			}catch (ServiceException e) {
 				response.getWriter().write(e.getMessage());
 				e.printStackTrace();
-			}catch(Exception e){
-				response.getWriter().write(e.getMessage());
-				e.printStackTrace();
 			}
 			
 		}else if("edit".equals(action)) {
@@ -145,7 +142,7 @@ public class CompanyActionServlet extends BaseActionServlet {
 				request.setAttribute("lista_co", lista);
 				
 				rd.forward(request, response);
-			}catch (Exception e) {
+			}catch (ServiceException e) {
 				response.getWriter().write(e.getMessage());
 				e.printStackTrace();
 			}
@@ -164,7 +161,7 @@ public class CompanyActionServlet extends BaseActionServlet {
 				service.addCompany(company);
 	
 			    response.sendRedirect("/company/list/"+idReq);
-			}catch (Exception e) {
+			}catch (ServiceException e) {
 				response.getWriter().write(e.getMessage());
 			}
 		}else {

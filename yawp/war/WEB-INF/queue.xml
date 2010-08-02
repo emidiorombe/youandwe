@@ -9,5 +9,10 @@
 		<name>search-logs</name>
 		<rate>1/s</rate>
 	</queue>
+	
+	<queue>
+		<name>image-splitter</name>
+		<rate>50/s</rate>
+	</queue>
 
 </queue-entries>
