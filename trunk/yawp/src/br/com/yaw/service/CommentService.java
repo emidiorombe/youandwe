@@ -1,5 +1,6 @@
 package br.com.yaw.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import br.com.yaw.entity.Comment;
@@ -19,4 +20,6 @@ public interface CommentService {
 	List<Comment> getCommentsByUser(User user) throws ServiceException;
 
 	List<Comment> getCommentsByNetwork(long companyId, User attribute) throws ServiceException;
+
+	Collection<Comment> getLatestComments(int quantidade) throws ServiceException;
 }

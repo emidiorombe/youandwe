@@ -7,18 +7,16 @@
 <%BlobstoreService blobS =  BlobstoreServiceFactory.getBlobstoreService(); %>
 
 <html>
-<head>
-<title>YaWP!</title>
-</head>
+	<head>
+	<title>EQtal? - Profile Empresa -</title>
+	<jsp:include page="/pages/template/styles.jsp"></jsp:include>
+	</head>
 <body>
+<jsp:include page="/pages/template/head.jsp"></jsp:include>
+<div id="content">
 <h3>
 	Empresa: ${company.name}<br/>
 	<img alt="${company.name}" src="/blob/img/${company.logo}">	
-	<form method="post" action="<%=blobS.createUploadUrl("/company/update_logo/") %>" enctype="multipart/form-data">
-		<input type="file" name="logoFile"><br/>
-		<input type="hidden" name="id_c" value="${company.key.id}">
-		<input type="submit" value="Salvar">
-	</form>
 </h3>
 Site: ${company.url}
 <br />
@@ -54,5 +52,8 @@ Categorias: ${c_tags}
 <c:forEach var="com" items="${c_comments}">
 	${com.text.value} / rating: ${com.rating}<br/>
 </c:forEach>
+</div>
+<jsp:include page="/pages/template/foot.jsp"></jsp:include>
+<jsp:include page="/pages/template/scripts.jsp"></jsp:include>
 </body>
 </html>

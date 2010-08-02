@@ -3,8 +3,6 @@ package br.com.yaw.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.NoResultException;
-
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
@@ -29,6 +27,8 @@ public class UserRepositoryDAO extends BaseDAO<User, Key> implements UserReposit
 			addParamToQuery("username", username);
 			addParamToQuery("pass", password);
 			us =  (User) executeQueryOneResult(jql.toString(), paramsToQuery);
+			if(us != null)
+				us.getContacts().size();
 			commitTransaction();
 		}catch (RepositoryException re) {
 			rollbackTransaction();
@@ -55,7 +55,7 @@ public class UserRepositoryDAO extends BaseDAO<User, Key> implements UserReposit
 			finishTransaction();
 		}
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see br.com.yaw.repository.UserRepository#getUserById(long)
 	 */
@@ -65,6 +65,8 @@ public class UserRepositoryDAO extends BaseDAO<User, Key> implements UserReposit
 		 try{
 			 beginTransaction();
 			 u = getByPrimaryKey(KeyFactory.createKey("User", id));
+			 if(u != null)
+					u.getContacts().size();
 			 commitTransaction();
 			}catch (RepositoryException re) {
 				rollbackTransaction();
@@ -102,6 +104,8 @@ public class UserRepositoryDAO extends BaseDAO<User, Key> implements UserReposit
 			jql.append("select u from User u where u.contactEmail = :username");
 			addParamToQuery("username", contactEmail);
 			u =  (User) executeQueryOneResult(jql.toString(), paramsToQuery);
+			if(u != null)
+				u.getContacts().size();
 			commitTransaction();
 		}catch (RepositoryException re) {
 			rollbackTransaction();
@@ -151,7 +155,7 @@ public class UserRepositoryDAO extends BaseDAO<User, Key> implements UserReposit
 		try{
 			beginTransaction();
 			StringBuilder jql = new StringBuilder();
-			jql.append("select u from User u where u in " + StringUtilities.listLongToInClause(network));
+			jql.append("select us from User us where us.key in " + StringUtilities.listLongToInClause(network));
 			list = executeQuery(jql.toString());
 			commitTransaction();
 		}catch (RepositoryException re) {
@@ -161,22 +165,6 @@ public class UserRepositoryDAO extends BaseDAO<User, Key> implements UserReposit
 			finishTransaction();
 		}
 		return list;
-	}
-
-	@Override
-	public void addContact(User logged, long contactId) throws RepositoryException {
-		try {
-			beginTransaction();
-			User u = getByPrimaryKey(logged.getKey());
-			u.getContacts().add(contactId);
-			commitTransaction();
-		}catch (RepositoryException re) {
-			rollbackTransaction();
-			throw re;
-		}finally {
-			finishTransaction();
-		}
-		
 	}
 
 }

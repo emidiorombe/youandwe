@@ -3,7 +3,7 @@ package br.com.yaw.service;
 import java.util.List;
 
 import br.com.yaw.entity.User;
-import br.com.yaw.exception.RepositoryException;
+import br.com.yaw.entity.UserImage;
 import br.com.yaw.exception.ServiceException;
 
 /**
@@ -32,5 +32,13 @@ public interface UserService {
 	public User getUserByEmail(String email) throws ServiceException;
 
 	void updateUser(User user) throws ServiceException;
+	
+	void addUserAvatar(UserImage uimg) throws ServiceException;
+	
+	UserImage getUserAvatar(long uid)  throws ServiceException;
+
+	List<User> getUserByName(String name) throws ServiceException;
+
+	void removeContact(User logged, long userId)throws ServiceException;
 
 }

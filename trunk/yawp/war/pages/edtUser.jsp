@@ -1,40 +1,42 @@
 <%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory"%>
+<%@page import="com.google.appengine.api.blobstore.BlobstoreService"%>
+
+<%BlobstoreService blobS =  BlobstoreServiceFactory.getBlobstoreService(); %>
+
 <html>
-<head>
-<title>YaWP!</title>
-</head>
+	<head>
+	<title>EQtal? - Profile Usuário -</title>
+	<jsp:include page="/pages/template/styles.jsp"></jsp:include>
+	<link rel="stylesheet" href="/media/css/user.css" type="text/css" media='screen'/>
+	</head>
 <body>
-${msgErro}
+<jsp:include page="/pages/template/head.jsp"></jsp:include>
 <h3>Perfil Usuário</h3>
 <hr />
 
-<form action="/user/add" method="post">
-<input type="hidden" name="edit" />
-<fieldset><legend>Usuário</legend>
+<form action=<%=blobS.createUploadUrl("/user/add")%> method="post" enctype="multipart/form-data">
+<input type="hidden" name="edit" value="true"/>
+<fieldset>
 	<table>
+	<tr>
+		<td><label>Foto:</label></td>
+		<td><input type="file" name="avatar"></td>
+	</tr>
 	<tr>
 		<td><label>Nome:</label></td>
 		<td><input type="text" name="name" value="${user.name}"/></td>
 	</tr>
 	
-	<c:if test="${user.tipoCadastro != 2}">
-	<tr>
-		<td><label>Nova Senha:</label></td>
-		<td><input type="password" name="password" />(Deixe em branco para manter a atual)</td>
-	</tr>
-	<tr>
-		<td><label>Repita Nova Senha:</label></td>
-		<td><input type="password" name="repassword" /></td>
-	</tr>
-	</c:if>
 	<tr>
 		<td><label>Email:</label></td>
 		<td><input type="text" name="contactEmail" value="${user.contactEmail}"  readonly="readonly"/></td>
 	</tr>
 	<tr>
 		<td><label>Twitter:</label></td>
-		<td><input type="text" name="twit" /></td>
+		<td><input type="text" name="twit" value="${user.twit}"/></td>
 	</tr>
 	<tr>
 		<td><label>Orkut:</label></td>
@@ -53,5 +55,8 @@ ${msgErro}
 
 </form>
 
+<jsp:include page="/pages/template/foot.jsp"></jsp:include>
 </body>
+<jsp:include page="/pages/template/scripts.jsp"></jsp:include>
+<script type='text/javascript' src='/media/js/basic.js'></script>
 </html>

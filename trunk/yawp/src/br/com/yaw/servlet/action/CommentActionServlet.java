@@ -1,32 +1,28 @@
 package br.com.yaw.servlet.action;
 
 import java.io.IOException;
+import java.util.Collection;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.yaw.entity.Comment;
-import br.com.yaw.entity.Company;
 import br.com.yaw.entity.User;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
+import br.com.yaw.service.CacheService;
 import br.com.yaw.service.CommentService;
 import br.com.yaw.service.CompanyService;
-import br.com.yaw.servlet.bean.BeanMapper;
 
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
-import com.google.gson.Gson;
 
 public class CommentActionServlet extends BaseActionServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		super.doPost(req, resp);
+		doPost(req, resp);
 	}
 
 	@Override
@@ -49,6 +45,7 @@ public class CommentActionServlet extends BaseActionServlet{
 				c.setCompany(companyId);
 				
 				service.addComment(c);
+				CacheService.addComment(c);
 				
 				response.sendRedirect("/company/list/" + companyId);
 			}catch (ServiceException e) {
@@ -56,6 +53,20 @@ public class CommentActionServlet extends BaseActionServlet{
 				e.printStackTrace();
 			}
 			
+		}else if("latest".equals(action)){
+			try {
+				Collection<Comment> latestComments = CacheService.getLatestComments();
+				if(latestComments == null || latestComments.size() == 0){
+					latestComments = service.getLatestComments(100);
+					CacheService.addComment(latestComments);
+				}
+				
+				for (Comment comment : latestComments) {
+					response.getWriter().write(comment.getTextValue());
+				}
+			}catch(ServiceException se) {
+				throw new RuntimeException();
+			}
 		}else {
 			response.sendRedirect("/pages/404.jsp");	
 		} 

@@ -1,5 +1,6 @@
 package br.com.yaw.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.google.appengine.api.datastore.Key;
@@ -90,6 +91,25 @@ public class CommentDAO extends BaseDAO<Comment, Key> implements CommentReposito
 			finishTransaction();
 		}
 		return list;
+	}
+
+	@Override
+	public Collection<Comment> getLatest(int quantidade) throws RepositoryException {
+	
+		try {
+			beginTransaction();
+			StringBuilder jql = new StringBuilder();
+			jql.append("select c from Comment c "); 
+
+			Collection<Comment> list = executeQuery(jql.toString(), paramsToQuery, 0, quantidade);
+			commitTransaction();
+			return list;
+		}catch (RepositoryException re) {
+			rollbackTransaction();
+			throw re;
+		}finally {
+			finishTransaction();
+		}
 	}
 
 }

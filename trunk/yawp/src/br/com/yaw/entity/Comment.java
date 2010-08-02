@@ -1,6 +1,7 @@
 package br.com.yaw.entity;
 
-import javax.jdo.annotations.Persistent;
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,7 +11,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
 
 @Entity
-public class Comment {
+public class Comment implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Key key;
@@ -63,6 +64,9 @@ public class Comment {
 		this.text = text;
 	}
 	
+	public String getTextValue(){
+		return text.getValue();
+	}
 	
 	
 }

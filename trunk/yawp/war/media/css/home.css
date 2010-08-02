@@ -1,30 +1,48 @@
+/*Fontes*/
+@font-face{
+	font-family: 
+}
+
+/*Gerais*/
+img
+{
+border:0px;
+}
+
 /* 
 	Estilos do Cabeçalho da Home
 */
 div#header
 {
 height:140px;
-width:960px;
+width:920px;
 }
 
 #img_logo
 {
-	margin-left: 40px;	
+margin-left: 40px;	
 }
 
 div#dvlog
 {
-width:290px;
+font-family: "Georgia", "Verdana", "sans-serif";
+width:270px;
 height:140px;
-margin-left: 960px;
+margin-left: 950px;
 margin-top: -100px;
+}
+
+#dvlog a:visited, #dvlog a:visited, #dvlog a:hover, #dvlog a:active, #dvlog a
+{
+text-decoration: none;
+font-size: 1.4em;
+color: #FF5C00;
 }
 
 div#dvlog li
 {
 display: block;
 padding: 2px;
-font-family: "Georgia", "Verdana", "sans-serif";
 font-size: 1.1em;
 font-style: italic;
 margin-left: -10px;
@@ -33,13 +51,23 @@ margin-left: -10px;
 /*
 Estilos da barra de navegação da home
 */
+div#nav
+{
+background-image: url("/media/img/nav_back2.png");
+background-repeat: repeat-x;
+margin-left: -10px;
+width: 1265px;
+height: 45px;
+}
+
+
 div#nav_link
 {
 color:#000;
-font-family: arial, helvetica, sans-serif;
+font-family: 'Molengo', arial, sans-serif;
 list-style-type:none;
 float:right;
-margin-top:-70px;
+margin-top:-65px;
 
 }
 
@@ -47,15 +75,17 @@ margin-top:-70px;
 
 #nav_link li a
 {
+text-decoration: none;
 padding:0.2em 1em;
 border-right: 1px solid;
-font-size: 1.2em;	
+font-size: 1.4em ;
+color: #FFF;
+
 }
 
 #nav_link li a:visited
 {
 text-decoration: none;
-color: #000000;
 }
 
 #nav_link li a:hover
@@ -66,40 +96,64 @@ text-decoration: underline;
 
 #nav_search
 {
-width: 600px;
+width: 770px;
 height: 60px;
-padding-top: 30px;
+margin-top: 30px;
+margin-left: -30px;
 }
 
+#nav_search li 
+{
+display:inline;
+list-style-type:none;
+float:left;
+padding: 5px;
+}
 /*
-Estilos da barra kateral com últimos comentários
+Estilos da barra lateral com últimos comentários
 */
 #latest
 {
-width: 280px;
+width: 335px;
 height: 540px;
 margin-top: -570px;
+margin-left: 15px;
+}
+
+#head_latest
+{
+font-family: Molengo,arial, "Verdana", "sans-serif";
+}
+#body_latest
+{
+border: 1px solid gray;
+height: 490px;
 }
 
 
 /*
 Estilos do conteúdo central da home
 */
+#center
+{
+margin-left: -10px;	
+}
 #home_center_head
 {
-width: 970px;
+width: 950px;
 margin-left: 400px;
-margin-top: 0px;
+margin-top: -10px;
 height: 80px;
+font-size: 1.6em;
 }
-#home_center_head #speech_2{padding-left:160px;}
-#home_center_head #sp1{position:absolute; margin-left: 70px;margin-top: 50px;padding: 0px;}
-#home_center_head #sp2{position:absolute;margin-left: 580px;margin-top: 50px;}
+
+#home_center_head #sp1{position:absolute; margin-left: 140px;margin-top: 20px;padding: 0px; font-family: 'Nobile', arial, serif; }
+#home_center_head #sp2{position:absolute;margin-left: 520px;margin-top: 20px; color: #FF5C00; font-family: 'Nobile', arial, serif; }
 
 #home_center_body
 {
 width: 970px;
-margin-left: 360px;
+margin-left: 480px;
 margin-top: 110px;
 height: 380px;
 }
@@ -110,10 +164,7 @@ Rodapé
 */
 #foot
 {
-background-color: #E68900;
 width: 1260px;
-height: 200px;
-margin-left: -10px;
-padding: 0px;
+height: 70px;
 }
 
