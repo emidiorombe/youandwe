@@ -1,7 +1,10 @@
 package br.com.yaw.servlet.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -14,6 +17,7 @@ import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.service.CacheService;
 import br.com.yaw.service.CommentService;
+import br.com.yaw.utils.ComparadorComentariosDecrescente;
 
 public class GeneralActionServlet extends BaseActionServlet{
 	private static final Logger log = Logger.getLogger(UserActionServlet.class.getName());
@@ -42,8 +46,10 @@ public class GeneralActionServlet extends BaseActionServlet{
 					CacheService.addComment(latestComments);
 				}
 				
+				List<Comment> orderedComments = new ArrayList<Comment>(latestComments);
+				Collections.sort(orderedComments, new ComparadorComentariosDecrescente());
 				RequestDispatcher rd = request.getRequestDispatcher("/pages/index.jsp");
-				request.setAttribute("lt_comment", latestComments);
+				request.setAttribute("lt_comment", orderedComments);
 				rd.forward(request, response);
 			}catch(ServiceException se) {
 				throw new RuntimeException();
