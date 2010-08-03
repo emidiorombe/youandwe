@@ -71,12 +71,15 @@
 			</div>
 			<div id="body_latest">
 				<c:forEach var="c" items="${lt_comment}">
-						<div>
-							<a href="#"><img src="/blob/avatar/1" style="width: 50px; height: 50px;"></a>
-							<h5>${c.textValue}</h5>
-							<hr/>
+						<div style="border-bottom: 1px solid #CCC; padding-bottom: 20px; margin-top: 5px;">
+							<div>
+								<a href="#"><img src="/blob/avatar/1" style="width: 50px; height: 50px; margin-left: 5px;"></a>
+							</div>
+							<div style="margin-left: 59px; margin-top: -75px;">
+								<h5 style="font-family: 'Trebuchet MS'; font-weight: normal; color: #303030">${c.textValue}</h5>
+								<h6>${msg['em']}${c.dtComment}</h6>
+							</div>
 						</div>
-						
 				</c:forEach>
 			</div>
 	</div>

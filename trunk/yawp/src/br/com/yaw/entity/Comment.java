@@ -1,6 +1,7 @@
 package br.com.yaw.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,6 +24,8 @@ public class Comment implements Serializable{
 	private int rating;
 	
 	private Long company;
+	
+	private Date dtComment;
 
 	public Key getKey() {
 		return key;
@@ -64,9 +67,24 @@ public class Comment implements Serializable{
 		this.text = text;
 	}
 	
+	public Date getDtComment() {
+		return dtComment;
+	}
+
+	public void setDtComment(Date dtComment) {
+		this.dtComment = dtComment;
+	}
+	
 	public String getTextValue(){
 		return text.getValue();
 	}
 	
-	
+	public String getPartialText(){
+		String txt = text.getValue();
+		if(txt.length() > 120){
+			txt = txt.substring(0, 121);
+		}
+		return txt;
+	}
+
 }
