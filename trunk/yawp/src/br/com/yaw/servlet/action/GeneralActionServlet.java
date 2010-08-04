@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,7 +19,6 @@ import br.com.yaw.service.CommentService;
 import br.com.yaw.utils.ComparadorComentariosDecrescente;
 
 public class GeneralActionServlet extends BaseActionServlet{
-	private static final Logger log = Logger.getLogger(UserActionServlet.class.getName());
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

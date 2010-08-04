@@ -22,4 +22,8 @@ public interface CommentService {
 	List<Comment> getCommentsByNetwork(long companyId, User attribute) throws ServiceException;
 
 	Collection<Comment> getLatestComments(int quantidade) throws ServiceException;
+
+	Comment getCommentById(long idComment) throws ServiceException;
+	
+	void remove(Comment c) throws ServiceException;
 }

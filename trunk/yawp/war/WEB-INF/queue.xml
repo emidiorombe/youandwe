@@ -14,5 +14,10 @@
 		<name>image-splitter</name>
 		<rate>50/s</rate>
 	</queue>
+	
+	<queue>
+		<name>cache-handle</name>
+		<rate>5/s</rate>
+	</queue>
 
 </queue-entries>

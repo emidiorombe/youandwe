@@ -77,4 +77,24 @@ public class CommentServiceImpl implements CommentService {
 		}
 	}
 
+	@Override
+	public Comment getCommentById(long idComment) throws ServiceException {
+		try {
+			repository = ServiceFactory.getService(CommentRepository.class);
+			return repository.getById(idComment);
+		}catch(RepositoryException re) {
+			throw new ServiceException("impossivel.buscar.comentarios",re);
+		}
+	}
+
+	@Override
+	public void remove(Comment c) throws ServiceException {
+		try {
+			repository = ServiceFactory.getService(CommentRepository.class);
+			repository.remove(c);
+		}catch(RepositoryException re) {
+			throw new ServiceException("impossivel.remover.comentarios",re);
+		}
+	}
+
 }

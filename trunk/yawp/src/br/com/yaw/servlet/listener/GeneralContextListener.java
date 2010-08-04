@@ -3,6 +3,7 @@ package br.com.yaw.servlet.listener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import br.com.yaw.async.AsyncJobs;
 import br.com.yaw.repository.CompassFactory;
 import br.com.yaw.repository.EMFactory;
 import br.com.yaw.resource.ResourceBundleFactory;
@@ -35,6 +36,9 @@ public class GeneralContextListener implements ServletContextListener {
 		//Cria a factory de resourceBundle para I18N, e insere o default no contexto da app
 		ResourceBundleFactory.loadBundles("pt", "es", "en");
 		ctxEv.getServletContext().setAttribute("msg", ResourceBundleFactory.getBundleByLanguage("pt"));
+		
+		//Adiciona todas as empresas no Cache
+		AsyncJobs.addAllCompaniesToCache();
 		
 		System.out.println("Inicializou o YaWP");
 	}
