@@ -2,10 +2,13 @@ package br.com.yaw.service;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Deque;
+import java.util.Map;
 
 import br.com.yaw.entity.Comment;
+import br.com.yaw.entity.Company;
 
 import net.sf.jsr107cache.Cache;
 import net.sf.jsr107cache.CacheException;
@@ -18,6 +21,8 @@ import net.sf.jsr107cache.CacheManager;
  *
  */
 public class CacheService {
+	private enum CACHE_COLLECTIONS {COMMENTS, COMPANIES}
+	
 	private static Cache generalCache;
 	
 	static{
@@ -32,27 +37,45 @@ public class CacheService {
 	}
 	
 	public static void addComment(Comment c){
-		Deque<Comment> q = (Deque<Comment>) generalCache.get("comments");
+		Deque<Comment> q = (Deque<Comment>) generalCache.get(CACHE_COLLECTIONS.COMMENTS.toString());
 		if( q == null){
 			q = new LinkedList<Comment>();
 		}
 		
 		q.add(c);
-		generalCache.put("comments", q);
+		generalCache.put(CACHE_COLLECTIONS.COMMENTS.toString(), q);
 	}
 	
 	public static Collection<Comment> getLatestComments(){
-		return (Collection<Comment>) generalCache.get("comments");
+		return (Collection<Comment>) generalCache.get(CACHE_COLLECTIONS.COMMENTS.toString());
 	}
 
 	public static void addComment(Collection<Comment> latestComments) {
-		Deque<Comment> q = (Deque<Comment>) generalCache.get("comments");
+		Deque<Comment> q = (Deque<Comment>) generalCache.get(CACHE_COLLECTIONS.COMMENTS.toString());
 		if( q == null){
 			q = new LinkedList<Comment>();
 		}
 		q.addAll(latestComments);
-		generalCache.put("comments", q);
+		generalCache.put(CACHE_COLLECTIONS.COMMENTS.toString(), q);
 	}
 	
+	public static Map<String, Company> getCompanies() {
+		return (Map<String, Company>) generalCache.get(CACHE_COLLECTIONS.COMPANIES.toString());
+	}
+	
+	public static void addCompany(Company company) {
+		Map<String, Company> map = (Map<String, Company>) generalCache.get(CACHE_COLLECTIONS.COMPANIES.toString()); 
+		if(map == null) {
+			map = new HashMap<String, Company>();
+		}
+		map.put(Long.toString(company.getKey().getId()), company);
+		generalCache.put(CACHE_COLLECTIONS.COMPANIES.toString(), map);
+	}
+	
+	public static void addCompanies(Collection<Company> companies) {
+		for (Company company : companies) {
+			addCompany(company);
+		}
+	}
 	
 }

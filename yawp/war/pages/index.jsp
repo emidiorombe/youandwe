@@ -3,6 +3,9 @@
 <%@page import="com.google.appengine.api.users.UserService"%>
 <%@page import="br.com.yaw.entity.User"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"  %>
+
+<%@ taglib prefix="eq" tagdir="/WEB-INF/tags/" %> 
 
 <%  UserService userServiceG = com.google.appengine.api.users.UserServiceFactory.getUserService(); %>
 
@@ -77,7 +80,7 @@
 							</div>
 							<div style="margin-left: 59px; margin-top: -75px;">
 								<h5 style="font-family: 'Trebuchet MS'; font-weight: normal; color: #303030">${c.textValue}</h5>
-								<h6>${msg['em']}${c.dtComment}</h6>
+								<h6>${msg['em']} <fmt:formatDate value="${c.dtComment}" type="date" pattern="dd/MM/yyyy"/> sobre <a href='/company/list/${c.company}'><eq:companyName idCompany="29"/></a></h6>
 							</div>
 						</div>
 				</c:forEach>

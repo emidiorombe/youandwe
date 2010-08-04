@@ -112,5 +112,26 @@ public class CommentDAO extends BaseDAO<Comment, Key> implements CommentReposito
 		}
 	}
 
+	@Override
+	public Comment getById(long idComment) throws RepositoryException {
+		return getByPrimaryKey(KeyFactory.createKey("Comment", idComment));
+		
+	}
+
+	@Override
+	public void remove(Comment c) throws RepositoryException {
+		try {
+			beginTransaction();
+			delete(c);
+			commitTransaction();	
+		}catch (RepositoryException re) {
+			rollbackTransaction();
+			throw re;
+		}finally {
+			finishTransaction();
+		}
+		
+	}
+
 }
 

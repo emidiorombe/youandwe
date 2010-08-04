@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.yaw.async.AsyncJobs;
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.Company;
 import br.com.yaw.entity.User;
@@ -73,14 +74,15 @@ public class CompanyActionServlet extends BaseActionServlet {
 			
 		}else if("add".equals(action)) {
 			try {
-				if(request.getParameter("edit") == null) {
+				if(request.getSession().getAttribute(LOGGED_USER) == null) {
+					response.sendRedirect("/pages/login.jsp");
+				}else if(request.getParameter("edit") == null) {
 					
 					
 					RequestDispatcher rd = request.getRequestDispatcher("/pages/edtCompany.jsp");
 					request.setAttribute("l_states", States.getListStates());
 					rd.forward(request, response);
 				}else {
-					
 					Company c = BeanMapper.createCompany(request);
 					
 					String id_c = request.getParameter("id_c");
@@ -100,6 +102,7 @@ public class CompanyActionServlet extends BaseActionServlet {
 					}
 					
 					service.addTags(request.getParameter("category"), c.getKey().getId());
+					AsyncJobs.addCompanyToCache(c);
 					response.sendRedirect("/company/list/" + c.getKey().getId());
 				}
 			}catch (ServiceException e) {

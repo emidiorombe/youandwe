@@ -28,4 +28,8 @@ public interface CommentRepository {
 	List<Comment> getCommentsByNetwork(long companyId, List<Long> list, int init, int end) throws RepositoryException;
 
 	Collection<Comment> getLatest(int quantidade) throws RepositoryException;
+
+	Comment getById(long idComment) throws RepositoryException;
+
+	void remove(Comment c) throws RepositoryException;
 }

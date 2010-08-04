@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"  %>
 
 <%@page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory"%>
 <%@page import="com.google.appengine.api.blobstore.BlobstoreService"%>
@@ -50,7 +51,7 @@ Categorias: ${c_tags}
 	<a href="/company/list/${company.key.id}/">ver somente contatos</a><br/>
 </c:if>
 <c:forEach var="com" items="${c_comments}">
-	${com.text.value} / rating: ${com.rating}<br/>
+	${com.text.value} / rating: ${com.rating} / <c:if test="${com.owner == loggedUser.key.id}"><a href="/comment/remove/${com.key.id}">${msg['remover']}</a></c:if><br/>
 </c:forEach>
 </div>
 <jsp:include page="/pages/template/foot.jsp"></jsp:include>

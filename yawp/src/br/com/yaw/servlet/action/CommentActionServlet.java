@@ -2,6 +2,7 @@ package br.com.yaw.servlet.action;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +38,7 @@ public class CommentActionServlet extends BaseActionServlet{
 				Comment c = new Comment();
 				c.setRating(Integer.parseInt(request.getParameter("rating")));
 				c.setText(new Text(request.getParameter("text")));
+				c.setDtComment(new Date());
 				
 				User u = (User) request.getSession(false).getAttribute(LOGGED_USER);
 				c.setOwner(u.getKey().getId());
@@ -67,8 +69,19 @@ public class CommentActionServlet extends BaseActionServlet{
 			}catch(ServiceException se) {
 				throw new RuntimeException();
 			}
+		}else if("remove".equals(action)){
+			try {
+				long idComment = Long.parseLong(tokens[3]);
+				Comment c = service.getCommentById(idComment);
+				String companyId = c.getCompany().toString();
+				service.remove(c);
+				response.sendRedirect("/company/list/"+companyId);
+			}catch (ServiceException se) {
+				response.getWriter().write(se.getMessage());
+				se.printStackTrace();
+			}
 		}else {
-			response.sendRedirect("/pages/404.jsp");	
+					response.sendRedirect("/pages/404.jsp");	
 		} 
 	}
 }
