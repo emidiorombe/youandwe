@@ -32,9 +32,6 @@ a:hover {color: #61350A; text-decoration: underline;}
 #cabecalho div p {padding-bottom: 7px; color: #fefefe; font: bold 1.6em/1 "Trebuchet MS", Helvetica, Jamrul, sans-serif;}
 #cabecalho div ul li {padding-bottom: 6px; color: #f4f4ed; font-size: 13px; font-weight: bold;}
 
-/*provisorio*/
-#cabecalho .profissao {position: absolute; left: 210px;}
-
 /* div para conteudo principal - ajustar */
 #content {float: left; position: relative; width: 650px; margin-top: 168px; padding: 12px 0 30px 5px; border-color: #9FA19D}
 #content h1 {width: 580px; margin-bottom: 6px; padding-bottom: 2px; color: #3f3f3e; font: 3.6em/1 "Trebuchet MS", Helvetica, Jamrul, sans-serif;}
@@ -97,7 +94,7 @@ table.stats td.hedBlue
 #noticias #inner span, #destaques #inner span {position: absolute; font-family: Verdana,Arial,Helvetica,sans-serif; font-weight: bold; font-size: 14px;}
 #noticias #inner p {font-family: Arial; font-size: 14px; line-height: 20px; }
 
-#destaques {top:270px;}
+#destaques {top:250px;}
 
 #destaques #inner #imagem5 {padding: 5px 0;}
 #destaques #inner #textos5 {padding: 5px 130px; width: 380px;}
@@ -148,3 +145,7 @@ table.stats td.hedBlue
 	width: 100px;
 	float: left;
 }
+
+/*provisorio*/
+#cabecalho .tdc {position: absolute; left: 230px; top:-10px;}
+#trilhasTDC {position: absolute; top:220px; width: 370px; height:210px; left:580px;}
