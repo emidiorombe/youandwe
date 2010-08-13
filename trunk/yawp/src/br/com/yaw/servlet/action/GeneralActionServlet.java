@@ -32,10 +32,12 @@ public class GeneralActionServlet extends BaseActionServlet{
 		CommentService com_service = ServiceFactory.getService(CommentService.class);
 		
 		if("help".equals(action)) {
-			response.sendRedirect("/pages/help.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/pages/help.jsp");
+			rd.forward(request, response);
 			
 		}else if("busca".equals(action)) {
-			response.sendRedirect("/pages/search.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/pages/search.jsp");
+			rd.forward(request, response);
 		}else if("index".equals(action)) {
 			try {
 				Collection<Comment> latestComments = CacheService.getLatestComments();

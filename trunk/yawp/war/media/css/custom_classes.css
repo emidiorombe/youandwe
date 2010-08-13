@@ -17,3 +17,17 @@ border:1px solid #000;
 .userLabel{
 color: #0A58A3;
 }
+
+.div_text_help{
+	border-top: 1px solid #CCC;
+	display: block;
+	width: 960px;
+	margin: 20px 0px;
+	padding: 15px 0px;
+	text-align: left;
+	color: #222;
+	font-family: Georgia, serif;
+	font-size: 1.1em;
+	font-weight: normal;
+	line-height: 1.3em;
+}
