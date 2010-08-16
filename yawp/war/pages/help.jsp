@@ -36,6 +36,7 @@
 				 Por exemplo, imagine que você foi em um restaurante do qual gostou muito. Você diz o que achou, o por que gostou, coloca algumas fotos que tirou no lugar e convida seus amigos para irem juntos na próxima semana.<br/>
 				 O EQtal também foi criado como o caso de estudo de um <a href="" target="_blank">curso sobre o Google AppEngine</a> utilizando a plataforma Java"
 			</p>
+			<a href="#faq_title">Topo</a>
 		</div>
 		
 		<div id="gae" class="div_text_help" >
@@ -44,6 +45,7 @@
 				"Google AppEngine é uma plataforma e/ou serviço(PaaS - Platform as a Service) criado pelo Google que nos permite criar aplicações web e hospedálas utilizando a infraestrutura, bancos de dados e servidores de aplicação do próprio Google.<br/>
 				 Se tiver mais interesse procure em: http://www.yaw.com.br/articles/gae"
 			</p>
+			<a href="#faq_title">Topo</a>
 		</div>
 	</div>
 	

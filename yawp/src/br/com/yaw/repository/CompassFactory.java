@@ -26,7 +26,7 @@ public class CompassFactory {
     	compassGps = new  SingleCompassGps(compass);
     	compassGps.addGpsDevice(new JpaGpsDevice("appengine", emfInstance));
     	compassGps.start();
-    	compassGps.index();
+    	//compassGps.index(); Está com problemas se tentarmos inicializar unto com o contexto, GAE geralmente retorna uma com.google.apphosting.api.DeadlineExceededException
     }
     
     public static Compass getCompass(){
