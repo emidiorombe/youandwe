@@ -15,9 +15,9 @@
 	</system-properties>
 	
     <static-files>
-        <include path="/**.png" expiration="180d"/>
-        <include path="/**.jpg" expiration="180d"/>
-        <include path="/**.gif" expiration="180d"/>
+        <include path="/**.png" expiration="14d"/>
+        <include path="/**.jpg" expiration="14d"/>
+        <include path="/**.gif" expiration="14d"/>
         <include path="/**.js" expiration="7d"/>
         <include path="/**.css" expiration="7d"/>
     </static-files>
