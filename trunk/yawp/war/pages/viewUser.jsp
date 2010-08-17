@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="eq" tagdir="/WEB-INF/tags/" %> 
 
 <html>
 	<head>
@@ -53,7 +54,10 @@
 		</div>
 		<div id="uc_comment">
 			<c:forEach var="com" items="${c_comments}">
-				${com.textValue}
+				<div id="user_c">
+					<p>${com.textValue}</p>
+					<h5>Sobre <a href='/company/list/${com.company}'><eq:companyName idCompany="${com.company}"/></a></h5>
+				</div>
 			</c:forEach>
 		</div>
 	</div>
