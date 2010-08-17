@@ -1,9 +1,9 @@
-#uinfo{ height: 250px; border: 1px solid; margin-top: -20px; margin-left: -5px;}
+#uinfo{ height: 250px; margin-top: -20px; margin-left: -5px; border-bottom: 1px solid;}
 
-#uphoto{ height: 80px; width: 120px; border: 1px solid; margin: 5px;}
+#uphoto{ height: 80px; width: 120px; margin: 5px;}
 #uphoto ul{ list-style: none; margin-left: -40px; margin-top: 0px;}
 
-#udata{ width: 1100px; height:120px; border: 1px solid; margin: 5px; margin-left: 140px; margin-top: -87px; }
+#udata{ width: 1100px; height:120px; margin: 5px; margin-left: 140px; margin-top: -87px; }
 #udata ul{ list-style: none;}
 
 #uname { display: inline; }
@@ -12,6 +12,8 @@
 
 #ucomments{ height: 340px; margin-left: -5px;}
 
-#uc_title{ height: 60px; border: 1px solid;}
+#uc_title{ height: 60px;}
 
-#uc_comment{ height: 280px;  border: 1px solid;}
+#uc_comment{ height: 280px;}
+
+#user_c{ border-bottom: 1px solid #ccc}
