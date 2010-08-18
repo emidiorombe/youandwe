@@ -42,7 +42,7 @@ public class GeneralActionServlet extends BaseActionServlet{
 			try {
 				Collection<Comment> latestComments = CacheService.getLatestComments();
 				if(latestComments == null || latestComments.size() == 0){
-					latestComments = com_service.getLatestComments(100);
+					latestComments = com_service.getLatestComments(10);
 					CacheService.addComment(latestComments);
 				}
 				

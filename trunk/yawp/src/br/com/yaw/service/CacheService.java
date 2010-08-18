@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Deque;
+import java.util.List;
 import java.util.Map;
 
 import br.com.yaw.entity.Comment;
@@ -37,7 +37,7 @@ public class CacheService {
 	}
 	
 	public static void addComment(Comment c){
-		Deque<Comment> q = (Deque<Comment>) generalCache.get(CACHE_COLLECTIONS.COMMENTS.toString());
+		List<Comment> q = (List<Comment>) generalCache.get(CACHE_COLLECTIONS.COMMENTS.toString());
 		if( q == null){
 			q = new LinkedList<Comment>();
 		}
@@ -51,7 +51,7 @@ public class CacheService {
 	}
 
 	public static void addComment(Collection<Comment> latestComments) {
-		Deque<Comment> q = (Deque<Comment>) generalCache.get(CACHE_COLLECTIONS.COMMENTS.toString());
+		List<Comment> q = (List<Comment>) generalCache.get(CACHE_COLLECTIONS.COMMENTS.toString());
 		if( q == null){
 			q = new LinkedList<Comment>();
 		}
@@ -76,6 +76,11 @@ public class CacheService {
 		for (Company company : companies) {
 			addCompany(company);
 		}
+	}
+
+	public static void removeComment(Comment c) {
+		generalCache.put(CACHE_COLLECTIONS.COMMENTS.toString(), null);
+		
 	}
 	
 }

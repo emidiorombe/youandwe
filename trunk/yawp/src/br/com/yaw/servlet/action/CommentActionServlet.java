@@ -75,6 +75,7 @@ public class CommentActionServlet extends BaseActionServlet{
 				Comment c = service.getCommentById(idComment);
 				String companyId = c.getCompany().toString();
 				service.remove(c);
+				CacheService.removeComment(c);
 				response.sendRedirect("/company/list/"+companyId);
 			}catch (ServiceException se) {
 				response.getWriter().write(se.getMessage());
