@@ -3,6 +3,7 @@ package br.com.yaw.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +15,10 @@ import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableId;
 import org.compass.annotations.SearchableProperty;
 
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
 
 /**
  * A generic app User.
@@ -171,7 +175,5 @@ public class User implements Serializable{
 			qtdeContatos++;
 		}
 	}
-	
-	
 	
 }

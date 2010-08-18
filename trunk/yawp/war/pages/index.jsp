@@ -76,7 +76,7 @@
 				<c:forEach var="c" items="${lt_comment}">
 						<div style="border-bottom: 1px solid #CCC; padding-bottom: 20px; margin-top: 5px;">
 							<div>
-								<a href="/user/list/${c.owner}"><img src="/blob/avatar/${c.owner}" style="width: 50px; height: 50px; margin-left: 5px;"></a>
+								<a href="/user/list/${c.owner}"><eq:userImg userId="${c.owner}" size="64" /></a>
 							</div>
 							<div style="margin-left: 59px; margin-top: -75px;">
 								<h5 style="font-family: 'Trebuchet MS'; font-weight: normal; color: #303030">${c.textValue}</h5>

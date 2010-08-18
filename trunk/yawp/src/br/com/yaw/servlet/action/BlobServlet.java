@@ -13,6 +13,8 @@ import br.com.yaw.service.UserService;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
 
 public class BlobServlet extends BaseActionServlet{
 
@@ -36,9 +38,14 @@ public class BlobServlet extends BaseActionServlet{
 		}else if("avatar".equals(action)){
 			try {
 				String uid = tokens[3];
-				UserImage avatar = userService.getUserAvatar(Long.parseLong(uid));
-				response.getOutputStream().write(avatar.getPhoto().getBytes());
-				response.getOutputStream().close();
+				
+				ImagesService imagesService = ImagesServiceFactory.getImagesService();
+				String url = imagesService.getServingUrl(new BlobKey(uid));
+				
+				response.getWriter().println(url+"=120s");
+				response.getWriter().close();
+				
+				
 			}catch (Exception e) {
 				// TODO return foto default
 			}
