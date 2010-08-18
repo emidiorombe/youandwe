@@ -1,3 +1,7 @@
+<%@page import="br.com.yaw.entity.User"%>
+<%@page import="com.google.appengine.api.images.ImagesService"%>
+<%@page import="com.google.appengine.api.blobstore.BlobKey"%>
+<%@page import="com.google.appengine.api.images.ImagesServiceFactory"%>
 <%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="eq" tagdir="/WEB-INF/tags/" %> 
@@ -13,6 +17,11 @@
 <body>
 <jsp:include page="/pages/template/head.jsp"></jsp:include>
 
+<%ImagesService imgS = ImagesServiceFactory.getImagesService(); 
+User us1 =  (User)request.getAttribute("user");	
+
+%>
+
 <div id="content">
 	<div id="uinfo">
 		<div id="uphoto">
@@ -21,7 +30,7 @@
 				<li><img alt="${user.name}" src="/media/img/photo_default.jpg" ></li>
 			</c:if>
 			<c:if test="${user.avatar != null}">
-				<li><img alt="${user.name}" src="/blob/avatar/${user.key.id}" ></li>
+				<li><eq:userImg userImg="${user.avatar}" size="120" /></li>
 			</c:if>
 			<c:if test="${loggedUser.key.id == user.key.id}">
 				<li><a href="/user/edit/${user.key.id}">${msg['editar_perfil']}</a></li>

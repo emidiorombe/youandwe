@@ -71,7 +71,6 @@ public class UserActionServlet extends BaseActionServlet{
 					
 					if(avatarKey != null) {
 						user.setAvatar(avatarKey.getKeyString());
-						createUserAvatar(avatarKey, user.getKey().getId());
 					}
 
 					service.updateUser(user);
@@ -230,23 +229,6 @@ public class UserActionServlet extends BaseActionServlet{
 			response.sendRedirect("/pages/404.jsp");	
 		} 
 		
-	}
-
-	private void createUserAvatar(BlobKey avatarKey, long uid) throws ServiceException {
-		UserService service = ServiceFactory.getService(UserService.class); 
-		
-		ImagesService imgS = ImagesServiceFactory.getImagesService();
-		Transform trs = ImagesServiceFactory.makeResize(120, 120);
-		Image newImg = imgS.applyTransform(trs, ImagesServiceFactory.makeImageFromBlob(avatarKey));
-		
-		UserImage avatar = service.getUserAvatar(uid);
-		
-		if(avatar != null) {
-			avatar.setPhoto(new Blob(newImg.getImageData()));
-		}else {
-			avatar = new UserImage(uid, new Blob(newImg.getImageData()));
-		}
-		service.addUserAvatar(avatar);
 	}
 
 }
