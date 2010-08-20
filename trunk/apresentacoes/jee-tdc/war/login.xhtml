@@ -1,0 +1,26 @@
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:ui="http://java.sun.com/jsf/facelets">
+   <body >
+      <f:view contentType="text/html">
+      	<h:form>
+      		<h:messages />
+      	<h2>Login com JSF 2 no Google AppEngine</h2>
+      	<h:panelGrid columns="2">
+       		<h:outputText value="E-mail:"/>
+         	<h:inputText value="#{loginMB.mail}" required="true" requiredMessage="Preenchimento do e-mail obrigatório"/>
+         	
+         	<h:outputText value="Senha:"/>
+         	<h:inputSecret value="#{loginMB.senha}" required="true" requiredMessage="A senha não deve ser vazia"/>
+         	
+         	<h:commandButton value="Ok" action="#{loginMB.autenticar}"/>
+         	
+         </h:panelGrid>
+         </h:form>
+      </f:view>
+   </body>
+</html>
