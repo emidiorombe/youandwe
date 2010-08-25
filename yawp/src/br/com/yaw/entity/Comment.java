@@ -2,12 +2,14 @@ package br.com.yaw.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
 
@@ -26,6 +28,8 @@ public class Comment implements Serializable{
 	private Long company;
 	
 	private Date dtComment;
+	
+	private List<BlobKey> photos;
 
 	public Key getKey() {
 		return key;
@@ -79,6 +83,14 @@ public class Comment implements Serializable{
 		return text.getValue();
 	}
 	
+	public List<BlobKey> getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(List<BlobKey> photos) {
+		this.photos = photos;
+	}
+
 	public String getPartialText(){
 		String txt = text.getValue();
 		if(txt.length() > 120){
@@ -86,6 +98,8 @@ public class Comment implements Serializable{
 		}
 		return txt;
 	}
+	
+	
 
 	@Override
 	public int hashCode() {

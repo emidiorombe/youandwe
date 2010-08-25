@@ -1,8 +1,11 @@
 package br.com.yaw.servlet.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +19,9 @@ import br.com.yaw.service.CacheService;
 import br.com.yaw.service.CommentService;
 import br.com.yaw.service.CompanyService;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.Text;
 
 public class CommentActionServlet extends BaseActionServlet{
@@ -45,6 +51,18 @@ public class CommentActionServlet extends BaseActionServlet{
 				
 				long companyId = Long.parseLong(request.getParameter("id_company"));
 				c.setCompany(companyId);
+				
+				BlobstoreService blobS = BlobstoreServiceFactory.getBlobstoreService();
+				Map<String, BlobKey> uploadedBlobs = blobS.getUploadedBlobs(request);
+				List<BlobKey> photos = new ArrayList<BlobKey>();
+				
+				for (Map.Entry<String, BlobKey> entry: uploadedBlobs.entrySet()) {
+					photos.add(entry.getValue());
+				}
+				
+				if(photos.size() > 0) {
+					c.setPhotos(photos);
+				}
 				
 				service.addComment(c);
 				CacheService.addComment(c);

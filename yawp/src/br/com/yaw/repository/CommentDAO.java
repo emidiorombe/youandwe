@@ -24,6 +24,12 @@ public class CommentDAO extends BaseDAO<Comment, Key> implements CommentReposito
 			jql.append("select c from Comment c where company = :coId");
 			addParamToQuery("coId", companyId);
 			list = executeQuery(jql.toString(), paramsToQuery, initPaginacao, fimPaginacao);
+			
+			for (Comment c : list) {
+				if(c.getPhotos() != null) {
+					c.getPhotos().size();
+				}
+			}
 			commitTransaction();	
 		}catch (RepositoryException re) {
 			rollbackTransaction();
@@ -83,6 +89,12 @@ public class CommentDAO extends BaseDAO<Comment, Key> implements CommentReposito
 			jql.append("select c from Comment c where c.company = :coId and c.owner in " + StringUtilities.listLongToInClause(network)); 
 			addParamToQuery("coId", companyId);
 			list = executeQuery(jql.toString(), paramsToQuery, init, end);
+			
+			for (Comment c : list) {
+				if(c.getPhotos() != null) {
+					c.getPhotos().size();
+				}
+			}
 			commitTransaction();
 		}catch (RepositoryException re) {
 			rollbackTransaction();
