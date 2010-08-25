@@ -4,3 +4,4 @@
 <script type="text/javascript" src="/media/js/modal_register_osx.js"></script>
 <script type="text/javascript" src="/media/js/validators.js"></script>
 <script type="text/javascript" src="/media/js/generic.js"></script>
+<script type="text/javascript" src="/media/js/jquery.raty.min.js"></script>

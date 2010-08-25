@@ -1,6 +1,11 @@
 <%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%@page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory"%>
+<%@page import="com.google.appengine.api.blobstore.BlobstoreService"%>
+
+<%BlobstoreService blobS =  BlobstoreServiceFactory.getBlobstoreService(); %>
+
 <html>
 <head>
 	<title>EQtal? - Editar Empresa</title>
@@ -11,7 +16,7 @@
 <jsp:include page="/pages/template/head.jsp"></jsp:include>
 <h3>Editar Empresa</h3>
 <hr />
-<form action="/company/add" method="post" >
+<form action=<%=blobS.createUploadUrl("/company/add")%> method="post" enctype="multipart/form-data" >
 <input type="hidden" name="edit" />
 <table>
 	<tr>
@@ -21,6 +26,10 @@
 	<tr>
 		<td><label>Site:</label></td>
 		<td><input type="text" name="url" value="${company.url}"/></td>
+	</tr>
+	<tr>
+		<td><label>Logo:</label></td>
+		<td><input type="file" name="logo_c" /></td>
 	</tr>
 	<tr>
 		<td><label>Descricao:</label></td>

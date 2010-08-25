@@ -86,6 +86,14 @@ public class CompanyActionServlet extends BaseActionServlet {
 					Company c = BeanMapper.createCompany(request);
 					
 					String id_c = request.getParameter("id_c");
+					
+					BlobstoreService blobS = BlobstoreServiceFactory.getBlobstoreService();
+					Map<String, BlobKey> uploadedBlobs = blobS.getUploadedBlobs(request);
+					
+					BlobKey blobKey = uploadedBlobs.get("logo_c");
+					
+					if(blobKey != null)
+						c.setLogo(blobKey.getKeyString());
 						
 					if(id_c == null || "".equals(id_c) ) {
 						User user = (User)request.getSession().getAttribute(LOGGED_USER);
