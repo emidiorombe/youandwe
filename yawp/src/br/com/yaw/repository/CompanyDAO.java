@@ -80,8 +80,27 @@ public class CompanyDAO extends BaseDAO<Company, Key> implements CompanyReposito
 		List<Company> list = new ArrayList<Company>();
 		try{
 			StringBuilder jql = new StringBuilder();
-			jql.append("select ct from Company ct where ct.name = :comp_name");
-			addParamToQuery("comp_name", query);
+			jql.append("select ct from Company ct where ct.searchableName >=:comp_name and  ct.searchableName < :delimit");
+			addParamToQuery("comp_name", query.toLowerCase());
+			addParamToQuery("delimit", query.toLowerCase() + "\ufffd");
+			list = executeQuery(jql.toString(), paramsToQuery);
+			list.size();
+		}catch (RepositoryException re) {
+			throw re;
+		}finally {
+		}
+		return list;
+	}
+
+	@Override
+	public Collection<Company> getByCidade(String city)
+			throws RepositoryException {
+		List<Company> list = new ArrayList<Company>();
+		try{
+			StringBuilder jql = new StringBuilder();
+			jql.append("select ct from Company ct where ct.addr.searchableCity >= :city_name and ct.addr.searchableCity < :delimit");
+			addParamToQuery("city_name", city.toLowerCase());
+			addParamToQuery("delimit", city.toLowerCase() + "\ufffd");
 			list = executeQuery(jql.toString(), paramsToQuery);
 			list.size();
 		}catch (RepositoryException re) {

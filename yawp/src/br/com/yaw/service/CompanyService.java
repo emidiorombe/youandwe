@@ -1,6 +1,7 @@
 package br.com.yaw.service;
 
 import java.util.List;
+import java.util.Map;
 
 import br.com.yaw.entity.Company;
 import br.com.yaw.entity.CompanyTag;
@@ -25,5 +26,5 @@ public interface CompanyService {
 
 	void remove(long companyId) throws ServiceException;
 
-	List<Company> findCompanies(String query)throws ServiceException;
+	List<Company> findCompanies(Map<String, String> query)throws ServiceException;
 }

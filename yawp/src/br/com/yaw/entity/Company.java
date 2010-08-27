@@ -5,12 +5,14 @@ import java.util.List;
 
 import javax.jdo.annotations.Persistent;
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+
 
 import com.google.appengine.api.datastore.Key;
 
@@ -27,11 +29,13 @@ public class Company implements Serializable {
 	
 	private String name;
 	
+	private String searchableName;
+	
 	private String description;
 	
 	private String mail;
 	
-	@Persistent
+	@Embedded
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private Address addr;
 	
@@ -114,5 +118,16 @@ public class Company implements Serializable {
 	public void setOwner(Long owner) {
 		this.owner = owner;
 	}
+
+	public String getSearchableName() {
+		return searchableName;
+	}
+
+	public void setSearchableName(String searchableName) {
+		this.searchableName = searchableName;
+	}
+	
+	
+	
 
 }

@@ -328,4 +328,15 @@ public class DatanucleusCRUDUtils {
 		}
 		
 	}
+
+	/**
+	 * Insert/update a generic entity
+	 * @param entity
+	 * @throws RepositoryException
+	 */
+	public static void saveGeneric(Object entity) throws RepositoryException {
+		save(entity);
+		
+	}
+
 }
