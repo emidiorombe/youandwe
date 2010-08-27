@@ -11,4 +11,5 @@ public interface CompanyTagRepository {
 	public List<CompanyTag> getTagsByCompany(Long companyId) throws RepositoryException;
 
 	public void deleteCompanyTags(Long companyId) throws RepositoryException;
+
 }

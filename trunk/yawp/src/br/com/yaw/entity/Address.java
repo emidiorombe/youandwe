@@ -2,6 +2,7 @@ package br.com.yaw.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,12 +15,8 @@ import com.google.appengine.api.datastore.Key;
  * @author Rafael Nunes
  *
  */
-@Entity
+@Embeddable
 public class Address implements Serializable{
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Key key;
 	
 	private String street;
 	
@@ -29,17 +26,11 @@ public class Address implements Serializable{
 	
 	private String city;
 	
+	private String searchableCity;
+	
 	private String state;
 	
 	private String country;
-
-	public Key getKey() {
-		return key;
-	}
-
-	public void setKey(Key key) {
-		this.key = key;
-	}
 
 	public String getStreet() {
 		return street;
@@ -92,6 +83,16 @@ public class Address implements Serializable{
 	public void setCountry(String country) {
 		this.country = country;
 	}
+
+	public String getSearchableCity() {
+		return searchableCity;
+	}
+
+	public void setSearchableCity(String searchableCity) {
+		this.searchableCity = searchableCity;
+	}
+	
+	
 	
 	
 }

@@ -38,8 +38,9 @@
 			<form action="/company/search" method="post">
 			<ul>
 				<li><input type="text" name="q_cat" class="input_search" value="${msg['txt_busca_empresa']}" onclick="cleanSearchBox(this)"></li>
-				<li>${msg['em']}</li>
+				<li>${msg['ou']}</li>
 				<li><input type="text" name="q_onde" class="input_search" value="${msg['txt_busca_cidade']}" onclick="cleanSearchBox(this)"></li>
+				<li><button type="submit"> &raquo; </button> </li>
 			</ul>
 			</form>
 		</div>

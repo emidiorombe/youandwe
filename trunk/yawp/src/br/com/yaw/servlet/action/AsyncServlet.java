@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.yaw.entity.Company;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
-import br.com.yaw.repository.CompassFactory;
 import br.com.yaw.service.CacheService;
 import br.com.yaw.service.CompanyService;
 
@@ -29,7 +28,7 @@ public class AsyncServlet extends BaseActionServlet{
 		String action = getAction(tokens);
 		
 		if("compass_rebuild".equals(action)) {
-			CompassFactory.rebuildIndex();
+			//Removido Compass
 			
 		}else if("cache_company".equals(action)){
 			String idC = tokens[3];

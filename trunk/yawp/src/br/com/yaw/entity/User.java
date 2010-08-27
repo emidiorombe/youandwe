@@ -11,10 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import org.compass.annotations.Searchable;
-import org.compass.annotations.SearchableId;
-import org.compass.annotations.SearchableProperty;
-
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.images.ImagesService;
@@ -26,19 +22,15 @@ import com.google.appengine.api.images.ImagesServiceFactory;
  *
  */
 @Entity
-@Searchable
 public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@SearchableId
 	private Key key ;
 	
-	@SearchableProperty
 	private String name;
 	
 	private String password;
 	
-	@SearchableProperty
 	private String contactEmail;
 	
 	private String description;

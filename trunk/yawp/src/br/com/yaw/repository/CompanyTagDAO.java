@@ -67,4 +67,5 @@ public class CompanyTagDAO extends BaseDAO<CompanyTag, Key> implements CompanyTa
 		}
 		
 	}
+
 }

@@ -51,6 +51,15 @@ public class BaseDAO<Entity, Id extends Serializable> {
 	}
 	
 	/**
+	 * Insert or update an generic entity
+	 * @param entity
+	 * @throws RepositoryException
+	 */
+	public void saveGeneric(Object entity) throws RepositoryException {
+		DatanucleusCRUDUtils.saveGeneric(entity);
+	}
+	
+	/**
 	 * Commit actual transaction
 	 * @param entity
 	 * @throws RepositoryException

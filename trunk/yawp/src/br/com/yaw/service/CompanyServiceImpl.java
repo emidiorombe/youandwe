@@ -2,10 +2,7 @@ package br.com.yaw.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.compass.core.CompassHits;
-import org.compass.core.CompassSearchSession;
-import org.compass.core.Resource;
+import java.util.Map;
 
 import br.com.yaw.async.AsyncJobs;
 import br.com.yaw.entity.Company;
@@ -15,7 +12,6 @@ import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.repository.CompanyRepository;
 import br.com.yaw.repository.CompanyTagRepository;
-import br.com.yaw.repository.CompassFactory;
 
 public class CompanyServiceImpl implements CompanyService{
 	private CompanyRepository companyRepository;
@@ -69,7 +65,6 @@ public class CompanyServiceImpl implements CompanyService{
 					lista.add(new CompanyTag(tag.trim(), companyId));
 			}
 			tagRepository.addTagsToCompany(lista);
-			AsyncJobs.rebuildCompassIndex();
 		}catch (RepositoryException re) {
 			re.printStackTrace();
 			throw new ServiceException(re);
@@ -101,22 +96,17 @@ public class CompanyServiceImpl implements CompanyService{
 	}
 
 	@Override
-	public List<Company> findCompanies(String query) throws ServiceException {
+	public List<Company> findCompanies(Map<String, String> query) throws ServiceException {
 		List<Company> lista = new ArrayList<Company>();
 		try {
 			companyRepository = ServiceFactory.getService(CompanyRepository.class);
-			CompassSearchSession search = CompassFactory.getCompass().openSearchSession();
-		 	
-		 	if(query != null){
-		 		CompassHits hits = search.find(query);
-		 		for(int i = 0; i < hits.length(); i++){
-		 	 		Resource resource = hits.resource(i);
-		 	 		String id = resource.getValue("companyId");
-		 	 		Company c = companyRepository.getById(Long.parseLong(id));
-		 	 		if(c != null)lista.add(c);
-		 		}
-		 	}
-		 	search.close();
+			if(query.get("categoria_ou_nome") != null && query.get("categoria_ou_nome").length() > 0) {
+				lista.addAll(companyRepository.getByName(query.get("categoria_ou_nome")));
+			}
+			
+			if(query.get("local") != null && query.get("local").length() > 0) {
+				lista.addAll(companyRepository.getByCidade(query.get("local")));
+			}
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}

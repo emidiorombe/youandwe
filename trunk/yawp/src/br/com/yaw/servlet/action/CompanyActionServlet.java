@@ -1,6 +1,7 @@
 package br.com.yaw.servlet.action;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -98,13 +99,16 @@ public class CompanyActionServlet extends BaseActionServlet {
 					if(id_c == null || "".equals(id_c) ) {
 						User user = (User)request.getSession().getAttribute(LOGGED_USER);
 						c.setOwner(user.getKey().getId());
+						c.setSearchableName(c.getName().toLowerCase());
+						c.getAddr().setSearchableCity(c.getAddr().getCity().toLowerCase());
 						service.addCompany(c);
 					}else {
 						Integer companyId = Integer.parseInt(id_c != null ? id_c : "0");
 						Company fromBase = service.getCompanyById(companyId);
 						c.setKey(fromBase.getKey());
 						c.setOwner(fromBase.getOwner());
-						c.getAddr().setKey(fromBase.getAddr().getKey());
+						c.getAddr().setSearchableCity(c.getAddr().getCity().toLowerCase());
+						c.setSearchableName(c.getName().toLowerCase());
 						service.addCompany(c);
 						
 					}
@@ -146,7 +150,11 @@ public class CompanyActionServlet extends BaseActionServlet {
 			}
 		}else if("search".equals(action)) {
 			try {
-				String query = request.getParameter("txtBusca");
+				
+				Map<String, String> query = new HashMap<String, String>();
+				query.put("categoria_ou_nome", request.getParameter("q_cat"));
+				query.put("local", request.getParameter("q_onde"));
+				
 				List<Company> lista = service.findCompanies(query);
 				
 				RequestDispatcher rd = request.getRequestDispatcher("/pages/listCompanies.jsp");

@@ -4,10 +4,6 @@ package br.com.yaw.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.compass.core.CompassHits;
-import org.compass.core.CompassSearchSession;
-import org.compass.core.Resource;
-
 import br.com.yaw.async.AsyncJobs;
 import br.com.yaw.entity.User;
 import br.com.yaw.entity.UserImage;
@@ -15,7 +11,6 @@ import br.com.yaw.exception.RepositoryException;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.exception.UsuarioExistenteException;
 import br.com.yaw.ioc.ServiceFactory;
-import br.com.yaw.repository.CompassFactory;
 import br.com.yaw.repository.UserImageRepository;
 import br.com.yaw.repository.UserRepository;
 
@@ -52,7 +47,6 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			userRepository.addUser(user);
-			AsyncJobs.rebuildCompassIndex();
 		} catch (RepositoryException e) {
 			//TODO log this
 			throw new ServiceException(e);
@@ -69,7 +63,6 @@ public class UserServiceImpl implements UserService {
 			userRepository = ServiceFactory.getService(UserRepository.class);
 			
 			userRepository.addUser(user);
-			AsyncJobs.rebuildCompassIndex();
 		} catch (RepositoryException e) {
 			throw new ServiceException(e);
 		}
@@ -205,18 +198,7 @@ public class UserServiceImpl implements UserService {
 		List<User> lista = new ArrayList<User>();
 		try {
 			userRepository = ServiceFactory.getService(UserRepository.class);
-			CompassSearchSession search = CompassFactory.getCompass().openSearchSession();
-		 	
-		 	if(name != null){
-		 		CompassHits hits = search.find(name);
-		 		for(int i = 0; i < hits.length(); i++){
-		 	 		Resource resource = hits.resource(i);
-		 	 		String id = resource.getValue("contactEmail");
-		 	 		User u = userRepository.getUserByEmail(id);
-		 	 		if(u != null)lista.add(u);
-		 		}
-		 	}
-		 	search.close();
+			userRepository.getFriends(null);
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}

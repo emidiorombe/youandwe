@@ -5,25 +5,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.compass.annotations.Searchable;
-import org.compass.annotations.SearchableId;
-import org.compass.annotations.SearchableProperty;
-
 import com.google.appengine.api.datastore.Key;
 
 @Entity
-@Searchable
 public class CompanyTag {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@SearchableId
 	private Key key;
 	
-	@SearchableProperty
 	private String name;
 	
-	@SearchableProperty
 	private Long companyId;
 
 	public CompanyTag(String tag, Long companyId) {
