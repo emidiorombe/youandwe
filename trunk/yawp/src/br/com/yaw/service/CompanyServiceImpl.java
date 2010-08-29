@@ -12,6 +12,7 @@ import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.repository.CompanyRepository;
 import br.com.yaw.repository.CompanyTagRepository;
+import br.com.yaw.utils.StringUtilities;
 
 public class CompanyServiceImpl implements CompanyService{
 	private CompanyRepository companyRepository;
@@ -100,12 +101,15 @@ public class CompanyServiceImpl implements CompanyService{
 		List<Company> lista = new ArrayList<Company>();
 		try {
 			companyRepository = ServiceFactory.getService(CompanyRepository.class);
-			if(query.get("categoria_ou_nome") != null && query.get("categoria_ou_nome").length() > 0) {
-				lista.addAll(companyRepository.getByName(query.get("categoria_ou_nome")));
+			String cat_nm = query.get("categoria_ou_nome");
+			if(cat_nm != null && cat_nm.length() > 0) {
+				lista.addAll(companyRepository.getByName(StringUtilities.getSearchableString(cat_nm).toLowerCase()));
+				lista.addAll(companyRepository.getByTag(StringUtilities.getSearchableString(cat_nm).toLowerCase()));
 			}
 			
-			if(query.get("local") != null && query.get("local").length() > 0) {
-				lista.addAll(companyRepository.getByCidade(query.get("local")));
+			String loc = query.get("local");
+			if(loc != null && loc.length() > 0) {
+				lista.addAll(companyRepository.getByCidade(StringUtilities.getSearchableString(loc).toLowerCase()));
 			}
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);

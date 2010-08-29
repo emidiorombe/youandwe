@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import br.com.yaw.utils.StringUtilities;
+
 import com.google.appengine.api.datastore.Key;
 
 @Entity
@@ -16,10 +18,12 @@ public class CompanyTag {
 	
 	private String name;
 	
+	private String searchableName;
+	
 	private Long companyId;
 
 	public CompanyTag(String tag, Long companyId) {
-		name = tag;
+		setName(tag);
 		this.companyId = companyId;
 	}
 
@@ -37,6 +41,7 @@ public class CompanyTag {
 
 	public void setName(String name) {
 		this.name = name;
+		this.searchableName = StringUtilities.getSearchableString(name).toString();
 	}
 
 	public Long getCompanyId() {
@@ -46,6 +51,13 @@ public class CompanyTag {
 	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
 	}
-	
+
+	public String getSearchableName() {
+		return searchableName;
+	}
+
+	public void setSearchableName(String searchableName) {
+		this.searchableName = searchableName;
+	}
 
 }

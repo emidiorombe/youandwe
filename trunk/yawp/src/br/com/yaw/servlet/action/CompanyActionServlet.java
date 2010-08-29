@@ -99,16 +99,12 @@ public class CompanyActionServlet extends BaseActionServlet {
 					if(id_c == null || "".equals(id_c) ) {
 						User user = (User)request.getSession().getAttribute(LOGGED_USER);
 						c.setOwner(user.getKey().getId());
-						c.setSearchableName(c.getName().toLowerCase());
-						c.getAddr().setSearchableCity(c.getAddr().getCity().toLowerCase());
 						service.addCompany(c);
 					}else {
 						Integer companyId = Integer.parseInt(id_c != null ? id_c : "0");
 						Company fromBase = service.getCompanyById(companyId);
 						c.setKey(fromBase.getKey());
 						c.setOwner(fromBase.getOwner());
-						c.getAddr().setSearchableCity(c.getAddr().getCity().toLowerCase());
-						c.setSearchableName(c.getName().toLowerCase());
 						service.addCompany(c);
 						
 					}

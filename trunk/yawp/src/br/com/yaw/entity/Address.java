@@ -3,12 +3,9 @@ package br.com.yaw.entity;
 import java.io.Serializable;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
-import com.google.appengine.api.datastore.Key;
+import br.com.yaw.utils.StringUtilities;
+
 
 /**
  * The company address
@@ -20,9 +17,9 @@ public class Address implements Serializable{
 	
 	private String street;
 	
-	private int number;
-	
 	private String bairro;
+	
+	private String searchableBairro;
 	
 	private String city;
 	
@@ -40,24 +37,13 @@ public class Address implements Serializable{
 		this.street = street;
 	}
 
-	public int getNumber() {
-		return number;
-	}
-
-	public void setNumber(int number) {
-		this.number = number;
-	}
-	
-	public void setNumber(String number) {
-		this.number = Integer.parseInt(number);
-	}
-
 	public String getBairro() {
 		return bairro;
 	}
 
 	public void setBairro(String bairro) {
 		this.bairro = bairro;
+		this.searchableBairro = StringUtilities.getSearchableString(bairro).toLowerCase();
 	}
 
 	public String getCity() {
@@ -66,6 +52,7 @@ public class Address implements Serializable{
 
 	public void setCity(String city) {
 		this.city = city;
+		this.searchableCity = StringUtilities.getSearchableString(city).toLowerCase();
 	}
 
 	public String getState() {
@@ -90,6 +77,14 @@ public class Address implements Serializable{
 
 	public void setSearchableCity(String searchableCity) {
 		this.searchableCity = searchableCity;
+	}
+
+	public String getSearchableBairro() {
+		return searchableBairro;
+	}
+
+	public void setSearchableBairro(String searchableBairro) {
+		this.searchableBairro = searchableBairro;
 	}
 	
 	

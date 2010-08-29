@@ -8,7 +8,9 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
 import br.com.yaw.entity.Company;
+import br.com.yaw.entity.CompanyTag;
 import br.com.yaw.exception.RepositoryException;
+import br.com.yaw.utils.StringUtilities;
 
 public class CompanyDAO extends BaseDAO<Company, Key> implements CompanyRepository{
 
@@ -81,8 +83,8 @@ public class CompanyDAO extends BaseDAO<Company, Key> implements CompanyReposito
 		try{
 			StringBuilder jql = new StringBuilder();
 			jql.append("select ct from Company ct where ct.searchableName >=:comp_name and  ct.searchableName < :delimit");
-			addParamToQuery("comp_name", query.toLowerCase());
-			addParamToQuery("delimit", query.toLowerCase() + "\ufffd");
+			addParamToQuery("comp_name", query);
+			addParamToQuery("delimit", query + "\ufffd");
 			list = executeQuery(jql.toString(), paramsToQuery);
 			list.size();
 		}catch (RepositoryException re) {
@@ -99,10 +101,39 @@ public class CompanyDAO extends BaseDAO<Company, Key> implements CompanyReposito
 		try{
 			StringBuilder jql = new StringBuilder();
 			jql.append("select ct from Company ct where ct.addr.searchableCity >= :city_name and ct.addr.searchableCity < :delimit");
-			addParamToQuery("city_name", city.toLowerCase());
-			addParamToQuery("delimit", city.toLowerCase() + "\ufffd");
+			addParamToQuery("city_name", city);
+			addParamToQuery("delimit", city + "\ufffd");
 			list = executeQuery(jql.toString(), paramsToQuery);
 			list.size();
+		}catch (RepositoryException re) {
+			throw re;
+		}finally {
+		}
+		return list;
+	}
+
+	@Override
+	public Collection<Company> getByTag(String tag)
+			throws RepositoryException {
+		List<Company> list = new ArrayList<Company>();
+		try{
+			StringBuilder jql = new StringBuilder();
+			jql.append("select ct from CompanyTag ct where ct.searchableName >=:comp_name and  ct.searchableName < :delimit");
+			addParamToQuery("comp_name", tag);
+			addParamToQuery("delimit", tag + "\ufffd");
+			List<CompanyTag> tags = executeQuery(jql.toString(), paramsToQuery);
+			
+			if(tags != null && tags.size() > 0) {
+				List<Long> keys = new ArrayList<Long>();
+				for (CompanyTag ctag : tags) {
+					keys.add(ctag.getCompanyId());
+				}
+				StringBuilder jql2 = new StringBuilder();
+				jql2.append("select ct from Company ct where ct.key in " + StringUtilities.listLongToInClause(keys));
+				list = executeQuery(jql2.toString(), paramsToQuery);
+				list.size();
+			}
+			
 		}catch (RepositoryException re) {
 			throw re;
 		}finally {
