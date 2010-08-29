@@ -3,7 +3,6 @@ package br.com.yaw.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.jdo.annotations.Persistent;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -13,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+
+import br.com.yaw.utils.StringUtilities;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -61,6 +62,7 @@ public class Company implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+		this.searchableName = StringUtilities.getSearchableString(name).toLowerCase();
 	}
 
 	public String getDescription() {

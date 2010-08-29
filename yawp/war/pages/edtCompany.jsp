@@ -68,10 +68,6 @@
 		<td><label>Rua:</label></td>
 		<td><input type="text" name="street" value="${company.addr.street}" /></td>
 	</tr>
-	<tr>
-		<td><label>Numero:</label></td>
-		<td><input type="text" name="number" value="${company.addr.number}"/></td>
-	</tr>
 </table>
 <div align="center"><input type="submit" value="Cadastrar"/></div>
 <input type="hidden" name="id_c" value="${company.key.id}">

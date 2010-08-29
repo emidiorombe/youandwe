@@ -27,4 +27,6 @@ public interface CompanyRepository {
 
 	Collection<? extends Company> getByCidade(String string)throws RepositoryException;
 
+	Collection<? extends Company> getByTag(String string)throws RepositoryException;
+
 }
