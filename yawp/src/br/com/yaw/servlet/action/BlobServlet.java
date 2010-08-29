@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.yaw.entity.UserImage;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.service.UserService;
 

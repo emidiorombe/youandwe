@@ -27,4 +27,14 @@ public interface CompanyService {
 	void remove(long companyId) throws ServiceException;
 
 	List<Company> findCompanies(Map<String, String> query)throws ServiceException;
+
+	List<Company> searchCompanyByFields(Map<String, String> params)throws ServiceException;
+	
+	List<Company> searchCompanyByName(String name)throws ServiceException;
+	
+	List<Company> searchCompanyByCity(String city)throws ServiceException;
+	
+	List<Company> searchCompanyByBairro(String bairro)throws ServiceException;
+	
+	List<Company> searchCompanyByTag(String tags)throws ServiceException;
 }

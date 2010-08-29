@@ -1,6 +1,7 @@
 package br.com.yaw.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -95,25 +96,79 @@ public class CompanyServiceImpl implements CompanyService{
 		}
 		
 	}
-
+	
+	
 	@Override
-	public List<Company> findCompanies(Map<String, String> query) throws ServiceException {
+	public List<Company> searchCompanyByFields(Map<String, String> params) throws ServiceException {
+		HashSet<Company> set = new HashSet<Company>();
+		
+		set.addAll(searchCompanyByName(params.get("nome_c")));
+		set.addAll(searchCompanyByCity(params.get("cidade_c")));
+		set.addAll(searchCompanyByBairro(params.get("bairro_c")));
+		set.addAll(searchCompanyByTag(params.get("categoria_c")));
+		
+		
+		return new ArrayList<Company>(set);
+	}
+	
+	@Override
+	public List<Company> searchCompanyByName(String name) throws ServiceException {
 		List<Company> lista = new ArrayList<Company>();
 		try {
 			companyRepository = ServiceFactory.getService(CompanyRepository.class);
-			String cat_nm = query.get("categoria_ou_nome");
-			if(cat_nm != null && cat_nm.length() > 0) {
-				lista.addAll(companyRepository.getByName(StringUtilities.getSearchableString(cat_nm).toLowerCase()));
-				lista.addAll(companyRepository.getByTag(StringUtilities.getSearchableString(cat_nm).toLowerCase()));
-			}
-			
-			String loc = query.get("local");
-			if(loc != null && loc.length() > 0) {
-				lista.addAll(companyRepository.getByCidade(StringUtilities.getSearchableString(loc).toLowerCase()));
-			}
+			lista.addAll(companyRepository.getByName(StringUtilities.getSearchableString(name).toLowerCase()));
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}
 		return lista;
 	}
+	
+	@Override
+	public List<Company> searchCompanyByCity(String city) throws ServiceException {
+		List<Company> lista = new ArrayList<Company>();
+		try {
+			companyRepository = ServiceFactory.getService(CompanyRepository.class);
+			lista.addAll(companyRepository.getByCity(StringUtilities.getSearchableString(city).toLowerCase()));
+		}catch(RepositoryException re) {
+			throw new ServiceException(re);
+		}
+		return lista;
+	}
+	
+	@Override
+	public List<Company> searchCompanyByBairro(String bairro) throws ServiceException {
+		List<Company> lista = new ArrayList<Company>();
+		try {
+			companyRepository = ServiceFactory.getService(CompanyRepository.class);
+			lista.addAll(companyRepository.getByBairro(StringUtilities.getSearchableString(bairro).toLowerCase()));
+		}catch(RepositoryException re) {
+			throw new ServiceException(re);
+		}
+		return lista;
+	}
+	
+	@Override
+	public List<Company> searchCompanyByTag(String tag) throws ServiceException {
+		List<Company> lista = new ArrayList<Company>();
+		try {
+			companyRepository = ServiceFactory.getService(CompanyRepository.class);
+			lista.addAll(companyRepository.getByTag(StringUtilities.getSearchableString(tag).toLowerCase()));
+		}catch(RepositoryException re) {
+			throw new ServiceException(re);
+		}
+		return lista;
+	}
+	
+	@Override
+	public List<Company> findCompanies(Map<String, String> query) throws ServiceException {
+		
+		HashSet<Company> set = new HashSet<Company>();
+		set.addAll(searchCompanyByName(query.get("categoria_ou_nome")));
+		set.addAll(searchCompanyByTag(query.get("categoria_ou_nome")));
+		set.addAll(searchCompanyByCity(query.get("local")));		
+		
+		
+		return new ArrayList<Company>(set);
+	}
+
 }

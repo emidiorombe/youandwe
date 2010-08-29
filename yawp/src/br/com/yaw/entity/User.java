@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import br.com.yaw.utils.StringUtilities;
+
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.images.ImagesService;
@@ -28,6 +30,8 @@ public class User implements Serializable{
 	private Key key ;
 	
 	private String name;
+	
+	private String searchableName;
 	
 	private String password;
 	
@@ -66,6 +70,7 @@ public class User implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+		this.searchableName = StringUtilities.getSearchableString(name);
 	}
 
 	public String getPassword() {
@@ -150,6 +155,15 @@ public class User implements Serializable{
 
 	public int getQtdeContatos() {
 		return qtdeContatos == null ? 0 : qtdeContatos;
+	}
+	
+
+	public String getSearchableName() {
+		return searchableName;
+	}
+
+	public void setSearchableName(String searchableName) {
+		this.searchableName = searchableName;
 	}
 
 	public void removeContact(long userId) {

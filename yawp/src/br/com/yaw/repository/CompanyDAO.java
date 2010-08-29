@@ -95,8 +95,7 @@ public class CompanyDAO extends BaseDAO<Company, Key> implements CompanyReposito
 	}
 
 	@Override
-	public Collection<Company> getByCidade(String city)
-			throws RepositoryException {
+	public Collection<Company> getByCity(String city)throws RepositoryException {
 		List<Company> list = new ArrayList<Company>();
 		try{
 			StringBuilder jql = new StringBuilder();
@@ -134,6 +133,23 @@ public class CompanyDAO extends BaseDAO<Company, Key> implements CompanyReposito
 				list.size();
 			}
 			
+		}catch (RepositoryException re) {
+			throw re;
+		}finally {
+		}
+		return list;
+	}
+
+	@Override
+	public Collection<Company> getByBairro(String bairro) throws RepositoryException {
+		List<Company> list = new ArrayList<Company>();
+		try{
+			StringBuilder jql = new StringBuilder();
+			jql.append("select ct from Company ct where ct.addr.searchableBairro >= :bairro_name and ct.addr.searchableBairro < :delimit");
+			addParamToQuery("bairro_name", bairro);
+			addParamToQuery("delimit", bairro + "\ufffd");
+			list = executeQuery(jql.toString(), paramsToQuery);
+			list.size();
 		}catch (RepositoryException re) {
 			throw re;
 		}finally {
