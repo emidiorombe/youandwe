@@ -65,7 +65,7 @@
 		<td><input type="text" name="bairro" value="${company.addr.bairro}"/></td>
 	</tr>
 	<tr>
-		<td><label>Rua:</label></td>
+		<td><label>Logradouro:</label></td>
 		<td><input type="text" name="street" value="${company.addr.street}" /></td>
 	</tr>
 </table>

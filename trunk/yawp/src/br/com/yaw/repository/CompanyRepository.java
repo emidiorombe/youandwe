@@ -25,8 +25,10 @@ public interface CompanyRepository {
 
 	Collection<Company> getByName(String query) throws RepositoryException;
 
-	Collection<? extends Company> getByCidade(String string)throws RepositoryException;
+	Collection<Company> getByCity(String string)throws RepositoryException;
 
-	Collection<? extends Company> getByTag(String string)throws RepositoryException;
+	Collection<Company> getByTag(String tags)throws RepositoryException;
 
+	Collection<Company> getByBairro(String bairro) throws RepositoryException;
+	
 }

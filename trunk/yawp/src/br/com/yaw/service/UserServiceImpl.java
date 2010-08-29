@@ -4,14 +4,11 @@ package br.com.yaw.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.yaw.async.AsyncJobs;
 import br.com.yaw.entity.User;
-import br.com.yaw.entity.UserImage;
 import br.com.yaw.exception.RepositoryException;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.exception.UsuarioExistenteException;
 import br.com.yaw.ioc.ServiceFactory;
-import br.com.yaw.repository.UserImageRepository;
 import br.com.yaw.repository.UserRepository;
 
 /**
@@ -21,7 +18,6 @@ import br.com.yaw.repository.UserRepository;
  */
 public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
-	UserImageRepository uImgRepository;
 	
 	@Override
 	public User authenticate(String username, String password) throws ServiceException {
@@ -166,31 +162,6 @@ public class UserServiceImpl implements UserService {
 			throw new ServiceException(re);
 		}
 		
-	}
-
-	@Override
-	public void addUserAvatar(UserImage uimg) throws ServiceException {
-		try {
-			uImgRepository = ServiceFactory.getService(UserImageRepository.class);
-			uImgRepository.addUserImage(uimg);
-			
-		}catch(RepositoryException re) {
-			//TODO log this
-			throw new ServiceException(re);
-		}
-		
-	}
-
-	@Override
-	public UserImage getUserAvatar(long uid) throws ServiceException {
-		try {
-			uImgRepository = ServiceFactory.getService(UserImageRepository.class);
-			
-			return uImgRepository.getUserImageByUserId(uid);
-		}catch(RepositoryException re) {
-			//TODO log this
-			throw new ServiceException(re);
-		}
 	}
 
 	@Override

@@ -162,6 +162,32 @@ public class CompanyActionServlet extends BaseActionServlet {
 				e.printStackTrace();
 			}
 			
+		}else if("search_adv".equals(action)) {
+			String nome_c = request.getParameter("nome_c");
+			String cidade_c = request.getParameter("cidade_c");
+			String bairro_c = request.getParameter("bairro_c");
+			String categoria_c = request.getParameter("categoria_c");
+			
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("nome_c", nome_c);
+			params.put("cidade_c", cidade_c);
+			params.put("bairro_c", bairro_c);
+			params.put("categoria_c", categoria_c);
+			
+			try {
+				List<Company> lista = service.searchCompanyByFields(params);
+				
+				RequestDispatcher rd = request.getRequestDispatcher("/pages/listCompanies.jsp");
+				request.setAttribute("lista_co", lista);
+				
+				rd.forward(request, response);
+			}catch (ServiceException e) {
+				response.getWriter().write(e.getMessage());
+				e.printStackTrace();
+			}
+			
+			
+			
 		}else if("update_logo".equals(action)) {
 			try {
 				BlobstoreService blobS = BlobstoreServiceFactory.getBlobstoreService();
