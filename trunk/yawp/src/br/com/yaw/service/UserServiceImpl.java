@@ -169,7 +169,7 @@ public class UserServiceImpl implements UserService {
 		List<User> lista = new ArrayList<User>();
 		try {
 			userRepository = ServiceFactory.getService(UserRepository.class);
-			userRepository.getFriends(null);
+			lista = userRepository.getUsersByName(name);
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}
@@ -184,7 +184,6 @@ public class UserServiceImpl implements UserService {
 			
 			userRepository.addUser(logged);
 		}catch(RepositoryException re) {
-			//TODO log this
 			throw new ServiceException(re);
 		}
 		

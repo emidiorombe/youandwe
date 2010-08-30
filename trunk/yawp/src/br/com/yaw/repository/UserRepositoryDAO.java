@@ -153,16 +153,29 @@ public class UserRepositoryDAO extends BaseDAO<User, Key> implements UserReposit
 			throws RepositoryException {
 		List<User> list = new ArrayList<User>();
 		try{
-			beginTransaction();
 			StringBuilder jql = new StringBuilder();
 			jql.append("select us from User us where us.key in " + StringUtilities.listLongToInClause(network));
 			list = executeQuery(jql.toString());
-			commitTransaction();
 		}catch (RepositoryException re) {
-			rollbackTransaction();
 			throw re;
 		}finally {
-			finishTransaction();
+		}
+		return list;
+	}
+
+	@Override
+	public List<User> getUsersByName(String name) throws RepositoryException {
+		List<User> list = new ArrayList<User>();
+		try{
+			StringBuilder jql = new StringBuilder();
+			jql.append("select us from User us where us.searchableName >=:us_name and  us.searchableName < :delimit");
+			addParamToQuery("us_name", name);
+			addParamToQuery("delimit", name + "\ufffd");
+			list = executeQuery(jql.toString(), paramsToQuery);
+			list.size();
+		}catch (RepositoryException re) {
+			throw re;
+		}finally {
 		}
 		return list;
 	}
