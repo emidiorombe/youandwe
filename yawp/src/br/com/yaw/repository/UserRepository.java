@@ -37,4 +37,6 @@ public interface UserRepository {
 
 	List<User> getUserListByIds(List<Long> network) throws RepositoryException;
 
+	List<User> getUsersByName(String name)throws RepositoryException;
+
 }

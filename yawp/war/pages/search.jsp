@@ -23,23 +23,41 @@
 				<tr>
 					<td>Cidade:</td>
 					<td><input type="text" name="cidade_c"></td>
+				</tr>
 				<tr>
 					<td>Bairro:</td>
 					<td><input type="text" name="bairro_c"></td>
+				</tr>
 				<tr>
 					<td>Categoria:</td>
 					<td><input type="text" name="categoria_c"></td>
+				</tr>
 				<tr>
 					<td></td>
 					<td><input type="submit" value="Buscar"></td>
+				</tr>
 			</table>	
 		</form>
 	</div>
 	
 	<div id="s_user">
 		<h3>Buscar Pessoa</h3>
-		<form action="/user/search_adv">
-			
+		<form action="/user/search_adv" method="post">
+			<table>
+				<tr>
+					<td>Nome:</td>
+					<td><input type="text" name="nome_u"></td>
+				</tr>
+				<tr>
+					<td>E-mail:</td>
+					<td><input type="text" name="mail_u"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Buscar"></td>
+				</tr>
+				
+			</table>
 		</form>
 		
 	</div>

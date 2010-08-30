@@ -201,6 +201,32 @@ public class UserActionServlet extends BaseActionServlet{
 			}catch (ServiceException se) {
 
 			}
+		}else if("search_adv".equals(action)) {
+			String nome_u = request.getParameter("nome_u");
+			String mail_u = request.getParameter("mail_u");
+			
+			try {
+				List<User> users = service.getUserByName(nome_u);
+				User u = service.getUserByEmail(mail_u);
+				response.setContentType("text/html");
+				
+				response.getWriter().print("<html><body>");
+				
+				if(u != null) {
+					response.getWriter().print("<a href='/user/list/" + u.getKey().getId() + "'>"+ u.getContactEmail()+ "</a>");
+				}else {
+				
+					for (User us : users) {
+						response.getWriter().print("<a href='/user/list/" + us.getKey().getId() + "'>"+ us.getContactEmail()+ "</a><br/>");
+					}
+				}
+				
+				response.getWriter().print("</body></html>");
+			} catch (ServiceException se) {
+				response.getWriter().write(se.getMessage());
+				se.printStackTrace();
+			}
+			
 		}else if("remove_contact".equals(action)) {
 			long userId = Long.parseLong(tokens[3]);
 			User logged = (User) request.getSession(false).getAttribute("loggedUser");
