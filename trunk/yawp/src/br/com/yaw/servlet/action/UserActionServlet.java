@@ -242,8 +242,7 @@ public class UserActionServlet extends BaseActionServlet{
 		}else if("logout".equals(action)) {
 		
 				request.getSession().invalidate();
-				RequestDispatcher dispatch = request.getRequestDispatcher("/index.jsp");
-				dispatch.forward(request, response);
+				response.sendRedirect("/geral/index");
 			
 		}else {
 			response.sendRedirect("/pages/404.jsp");	
