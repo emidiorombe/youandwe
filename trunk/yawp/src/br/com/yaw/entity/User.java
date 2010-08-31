@@ -70,7 +70,7 @@ public class User implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
-		this.searchableName = StringUtilities.getSearchableString(name);
+		this.searchableName = StringUtilities.getSearchableString(name).toLowerCase();
 	}
 
 	public String getPassword() {
@@ -170,7 +170,7 @@ public class User implements Serializable{
 		int index = contacts.indexOf(userId);
 		if(index >= 0) {
 			contacts.remove(index);
-			qtdeContatos--;
+			qtdeContatos = getQtdeContatos() - 1;
 		}
 		
 	}
@@ -178,7 +178,7 @@ public class User implements Serializable{
 	public void addContact(long contactId) {
 		if(!contacts.contains(contactId)){
 			contacts.add(contactId);
-			qtdeContatos++;
+			qtdeContatos = getQtdeContatos() + 1;
 		}
 	}
 	

@@ -5,3 +5,10 @@ jQuery(function ($) {
 		  return false;
 	});
 });
+
+jQuery(function ($) {
+	$('.preview').click(function (e) {
+		$.modal("<img src='" + this.href + "'/>");
+		return false;
+	});
+});
