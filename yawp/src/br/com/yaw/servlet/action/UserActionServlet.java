@@ -17,12 +17,15 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.User;
+import br.com.yaw.exception.SenhaInvalidaException;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.exception.UsuarioExistenteException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.service.CommentService;
+import br.com.yaw.service.EQtalMailService;
 import br.com.yaw.service.UserService;
 import br.com.yaw.servlet.bean.BeanMapper;
+import br.com.yaw.utils.StringUtilities;
 
 public class UserActionServlet extends BaseActionServlet{
 	private static final Logger log = Logger.getLogger(UserActionServlet.class.getName());
@@ -46,11 +49,21 @@ public class UserActionServlet extends BaseActionServlet{
 				String paramEdt = request.getParameter("edit");
 				
 				if(paramEdt == null) {
+					String senha = request.getParameter("pass1");
+					if(senha == null || senha.length() < 6) {
+						throw new SenhaInvalidaException("Senha deve ter no mínimo 6 caracteres!");
+					}
 					User user = new User();
 					user.setContactEmail(request.getParameter("mail"));
-					user.setPassword(request.getParameter("pass1"));
+					user.setPassword(StringUtilities.createPassword(senha));
 					service.addUser(user);
+					
 					request.getSession().setAttribute(LOGGED_USER, user);
+					
+					
+					EQtalMailService mailService = ServiceFactory.getService(EQtalMailService.class);
+					mailService.sendCreateUser(user);
+					
 					response.sendRedirect("/user/list/" + user.getKey().getId());
 				}else {
 					User user = service.getUserByEmail(request.getParameter("contactEmail"));
@@ -77,6 +90,10 @@ public class UserActionServlet extends BaseActionServlet{
 			}catch(UsuarioExistenteException uee) {
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/edtUser.jsp");
 				request.setAttribute("msgErro", uee.getMessage());
+				dispatcher.forward(request, response);
+			}catch(SenhaInvalidaException sie) {
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/login.jsp");
+				request.setAttribute("msgErro", sie.getMessage());
 				dispatcher.forward(request, response);
 			}
 			
@@ -121,7 +138,15 @@ public class UserActionServlet extends BaseActionServlet{
 			
 		}else if("login".equals(action)) {
 			try {
-				User user = BeanMapper.createUser(request);
+				String senha = request.getParameter("password");
+				if(senha == null || senha.length() < 6) {
+					throw new SenhaInvalidaException("Senha deve ter no mínimo 6 caracteres");
+				}
+				
+				User user = new User();
+				user.setContactEmail(request.getParameter("contactEmail"));
+				user.setPassword(StringUtilities.createPassword(request.getParameter("password")));
+				
 				User userAuth = service.authenticate(user.getContactEmail(), user.getPassword());
 				
 				if(userAuth != null) {
@@ -134,6 +159,8 @@ public class UserActionServlet extends BaseActionServlet{
 				
 			}catch (ServiceException e) {
 				response.getWriter().println(e.getMessage());
+			}catch (SenhaInvalidaException se) {
+				response.getWriter().println(se.getMessage());
 			}
 		}else if("login_ext".equals(action)) {
 			try {
@@ -206,7 +233,6 @@ public class UserActionServlet extends BaseActionServlet{
 			String mail_u = request.getParameter("mail_u");
 			
 			try {
-				List<User> users = service.getUserByName(nome_u);
 				User u = service.getUserByEmail(mail_u);
 				response.setContentType("text/html");
 				
@@ -215,7 +241,7 @@ public class UserActionServlet extends BaseActionServlet{
 				if(u != null) {
 					response.getWriter().print("<a href='/user/list/" + u.getKey().getId() + "'>"+ u.getContactEmail()+ "</a>");
 				}else {
-				
+					List<User> users = service.getUserByName(nome_u);
 					for (User us : users) {
 						response.getWriter().print("<a href='/user/list/" + us.getKey().getId() + "'>"+ us.getContactEmail()+ "</a><br/>");
 					}

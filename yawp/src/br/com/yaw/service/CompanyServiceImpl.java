@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import br.com.yaw.async.AsyncJobs;
 import br.com.yaw.entity.Company;
 import br.com.yaw.entity.CompanyTag;
 import br.com.yaw.exception.RepositoryException;
@@ -116,7 +115,7 @@ public class CompanyServiceImpl implements CompanyService{
 		List<Company> lista = new ArrayList<Company>();
 		try {
 			companyRepository = ServiceFactory.getService(CompanyRepository.class);
-			lista.addAll(companyRepository.getByName(StringUtilities.getSearchableString(name).toLowerCase()));
+			lista.addAll(companyRepository.getByName(StringUtilities.getSearchableString(name)));
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}
@@ -128,7 +127,7 @@ public class CompanyServiceImpl implements CompanyService{
 		List<Company> lista = new ArrayList<Company>();
 		try {
 			companyRepository = ServiceFactory.getService(CompanyRepository.class);
-			lista.addAll(companyRepository.getByCity(StringUtilities.getSearchableString(city).toLowerCase()));
+			lista.addAll(companyRepository.getByCity(StringUtilities.getSearchableString(city)));
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}
@@ -140,7 +139,7 @@ public class CompanyServiceImpl implements CompanyService{
 		List<Company> lista = new ArrayList<Company>();
 		try {
 			companyRepository = ServiceFactory.getService(CompanyRepository.class);
-			lista.addAll(companyRepository.getByBairro(StringUtilities.getSearchableString(bairro).toLowerCase()));
+			lista.addAll(companyRepository.getByBairro(StringUtilities.getSearchableString(bairro)));
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}
@@ -152,7 +151,7 @@ public class CompanyServiceImpl implements CompanyService{
 		List<Company> lista = new ArrayList<Company>();
 		try {
 			companyRepository = ServiceFactory.getService(CompanyRepository.class);
-			lista.addAll(companyRepository.getByTag(StringUtilities.getSearchableString(tag).toLowerCase()));
+			lista.addAll(companyRepository.getByTag(StringUtilities.getSearchableString(tag)));
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}

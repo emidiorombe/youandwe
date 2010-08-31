@@ -64,7 +64,16 @@ public class StringUtilities {
         
         String result = text.replaceAll(pattern, "");
         
-        return result;
+        return result.toLowerCase();
+	}
+
+	public static String createPassword(String senha) {
+		StringBuilder str = new StringBuilder(senha);
+		str.reverse();
+		str.append(Integer.toHexString(senha.hashCode()));
+		str.append(senha.toUpperCase());
+		
+		return str.toString();
 	}
 	
 }

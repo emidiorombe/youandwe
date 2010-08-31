@@ -12,6 +12,8 @@ import br.com.yaw.service.CompanyService;
 import br.com.yaw.service.CommentService;
 import br.com.yaw.service.CompanyServiceImpl;
 import br.com.yaw.service.CommentServiceImpl;
+import br.com.yaw.service.EQtalMailService;
+import br.com.yaw.service.EQtalMailServiceImpl;
 import br.com.yaw.service.UserService;
 import br.com.yaw.service.UserServiceImpl;
 
@@ -35,6 +37,7 @@ public class IoCBinder implements Module{
         binder.bind(CompanyRepository.class).to(CompanyDAO.class);
         binder.bind(CommentRepository.class).to(CommentDAO.class);
         binder.bind(CompanyTagRepository.class).to(CompanyTagDAO.class);
+        binder.bind(EQtalMailService.class).to(EQtalMailServiceImpl.class);
         
     }
 
