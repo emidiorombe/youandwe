@@ -56,6 +56,10 @@ User us1 =  (User)request.getAttribute("user");
 				<li>${msg['fcbook']}:</li>
 			</ul>
 		</div>
+		<c:if test="${loggedUser != null && !loggedUser.approved}">
+			<h4>Por favor, acesse o link enviado ao seu e-mail para habilitar sua conta. Reenviar o e-mail de habilitação?</h4>
+		</c:if>
+		
 	</div>
 	<div id="ucomments">
 		<div id="uc_title">

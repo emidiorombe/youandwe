@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <queue-entries>
 	<queue>
-		<name>compass-index</name>
-		<rate>5/s</rate>
-	</queue>
-	
-	<queue>
 		<name>search-logs</name>
 		<rate>1/s</rate>
 	</queue>
 	
 	<queue>
-		<name>image-splitter</name>
-		<rate>50/s</rate>
+		<name>cache-handle</name>
+		<rate>5/s</rate>
 	</queue>
 	
 	<queue>
-		<name>cache-handle</name>
+		<name>mail-sender</name>
 		<rate>5/s</rate>
 	</queue>
 

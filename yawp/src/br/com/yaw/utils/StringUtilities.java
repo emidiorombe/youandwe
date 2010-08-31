@@ -75,5 +75,10 @@ public class StringUtilities {
 		
 		return str.toString();
 	}
+
+	public static String generateUserAuthKey() {
+		StringBuilder key = new StringBuilder(Long.toHexString(System.currentTimeMillis()));
+		return key.toString();
+	}
 	
 }

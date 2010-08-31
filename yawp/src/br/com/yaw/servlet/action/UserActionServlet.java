@@ -15,6 +15,7 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
+import br.com.yaw.async.AsyncJobs;
 import br.com.yaw.entity.Comment;
 import br.com.yaw.entity.User;
 import br.com.yaw.exception.SenhaInvalidaException;
@@ -56,14 +57,12 @@ public class UserActionServlet extends BaseActionServlet{
 					User user = new User();
 					user.setContactEmail(request.getParameter("mail"));
 					user.setPassword(StringUtilities.createPassword(senha));
+					user.setAuthKey(StringUtilities.generateUserAuthKey());
 					service.addUser(user);
 					
+					AsyncJobs.sendMailUserAdded(user);
+					
 					request.getSession().setAttribute(LOGGED_USER, user);
-					
-					
-					EQtalMailService mailService = ServiceFactory.getService(EQtalMailService.class);
-					mailService.sendCreateUser(user);
-					
 					response.sendRedirect("/user/list/" + user.getKey().getId());
 				}else {
 					User user = service.getUserByEmail(request.getParameter("contactEmail"));
@@ -88,7 +87,7 @@ public class UserActionServlet extends BaseActionServlet{
 				e.printStackTrace();
 				
 			}catch(UsuarioExistenteException uee) {
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/edtUser.jsp");
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/login.jsp");
 				request.setAttribute("msgErro", uee.getMessage());
 				dispatcher.forward(request, response);
 			}catch(SenhaInvalidaException sie) {
@@ -270,6 +269,22 @@ public class UserActionServlet extends BaseActionServlet{
 				request.getSession().invalidate();
 				response.sendRedirect("/geral/index");
 			
+		}else if("enable".equals(action)) {
+				String mail = request.getParameter("u_mail");
+				String auth = request.getParameter("enable_key");
+				
+				try {
+					User user = service.getUserByEmail(mail);
+					 if(user.getAuthKey().equals(auth)) {
+						 user.setApproved(true);
+						 service.updateUser(user);
+						 response.sendRedirect("/user/list/" + user.getKey().getId());
+					 }
+					 
+					
+				} catch (ServiceException e) {
+					response.sendRedirect("/geral/index");
+				}
 		}else {
 			response.sendRedirect("/pages/404.jsp");	
 		} 
