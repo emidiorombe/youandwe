@@ -79,7 +79,7 @@
 							<div>
 								<a href="/user/list/${c.owner}"><eq:userImg userId="${c.owner}" size="64" /></a>
 							</div>
-							<div style="margin-left: 59px; margin-top: -75px;">
+							<div style="margin-left: 69px; margin-top: -69px;">
 								<h5 style="font-family: 'Trebuchet MS'; font-weight: normal; color: #303030">${c.textValue}</h5>
 								<h6>${msg['em']} <fmt:formatDate value="${c.dtComment}" type="date" pattern="dd/MM/yyyy"/> sobre <a href='/company/list/${c.company}'><eq:companyName idCompany="${c.company}"/></a></h6>
 							</div>
