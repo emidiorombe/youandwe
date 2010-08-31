@@ -5,3 +5,5 @@
 <script type="text/javascript" src="/media/js/validators.js"></script>
 <script type="text/javascript" src="/media/js/generic.js"></script>
 <script type="text/javascript" src="/media/js/jquery.raty.min.js"></script>
+<script type="text/javascript" src="/media/js/basic.js"></script>
+

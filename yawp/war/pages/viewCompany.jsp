@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"  %>
+<%@ taglib prefix="eq" tagdir="/WEB-INF/tags/" %> 
 
 <%@page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory"%>
 <%@page import="com.google.appengine.api.blobstore.BlobstoreService"%>
@@ -12,13 +13,14 @@
 	<title>EQtal? - Profile Empresa -</title>
 	<jsp:include page="/pages/template/styles.jsp"></jsp:include>
 	<jsp:include page="/pages/template/scripts.jsp"></jsp:include>
+	<link type='text/css' href='/media/css/basic2.css' rel='stylesheet' media='screen' />
 	</head>
 <body>
 <jsp:include page="/pages/template/head.jsp"></jsp:include>
 <div id="content_custom">
 <h3>
 	Empresa: ${company.name}<br/>
-	<img alt="${company.name}" src="/blob/img/${company.logo}">	
+	<img src='<eq:urlImage blobKey="${company.logo}" size="220"/>' >
 </h3>
 Site: ${company.url}
 <br />
@@ -72,9 +74,11 @@ Categorias: ${c_tags}
 			</script>
 		</div>
 		${com.text.value} / <c:if test="${com.owner == loggedUser.key.id}"><a href="/comment/remove/${com.key.id}">${msg['remover']}</a></c:if>
-		<c:forEach var="ph" items="${com.photos}">
-			<img src="/blob/img/${ph.keyString}" style="width: 50px; height: 50px;"/>
-		</c:forEach>
+		<div id="photog">
+			<c:forEach var="ph" items="${com.photos}">
+				<a href='<eq:urlImage blobKey="${ph.keyString}" size="720"/>' class="preview"><img src='<eq:urlImage blobKey="${ph.keyString}" size="64"/>'></a> 
+			</c:forEach>
+		</div>
 	</div>
 </c:forEach>
 </div>

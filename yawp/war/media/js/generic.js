@@ -16,6 +16,7 @@ function defineRating(divId, rate){
 jQuery(function ($) {
 	$('#add_com_p').click(function (e) {
 		$('#com_p').append("<br/><input type='file' name='photo_com_" + new Date().getTime() + "'>");
+		return false;
 	});
 });
 
@@ -25,6 +26,7 @@ jQuery(function ($){
 	$('#star').raty({
 		path: '/media/img/',
 		hintList:     ['Nao recomendo', 'Regular', 'Bom', 'Muito Bom', 'Recomendadissimo'],
+		width: '120',
 		onClick:    function(score) { $('#rating').val(score)  }	
 	});
 });
