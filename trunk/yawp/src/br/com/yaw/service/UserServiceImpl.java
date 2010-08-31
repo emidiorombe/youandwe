@@ -10,6 +10,7 @@ import br.com.yaw.exception.ServiceException;
 import br.com.yaw.exception.UsuarioExistenteException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.repository.UserRepository;
+import br.com.yaw.utils.StringUtilities;
 
 /**
  * Implementation of UserService
@@ -169,7 +170,7 @@ public class UserServiceImpl implements UserService {
 		List<User> lista = new ArrayList<User>();
 		try {
 			userRepository = ServiceFactory.getService(UserRepository.class);
-			lista = userRepository.getUsersByName(name);
+			lista = userRepository.getUsersByName(StringUtilities.getSearchableString(name));
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}

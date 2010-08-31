@@ -55,6 +55,8 @@ public class User implements Serializable{
 	private String tipoUsuario;
 	
 	private Integer qtdeContatos;
+	
+	private boolean approved;
 
 	public Key getKey() {
 		return key;
@@ -164,6 +166,14 @@ public class User implements Serializable{
 
 	public void setSearchableName(String searchableName) {
 		this.searchableName = searchableName;
+	}
+	
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
 	}
 
 	public void removeContact(long userId) {
