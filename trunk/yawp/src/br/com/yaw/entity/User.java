@@ -3,7 +3,6 @@ package br.com.yaw.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,10 +12,7 @@ import javax.persistence.OneToMany;
 
 import br.com.yaw.utils.StringUtilities;
 
-import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ImagesServiceFactory;
 
 /**
  * A generic app User.
@@ -56,7 +52,9 @@ public class User implements Serializable{
 	
 	private Integer qtdeContatos;
 	
-	private boolean approved;
+	private Boolean approved;
+	
+	private String authKey;
 
 	public Key getKey() {
 		return key;
@@ -168,11 +166,19 @@ public class User implements Serializable{
 		this.searchableName = searchableName;
 	}
 	
-	public boolean isApproved() {
-		return approved;
+	public String getAuthKey() {
+		return authKey;
 	}
 
-	public void setApproved(boolean approved) {
+	public void setAuthKey(String authKey) {
+		this.authKey = authKey;
+	}
+	
+	public Boolean getApproved() {
+		return approved == null ? false : approved;
+	}
+
+	public void setApproved(Boolean approved) {
 		this.approved = approved;
 	}
 

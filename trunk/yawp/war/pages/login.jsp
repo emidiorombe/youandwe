@@ -16,6 +16,8 @@
 <div id="content">
 	<div style="margin-left: 470px;">
 		<h4>Autentique-se ou Registre-se</h4>
+		<br>
+		<h5>${msg[msgErro]}</h5>
 	</div>
 </div>
 <jsp:include page="/pages/template/foot.jsp"></jsp:include>

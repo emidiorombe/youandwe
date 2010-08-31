@@ -39,7 +39,7 @@ Categorias: ${c_tags}
 
 <hr />
 
-<c:if test="${loggedUser != null}">
+<c:if test="${loggedUser != null && loggedUser.approved}">
 <form action=<%=blobS.createUploadUrl("/comment/add")%> method="post" enctype="multipart/form-data">
 	<input type="hidden" name="id_company" value="${company.key.id}">
 	<input type="hidden" id="rating" name="rating" value="0">

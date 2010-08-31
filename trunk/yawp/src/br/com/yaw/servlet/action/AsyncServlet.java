@@ -9,10 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.yaw.entity.Company;
+import br.com.yaw.entity.User;
 import br.com.yaw.exception.ServiceException;
 import br.com.yaw.ioc.ServiceFactory;
 import br.com.yaw.service.CacheService;
 import br.com.yaw.service.CompanyService;
+import br.com.yaw.service.EQtalMailService;
+import br.com.yaw.service.UserService;
 
 public class AsyncServlet extends BaseActionServlet{
 	
@@ -52,6 +55,19 @@ public class AsyncServlet extends BaseActionServlet{
 				System.err.println(":::::: Erro ao carregar empresas para o Cache > " + e.getMessage());
 				e.printStackTrace();
 			}
+		}else if("mail_user_add".equals(action)) {
+			UserService userService = ServiceFactory.getService(UserService.class);
+			EQtalMailService mailService = ServiceFactory.getService(EQtalMailService.class);
+			
+			try {
+				User user = userService.getUserByEmail(request.getParameter("u_mail"));
+				mailService.sendCreateUser(user);
+			} catch (ServiceException e) {
+				System.err.println(e.getMessage());
+				e.printStackTrace();
+			}
+			
+			
 		}
 	}
 	

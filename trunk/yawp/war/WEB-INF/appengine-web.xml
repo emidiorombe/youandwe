@@ -5,7 +5,6 @@
 	<sessions-enabled>true</sessions-enabled>
 	
 	<inbound-services>
-    	<service>xmpp_message</service>
     	<service>mail</service>
   	</inbound-services>
   
