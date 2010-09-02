@@ -68,16 +68,19 @@ public class StringUtilities {
 	}
 
 	public static String createPassword(String senha) {
+		/*<magia-negra>*/
 		StringBuilder str = new StringBuilder(senha);
 		str.reverse();
 		str.append(Integer.toHexString(senha.hashCode()));
 		str.append(senha.toUpperCase());
-		
+		/*</magia-negra>*/
 		return str.toString();
 	}
 
 	public static String generateUserAuthKey() {
+		/*número-randomico-hexadecimal baseado na variação sismológica das placas tectônicas*/
 		StringBuilder key = new StringBuilder(Long.toHexString(System.currentTimeMillis()));
+		key.append(Long.toHexString(System.nanoTime()));
 		return key.toString();
 	}
 	

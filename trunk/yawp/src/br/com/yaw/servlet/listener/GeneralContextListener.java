@@ -1,5 +1,7 @@
 package br.com.yaw.servlet.listener;
 
+import java.util.HashMap;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -30,7 +32,8 @@ public class GeneralContextListener implements ServletContextListener {
 		
 		//Cria a factory de resourceBundle para I18N, e insere o default no contexto da app
 		ResourceBundleFactory.loadBundles("pt", "es", "en");
-		ctxEv.getServletContext().setAttribute("msg", ResourceBundleFactory.getBundleByLanguage("pt"));
+		HashMap<String,String> bundleByLanguage = ResourceBundleFactory.getBundleByLanguage("pt");
+		ctxEv.getServletContext().setAttribute("msg", bundleByLanguage);
 		
 		//Adiciona todas as empresas no Cache
 		//AsyncJobs.addAllCompaniesToCache();
