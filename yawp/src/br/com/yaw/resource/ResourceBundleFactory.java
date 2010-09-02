@@ -1,5 +1,6 @@
 package br.com.yaw.resource;
 
+import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -39,10 +40,20 @@ public class ResourceBundleFactory {
 	 * @return
 	 */
 	public static HashMap<String, String> getBundleByLanguage(String language) {
+		 HashMap<String, String> bu = null; 
 		if(!bundles.containsKey(language)) {
-			return bundles.get("pt");
-		}
-		return bundles.get(language);
+			bu = bundles.get("pt");
+		}else
+			bu = bundles.get(language);
+		return bu;
 	}
 	
+	public static String getMessage(String msg, Object... params){
+		return getMessage(null, msg, params);
+	}
+	
+	public static String getMessage(Locale lang, String msg, Object... params){
+		String msg2 = getBundleByLanguage(lang != null ? lang.getLanguage() : null).get(msg);
+		return MessageFormat.format(msg2, params);
+	}
 }

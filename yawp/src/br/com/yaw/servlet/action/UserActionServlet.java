@@ -58,6 +58,7 @@ public class UserActionServlet extends BaseActionServlet{
 					user.setContactEmail(request.getParameter("mail"));
 					user.setPassword(StringUtilities.createPassword(senha));
 					user.setAuthKey(StringUtilities.generateUserAuthKey());
+					user.setTipoCadastro(1);
 					service.addUser(user);
 					
 					AsyncJobs.sendMailUserAdded(user);
@@ -173,7 +174,10 @@ public class UserActionServlet extends BaseActionServlet{
 					user = new User();
 					user.setContactEmail(request.getUserPrincipal().getName());
 					user.setTipoCadastro(2);
+					user.setAuthKey(StringUtilities.generateUserAuthKey());
 					service.addUser(user);
+					
+					AsyncJobs.sendMailUserAdded(user);
 					
 					request.getSession().setAttribute(LOGGED_USER, user);
 					response.sendRedirect("/user/list/" + user.getKey().getId());
@@ -278,6 +282,8 @@ public class UserActionServlet extends BaseActionServlet{
 					 if(user.getAuthKey().equals(auth)) {
 						 user.setApproved(true);
 						 service.updateUser(user);
+						 
+						 request.getSession().setAttribute(LOGGED_USER, user);
 						 response.sendRedirect("/user/list/" + user.getKey().getId());
 					 }
 					 

@@ -13,13 +13,15 @@ import javax.mail.internet.MimeMessage;
 import br.com.yaw.entity.User;
 import br.com.yaw.exception.ServiceException;
 
+import static br.com.yaw.resource.ResourceBundleFactory.*;
+
 public class EQtalMailServiceImpl implements EQtalMailService {
 
 	@Override
 	public void sendCreateUser(User user) throws ServiceException {
 		
 		Session session = Session.getDefaultInstance(new Properties(), null);
-		String msgBody = "Bem vindo ao EQtal, você acaboud e se cadastrar. Clique no link para ativar sua conta => ?u_mail=" +  user.getContactEmail() + "&enable_key=" + user.getAuthKey();
+		String msgBody = getMessage("user_add_mail",  user.getContactEmail(), user.getAuthKey());
 		
 		System.err.println(msgBody);
 		
