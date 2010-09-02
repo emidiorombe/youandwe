@@ -26,7 +26,7 @@
 		
 		UserService uService = ServiceFactory.getService(UserService.class);
 		User us = (User)uService.getUserById(Long.parseLong(uid));
-		bKey = us.getAvatar();
+		bKey = (us != null ? us.getAvatar() : null);
 	}
 
 	
@@ -34,10 +34,10 @@
 	ImagesService imgS = ImagesServiceFactory.getImagesService();
 	String imgSize = (String)request.getAttribute("imgSize");
 	
-	String url = "";
-	if(imgSize != null){
+	String url = "/media/img/photo_default_peq.jpg";
+	if(imgSize != null && bKey != null){
 		url = imgS.getServingUrl(new BlobKey(bKey), Integer.parseInt(imgSize), false); 
-	}else{
+	}else if(bKey != null){
 		url = imgS.getServingUrl(new BlobKey(bKey));
 	}
 	
