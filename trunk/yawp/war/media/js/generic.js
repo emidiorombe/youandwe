@@ -30,4 +30,3 @@ jQuery(function ($){
 		onClick:    function(score) { $('#rating').val(score)  }	
 	});
 });
-

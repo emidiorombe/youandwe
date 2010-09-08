@@ -2,6 +2,7 @@ package br.com.yaw.servlet.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -58,6 +59,7 @@ public class UserActionServlet extends BaseActionServlet{
 					user.setContactEmail(request.getParameter("mail"));
 					user.setPassword(StringUtilities.createPassword(senha));
 					user.setAuthKey(StringUtilities.generateUserAuthKey());
+					user.setLastAccess(new Date().getTime());
 					user.setTipoCadastro(1);
 					service.addUser(user);
 					
@@ -150,6 +152,8 @@ public class UserActionServlet extends BaseActionServlet{
 				User userAuth = service.authenticate(user.getContactEmail(), user.getPassword());
 				
 				if(userAuth != null) {
+					userAuth.setLastAccess(new Date().getTime());
+					service.updateUser(userAuth);
 					request.getSession().setAttribute(LOGGED_USER, userAuth);
 					response.sendRedirect("/user/list/" + userAuth.getKey().getId());
 				}else {
@@ -167,6 +171,9 @@ public class UserActionServlet extends BaseActionServlet{
 				User user = service.getUserByEmail(request.getUserPrincipal().getName());
 				
 				if(user != null) {
+					user.setLastAccess(new Date().getTime());
+					service.updateUser(user);
+					
 					request.getSession().setAttribute(LOGGED_USER, user);
 					response.sendRedirect("/user/list/" + user.getKey().getId());
 				}else {
@@ -174,6 +181,7 @@ public class UserActionServlet extends BaseActionServlet{
 					user = new User();
 					user.setContactEmail(request.getUserPrincipal().getName());
 					user.setTipoCadastro(2);
+					user.setLastAccess(new Date().getTime());
 					user.setAuthKey(StringUtilities.generateUserAuthKey());
 					service.addUser(user);
 					
@@ -236,21 +244,18 @@ public class UserActionServlet extends BaseActionServlet{
 			String mail_u = request.getParameter("mail_u");
 			
 			try {
-				User u = service.getUserByEmail(mail_u);
-				response.setContentType("text/html");
 				
-				response.getWriter().print("<html><body>");
 				
-				if(u != null) {
-					response.getWriter().print("<a href='/user/list/" + u.getKey().getId() + "'>"+ u.getContactEmail()+ "</a>");
-				}else {
+				if(mail_u != null && mail_u.length() > 0) {
+					User u = service.getUserByEmail(mail_u);
+					request.setAttribute("us_by_mail", u);
+				}else if(nome_u != null && nome_u.length() > 0) {
 					List<User> users = service.getUserByName(nome_u);
-					for (User us : users) {
-						response.getWriter().print("<a href='/user/list/" + us.getKey().getId() + "'>"+ us.getContactEmail()+ "</a><br/>");
-					}
+					request.setAttribute("list_users", users);
 				}
 				
-				response.getWriter().print("</body></html>");
+				RequestDispatcher rd = request.getRequestDispatcher("/pages/search_result.jsp");
+				rd.forward(request, response);
 			} catch (ServiceException se) {
 				response.getWriter().write(se.getMessage());
 				se.printStackTrace();
@@ -268,6 +273,21 @@ public class UserActionServlet extends BaseActionServlet{
 				se.printStackTrace();
 			}
 		
+		}else if("send_remember_mail".equals(action)) {
+			
+			long userId = Long.parseLong(tokens[3]);
+			try {
+				User user = service.getUserById(userId);
+				user.setAuthKey(StringUtilities.generateUserAuthKey());
+				service.updateUser(user);
+				
+				AsyncJobs.sendMailUserAdded(user);
+				
+				response.sendRedirect("/user/list/"+user.getKey().getId());
+			} catch (ServiceException e) {
+				
+				e.printStackTrace();
+			}
 		}else if("logout".equals(action)) {
 		
 				request.getSession().invalidate();
