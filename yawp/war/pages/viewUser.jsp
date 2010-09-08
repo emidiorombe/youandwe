@@ -22,7 +22,7 @@ User us1 =  (User)request.getAttribute("user");
 
 %>
 
-<div id="content">
+<div id="content_user">
 	<div id="uinfo">
 		<div id="uphoto">
 		<ul>
@@ -51,13 +51,14 @@ User us1 =  (User)request.getAttribute("user");
 				<li><h2>${user.name}</h2></li>
 			</ul>
 			<ul id="usocial">
-				<li>${msg['twitter']}: ${user.twit}</li>
+				<li>${msg['twitter']}: <a href="http://twitter.com/${user.twit}">${user.twit}</a></li>
 				<li>${msg['orkut']}:</li>
 				<li>${msg['fcbook']}:</li>
 			</ul>
 		</div>
-		<c:if test="${loggedUser != null && !loggedUser.approved}">
-			<h4>Por favor, acesse o link enviado ao seu e-mail para habilitar sua conta. Reenviar o e-mail de habilitação?</h4>
+		<c:if test="${loggedUser != null && loggedUser.key == user.key && !loggedUser.approved}">
+			<h4>${msg['remember_mail_enable']}</h4>
+			<h4><a href="/user/send_remember_mail/${loggedUser.key.id}" id="link_remember">${msg['send_remember_mail_enable']}</a></h4>
 		</c:if>
 		
 	</div>
@@ -67,7 +68,7 @@ User us1 =  (User)request.getAttribute("user");
 		</div>
 		<div id="uc_comment">
 			<c:forEach var="com" items="${c_comments}">
-				<div id="user_c">
+				<div class="user_c">
 					<p>${com.textValue}</p>
 					<h5>Sobre <a href='/company/list/${com.company}'><eq:companyName idCompany="${com.company}"/></a></h5>
 				</div>
@@ -78,12 +79,11 @@ User us1 =  (User)request.getAttribute("user");
 <div id="basic-modal-content">
 <h3>Contatos de ${user.name}</h3>
 <c:forEach var="f" items="${c_friends}"	>
-	Amigo: ${f.name}<br/>
+	<eq:userImg userId="${f.key.id}" size="64" />
+	<a href="/user/list/${f.key.id}">${f.name}</a><br/>
 </c:forEach>
 </div>
 
-<!-- preload the images -->
-<div style='display: none'><img src='/media/img/x.png' alt='' /></div>
 <jsp:include page="/pages/template/foot.jsp"></jsp:include>
 </body>
 <jsp:include page="/pages/template/scripts.jsp"></jsp:include>

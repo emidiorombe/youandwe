@@ -153,7 +153,7 @@ public class CompanyActionServlet extends BaseActionServlet {
 				
 				List<Company> lista = service.findCompanies(query);
 				
-				RequestDispatcher rd = request.getRequestDispatcher("/pages/listCompanies.jsp");
+				RequestDispatcher rd = request.getRequestDispatcher("/pages/search_result.jsp");
 				request.setAttribute("lista_co", lista);
 				
 				rd.forward(request, response);
@@ -177,7 +177,7 @@ public class CompanyActionServlet extends BaseActionServlet {
 			try {
 				List<Company> lista = service.searchCompanyByFields(params);
 				
-				RequestDispatcher rd = request.getRequestDispatcher("/pages/listCompanies.jsp");
+				RequestDispatcher rd = request.getRequestDispatcher("/pages/search_result.jsp");
 				request.setAttribute("lista_co", lista);
 				
 				rd.forward(request, response);

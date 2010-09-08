@@ -114,8 +114,10 @@ public class CompanyServiceImpl implements CompanyService{
 	public List<Company> searchCompanyByName(String name) throws ServiceException {
 		List<Company> lista = new ArrayList<Company>();
 		try {
-			companyRepository = ServiceFactory.getService(CompanyRepository.class);
-			lista.addAll(companyRepository.getByName(StringUtilities.getSearchableString(name)));
+			if(name != null && name.length() > 0) {
+				companyRepository = ServiceFactory.getService(CompanyRepository.class);
+				lista.addAll(companyRepository.getByName(StringUtilities.getSearchableString(name)));
+			}
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}
@@ -126,8 +128,10 @@ public class CompanyServiceImpl implements CompanyService{
 	public List<Company> searchCompanyByCity(String city) throws ServiceException {
 		List<Company> lista = new ArrayList<Company>();
 		try {
-			companyRepository = ServiceFactory.getService(CompanyRepository.class);
-			lista.addAll(companyRepository.getByCity(StringUtilities.getSearchableString(city)));
+			if(city != null && city.length() > 0) {
+				companyRepository = ServiceFactory.getService(CompanyRepository.class);
+				lista.addAll(companyRepository.getByCity(StringUtilities.getSearchableString(city)));
+			}
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}
@@ -138,8 +142,10 @@ public class CompanyServiceImpl implements CompanyService{
 	public List<Company> searchCompanyByBairro(String bairro) throws ServiceException {
 		List<Company> lista = new ArrayList<Company>();
 		try {
-			companyRepository = ServiceFactory.getService(CompanyRepository.class);
-			lista.addAll(companyRepository.getByBairro(StringUtilities.getSearchableString(bairro)));
+			if(bairro != null && bairro.length() > 0) {
+				companyRepository = ServiceFactory.getService(CompanyRepository.class);
+				lista.addAll(companyRepository.getByBairro(StringUtilities.getSearchableString(bairro)));
+			}
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}
@@ -150,8 +156,10 @@ public class CompanyServiceImpl implements CompanyService{
 	public List<Company> searchCompanyByTag(String tag) throws ServiceException {
 		List<Company> lista = new ArrayList<Company>();
 		try {
-			companyRepository = ServiceFactory.getService(CompanyRepository.class);
-			lista.addAll(companyRepository.getByTag(StringUtilities.getSearchableString(tag)));
+			if(tag != null && tag.length() > 0) {
+				companyRepository = ServiceFactory.getService(CompanyRepository.class);
+				lista.addAll(companyRepository.getByTag(StringUtilities.getSearchableString(tag)));
+			}
 		}catch(RepositoryException re) {
 			throw new ServiceException(re);
 		}

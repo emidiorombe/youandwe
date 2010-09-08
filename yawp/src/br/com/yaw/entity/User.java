@@ -1,6 +1,7 @@
 package br.com.yaw.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -33,8 +34,6 @@ public class User implements Serializable{
 	
 	private String contactEmail;
 	
-	private String description;
-	
 	@OneToMany(cascade=CascadeType.REMOVE)
 	private List<Long> contacts;
 	
@@ -55,7 +54,9 @@ public class User implements Serializable{
 	private Boolean approved;
 	
 	private String authKey;
-
+	
+	private Long lastAccess;
+	
 	public Key getKey() {
 		return key;
 	}
@@ -89,15 +90,9 @@ public class User implements Serializable{
 		this.contactEmail = contactEmail;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public List<Long> getContacts() {
+		if(contacts == null)
+			contacts = new ArrayList<Long>();
 		return contacts;
 	}
 
@@ -182,6 +177,14 @@ public class User implements Serializable{
 		this.approved = approved;
 	}
 
+	public Long getLastAccess() {
+		return lastAccess;
+	}
+
+	public void setLastAccess(Long lastAccess) {
+		this.lastAccess = lastAccess;
+	}
+
 	public void removeContact(long userId) {
 		int index = contacts.indexOf(userId);
 		if(index >= 0) {
@@ -192,8 +195,8 @@ public class User implements Serializable{
 	}
 
 	public void addContact(long contactId) {
-		if(!contacts.contains(contactId)){
-			contacts.add(contactId);
+		if(!getContacts().contains(contactId)){
+			getContacts().add(contactId);
 			qtdeContatos = getQtdeContatos() + 1;
 		}
 	}
