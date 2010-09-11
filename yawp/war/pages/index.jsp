@@ -13,9 +13,10 @@
 <head>
 	<title>EQTAL?</title>
 	<jsp:include page="/pages/template/home_style.jsp"></jsp:include>
+	<jsp:include page="/pages/template/home_scripts.jsp"></jsp:include>
 </head>
 <body>
-	<div id="header">
+	<div id="header" class="content">
 		<div id="img_logo">
 			<a title="Página Inicial" href="/"><img src="/media/img/logo7.png" ></a>
 		</div>
@@ -87,13 +88,14 @@
 				</c:forEach>
 			</div>
 	</div>
-	
+	<div id="bar_content" style="visibility:hidden;">
+		   <a href="http://www.mozilla.com/firefox/" target="_blank"><img src="/media/img/ffox.png" style="width: 58px; height: 58px; border: 0px;"/></a>&nbsp;&nbsp;
+		   <a href="http://www.google.com/chrome" target="_blank"><img src="/media/img/Chrome.png" style="width: 58px; height: 58px; border: 0px;"/></a>&nbsp;&nbsp;
+		   <a href="http://www.apple.com/safari/" target="_blank"><img src="/media/img/safari3.png" style="width: 58px; height: 58px; border: 0px;"/></a>
+	</div>
 	<jsp:include page="/pages/template/modal_login_register.jsp"></jsp:include>
 	
 	<jsp:include page="/pages/template/foot.jsp"></jsp:include>
 	
-	
-		<jsp:include page="/pages/template/home_scripts.jsp"></jsp:include>
 </body>
-
 </html>

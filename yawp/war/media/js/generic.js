@@ -22,11 +22,23 @@ jQuery(function ($) {
 
 
 //operação de classificar uma empresa com estrelas 
-jQuery(function ($){
-	$('#star').raty({
-		path: '/media/img/',
-		hintList:     ['Nao recomendo', 'Regular', 'Bom', 'Muito Bom', 'Recomendadissimo'],
-		width: '120',
-		onClick:    function(score) { $('#rating').val(score)  }	
-	});
-});
+//jQuery(function ($){
+//	$('#star').raty({
+//		path: '/media/img/',
+//		hintList:     ['Nao recomendo', 'Regular', 'Bom', 'Muito Bom', 'Recomendadissimo'],
+//		width: '120',
+//		onClick:    function(score) { $('#rating').val(score)  }	
+//	})
+//});
+
+//Inserir notificação de navegadores no index
+jQuery(function($){
+	if($.browser.msie){
+		$("body").bar({
+			color 			 : '#1E90FF',
+			background_color : '#FFFFFF',
+			removebutton     : true,
+			time			 : 12000
+		});
+	}
+})
