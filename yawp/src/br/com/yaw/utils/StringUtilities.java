@@ -1,6 +1,5 @@
 package br.com.yaw.utils;
 
-import java.util.Iterator;
 import java.util.List;
 
 import br.com.yaw.entity.CompanyTag;
