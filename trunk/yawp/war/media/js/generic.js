@@ -21,16 +21,6 @@ jQuery(function ($) {
 });
 
 
-//operação de classificar uma empresa com estrelas 
-//jQuery(function ($){
-//	$('#star').raty({
-//		path: '/media/img/',
-//		hintList:     ['Nao recomendo', 'Regular', 'Bom', 'Muito Bom', 'Recomendadissimo'],
-//		width: '120',
-//		onClick:    function(score) { $('#rating').val(score)  }	
-//	})
-//});
-
 //Inserir notificação de navegadores no index
 jQuery(function($){
 	if($.browser.msie){
@@ -39,7 +29,7 @@ jQuery(function($){
 			background_color : '#FFFFFF',
 			removebutton     : true,
 			time			 : 12000, 
-			message			 : 'H&aacute; um jeito mais r&aacute;pido e seguro de navegar na internet ' + $('#bar_content').html(), 		
+			message			 : 'H&aacute; um jeito mais r&aacute;pido e seguro de navegar na internet ' + $('#bar_content').html()		
 		});
 	}
-})
+});
