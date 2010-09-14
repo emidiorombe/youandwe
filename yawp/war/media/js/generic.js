@@ -33,7 +33,7 @@ jQuery(function ($) {
 
 //Inserir notificação de navegadores no index
 jQuery(function($){
-	
+	if($.browser.msie){
 		$("body").bar({
 			color 			 : '#1E90FF',
 			background_color : '#FFFFFF',
@@ -41,4 +41,5 @@ jQuery(function($){
 			time			 : 12000, 
 			message			 : 'H&aacute; um jeito mais r&aacute;pido e seguro de navegar na internet ' + $('#bar_content').html(), 		
 		});
+	}
 })
