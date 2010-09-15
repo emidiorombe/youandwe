@@ -5,7 +5,6 @@
 <head>
 	<title>EQtal? - Busca</title>
 	<jsp:include page="/pages/template/styles.jsp"></jsp:include>
-	<link rel="stylesheet" href="/media/css/user.css" type="text/css" media='screen'/>
 	</head>
 <body>
 <jsp:include page="/pages/template/head.jsp"></jsp:include>

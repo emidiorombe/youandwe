@@ -15,7 +15,7 @@
 <jsp:include page="/pages/template/head.jsp"></jsp:include>
 <div id="content">
 	<div style="margin-left: 470px;">
-		<h4>Autentique-se ou Registre-se</h4>
+		<h2>Autentique-se ou Registre-se</h2>
 		<br>
 		<h5>${msg[msgErro]}</h5>
 	</div>

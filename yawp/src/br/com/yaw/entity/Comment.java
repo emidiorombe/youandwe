@@ -93,8 +93,8 @@ public class Comment implements Serializable{
 
 	public String getPartialText(){
 		String txt = text.getValue();
-		if(txt.length() > 120){
-			txt = txt.substring(0, 121);
+		if(txt.length() > 140){
+			txt = txt.substring(0, 141) + "...";
 		}
 		return txt;
 	}

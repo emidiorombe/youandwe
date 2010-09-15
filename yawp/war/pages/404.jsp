@@ -1,15 +1,24 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
+<%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"  %>
+<%@ taglib prefix="eq" tagdir="/WEB-INF/tags/" %> 
+
 
 <html>
-<head>
-	<title></title>
-	<link rel="stylesheet" href="/media/css/home.css" type="text/css" media='screen'/>
-	<link rel="stylesheet" href="/media/css/custom_classes.css" type="text/css" media='screen'/>
-	<link type='text/css' href='/media/css/osx.css' rel='stylesheet' media='screen' />
-</head>
+	<head>
+	<title>EQtal? - Profile Empresa -</title>
+	<jsp:include page="/pages/template/styles.jsp"></jsp:include>
+	<jsp:include page="/pages/template/scripts.jsp"></jsp:include>
+	<link type='text/css' href='/media/css/basic2.css' rel='stylesheet' media='screen' />
+	</head>
 <body>
-<h1>Tem nada aqui não!!</h1>
+<jsp:include page="/pages/template/head.jsp"></jsp:include>
+<div id="content">
+	<div style="text-align: center;">
+		<h2>@eqtal não encontrou o que você está procurando #fail</h2>
+	</div>
+</div>
+
+<jsp:include page="/pages/template/foot.jsp"></jsp:include>
 </body>
 </html>
