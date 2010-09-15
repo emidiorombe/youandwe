@@ -1,5 +1,5 @@
 #head_nav{height: 120px; margin-top: -5px;}
-#head_nav img{border-right: 0px;}
+#head_nav img{border: none;}
 
 #head_nav_auth{font-family: "Georgia", "Verdana", "sans-serif"; float: right; margin-top: -60px; margin-left: -30px; width: 320px;}
 #head_nav_auth a, #head_nav_auth a:visited, #head_nav_auth a:hover, #head_nav_auth a:active{ text-decoration: none; color: #FF5C00; font-style: italic; font-size: 1.2em;}

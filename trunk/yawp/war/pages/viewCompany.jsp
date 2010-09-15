@@ -22,11 +22,11 @@
 	Empresa: ${company.name}<br/>
 	<img src='<eq:urlImage blobKey="${company.logo}" size="220"/>' >
 </h3>
-Site: ${company.url}
+${msg['site'] }: ${company.url}
 <br />
-Description: ${company.description}
+${msg['descricao'] }: ${company.description}
 <br />
-Categorias: ${c_tags}
+${msg['categorias'] }: ${c_tags}
 <br/>
 <c:if test="${loggedUser != null && company.owner == loggedUser.key.id}">
  <a href="/company/edit/${company.key.id}">Editar</a>
@@ -52,7 +52,7 @@ Categorias: ${c_tags}
 	<input type="submit" value="Registrar">
 </form>
 </c:if>
-<h4>Comentários (${qtdeComments})</h4> 
+<h2>Comentários (${qtdeComments})</h2> 
 <c:if test="${empty param.all &&  !(empty loggedUser)}">
 	<a href="/company/list/${company.key.id}/?all=1">ver todos</a><br/>
 </c:if>
@@ -60,7 +60,7 @@ Categorias: ${c_tags}
 	<a href="/company/list/${company.key.id}/">ver somente contatos</a><br/>
 </c:if>
 <c:forEach var="com" items="${c_comments}">
-	<div id="list_c">
+	<div id="list_c_${com.key.id}" class="list_c">
 		<div id="star_${com.key.id}">
 			<script type="text/javascript">
 				jQuery(function ($){
@@ -73,7 +73,7 @@ Categorias: ${c_tags}
 				});
 			</script>
 		</div>
-		${com.text.value} / <c:if test="${com.owner == loggedUser.key.id}"><a href="/comment/remove/${com.key.id}">${msg['remover']}</a></c:if>
+		${com.text.value} <c:if test="${com.owner == loggedUser.key.id}">/<a href="/comment/remove/${com.key.id}">${msg['remover']}</a></c:if>
 		<div id="photog">
 			<c:forEach var="ph" items="${com.photos}">
 				<a href='<eq:urlImage blobKey="${ph.keyString}" size="720"/>' class="preview"><img src='<eq:urlImage blobKey="${ph.keyString}" size="64"/>'></a> 

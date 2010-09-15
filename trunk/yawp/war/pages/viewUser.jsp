@@ -12,7 +12,8 @@
 	<jsp:include page="/pages/template/styles.jsp"></jsp:include>
 	<link rel="stylesheet" href="/media/css/user.css" type="text/css" media='screen'/>
 	<link type='text/css' href='/media/css/basic.css' rel='stylesheet' media='screen' />
-	
+	<jsp:include page="/pages/template/scripts.jsp"></jsp:include>
+	<script type='text/javascript' src='/media/js/basic.js'></script>
 	</head>
 <body>
 <jsp:include page="/pages/template/head.jsp"></jsp:include>
@@ -51,7 +52,7 @@ User us1 =  (User)request.getAttribute("user");
 				<li><h2>${user.name}</h2></li>
 			</ul>
 			<ul id="usocial">
-				<li>${msg['twitter']}: <a href="http://twitter.com/${user.twit}">${user.twit}</a></li>
+				<li>${msg['twitter']}: <a href="http://twitter.com/${user.twit}" target="_blank">${user.twit}</a></li>
 				<li>${msg['orkut']}:</li>
 				<li>${msg['fcbook']}:</li>
 			</ul>
@@ -69,8 +70,20 @@ User us1 =  (User)request.getAttribute("user");
 		<div id="uc_comment">
 			<c:forEach var="com" items="${c_comments}">
 				<div class="user_c">
+					<h3>Sobre <a href='/company/list/${com.company}'><eq:companyName idCompany="${com.company}"/></a></h3>
+					<div id="star_${com.key.id}" style="margin-top: -15px;">
+					<script type="text/javascript">
+						jQuery(function ($){
+							$('#star_${com.key.id}').raty({
+								path: '/media/img/',
+								hintList:     ['Nao recomendo', 'Regular', 'Bom', 'Muito Bom', 'Recomendadissimo'],
+								readOnly:     true, 
+								start: ${com.rating}
+							});
+						});
+					</script>
+				</div>
 					<p>${com.textValue}</p>
-					<h5>Sobre <a href='/company/list/${com.company}'><eq:companyName idCompany="${com.company}"/></a></h5>
 				</div>
 			</c:forEach>
 		</div>
@@ -79,15 +92,12 @@ User us1 =  (User)request.getAttribute("user");
 <div id="basic-modal-content">
 <h3>Contatos de ${user.name}</h3>
 <c:forEach var="f" items="${c_friends}"	>
-	<eq:userImg userId="${f.key.id}" size="64" />
+	<a href="/user/list/${f.key.id}"><eq:userImg userId="${f.key.id}" size="64" /></a>
 	<a href="/user/list/${f.key.id}">${f.name}</a><br/>
 </c:forEach>
 </div>
 
 <jsp:include page="/pages/template/foot.jsp"></jsp:include>
 </body>
-<jsp:include page="/pages/template/scripts.jsp"></jsp:include>
-<script type='text/javascript' src='/media/js/basic.js'></script>
-
 
 </html>
