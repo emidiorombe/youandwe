@@ -85,7 +85,6 @@ public class CompanyActionServlet extends BaseActionServlet {
 					rd.forward(request, response);
 				}else {
 					Company c = BeanMapper.createCompany(request);
-					
 					String id_c = request.getParameter("id_c");
 					
 					BlobstoreService blobS = BlobstoreServiceFactory.getBlobstoreService();

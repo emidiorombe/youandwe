@@ -1,7 +1,7 @@
-<%@ page contentType="text/html; charset=ISO-8859-1" language="java"
-	isELIgnored="false"%>
+<%@ page language="java" isELIgnored="false"%>
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>YaWP!</title>
 </head>
 <body>

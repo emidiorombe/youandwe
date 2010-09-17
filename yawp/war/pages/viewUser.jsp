@@ -2,12 +2,13 @@
 <%@page import="com.google.appengine.api.images.ImagesService"%>
 <%@page import="com.google.appengine.api.blobstore.BlobKey"%>
 <%@page import="com.google.appengine.api.images.ImagesServiceFactory"%>
-<%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
+<%@ page language="java" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="eq" tagdir="/WEB-INF/tags/" %> 
 
 <html>
 	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>EQtal? - Profile Usuário -</title>
 	<jsp:include page="/pages/template/styles.jsp"></jsp:include>
 	<link rel="stylesheet" href="/media/css/user.css" type="text/css" media='screen'/>

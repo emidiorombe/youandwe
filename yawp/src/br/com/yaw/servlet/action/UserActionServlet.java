@@ -73,7 +73,6 @@ public class UserActionServlet extends BaseActionServlet{
 					user.setTwit(request.getParameter("twit"));
 					user.setFcbook(request.getParameter("fcbook"));
 					user.setOrkut(request.getParameter("orkut"));
-					user.setTipoUsuario(request.getParameter("tpcad"));
 					
 					BlobstoreService bService = BlobstoreServiceFactory.getBlobstoreService();
 					Map<String, BlobKey> blobs = bService.getUploadedBlobs(request);

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
+<%@ page language="java" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory"%>
@@ -8,6 +8,7 @@
 
 <html>
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>EQtal? - Editar Empresa</title>
 	<jsp:include page="/pages/template/styles.jsp"></jsp:include>
 	<link rel="stylesheet" href="/media/css/user.css" type="text/css" media='screen'/>
@@ -16,7 +17,7 @@
 <jsp:include page="/pages/template/head.jsp"></jsp:include>
 <h3>Editar Empresa</h3>
 <hr />
-<form action=<%=blobS.createUploadUrl("/company/add")%> method="post" enctype="multipart/form-data" >
+<form action=<%=blobS.createUploadUrl("/company/add")%> method="post" enctype="multipart/form-data">
 <input type="hidden" name="edit" />
 <table>
 	<tr>
