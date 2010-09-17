@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
+<%@ page language="java" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory"%>
@@ -8,6 +8,7 @@
 
 <html>
 	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>EQtal? - Profile Usuário -</title>
 	<jsp:include page="/pages/template/styles.jsp"></jsp:include>
 	<link rel="stylesheet" href="/media/css/user.css" type="text/css" media='screen'/>
@@ -45,10 +46,6 @@
 	<tr>
 		<td><label>Facebook:</label></td>
 		<td><input type="text" name="orkut" /></td>
-	</tr>
-	<tr>
-		<td><label>Tipo:</label></td>
-		<td><input type="text" name="tpcad" /></td>
 	</tr>
 	<tr>
 		<td><label></label></td>
