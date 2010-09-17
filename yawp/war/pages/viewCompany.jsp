@@ -28,11 +28,11 @@ ${msg['descricao'] }: ${company.description}
 <br />
 ${msg['categorias'] }: ${c_tags}
 <br/>
-<c:if test="${loggedUser != null && company.owner == loggedUser.key.id}">
+<c:if test="${loggedUser != null && company.owner == loggedUser.key.id || loggedUser.tipoUsuario == 'A'}">
  <a href="/company/edit/${company.key.id}">Editar</a>
 </c:if> 
 <br/>
-<c:if test="${loggedUser != null && company.owner == loggedUser.key.id}">
+<c:if test="${loggedUser != null && company.owner == loggedUser.key.id || loggedUser.tipoUsuario == 'A'}">
  <a href="/company/delete/${company.key.id}">Remover</a>
 </c:if> 
 
