@@ -47,6 +47,10 @@
 		<td><input type="text" name="orkut" /></td>
 	</tr>
 	<tr>
+		<td><label>Tipo:</label></td>
+		<td><input type="text" name="tpcad" /></td>
+	</tr>
+	<tr>
 		<td><label></label></td>
 		<td><input type="submit" value="Cadastrar" /></td>
 	</tr>
