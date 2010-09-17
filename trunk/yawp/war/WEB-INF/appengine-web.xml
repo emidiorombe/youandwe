@@ -20,5 +20,5 @@
         <include path="/**.js" expiration="7d"/>
         <include path="/**.css" expiration="7d"/>
     </static-files>
-	
+    
 </appengine-web-app>

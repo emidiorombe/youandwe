@@ -18,6 +18,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 			<param-value>Appstats available: /appstats/details?time={ID}</param-value>
 		</init-param>
 	</filter>
+	
+	<filter>
+		<filter-name>request_handler</filter-name>
+		<filter-class>br.com.yaw.servlet.filter.RequestHandlerFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>request_handler</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<filter-mapping>
 		<filter-name>gae_downtime</filter-name>
