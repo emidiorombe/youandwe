@@ -18,7 +18,7 @@
 <jsp:include page="/pages/template/head.jsp"></jsp:include>
 <h3>Editar Empresa</h3>
 <hr />
-<form action="/company/add" method="post" enctype="multipart/form-data">
+<form action="/company/add" method="post">
 <input type="hidden" name="edit" />
 <table>
 	<tr>
