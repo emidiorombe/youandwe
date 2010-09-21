@@ -87,7 +87,13 @@ public class CompanyActionServlet extends BaseActionServlet {
 					Company c = BeanMapper.createCompany(request);
 					String id_c = request.getParameter("id_c");
 					
+					BlobstoreService blobS = BlobstoreServiceFactory.getBlobstoreService();
+					Map<String, BlobKey> uploadedBlobs = blobS.getUploadedBlobs(request);
 					
+					BlobKey blobKey = uploadedBlobs.get("logo_c");
+					
+					if(blobKey != null)
+						c.setLogo(blobKey.getKeyString());
 						
 					if(id_c == null || "".equals(id_c) ) {
 						User user = (User)request.getSession().getAttribute(LOGGED_USER);
@@ -111,26 +117,6 @@ public class CompanyActionServlet extends BaseActionServlet {
 				e.printStackTrace();
 			}
 			
-		}else if("add_logo".equals(action)) {
-			try {
-				String id_c = request.getParameter("id_c");
-				Integer companyId = Integer.parseInt(id_c != null ? id_c : "0");
-				Company fromBase = service.getCompanyById(companyId);
-				
-				BlobstoreService blobS = BlobstoreServiceFactory.getBlobstoreService();
-				Map<String, BlobKey> uploadedBlobs = blobS.getUploadedBlobs(request);
-				
-				BlobKey blobKey = uploadedBlobs.get("logo_c");
-			
-				if(blobKey != null)
-					fromBase.setLogo(blobKey.getKeyString());
-				
-				service.addCompany(fromBase);
-				
-			}catch(ServiceException se) {
-				response.getWriter().write(se.getMessage());
-				se.printStackTrace();
-			}
 		}else if("edit".equals(action)) {
 			try {
 				long companyId = Long.parseLong(tokens[3]);
