@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false"%>
+<%@ page contentType="text/html; charset=ISO-8859-1" language="java" isELIgnored="false" pageEncoding="ISO-8859-1"%>
 <%@page import="com.google.appengine.api.users.UserService"%>
 
 <%  UserService userServiceG = com.google.appengine.api.users.UserServiceFactory.getUserService(); %>

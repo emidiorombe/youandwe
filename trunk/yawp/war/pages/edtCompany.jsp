@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=ISO-8859-1" language="java" isELIgnored="false" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory"%>
@@ -9,7 +9,7 @@
 
 <html>
 <head>
-	<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<title>EQtal? - Editar Empresa</title>
 	<jsp:include page="/pages/template/styles.jsp"></jsp:include>
 	<link rel="stylesheet" href="/media/css/user.css" type="text/css" media='screen'/>

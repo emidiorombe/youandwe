@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false"%>
+<%@ page contentType="text/html;charset=ISO-8859-1" language="java" isELIgnored="false" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"  %>
 <%@ taglib prefix="eq" tagdir="/WEB-INF/tags/" %> 
@@ -10,7 +10,7 @@
 
 <html>
 	<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>EQtal? - Profile Empresa -</title>
 	<jsp:include page="/pages/template/styles.jsp"></jsp:include>
 	<jsp:include page="/pages/template/scripts.jsp"></jsp:include>
@@ -53,7 +53,7 @@ ${msg['categorias'] }: ${c_tags}
 	<input type="submit" value="Registrar">
 </form>
 </c:if>
-<h2>Coment√°rios (${qtdeComments})</h2> 
+<h2>Coment·rios (${qtdeComments})</h2> 
 <c:if test="${empty param.all &&  !(empty loggedUser)}">
 	<a href="/company/list/${company.key.id}/?all=1">ver todos</a><br/>
 </c:if>
