@@ -41,7 +41,6 @@ public class CompanyActionServlet extends BaseActionServlet {
 		String action = getAction(tokens);
 		CompanyService service = ServiceFactory.getService(CompanyService.class);
 		CommentService commentService = ServiceFactory.getService(CommentService.class);
-		Gson gson = new Gson();
 		
 		if("list".equals(action)) {
 			try {
