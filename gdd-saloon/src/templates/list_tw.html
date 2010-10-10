@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title></title>
+	<meta name="author" content="Rafael Nunes">
+	<link rel="stylesheet" href="/css/basic.css" type="text/css" media='screen'/>
+</head>
+
+<body>
+  <table>
+{% for tw in tweets %}
+    <tr>
+      <td>
+          <img src='{{ tw.img_url }}'/><br/>
+          {{tw.from_user}}
+      </td>
+      <td>{{tw.text}}</td>
+      <td>
+        <div class="basic-modal-content" id="modal_c_{{tw.tweet_id}}">
+          <form action="/add_comment/" method="POST">
+            <p>
+              <textarea name="txt_c"></textarea><br/>
+              <input type="hidden" name="id_tw" value="{{tw.key}}"/>
+            </p>
+            <input type="submit" value="Enviar"/>
+          </form>
+         {%for k, v in all_comments.items%}
+           {% if k == tw.tweet_id%}
+              {%for cm in v%}
+                <p>{{cm.text}}</p>
+              {%endfor%}
+           {%endif%}
+         {%endfor%} 
+        </div>
+        <ul>
+          <li><a href="#" class="basic" name="{{tw.tweet_id}}">Coment&aacute;rios</a></li>
+        </ul>
+      </td>
+    </tr>
+{% endfor %}
+</table>
+
+</body>
+<script type="text/javascript" src="/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/js/jquery.simplemodal-1.3.5.min.js"></script>
+<script type="text/javascript" src="/js/basic.js"></script>
+</html>
