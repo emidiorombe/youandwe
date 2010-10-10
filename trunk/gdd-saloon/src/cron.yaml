@@ -1,0 +1,4 @@
+cron:
+- description: daily summary job
+  url: /cron/get_tweet
+  schedule: every 5 minutes
