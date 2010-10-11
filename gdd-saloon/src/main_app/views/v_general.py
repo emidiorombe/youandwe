@@ -34,8 +34,9 @@ def adicionar_comentario(request):
         tw = request.POST['id_tw']
         cm.pub_date = datetime.now()
         cm.tweet = db.get(tw)
-        cm.put()
-    return render_to_response('list_tw.html', locals())
+        #cm.put()
+        assert False
+    return HttpResponse()
 
 def erro404(request):
     return render_to_response('404.html')
