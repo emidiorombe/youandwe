@@ -8,30 +8,48 @@
 </head>
 
 <body>
+  Olá, {{user}}
+   <div id="dv_busca">
+     <form action="/search/" method="POST">
+        <p>ID Tweet <input type="text" name="tw_id_search" /></p>
+        <input type="submit" value="Buscar"/>
+     </form>
+   </div>
+   <hr/>
   <table>
 {% for tw in tweets %}
     <tr>
       <td>
           <img src='{{ tw.img_url }}'/><br/>
-          {{tw.from_user}}
+          {{tw.from_user}}<br/>
+          {{tw.tweet_id}}
       </td>
       <td>{{tw.text}}</td>
       <td>
         <div class="basic-modal-content" id="modal_c_{{tw.tweet_id}}">
-          <form method="POST" class="form_ajax">
-            <p>
-              <textarea name="txt_c"></textarea><br/>
-              <input type="hidden" name="id_tw" value="{{tw.key}}"/>
-            </p>
-            <input type="submit" value="Enviar"/>
-          </form>
-         {%for k, v in all_comments.items%}
-           {% if k == tw.tweet_id%}
-              {%for cm in v%}
-                <p>{{cm.text}}</p>
-              {%endfor%}
-           {%endif%}
-         {%endfor%} 
+          <div id="dv_ajax">
+            <div class="dv_load"></div>
+            <div class="dv_form">
+              <form method="POST" class="form_ajaxx" onsubmit="return send_ajax(this, {{tw.tweet_id}})">
+                <p>
+                  <textarea name="txt_c"></textarea><br/>
+                  <input type="hidden" name="id_tw" value="{{tw.key}}"/>
+                </p>
+                <input type="submit" value="Enviar"/>
+              </form>
+            </div>
+          </div>
+          <div id="dv_comments_{{tw.tweet_id}}">
+           {%for k, v in all_comments.items%}
+             {% if k == tw.tweet_id%}
+                {%for cm in v%}
+                  <div>
+                    <p>{{cm.text}}</p>
+                  </div>
+                {%endfor%}
+             {%endif%}
+           {%endfor%}
+          </div> 
         </div>
         <ul>
           <li><a href="#" class="basic" name="{{tw.tweet_id}}">Coment&aacute;rios</a></li>

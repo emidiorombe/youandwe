@@ -18,7 +18,7 @@ def get_tweets(request):
     return HttpResponse()
 
 def load_tweets_web():
-    url = "http://search.twitter.com/search.json?q=%23dilmanao"
+    url = "http://search.twitter.com/search.json?q=%23gddbr"
     result = urlfetch.fetch(url)
     data = json.loads(result.content)
     tweets = custom_serializer.create_tweet_list(data)

@@ -7,6 +7,8 @@ urlpatterns = patterns('',
     ('^$', v_general.index),
     ('^list/$', v_general.list),
     ('^add_comment/$', v_general.adicionar_comentario),
+    ('^search/$', v_general.search_tweet),
+    ('^delete/all$', v_general.delete_all),
     
     ('^cron/get_tweet$', v_infra.get_tweets),
 )

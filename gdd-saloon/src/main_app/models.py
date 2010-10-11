@@ -1,5 +1,6 @@
 from appengine_django.models import BaseModel
 from google.appengine.ext import db
+from appengine_django.auth.models import User
 
 class Tweet(BaseModel):
     text = db.StringProperty(multiline=True)
@@ -10,7 +11,7 @@ class Tweet(BaseModel):
     
 class Comentario(BaseModel):
     text = db.StringProperty(multiline=True)
-    user = db.StringProperty()
+    user = db.UserProperty()
     tweet = db.ReferenceProperty(Tweet)
     pub_date = db.DateTimeProperty()
     
