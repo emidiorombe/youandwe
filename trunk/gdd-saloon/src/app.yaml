@@ -12,5 +12,10 @@ handlers:
 
 - url: /img
   static_dir: static/img
+  
+- url: /remote_api
+  script: handler.py
+  login: admin
+
 - url: /.*
   script: main.py
