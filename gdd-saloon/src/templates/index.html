@@ -1,4 +1,5 @@
 {%load i18n %}
+{%load generic_filters %}
 {% get_available_languages as LANGUAGES %}
 <html>
 
@@ -11,5 +12,6 @@
 	 <div>
 	   <p><a href="{{login_url}}">{% trans "auth_goo" %}</a></p>
 	 </div>
+	 <h4>{{var|trying:var}}</h4>
 </body>
 </html>

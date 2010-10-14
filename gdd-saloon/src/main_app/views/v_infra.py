@@ -8,12 +8,13 @@ from django.http import HttpResponse
 from google.appengine.api import memcache, urlfetch
 from django.utils import simplejson as json
 
-from main_app.utils import custom_serializer 
+from main_app.utils import custom_serializer, generic
 from main_app.models import Tweet
 
 
 def get_tweets(request):
-    tweets = load_tweets_web()
+    load_tweets_web()
+    tweets = load_tweets_base(0, generic.DEFAULT_PAGING)
     memcache.set("tweets", tweets)
     return HttpResponse()
 
@@ -28,8 +29,8 @@ def load_tweets_web():
             tw.put()
     return tweets
 
-def load_tweets_base():
-    tweets = Tweet.all().order("-dt_tweet").fetch(25)
+def load_tweets_base(init, end):
+    tweets = Tweet.all().order("-dt_tweet").fetch(end, init)
     return tweets
     
     

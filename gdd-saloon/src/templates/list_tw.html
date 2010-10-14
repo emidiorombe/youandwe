@@ -1,3 +1,4 @@
+{%load generic_filters%}
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
@@ -58,7 +59,9 @@
     </tr>
 {% endfor %}
 </table>
-
+<div id="dv_pg">
+  <a href="/list/{{page|paging:'-'}}"><< P&aacute;gina Anterior</a>&nbsp;&nbsp;&nbsp;<a href="/list/{{page_next|paging:'+'}}">Proxima P&aacute;gina>></a>
+</div>
 </body>
 <script type="text/javascript" src="/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="/js/jquery.simplemodal-1.3.5.min.js"></script>
