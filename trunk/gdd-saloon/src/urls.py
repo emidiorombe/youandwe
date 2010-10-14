@@ -5,7 +5,7 @@ from main_app.views import v_infra
 
 urlpatterns = patterns('',
     ('^$', v_general.index),
-    ('^list/$', v_general.list),
+    ('^list/(\d*)$', v_general.list),
     ('^add_comment/$', v_general.adicionar_comentario),
     ('^search/$', v_general.search_tweet),
     ('^delete/all$', v_general.delete_all),
