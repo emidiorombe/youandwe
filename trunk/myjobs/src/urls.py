@@ -7,3 +7,4 @@ urlpatterns = patterns('',
 )
 
 handler404 = 'v_general.erro404'
+handler500 = 'v_general.erro500'
