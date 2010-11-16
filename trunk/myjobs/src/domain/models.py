@@ -1,11 +1,22 @@
 from appengine_django.models import BaseModel
-from google.appengine.ext import db
+from google.appengine.ext import db, blobstore
 
-class Poll(BaseModel):
-    question = db.StringProperty()
-    pub_date = db.DateTimeProperty('date published')
+class PortfolioEntry(BaseModel):
+    description = db.StringProperty()
+    image = blobstore.BlobReferenceProperty()
+    tags = db.StringListProperty()
+    
+    
+class Usuario(BaseModel):
+    user = db.UserProperty()
+    type = db.IntegerProperty()
+    creation_date = db.DateTimeProperty()
 
-class Choice(BaseModel):
-    poll = db.ReferenceProperty(Poll)
-    choice = db.StringProperty()
-    votes = db.IntegerProperty()
+
+class Portfolio(BaseModel):
+    entries = db.ReferenceProperty(PortfolioEntry)
+    user = db.ReferenceProperty(Usuario)
+    
+    def get_latest(self):
+        return Portfolio.all().fetch(100);
+    
