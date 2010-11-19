@@ -12,3 +12,4 @@ register = template.Library()
 @register.filter(name='blob_upload_url')
 def paging(value):
     return blobstore.create_upload_url(value)
+

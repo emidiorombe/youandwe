@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-from domain.views import v_general, v_portfolio
+from domain.views import v_general, v_portfolio, v_usuario
 
 #Geral
 urlpatterns = patterns('',
@@ -13,6 +13,15 @@ urlpatterns += patterns('',
    ('^portfolio/add/$', v_portfolio.add),
    ('^portfolio/(\d*)$', v_portfolio.list),
 )
+
+#User
+urlpatterns += patterns('',
+   ('^user/add/$', v_usuario.create_user),
+   ('^user/login/$', v_usuario.login),
+   ('^user/logout/$', v_usuario.logout),
+   
+)
+
 
 handler404 = 'v_general.erro404'
 handler500 = 'v_general.erro500'

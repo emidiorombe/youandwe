@@ -3,10 +3,13 @@ Created on Nov 12, 2010
 
 @author: Rafael Nunes
 '''
-from google.appengine.ext.webapp import blobstore_handlers
-def get_blobkeys(request):
-    pass
 
-class UpHa(blobstore_handlers.BlobstoreUploadHandler):
-    def x(self):
-        self.get_uploads('field_name')
+from domain.models import Tag
+
+def split_tags_into_models(tags):
+    tag_list = []
+    for tokken in tags.split(','):
+        tag = Tag()
+        tag.name = tokken.lower()
+        tag_list += tag
+    return tag_list

@@ -1,4 +1,6 @@
 {%load i18n %}
+{%load gae_filters %}
+{%load gae_tags %}
 {% get_available_languages as LANGUAGES %}
 <html>
 <head>
@@ -9,13 +11,7 @@
 <body>
 	<h1>{{myvar}}</h1>
 	{% trans "frase_internacional" %}
-	<br />
-	<a href="/user/add/">AddUser</a>
 	<form action="/i18n/setlang/" method="post">
-	<label for="bookSearchField">Book: </label>
-	<input type="text" id="bookSearchField" name="bookSearchField">
-	
-		<input name="next" type="hidden" value="/index" /> 
 		<select name="language">
 				<option value="99">Selecione...</option>
 			{% for lang in LANGUAGES %}
@@ -24,9 +20,16 @@
 		</select>
 		 <input type="submit" value="Go" />
 	 </form>
+	 {%if logged_user%}
+	   <h4>{{logged_user}} / <a href='{% logout_url %}'>Logout</a></h4>
+	 {%endif%}
 	 
-	 <h2>{{plist}}</h2>
-	
-	<a href="/portfolio/add">Adicionar Portfolio</a>  
+	 {%if not logged_user%}
+	   <a href='{{login_url}}'>Login</a> <br/>
+	 {%endif%}
+
+	<a href="/portfolio/add">Adicionar Portfolio</a><br />
+	<a href="/user/add">Adicionar Usuario</a><br />
+	  
 </body>
 </html>
