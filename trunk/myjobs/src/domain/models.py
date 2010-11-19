@@ -6,8 +6,9 @@ class Tag(BaseModel):
     name = db.StringProperty()
     
 class PortfolioEntry(BaseModel):
-    description = db.StringProperty()
+    image_description = db.StringProperty()
     image = blobstore.BlobReferenceProperty()
+    title = db.StringProperty()
     tags = db.ListProperty(db.Key)
     creation_date = db.DateTimeProperty(auto_now_add=True)
     
@@ -19,7 +20,7 @@ class Usuario(BaseModel):
     name = db.StringProperty()
     url = db.URLProperty()
     mail = db.EmailProperty()
-    description = db.TextProperty()
+    image_description = db.TextProperty()
     creation_date = db.DateTimeProperty(auto_now_add=True)
 
 
