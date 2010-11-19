@@ -7,7 +7,7 @@
 	<title>MyJobs</title>
 </head>
 <body>
-  <form action="/user/add/" method="POST">
+  <form action="/user/add/" method="POST" enctype="multipart/form-data">
     Conta: <select name="perfil">
       <option value="1">Freelance</option>
       <option value="2">Empresa</option>
@@ -15,7 +15,8 @@
     Nome:<input type="text" name="name"/><br />
     URL:<input type="text" name="url"/><br />
     E-mail:<input type="text" name="mail"/><br />
-    Descricao:<textarea name="description"></textarea><br />
+    Descricao:<textarea name="user_description"></textarea><br />
+    
     <input type="submit" value="OK"/><br />
     
   </form>
