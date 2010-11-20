@@ -9,8 +9,11 @@ from domain.utils.get_uploads import get_uploads
 from domain.forms import PortfolioEntryForm
 from domain.utils.utils import split_tags_into_models
 from domain.models import Tag
+from domain.views.decorators import login_required
 
 #### === MAPPED METHODS ===###
+
+@login_required
 def add(request):
     if request.method == 'GET':
         form_action = blobstore.create_upload_url('/portfolio/add/')

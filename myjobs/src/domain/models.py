@@ -11,10 +11,16 @@ class PortfolioEntry(BaseModel):
     title = db.StringProperty()
     tags = db.ListProperty(db.Key)
     creation_date = db.DateTimeProperty(auto_now_add=True)
+
+class Portfolio(BaseModel):
+    entries = db.ListProperty(db.Key)
+    description = db.TextProperty()
     
+    def get_latest(self):
+        return Portfolio.all().fetch(100);
     
 class Usuario(BaseModel):
-    user = db.UserProperty()
+    guser = db.UserProperty()
     type = db.IntegerProperty() #pagante ou free
     perfil = db.IntegerProperty() #user or company
     name = db.StringProperty()
@@ -22,13 +28,9 @@ class Usuario(BaseModel):
     mail = db.EmailProperty()
     image_description = db.TextProperty()
     creation_date = db.DateTimeProperty(auto_now_add=True)
-
-
-class Portfolio(BaseModel):
-    entries = db.ListProperty(db.Key)
-    user = db.ReferenceProperty(Usuario)
-    description = db.TextProperty()
+    portfolio = db.ReferenceProperty(Portfolio)
     
-    def get_latest(self):
-        return Portfolio.all().fetch(100);
+    def save(self):
+        self.put()
+
     
