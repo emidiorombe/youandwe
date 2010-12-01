@@ -6,9 +6,9 @@ Created on Nov 17, 2010
 from django.shortcuts import render_to_response, redirect
 from django.contrib import auth
 from google.appengine.api import memcache, users
-from domain.forms import UsuarioForm
-from domain.models import Portfolio
-from domain.views.decorators import login_required
+from core.forms import UsuarioForm
+from core.models import Portfolio
+from core.views.decorators import login_required
 
 @login_required
 def create_user(request):
@@ -20,7 +20,7 @@ def create_user(request):
             user_new = user_form.save(commit=False)
             user_new.type = 1
             portfolio = Portfolio()
-            portfolio.put()
+            portfolio.save()
             user_new.portfolio = portfolio
             user_new.put()
         return render_to_response('user_view.html', locals())

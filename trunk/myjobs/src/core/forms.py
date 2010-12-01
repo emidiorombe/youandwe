@@ -4,16 +4,16 @@ Created on Nov 17, 2010
 @author: Rafael Nunes
 '''
 
-from google.appengine.ext.db import djangoforms
-from domain.models import PortfolioEntry, Usuario
+from django import forms
+from core.models import PortfolioEntry, Usuario
 
 
-class PortfolioEntryForm(djangoforms.ModelForm):
+class PortfolioEntryForm(forms.ModelForm):
     class Meta:
         model = PortfolioEntry
-        exclude = ['image', 'tags']
+        exclude = ['image', 'tags', 'portfolio', 'creation_date']
         
-class UsuarioForm(djangoforms.ModelForm):
+class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
         exclude = ['user', 'type', 'creation_date']

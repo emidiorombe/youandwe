@@ -11,8 +11,7 @@ def index(request):
     else:
         login_url = users.create_login_url('/user/login')
     if plist is None:
-        portfolio = Portfolio()
-        plist = portfolio.get_latest()
+        plist = Portfolio.objects.all()
     return render_to_response('index.html', locals())
    
     
