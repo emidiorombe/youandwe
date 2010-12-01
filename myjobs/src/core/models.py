@@ -1,36 +1,26 @@
-from appengine_django.models import BaseModel
-from google.appengine.ext import db, blobstore
+from django.db import models
+from djangotoolbox.fields import ListField
+from django.contrib.auth.models import User
 
 
-class Tag(BaseModel):
-    name = db.StringProperty()
+class Portfolio(models.Model):
+    description = models.TextField()
     
-class PortfolioEntry(BaseModel):
-    image_description = db.StringProperty()
-    image = blobstore.BlobReferenceProperty()
-    title = db.StringProperty()
-    tags = db.ListProperty(db.Key)
-    creation_date = db.DateTimeProperty(auto_now_add=True)
-
-class Portfolio(BaseModel):
-    entries = db.ListProperty(db.Key)
-    description = db.TextProperty()
-    
-    def get_latest(self):
-        return Portfolio.all().fetch(100);
-    
-class Usuario(BaseModel):
-    guser = db.UserProperty()
-    type = db.IntegerProperty() #pagante ou free
-    perfil = db.IntegerProperty() #user or company
-    name = db.StringProperty()
-    url = db.URLProperty()
-    mail = db.EmailProperty()
-    image_description = db.TextProperty()
-    creation_date = db.DateTimeProperty(auto_now_add=True)
-    portfolio = db.ReferenceProperty(Portfolio)
-    
-    def save(self):
-        self.put()
+class PortfolioEntry(models.Model):
+    image_description = models.CharField(max_length=255, null=True, blank=True)
+    image = models.CharField(max_length=255) #In appengine will store BlobKey
+    title = models.CharField(max_length=255, null=True, blank=True)
+    tags = ListField(models.CharField(max_length=255))
+    creation_date = models.DateTimeField(auto_now_add=True)
+    portfolio = models.ForeignKey(Portfolio, null=True, blank=True)
 
     
+class Usuario(models.Model):
+    djuser = models.ForeignKey(User, null=True)
+    is_pagante = models.BooleanField() #pagante ou free
+    perfil = models.PositiveIntegerField() #freelance/company/outro
+    url = models.URLField()
+    image_description = models.TextField()
+    creation_date = models.DateTimeField(auto_now_add=True)
+    portfolio = models.ForeignKey(Portfolio)
+

@@ -3,20 +3,24 @@ Created on Nov 12, 2010
 
 @author: Rafael Nunes
 '''
+import logging as log
 from django.shortcuts import render_to_response, redirect
+from django.views.decorators.csrf import csrf_exempt
 from google.appengine.api.blobstore import blobstore
-from domain.utils.get_uploads import get_uploads
-from domain.forms import PortfolioEntryForm
-from domain.utils.utils import split_tags_into_models
-from domain.models import Tag
-from domain.views.decorators import login_required
+from core.utils.get_uploads import get_uploads
+from core.forms import PortfolioEntryForm
+from core.utils.utils import split_tags_into_models
+from core.views.decorators import login_required
+from core.models import PortfolioEntry
+from google.appengine.api import images
 
 #### === MAPPED METHODS ===###
 
+@csrf_exempt
 @login_required
 def add(request):
     if request.method == 'GET':
-        form_action = blobstore.create_upload_url('/portfolio/add/')
+        form_action = blobstore.create_upload_url("/portfolio/add/")
         return render_to_response('portfolio_edit.html', locals())
     elif request.method == 'POST':
         blobs = get_uploads(request)
@@ -25,26 +29,18 @@ def add(request):
             if p_entry_form.is_valid():
                 p_entry = p_entry_form.save(commit=False)
                 p_entry.image = binfo
-                p_entry.tags = get_tags(request.POST['tags'])
-                p_entry.put()
+                #p_entry.tags = request.POST['tags']
+                p_entry.save()
             else:
-                request.session['err'] = p_entry.errors
-        return redirect('/portfolio/1')
+                log.error(p_entry_form.errors)
+        return redirect('/portfolio/'+ p_entry.id)
 
 def list(request, id_p):
+    pe = PortfolioEntry.objects.get(pk=id_p)
+    img_url = images.get_serving_url(pe.image, size=120)
     return render_to_response('index.html', locals())
 
 
 ###=== HELPER METHODS ===###
 def get_tags(tags):
-    tag_list = []
-    for token in tags.split(','):
-        tag = Tag.all().filter('name =', token.lower()).fetch(1)
-        if tag.__len__() == 0:
-            tag_new = Tag()
-            tag_new.name = token.lower()
-            tag_new.put()
-            tag_list.append(tag_new.key())
-        else:
-            tag_list.append(tag[0].key())
-    return tag_list
+    return 'tag_list'
