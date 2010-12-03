@@ -20,12 +20,12 @@
 		</select>
 		 <input type="submit" value="Go" />
 	 </form>
-	 {%if logged_user%}
-	   <h4>{{logged_user}} / <a href='{% logout_url %}'>Logout</a></h4>
+	 {%if request.user.is_authenticated %}
+	   <h4>{{request.user}} / <a href='/user/logout'>Logout</a></h4>
 	 {%endif%}
 	 
-	 {%if not logged_user%}
-	   <a href='{{login_url}}'>Login</a> <br/>
+	 {%if not request.user.is_authenticated %}
+	   <a href='/user/login'>Login</a> <br/>
 	 {%endif%}
 
 	<a href="/portfolio/add">Adicionar Portfolio</a><br />

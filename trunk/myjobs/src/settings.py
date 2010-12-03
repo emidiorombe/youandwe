@@ -17,6 +17,9 @@ INSTALLED_APPS = (
     'core',
 )
 
+MIDDLEWARE_CLASSE = (
+    'django.middleware.csrf.CsrfViewMiddleware'
+)
 # This test runner captures stdout and associates tracebacks with their
 # corresponding output. Helps a lot with print-debugging.
 TEST_RUNNER = 'djangotoolbox.test.CapturingTestSuiteRunner'
