@@ -13,7 +13,6 @@ from core.utils.utils import split_tags_into_models
 from core.views.decorators import login_required
 from core.models import PortfolioEntry
 from google.appengine.api import images
-
 #### === MAPPED METHODS ===###
 
 @csrf_exempt
@@ -28,12 +27,12 @@ def add(request):
             p_entry_form = PortfolioEntryForm(request.POST)
             if p_entry_form.is_valid():
                 p_entry = p_entry_form.save(commit=False)
-                p_entry.image = binfo
+                p_entry.image = str(binfo.key())
                 #p_entry.tags = request.POST['tags']
                 p_entry.save()
             else:
                 log.error(p_entry_form.errors)
-        return redirect('/portfolio/'+ p_entry.id)
+        return redirect('/portfolio/'+ str(p_entry.id))
 
 def list(request, id_p):
     pe = PortfolioEntry.objects.get(pk=id_p)

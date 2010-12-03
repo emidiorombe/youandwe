@@ -4,6 +4,7 @@ Created on Nov 20, 2010
 @author: Rafael Nunes
 '''
 from django.shortcuts import render_to_response
+import logging as log
 
 """Decorators"""
 
@@ -15,9 +16,9 @@ def login_required(function):
         The login redirect URL is always set to /login
     """
     def login_required_wrapper(request, *args, **kw):
-        try:
-            logged_user = request.session['logged_user']
-            return function(request, *args, **kw)
-        except KeyError, error:
-            return HttpResponseRedirect("/")
+            log.info("====>1")
+            if request.user.is_authenticated():
+                return function(request, *args, **kw)
+            else:
+                return HttpResponseRedirect("/")
     return login_required_wrapper

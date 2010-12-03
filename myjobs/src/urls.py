@@ -17,8 +17,8 @@ urlpatterns += patterns('',
 #User
 urlpatterns += patterns('',
    ('^user/add/$', v_usuario.create_user),
-   ('^user/login/$', v_usuario.login),
-   ('^user/logout/$', v_usuario.logout),
+   ('^user/login/$', v_usuario.login_user),
+   ('^user/logout/$', v_usuario.logout_user),
    
 )
 

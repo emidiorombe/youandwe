@@ -8,8 +8,6 @@ def index(request):
     plist = memcache.get('list_p')
     if users.get_current_user():
         logged_user = users.get_current_user()
-    else:
-        login_url = users.create_login_url('/user/login')
     if plist is None:
         plist = Portfolio.objects.all()
     return render_to_response('index.html', locals())
@@ -21,3 +19,4 @@ def erro404(request):
 
 def erro500(request):
     return render_to_response('500.html')
+
