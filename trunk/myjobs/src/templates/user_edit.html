@@ -8,6 +8,7 @@
 </head>
 <body>
   <form action="/user/add/" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
     Conta: <select name="perfil">
       <option value="1">Freelance</option>
       <option value="2">Empresa</option>
@@ -15,6 +16,7 @@
     Nome:<input type="text" name="name"/><br />
     URL:<input type="text" name="url"/><br />
     E-mail:<input type="text" name="mail"/><br />
+    Password:<input type="password" name="pwd"/><br />
     Descricao:<textarea name="user_description"></textarea><br />
     
     <input type="submit" value="OK"/><br />

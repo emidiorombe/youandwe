@@ -13,14 +13,11 @@ class PortfolioEntry(models.Model):
     tags = ListField(models.CharField(max_length=255))
     creation_date = models.DateTimeField(auto_now_add=True)
     portfolio = models.ForeignKey(Portfolio, null=True, blank=True)
-
     
 class Usuario(models.Model):
     djuser = models.ForeignKey(User, null=True)
     is_pagante = models.BooleanField() #pagante ou free
     perfil = models.PositiveIntegerField() #freelance/company/outro
     url = models.URLField()
-    image_description = models.TextField()
-    creation_date = models.DateTimeField(auto_now_add=True)
     portfolio = models.ForeignKey(Portfolio)
 

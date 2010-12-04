@@ -16,9 +16,9 @@ def login_required(function):
         The login redirect URL is always set to /login
     """
     def login_required_wrapper(request, *args, **kw):
-            log.info("====>1")
             if request.user.is_authenticated():
                 return function(request, *args, **kw)
             else:
+                log.info("====>Not Authenticated")
                 return HttpResponseRedirect("/")
     return login_required_wrapper

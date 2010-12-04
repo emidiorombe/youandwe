@@ -6,20 +6,18 @@ Created on Nov 17, 2010
 import logging as log
 from django.shortcuts import render_to_response, redirect
 from django.contrib import auth
+from django.contrib.auth.models import User
 from google.appengine.api import memcache, users
 from core.forms import UsuarioForm
 from core.models import Portfolio
-from core.views.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.core.context_processors import csrf
-from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_protect
 from core.utils.utils import secure_render_response
 
-@login_required
+@csrf_protect
 def create_user(request):
     if request.method == 'GET':
-        return render_to_response('user_edit.html', locals())
+        return secure_render_response(request, 'user_edit.html', locals())
     elif request.method == 'POST':
         user_form = UsuarioForm(request.POST)
         if user_form.is_valid():
@@ -28,7 +26,9 @@ def create_user(request):
             portfolio = Portfolio()
             portfolio.save()
             user_new.portfolio = portfolio
-            user_new.put()
+            djuser = User.objects.create_user(username=request.POST['mail'],email=request.POST['mail'], password=request.POST['pwd'])
+            user_new.djuser = djuser 
+            user_new.save()
         return render_to_response('user_view.html',  locals())
 
 
