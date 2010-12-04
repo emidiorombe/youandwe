@@ -23,6 +23,6 @@ urlpatterns += patterns('',
 )
 
 
-handler404 = 'v_general.erro404'
+handler404 = 'core.views.v_general.erro404'
 handler500 = 'djangotoolbox.errorviews.server_error'
 #handler500 = 'v_general.erro500'

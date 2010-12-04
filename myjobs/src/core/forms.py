@@ -16,4 +16,4 @@ class PortfolioEntryForm(forms.ModelForm):
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        exclude = ['user', 'type', 'creation_date']
+        exclude = ['djuser', 'type', 'portfolio']
