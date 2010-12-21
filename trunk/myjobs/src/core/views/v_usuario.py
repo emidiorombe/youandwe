@@ -17,7 +17,7 @@ from core.utils.utils import secure_render_response
 @csrf_protect
 def create_user(request):
     if request.method == 'GET':
-        return secure_render_response(request, 'user_edit.html', locals())
+        return secure_render_response(request, 'cadastro.html', locals())
     elif request.method == 'POST':
         user_form = UsuarioForm(request.POST)
         if user_form.is_valid():
