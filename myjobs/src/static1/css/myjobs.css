@@ -1,0 +1,104 @@
+@charset "utf-8";
+
+
+/*
+CSS desenvolvido para o site www.allissaninox.com.br
+[mee]design . 2010 . lucas m & eric e
+contato@meedesign.com.br
+
+organização do CSS
+1. tags gerais
+2. classes e ids, por 'ordem de aparição'
+
+propriedades: retirado do aloe studios (http://aloestudios.com/2009/02/order-of-the-day-css-properties/)
+   1. Display & Flow
+   2. Positioning
+   3. Dimensions
+   4. Margins, Padding, Borders, Outline
+   5. Typographic Styles
+   6. Backgrounds
+   7. Opacity, Cursors, Generated Content
+*/
+
+
+/*
+eric meyer css reset
+http://meyerweb.com/eric/tools/css/reset/index.html
+v1.0 | 20080212
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+}
+
+/* remember to highlight inserts somehow! */
+ins {
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+body {background: #FFFFFF;}
+
+/*classes e ids*/
+
+.container {position: relative; width: 1000px; margin: 0 auto;}
+.header {position: relative; width: 1000px; z-index: 20;}
+.main {position: relative; width: 1000px; margin: 40px 0 0; z-index: 1;}
+	.col1 {float: left; overflow: hidden; position: relative; width: 450px; height: auto; margin: 0 0 0 25px; background: #000000; cursor: pointer;}
+	.col2 {float: left; position: relative; width: 450px; height: auto; margin: 0 0 0 50px; background: #000000;}
+	.clear {clear:left;}
+.footer {position: relative; width: 1000px; margin: 100px 0 0;}
+
+.cadastre {position: absolute; top: 123px; right: 75px; cursor: pointer;}
+.login {position: absolute; top: 123px; right: 25px; cursor: pointer;}
+
+.cadastroW {position: absolute; top: 136px; right: 87px; cursor: pointer;}
+.loginW {position: absolute; top: 135px; right: 17px;}
+
+.portfolio {position: absolute; width: 219px; height: 146px;}
+#portifa1 {top: 50px; left: 0;}
+#portifa2 {top: 50px; left: 232px;}
+#portifa3 {top: 206px; left: 0;}
+#portifa4 {top: 206px; left: 232px;}
