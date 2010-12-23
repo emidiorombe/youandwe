@@ -31,6 +31,8 @@ def create_user(request):
             user_new.save()
         return render_to_response('user_view.html',  locals())
 
+def list(request, user_id):
+    return render_to_response('user_view.html', locals())
 
 @csrf_protect
 def login_user(request):

@@ -12,3 +12,7 @@ register = template.Library()
 @register.simple_tag
 def portfolio_upload_action():
     return blobstore.create_upload_url("/portfolio/add/")
+
+@register.simple_tag
+def buster():
+    return "1"
