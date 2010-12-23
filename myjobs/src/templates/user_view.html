@@ -1,15 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
+{% extends "base.html" %}
+{%load gae_tags %}
 
-<html lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>user_view</title>
-	<meta name="author" content="Rafael Nunes">
-</head>
-<body>
-  <h1>{{user_new.name}}</h1>
-  <h1>{{user_form.errors}}</h1>
-</body>
-</html>
+{% block content %}
 
+<div class="main">
+          <div class="col1">
+              <img src="/static/{%buster%}/img/empresa.jpg" />
+            </div>
+            
+            <div class="col2">
+              <img src="/static/{%buster%}/img/portfolio.jpg" />
+                <a rel="portifa" href="/static/{%buster%}/img/portfolio1.jpg" title="descri&ccedil;&atilde;o do projeto" class="fancybox"><img src="/static/{%buster%}/img/portfolio1.jpg" class="portfolio" id="portifa1" /></a>
+                <a rel="portifa" href="/static/{%buster%}/img/portfolio2.jpg" title="descri&ccedil;&atilde;o do projeto" class="fancybox"><img src="/static/{%buster%}/img/portfolio2.jpg" class="portfolio" id="portifa2" /></a>
+                <a rel="portifa" href="/static/{%buster%}/img/portfolio3.jpg" title="descri&ccedil;&atilde;o do projeto" class="fancybox"><img src="/static/{%buster%}/img/portfolio3.jpg" class="portfolio" id="portifa3" /></a>
+                <a rel="portifa" href="/static/{%buster%}/img/portfolio4.jpg" title="descri&ccedil;&atilde;o do projeto" class="fancybox"><img src="/static/{%buster%}/img/portfolio4.jpg" class="portfolio" id="portifa4" /></a>
+            </div>
+            
+            <div class="clear"></div>
+        </div>
+{% endblock %}

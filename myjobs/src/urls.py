@@ -19,6 +19,7 @@ urlpatterns += patterns('',
    ('^user/add/$', v_usuario.create_user),
    ('^user/login/$', v_usuario.login_user),
    ('^user/logout/$', v_usuario.logout_user),
+   ('^user/list/(\d*)$', v_usuario.list),
    
 )
 
