@@ -4,6 +4,7 @@ Created on Nov 18, 2010
 @author: Rafael Nunes
 '''
 from django import template
+from settings import BUSTER_VERSION
 from google.appengine.api import users
 from google.appengine.api.blobstore import blobstore
 
@@ -15,4 +16,4 @@ def portfolio_upload_action():
 
 @register.simple_tag
 def buster():
-    return "1"
+    return BUSTER_VERSION
