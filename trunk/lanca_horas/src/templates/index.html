@@ -1,0 +1,13 @@
+{% extends "base.html" %} 
+{%load i18n %}
+{%load gae_filters %}
+{%load gae_tags %}
+{% get_available_languages as LANGUAGES %}
+
+{% block content%}
+  <img src="/static/{%buster%}/img/home.jpg" />
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

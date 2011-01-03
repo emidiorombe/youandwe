@@ -1,0 +1,38 @@
+{%load gae_tags %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+{% block head %}
+{% include 'scripts.html' %}
+{% endblock%}
+
+<link rel="shortcut icon" type="image/png" href="/static/{%buster%}/img/favicon.png" />
+
+<title>{% block title %}MyJobs {% endblock %}</title>
+
+<meta name="author" content="YaW IT" />
+<meta name="description" content="myjobs" />
+<meta name="keywords" content="myjobs" />
+
+</head>
+
+<body>
+  <div class="container">
+      {% block header %} 
+        {% include 'header.html' %}
+      {% endblock %}
+        
+      {% block content%} {% endblock %}
+      
+      {% block footer %}
+        <div class="footer">
+          <img src="/static/{%buster%}/img/footer.jpg" />
+        </div>
+      {% endblock %}
+      
+  </div>
+</body>
+</html>
