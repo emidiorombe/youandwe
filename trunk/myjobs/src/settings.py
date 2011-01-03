@@ -36,6 +36,7 @@ TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'templates'),)
 ROOT_URLCONF = 'urls'
 
 SITE_ID = 1
+BUSTER_VERSION = 1
 
 # Activate django-dbindexer if available
 try:
