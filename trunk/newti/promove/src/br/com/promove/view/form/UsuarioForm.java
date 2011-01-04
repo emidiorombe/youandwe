@@ -126,8 +126,9 @@ public class UsuarioForm extends BaseForm{
 					c.setPropertyDataSource(item.getItemProperty(propertyId));
 					c.setItemCaptionPropertyId("label");
 					
-					if (c.getValue() ==  null && c.size() > 0)
+					if (c.size() > 0) {
 	                    c.setValue(c.getItemIds().iterator().next());
+					}
 					
 					return c;
 				}catch (PromoveException e) {
