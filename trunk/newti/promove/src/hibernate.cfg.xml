@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- <property name="hibernate.connection.pool_size">10</property> -->
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/promovetst</property>
+		<property name="hibernate.connection.username">postgres</property>
+		<property name="hibernate.connection.password">Laranja@1</property>
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		
+		<!-- Mapped Classes -->
+		<mapping class="br.com.promove.entity.Avaria" />
+		<mapping class="br.com.promove.entity.TipoAvaria" />
+		<mapping class="br.com.promove.entity.LocalAvaria" />
+		<mapping class="br.com.promove.entity.OrigemAvaria" />
+		<mapping class="br.com.promove.entity.ExtensaoAvaria" />
+		<mapping class="br.com.promove.entity.Filial" />
+		<mapping class="br.com.promove.entity.Usuario" />
+		<mapping class="br.com.promove.entity.Fabricante" />
+		<mapping class="br.com.promove.entity.Modelo" />
+		<mapping class="br.com.promove.entity.Cor" />
+		<mapping class="br.com.promove.entity.TipoUsuario" />
+		
+
+	</session-factory>
+</hibernate-configuration>
