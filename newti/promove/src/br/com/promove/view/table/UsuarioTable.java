@@ -42,6 +42,7 @@ public class UsuarioTable extends Table {
 		addListener(new RowSelectedListener());
 		
 		addGeneratedColumn("filial", new UsuarioTableColumnGenerator());
+		addGeneratedColumn("tipo", new UsuarioTableColumnGenerator());
 	}
 
 	public void setView(UsuarioView view) {
@@ -84,6 +85,8 @@ public class UsuarioTable extends Table {
 			Usuario us = (Usuario)itemId;
 			if(columnId.toString().equals("filial"))
 				return new Label(us.getFilial().getNome());
+			else if(columnId.toString().equals("tipo"))
+				return new Label(us.getTipo().getNome());
 			else 
 				return null;
 		}
