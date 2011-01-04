@@ -63,7 +63,6 @@ public class UsuarioTable extends Table {
 			populate();
 		}
 		
-		
 		private void populate() {
 			try {
 				List<Usuario> list = cadastroService.buscarTodosUsuarios();
