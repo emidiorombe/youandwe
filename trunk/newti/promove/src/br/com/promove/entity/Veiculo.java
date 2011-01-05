@@ -20,6 +20,8 @@ public class Veiculo implements Serializable{
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_veiculo")
 	private Integer id;
 	
+	private Integer codigo;
+	
 	@OneToOne
 	private Modelo modelo;
 	
@@ -70,5 +72,14 @@ public class Veiculo implements Serializable{
 	public void setChassi(String chassi) {
 		this.chassi = chassi;
 	}
+
+	public Integer getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(Integer codigo) {
+		this.codigo = codigo;
+	}
+	
 	
 }

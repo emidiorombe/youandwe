@@ -11,11 +11,13 @@ import br.com.promove.view.form.FabricanteForm;
 import br.com.promove.view.form.FilialForm;
 import br.com.promove.view.form.ModeloForm;
 import br.com.promove.view.form.UsuarioForm;
+import br.com.promove.view.form.VeiculoForm;
 import br.com.promove.view.table.CorTable;
 import br.com.promove.view.table.FabricanteTable;
 import br.com.promove.view.table.FilialTable;
 import br.com.promove.view.table.ModeloTable;
 import br.com.promove.view.table.UsuarioTable;
+import br.com.promove.view.table.VeiculoTable;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -79,10 +81,11 @@ public class MenuGeral extends CssLayout{
 		public void buttonClick(ClickEvent event) {
 			addAndRemoveStyle(event.getButton(), add_veiculo, list_veiculo, usuario, filial, fabricante, modelo, cor);
 			if(event.getButton() == add_veiculo) {
-				app.setMainView(null);
-				
+				VeiculoForm form = new VeiculoForm();
+				app.setMainView(form.getFormLayout());
 			}else if(event.getButton() == list_veiculo) {
-				app.setMainView(null);
+				VeiculoTable table = new VeiculoTable(app);
+				app.setMainView(table);
 			}else if(event.getButton() == usuario) {
 				UsuarioTable table = new UsuarioTable();
 				UsuarioForm form = new UsuarioForm();
