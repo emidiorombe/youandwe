@@ -8,12 +8,14 @@ import br.com.promove.dao.FilialDAO;
 import br.com.promove.dao.ModeloDAO;
 import br.com.promove.dao.TipoUsuarioDAO;
 import br.com.promove.dao.UsuarioDAO;
+import br.com.promove.dao.VeiculoDAO;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Filial;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.TipoUsuario;
 import br.com.promove.entity.Usuario;
+import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
 
@@ -25,6 +27,7 @@ public class CadastroServiceImpl implements CadastroService{
 	private FilialDAO filialDAO;
 	private UsuarioDAO usuarioDAO;
 	private TipoUsuarioDAO tipoUsuarioDAO;
+	private VeiculoDAO veiculoDAO;
 	
 	public CadastroServiceImpl() {
 		corDAO = new CorDAO();
@@ -33,6 +36,7 @@ public class CadastroServiceImpl implements CadastroService{
 		filialDAO = new FilialDAO();
 		usuarioDAO = new UsuarioDAO();
 		tipoUsuarioDAO = new TipoUsuarioDAO();
+		veiculoDAO = new VeiculoDAO();
 	}
 	
 	@Override
@@ -192,10 +196,41 @@ public class CadastroServiceImpl implements CadastroService{
 	}
 
 	@Override
-	public List<TipoUsuario> getTodosTiposUsuarios() throws PromoveException {
+	public List<TipoUsuario> buscarTodosTiposUsuarios() throws PromoveException {
 		List<TipoUsuario> lista = null;
 		try {
 			lista = tipoUsuarioDAO.getAll();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public void salvarVeiculo(Veiculo bean) throws PromoveException {
+		try {
+			veiculoDAO.save(bean);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public void excluirVeiculo(Veiculo bean) throws PromoveException {
+		try {
+			veiculoDAO.delete(bean);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public List<Veiculo> buscarTodosVeiculos() throws PromoveException {
+		List<Veiculo> lista = null;
+		try {
+			lista = veiculoDAO.getAll();
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

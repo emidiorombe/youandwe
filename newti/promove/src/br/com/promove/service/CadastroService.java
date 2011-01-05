@@ -8,6 +8,7 @@ import br.com.promove.entity.Filial;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.TipoUsuario;
 import br.com.promove.entity.Usuario;
+import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 
 /**
@@ -46,5 +47,12 @@ public interface CadastroService {
 	
 	public List<Usuario> buscarTodosUsuarios()throws PromoveException;
 
-	public List<TipoUsuario> getTodosTiposUsuarios()throws PromoveException;;
+	public List<TipoUsuario> buscarTodosTiposUsuarios()throws PromoveException;
+
+	public void salvarVeiculo(Veiculo bean)throws PromoveException;
+
+	public void excluirVeiculo(Veiculo bean)throws PromoveException;
+
+	public List<Veiculo> buscarTodosVeiculos()throws PromoveException;
+
 }
