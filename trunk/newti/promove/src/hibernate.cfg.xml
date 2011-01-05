@@ -19,6 +19,7 @@
 		<mapping class="br.com.promove.entity.LocalAvaria" />
 		<mapping class="br.com.promove.entity.OrigemAvaria" />
 		<mapping class="br.com.promove.entity.ExtensaoAvaria" />
+		<mapping class="br.com.promove.entity.Veiculo" />
 		<mapping class="br.com.promove.entity.Filial" />
 		<mapping class="br.com.promove.entity.Usuario" />
 		<mapping class="br.com.promove.entity.Fabricante" />
