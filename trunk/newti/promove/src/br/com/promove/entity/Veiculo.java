@@ -17,7 +17,7 @@ import javax.persistence.SequenceGenerator;
 public class Veiculo implements Serializable{
 	@Id
 	@SequenceGenerator(name="seq_veiculo", sequenceName="seq_veiculo")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_veiculo")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_veiculo")
 	private Integer id;
 	
 	private Integer codigo;

@@ -11,7 +11,7 @@ public class OrigemAvaria {
 	
 	@Id
 	@SequenceGenerator(name="seq_origem_avaria", sequenceName="seq_origem_avaria")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_origem_avaria")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_origem_avaria")
 	private Integer id;
 	private Integer codigo;
 	private String descricao;

@@ -10,7 +10,7 @@ import javax.persistence.SequenceGenerator;
 public class ExtensaoAvaria {
 	@Id
 	@SequenceGenerator(name="seq_extensao_avaria", sequenceName="seq_extensao_avaria")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_extensao_avaria")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_extensao_avaria")
 	private Integer id;
 	private Integer codigo;
 	private String descricao;

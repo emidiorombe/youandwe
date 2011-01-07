@@ -12,7 +12,7 @@ public class Usuario {
 
 	@Id
 	@SequenceGenerator(name="seq_usuario", sequenceName="seq_usuario")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_usuario")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_usuario")
 	private Integer id;
 	private Integer codigo;
 	private String nome;

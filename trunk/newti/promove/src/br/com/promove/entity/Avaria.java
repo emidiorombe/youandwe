@@ -1,6 +1,7 @@
 package br.com.promove.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,13 +10,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Avaria implements Serializable{
 	
 	@Id
 	@SequenceGenerator(name="seq_avaria", sequenceName="seq_avaria")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_avaria")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_avaria")
 	private Integer id;
 	
 	@ManyToOne(targetEntity=Veiculo.class)
@@ -23,6 +26,28 @@ public class Avaria implements Serializable{
 	
 	@OneToOne
 	private TipoAvaria tipo;
+	
+	@OneToOne
+	private LocalAvaria local;
+	
+	@OneToOne
+	private OrigemAvaria origem;
+	
+	@OneToOne
+	private ExtensaoAvaria extensao;
+	
+	@OneToOne
+	private Clima clima;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataLancamento = new Date();
+	
+	private String foto;
+	
+	@OneToOne
+	private Usuario usuario;
+	
+	private String observacao;
 
 	public Integer getId() {
 		return id;
@@ -46,6 +71,70 @@ public class Avaria implements Serializable{
 
 	public void setVeiculo(Veiculo veiculo) {
 		this.veiculo = veiculo;
+	}
+
+	public LocalAvaria getLocal() {
+		return local;
+	}
+
+	public void setLocal(LocalAvaria local) {
+		this.local = local;
+	}
+
+	public OrigemAvaria getOrigem() {
+		return origem;
+	}
+
+	public void setOrigem(OrigemAvaria origem) {
+		this.origem = origem;
+	}
+
+	public ExtensaoAvaria getExtensao() {
+		return extensao;
+	}
+
+	public void setExtensao(ExtensaoAvaria extensao) {
+		this.extensao = extensao;
+	}
+
+	public Clima getClima() {
+		return clima;
+	}
+
+	public void setClima(Clima clima) {
+		this.clima = clima;
+	}
+
+	public Date getDataLancamento() {
+		return dataLancamento;
+	}
+
+	public void setDataLancamento(Date dataLancamento) {
+		this.dataLancamento = dataLancamento;
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 	
 	

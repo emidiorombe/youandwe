@@ -12,7 +12,7 @@ public class Modelo {
 
 	@Id
 	@SequenceGenerator(name="seq_modelo", sequenceName="seq_modelo")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_modelo")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_modelo")
 	private Integer id;
 	private Integer codigo;
 	private String descricao;

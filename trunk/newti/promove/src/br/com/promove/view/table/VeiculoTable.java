@@ -132,8 +132,8 @@ public class VeiculoTable extends Table{
 			Window w = new Window("Avarias");
 			w.setHeight("400px");
 			w.setWidth("500px");
-			w.setPositionY(50);
-			w.setPositionX(300);
+			w.setPositionY(table.getWindow().getPositionY() + 30);
+			w.setPositionX(360);
 			app.getMainWindow().addWindow(w);
 			w.setContent(buildComponents());
 

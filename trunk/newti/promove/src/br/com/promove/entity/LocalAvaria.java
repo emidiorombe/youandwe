@@ -14,7 +14,7 @@ public class LocalAvaria implements Serializable{
 	
 	@Id
 	@SequenceGenerator(name="seq_local_avaria", sequenceName="seq_local_avaria")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_local_avaria")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_local_avaria")
 	private Integer id;
 	private Integer codigo;
 	private String descricao;
