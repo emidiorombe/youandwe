@@ -2,10 +2,14 @@ package br.com.promove.service;
 
 import java.util.List;
 
+import br.com.promove.dao.AvariaDAO;
+import br.com.promove.dao.ClimaDAO;
 import br.com.promove.dao.ExtensaoDAO;
 import br.com.promove.dao.LocalAvariaDAO;
 import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.TipoAvariaDAO;
+import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
@@ -18,12 +22,16 @@ public class AvariaServiceImpl implements AvariaService {
 	private LocalAvariaDAO localDAO;
 	private OrigemAvariaDAO origemDAO;
 	private ExtensaoDAO extensaoDAO;
+	private ClimaDAO climaDAO;
+	private AvariaDAO avariaDAO;
 
 	AvariaServiceImpl() {
 		tipoDAO = new TipoAvariaDAO();
 		localDAO = new LocalAvariaDAO();
 		origemDAO = new OrigemAvariaDAO();
 		extensaoDAO = new ExtensaoDAO();
+		climaDAO = new ClimaDAO();
+		avariaDAO = new AvariaDAO();
 	}
 
 	@Override
@@ -148,6 +156,69 @@ public class AvariaServiceImpl implements AvariaService {
 			lista = extensaoDAO.getAll();
 		} catch (DAOException de) {
 			throw new PromoveException(de);
+		}
+		return lista;
+	}
+	
+
+	@Override
+	public List<Clima> buscarTodosClimas() throws PromoveException {
+		List<Clima> lista = null;
+		try {
+			lista = climaDAO.getAll();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public void salvarClima(Clima bean) throws PromoveException {
+		try {
+			climaDAO.save(bean);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public void excluirClima(Clima bean) throws PromoveException {
+		try {
+			climaDAO.delete(bean);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public void salvarAvaria(Avaria bean) throws PromoveException {
+		try {
+			avariaDAO.save(bean);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public void excluirAvaria(Avaria bean) throws PromoveException {
+		try {
+			avariaDAO.delete(bean);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+	
+	@Override
+	public List<Avaria> buscarTodasAvarias() throws PromoveException {
+		List<Avaria> lista = null;
+		try {
+			lista = avariaDAO.getAll();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
 		}
 		return lista;
 	}

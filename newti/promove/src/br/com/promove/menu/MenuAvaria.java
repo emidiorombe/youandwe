@@ -1,15 +1,18 @@
 package br.com.promove.menu;
 
 import br.com.promove.application.PromoveApplication;
+import br.com.promove.view.ClimaAvariaView;
 import br.com.promove.view.ExtensaoAvariaView;
 import br.com.promove.view.LocalAvariaView;
 import br.com.promove.view.OrigemAvariaView;
 import br.com.promove.view.TipoAvariaView;
 import br.com.promove.view.form.AvariaForm;
+import br.com.promove.view.form.ClimaForm;
 import br.com.promove.view.form.ExtensaoAvariaForm;
 import br.com.promove.view.form.LocalAvariaForm;
 import br.com.promove.view.form.OrigemAvariaForm;
 import br.com.promove.view.form.TipoAvariaForm;
+import br.com.promove.view.table.ClimaTable;
 import br.com.promove.view.table.ExtensaoAvariaTable;
 import br.com.promove.view.table.LocalAvariaTable;
 import br.com.promove.view.table.OrigemAvariaTable;
@@ -30,6 +33,7 @@ public class MenuAvaria  extends CssLayout{
 	private Button local;
 	private Button origem;
 	private Button extensao;
+	private Button clima;
 	private PromoveApplication app;
 	
 	public MenuAvaria(PromoveApplication app) {
@@ -50,9 +54,10 @@ public class MenuAvaria  extends CssLayout{
 		local = new NativeButton("Locais de Avaria");
 		origem = new NativeButton("Origens de Avaria");
 		extensao = new NativeButton("Extensões de Avaria");
+		clima = new NativeButton("Condições Climáticas");
 		
-		addListeners(add, list, tipo, local, origem, extensao);
-		addComponents(title, add, list, tipo, local, origem, extensao);
+		addListeners(add, list, tipo, local, origem, extensao, clima);
+		addComponents(title, add, list, tipo, local, origem, extensao, clima);
 				
 	}
 	
@@ -72,11 +77,10 @@ public class MenuAvaria  extends CssLayout{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			addAndRemoveStyle(event.getButton(), add, list, tipo, local, origem, extensao);
+			addAndRemoveStyle(event.getButton(), add, list, tipo, local, origem, extensao, clima);
 			if(event.getButton() == add) {
 				AvariaForm form = new AvariaForm();
 				app.setMainView(form.getFormLayout());
-				
 			}else if(event.getButton() == tipo){
 				TipoAvariaTable table = new TipoAvariaTable();
 				TipoAvariaForm form = new TipoAvariaForm();
@@ -93,6 +97,10 @@ public class MenuAvaria  extends CssLayout{
 				ExtensaoAvariaTable table = new ExtensaoAvariaTable();
 				ExtensaoAvariaForm form = new ExtensaoAvariaForm();
 				app.setMainView(new ExtensaoAvariaView(table, form));
+			}else if(event.getButton() == clima){
+				ClimaTable table = new ClimaTable();
+				ClimaForm form = new ClimaForm();
+				app.setMainView(new ClimaAvariaView(table, form));
 			}
 		}
 

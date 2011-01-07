@@ -25,6 +25,7 @@
 		<mapping class="br.com.promove.entity.Fabricante" />
 		<mapping class="br.com.promove.entity.Modelo" />
 		<mapping class="br.com.promove.entity.Cor" />
+		<mapping class="br.com.promove.entity.Clima" />
 		<mapping class="br.com.promove.entity.TipoUsuario" />
 		
 

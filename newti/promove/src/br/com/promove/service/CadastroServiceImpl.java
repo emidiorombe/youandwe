@@ -37,6 +37,7 @@ public class CadastroServiceImpl implements CadastroService{
 		usuarioDAO = new UsuarioDAO();
 		tipoUsuarioDAO = new TipoUsuarioDAO();
 		veiculoDAO = new VeiculoDAO();
+		
 	}
 	
 	@Override
@@ -236,5 +237,4 @@ public class CadastroServiceImpl implements CadastroService{
 		}
 		return lista;
 	}
-
 }

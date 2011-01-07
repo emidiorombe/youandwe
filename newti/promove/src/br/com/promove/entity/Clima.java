@@ -7,38 +7,36 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-public class Cor {
-
+public class Clima {
 	@Id
-	@SequenceGenerator(name="seq_cor", sequenceName="seq_cor")
-	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_cor")
+	@SequenceGenerator(name="seq_clima", sequenceName="seq_clima")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_clima")
 	private Integer id;
+	
 	private Integer codigo;
+	
 	private String descricao;
-	
-	public Cor() {}
-	
-	public Cor(Integer codigo, String descricao) {
-		super();
-		this.codigo = codigo;
-		this.descricao = descricao;
-	}
 
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public Integer getCodigo() {
 		return codigo;
 	}
+
 	public void setCodigo(Integer codigo) {
 		this.codigo = codigo;
 	}
+
 	public String getDescricao() {
 		return descricao;
 	}
+
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}

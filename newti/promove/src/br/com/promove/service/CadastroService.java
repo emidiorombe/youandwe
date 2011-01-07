@@ -2,6 +2,7 @@ package br.com.promove.service;
 
 import java.util.List;
 
+import br.com.promove.entity.Clima;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Filial;

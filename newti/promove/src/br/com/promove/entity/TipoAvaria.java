@@ -14,7 +14,7 @@ import javax.persistence.SequenceGenerator;
 public class TipoAvaria implements Serializable{
 	@Id
 	@SequenceGenerator(name="seq_tipo_avaria", sequenceName="seq_tipo_avaria")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_tipo_avaria")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_tipo_avaria")
 	private Integer id;
 	private Integer codigo;
 	private String descricao;

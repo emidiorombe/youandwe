@@ -10,7 +10,7 @@ import javax.persistence.SequenceGenerator;
 public class TipoUsuario {
 	@Id
 	@SequenceGenerator(name="seq_tipo_usuario", sequenceName="seq_tipo_usuario")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_tipo_usuario")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_tipo_usuario")
 	private Integer id;
 	private String nome;
 	

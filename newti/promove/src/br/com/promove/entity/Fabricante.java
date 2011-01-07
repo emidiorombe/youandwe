@@ -11,7 +11,7 @@ public class Fabricante {
 	
 	@Id
 	@SequenceGenerator(name="seq_fabricante", sequenceName="seq_fabricante")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_fabricante")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_fabricante")
 	private Integer id;
 	private Integer codigo;
 	private String nome;

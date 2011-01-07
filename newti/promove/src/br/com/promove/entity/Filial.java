@@ -12,7 +12,7 @@ public class Filial {
 
 	@Id
 	@SequenceGenerator(name="seq_filial", sequenceName="seq_filial")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_filial")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_filial")
 	private Integer id;
 	private Integer codigo;
 	private String nome;

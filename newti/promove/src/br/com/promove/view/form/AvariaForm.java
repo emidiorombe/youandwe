@@ -1,16 +1,26 @@
 package br.com.promove.view.form;
 
-import br.com.promove.application.PromoveApplication;
+import java.util.Date;
+import java.util.Locale;
+
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Clima;
+import br.com.promove.entity.ExtensaoAvaria;
+import br.com.promove.entity.LocalAvaria;
+import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
+import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
+import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.StringUtilities;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -18,17 +28,23 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.PopupDateField;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.VerticalLayout;
 
 public class AvariaForm extends BaseForm {
 	private Button save;
+	private Button excluir;
+	private Button novo;
 	private VerticalLayout f_layout = new VerticalLayout();
 	private AvariaService avariaService;
+	private CadastroService cadastroService;
 	
 	public AvariaForm() {
 		avariaService = ServiceFactory.getService(AvariaService.class);
+		cadastroService = ServiceFactory.getService(CadastroService.class);
 		buildForm();
 	}
 	
@@ -39,7 +55,9 @@ public class AvariaForm extends BaseForm {
 		setSizeFull();
 		f_layout.setSpacing(true);
 		
-		save = new Button("Salvar", new FormButtonListener());
+		save = new Button("Salvar", new FormButtonListener(this));
+		excluir = new Button("Excluir", new FormButtonListener(this));
+		novo = new Button("Novo", new FormButtonListener(this));
 		createFormBody(new BeanItem<Avaria>(new Avaria()));
 		f_layout.addComponent(this);
 		f_layout.addComponent(createFooter());
@@ -51,11 +69,10 @@ public class AvariaForm extends BaseForm {
 		return f_layout;
 	}
 	
-	private void createFormBody(Item avaria){
+	private void createFormBody(BeanItem<Avaria> avaria){
 		setItemDataSource(avaria);
-		setFormFieldFactory(new AvariaFieldFactory());
-		setVisibleItemProperties(new Object[]{"tipo"});
-		
+		setFormFieldFactory(new AvariaFieldFactory(this, avaria.getBean().getId() == null));
+		setVisibleItemProperties(new Object[]{"veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento", "foto", "observacao"});
 		
 	}
 	
@@ -63,41 +80,177 @@ public class AvariaForm extends BaseForm {
 		HorizontalLayout footer = new HorizontalLayout();
 		footer.setSpacing(true);
 		footer.addComponent(save);
+		footer.addComponent(excluir);
+		footer.addComponent(novo);
 		footer.setVisible(true);
 		
 		return footer;
 	}
 	
-	private void addFormComponents(GenericFormField...fields){
-		for (GenericFormField field : fields) {
-			addItemProperty(field.getName(), field);
-		}
+	public void addNewAvaria() {
+		createFormBody(new BeanItem<Avaria>(new Avaria()));
 	}
-
+	
 
 class AvariaFieldFactory extends DefaultFieldFactory{
 	
+	private AvariaForm avariaForm;
+	private boolean isNew;
+
+	public AvariaFieldFactory(AvariaForm avariaForm, boolean isNew) {
+		this.avariaForm = avariaForm;
+		this.isNew = isNew;
+	}
+
 	@Override
 	public Field createField(Item item, Object propertyId, Component uiContext) {
 		Field f = super.createField(item, propertyId, uiContext);
+		
 		try {
 			if(propertyId.equals("tipo")) {
 				ComboBox c = new ComboBox("Tipo Avaria");
+				c.addContainerProperty("label", String.class, null);
+				
+				for(TipoAvaria tp: avariaService.buscarTodosTipoAvaria()){
+					Item i = c.addItem(tp);
+					i.getItemProperty("label").setValue(tp.getDescricao());
+				}
+				
 				c.setRequired(true);
-				c.setRequiredError("Tipo de Avaria obrigatório");
+				c.setRequiredError("Tipo Avaria obrigatório");
 				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 				c.setImmediate(true);
 				c.setNullSelectionAllowed(false);
+				c.setPropertyDataSource(item.getItemProperty(propertyId));
+				c.setItemCaptionPropertyId("label");
 				
-				for(TipoAvaria tp: avariaService.buscarTodosTipoAvaria()){
-					c.addItem(tp);
-				}
+				if (c.getValue() ==  null && c.size() > 0)
+                    c.setValue(c.getItemIds().iterator().next());
+				
+				
 				return c;
-			}else {
-				return f;
+			}else if(propertyId.equals("local")) {
+				ComboBox c = new ComboBox("Local Avaria");
+				c.addContainerProperty("label", String.class, null);
+				
+				for(LocalAvaria l: avariaService.buscarTodosLocaisAvaria()){
+					Item i = c.addItem(l);
+					i.getItemProperty("label").setValue(l.getDescricao());
+				}
+				
+				c.setRequired(true);
+				c.setRequiredError("Local obrigatório");
+				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+				c.setImmediate(true);
+				c.setNullSelectionAllowed(false);
+				c.setPropertyDataSource(item.getItemProperty(propertyId));
+				c.setItemCaptionPropertyId("label");
+				
+				if (c.getValue() ==  null && c.size() > 0)
+                    c.setValue(c.getItemIds().iterator().next());
+				
+				
+				return c;
+			}else if(propertyId.equals("origem")) {
+				ComboBox c = new ComboBox("Origem Avaria");
+				c.addContainerProperty("label", String.class, null);
+				
+				for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
+					Item i = c.addItem(or);
+					i.getItemProperty("label").setValue(or.getDescricao());
+				}
+				
+				c.setRequired(true);
+				c.setRequiredError("Origem obrigatória");
+				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+				c.setImmediate(true);
+				c.setNullSelectionAllowed(false);
+				c.setPropertyDataSource(item.getItemProperty(propertyId));
+				c.setItemCaptionPropertyId("label");
+				
+				if (c.getValue() ==  null && c.size() > 0)
+                    c.setValue(c.getItemIds().iterator().next());
+				
+				
+				return c;
+			}else if(propertyId.equals("extensao")) {
+				ComboBox c = new ComboBox("Extensão Avaria");
+				c.addContainerProperty("label", String.class, null);
+				
+				for(ExtensaoAvaria ext: avariaService.buscarTodasExtensoesAvaria()){
+					Item i = c.addItem(ext);
+					i.getItemProperty("label").setValue(ext.getDescricao());
+				}
+				
+				c.setRequired(true);
+				c.setRequiredError("Extensão obrigatória");
+				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+				c.setImmediate(true);
+				c.setNullSelectionAllowed(false);
+				c.setPropertyDataSource(item.getItemProperty(propertyId));
+				c.setItemCaptionPropertyId("label");
+				
+				if (c.getValue() ==  null && c.size() > 0)
+                    c.setValue(c.getItemIds().iterator().next());
+				
+				
+				return c;
+			}else if(propertyId.equals("clima")) {
+				ComboBox c = new ComboBox("Condições Climáticas");
+				c.addContainerProperty("label", String.class, null);
+				
+				for(Clima cl: avariaService.buscarTodosClimas()){
+					Item i = c.addItem(cl);
+					i.getItemProperty("label").setValue(cl.getDescricao());
+				}
+				
+				c.setRequired(true);
+				c.setRequiredError("Condição Climática obrigatório");
+				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+				c.setImmediate(true);
+				c.setNullSelectionAllowed(false);
+				c.setPropertyDataSource(item.getItemProperty(propertyId));
+				c.setItemCaptionPropertyId("label");
+				
+				if (c.getValue() ==  null && c.size() > 0)
+                    c.setValue(c.getItemIds().iterator().next());
+				
+				
+				return c;
+			}else if(propertyId.equals("observacao")) {
+				TextField tf = new TextField("Observação", "");
+				tf.setNullRepresentation("");
+				tf.setRows(5);
+				tf.setColumns(20);
+				tf.setImmediate(true);
+				return tf;
+			}else if(propertyId.equals("foto")){
+				TextField tf = new TextField("Foto");
+				tf.setNullRepresentation("");
+				tf.setImmediate(true);
+				return tf;
+			}else if(propertyId.equals("veiculo")){
+				ComboBox c = new ComboBox("Veículo");
+				c.addContainerProperty("label", String.class, null);
+				
+				for(Veiculo veic: cadastroService.buscarTodosVeiculos()){
+					Item i = c.addItem(veic);
+					i.getItemProperty("label").setValue(veic.getChassi());
+				}
+				
+				c.setRequired(true);
+				c.setRequiredError("Veículo obrigatório");
+				c.setFilteringMode(Filtering.FILTERINGMODE_STARTSWITH);
+				c.setImmediate(true);
+				c.setNullSelectionAllowed(false);
+				c.setPropertyDataSource(item.getItemProperty(propertyId));
+				c.setItemCaptionPropertyId("label");
+				
+				
+				return c;
 			}
 		}catch(PromoveException pe) {
-				
+				showErrorMessage(avariaForm, "Não foi possível montar o formulário de Avaria");
 		}
 		return null;
 	}
@@ -105,23 +258,45 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 
 class FormButtonListener implements ClickListener{
 
+	private AvariaForm form;
+
+	public FormButtonListener(AvariaForm form) {
+		this.form = form;
+	}
+
 	@Override
 	public void buttonClick(ClickEvent event) {
 		if(event.getButton() == save){
 			try{
-				commit();
+				validate();
 				if(isValid()){
-					Property property = getItemProperty("tipo");
-					System.out.println(":::::Form valido " + property.getValue());
+					commit();
+					BeanItem<Avaria> item = (BeanItem<Avaria>) getItemDataSource();
+					avariaService.salvarAvaria(item.getBean());
+					addNewAvaria();
+					showSuccessMessage(form, "Avaria salva!");
 				}
 			}catch(InvalidValueException ive){
 				setValidationVisible(true);
+			}catch(PromoveException de){
+				showErrorMessage(form,"Não foi possível salvar Avaria");
 			}
 			
-			
+		}else if(event.getButton() == novo){
+			addNewAvaria();
+		}else if(event.getButton() == excluir){
+			try {
+				BeanItem<Avaria> item = (BeanItem<Avaria>) getItemDataSource();
+				if(item.getBean().getId() != null) {
+					avariaService.excluirAvaria(item.getBean());
+					showSuccessMessage(form, "Avaria removida");
+				}
+				addNewAvaria();
+			}catch(PromoveException de){
+				showErrorMessage(form, "Não foi possível remover Avaria");
+			}
 		}
+	}
 		
 	}
-	
-}
 }

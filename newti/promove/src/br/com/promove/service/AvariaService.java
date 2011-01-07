@@ -3,6 +3,8 @@ package br.com.promove.service;
 import java.io.Serializable;
 import java.util.List;
 
+import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
@@ -96,4 +98,15 @@ public interface AvariaService extends Serializable{
 	 */
 	List<ExtensaoAvaria> buscarTodasExtensoesAvaria() throws PromoveException;
 	
+	public List<Clima> buscarTodosClimas()throws PromoveException;
+
+	public void salvarClima(Clima bean)throws PromoveException;
+
+	public void excluirClima(Clima bean)throws PromoveException;
+
+	void salvarAvaria(Avaria bean)throws PromoveException;
+
+	void excluirAvaria(Avaria bean)throws PromoveException;
+
+	List<Avaria> buscarTodasAvarias() throws PromoveException;
 }
