@@ -12,6 +12,7 @@ import br.com.promove.view.form.ExtensaoAvariaForm;
 import br.com.promove.view.form.LocalAvariaForm;
 import br.com.promove.view.form.OrigemAvariaForm;
 import br.com.promove.view.form.TipoAvariaForm;
+import br.com.promove.view.table.AvariaTable;
 import br.com.promove.view.table.ClimaTable;
 import br.com.promove.view.table.ExtensaoAvariaTable;
 import br.com.promove.view.table.LocalAvariaTable;
@@ -81,6 +82,9 @@ public class MenuAvaria  extends CssLayout{
 			if(event.getButton() == add) {
 				AvariaForm form = new AvariaForm();
 				app.setMainView(form.getFormLayout());
+			}else if(event.getButton() == list){
+				AvariaTable table = new AvariaTable(app);
+				app.setMainView(table);
 			}else if(event.getButton() == tipo){
 				TipoAvariaTable table = new TipoAvariaTable();
 				TipoAvariaForm form = new TipoAvariaForm();
