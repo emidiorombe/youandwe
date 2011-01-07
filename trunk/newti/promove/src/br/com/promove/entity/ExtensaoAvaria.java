@@ -33,5 +33,8 @@ public class ExtensaoAvaria {
 		this.descricao = descricao;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return descricao;
+	}
 }

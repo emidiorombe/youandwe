@@ -46,5 +46,10 @@ public class LocalAvaria implements Serializable{
 	public void setAcessorio(Boolean acessorio) {
 		this.acessorio = acessorio;
 	}
+	
+	@Override
+	public String toString() {
+		return descricao;
+	}
 
 }

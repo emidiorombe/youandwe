@@ -49,5 +49,10 @@ public class OrigemAvaria {
 		this.sigla = sigla;
 	}
 	
+	@Override
+	public String toString() {
+		return descricao;
+	}
+	
 	
 }
