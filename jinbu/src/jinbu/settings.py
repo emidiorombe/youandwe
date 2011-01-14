@@ -5,19 +5,19 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    # ('Rafael Nunes', 'rafael@jinbu.com.br'),
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'jinbu',                      # Or path to database file if using sqlite3.
-        'USER': 'postgres',                      # Not used with sqlite3.
-        'PASSWORD': 'Laranja@1',                  # Not used with sqlite3.
+        'USER': 'root',                      # Not used with sqlite3.
+        'PASSWORD': 'mysql',                  # Not used with sqlite3.
         'HOST': '10.0.2.2',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '5432',                      # Set to empty string for default. Not used with sqlite3.
+        'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
 
@@ -58,8 +58,11 @@ MEDIA_URL = ''
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/'
 
-#Bu
+#Cached static content
 BUSTER_VERSION = 1
+
+#Cache settings
+CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '34cfrbv&#hy3&4hds#-h0ck$mx^z4%fmdpgr7l=g4bvu4_dq+='
@@ -77,6 +80,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+#    'django.middleware.cache.UpdateCacheMiddleware',
+#    'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 ROOT_URLCONF = 'jinbu.urls'
