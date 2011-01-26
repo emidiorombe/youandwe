@@ -6,18 +6,21 @@ Replace these with more appropriate tests for your application.
 """
 
 from django.test import TestCase
+from django.test.client import RequestFactory
+from jinbu.core.views import v_general
 
 class SimpleTest(TestCase):
+    
+    def setup(self):
+        self.factory = RequestFactory()
+        
     def test_basic_addition(self):
         """
-        Tests that 1 + 1 always equals 2.
+        Tests index.
         """
-        self.failUnlessEqual(1 + 1, 2)
+        factory = RequestFactory()
+        req = factory.get("/")
+        resp = v_general.index(req)
+        self.failUnlessEqual(resp.status_code, 200)
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
-
->>> 1 + 1 == 2
-True
-"""}
 
