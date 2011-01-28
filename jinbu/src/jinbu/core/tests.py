@@ -7,20 +7,14 @@ Replace these with more appropriate tests for your application.
 
 from django.test import TestCase
 from django.test.client import RequestFactory
-from jinbu.core.views import v_general
+from jinbu.core.views import v_general, v_promocao
 
 class SimpleTest(TestCase):
     
-    def setup(self):
-        self.factory = RequestFactory()
-        
-    def test_basic_addition(self):
-        """
-        Tests index.
-        """
+    def test_add_promo(self):
         factory = RequestFactory()
-        req = factory.get("/")
-        resp = v_general.index(req)
+        req = factory.get("/promocao/add")
+        resp = v_promocao.criar_promocao(req)
         self.failUnlessEqual(resp.status_code, 200)
 
 
