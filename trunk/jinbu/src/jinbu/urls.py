@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from core.views import v_general
+from core.views import v_general, v_promocao
 
 
 # Uncomment the next two lines to enable the admin:
@@ -12,4 +12,8 @@ urlpatterns = patterns('',
     
 )
 
+urlpatterns += patterns('',
+    ('^/promocao/add$', v_promocao.criar_promocao),
+    
+)
 
