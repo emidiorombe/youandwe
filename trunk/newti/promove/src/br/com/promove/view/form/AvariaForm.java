@@ -1,7 +1,5 @@
 package br.com.promove.view.form;
 
-import java.util.Date;
-import java.util.Locale;
 
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
@@ -14,13 +12,10 @@ import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
-import br.com.promove.utils.StringUtilities;
 
 import com.vaadin.data.Item;
-import com.vaadin.data.Property;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -28,7 +23,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -240,7 +234,7 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				
 				c.setRequired(true);
 				c.setRequiredError("Veículo obrigatório");
-				c.setFilteringMode(Filtering.FILTERINGMODE_STARTSWITH);
+				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 				c.setImmediate(true);
 				c.setNullSelectionAllowed(false);
 				c.setPropertyDataSource(item.getItemProperty(propertyId));
