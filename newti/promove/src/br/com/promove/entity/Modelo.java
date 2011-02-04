@@ -14,7 +14,7 @@ public class Modelo {
 	@SequenceGenerator(name="seq_modelo", sequenceName="seq_modelo")
 	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_modelo")
 	private Integer id;
-	private Integer codigo;
+	private String codigo;
 	private String descricao;
 	
 	@OneToOne
@@ -22,7 +22,7 @@ public class Modelo {
 	
 	public Modelo() {}
 	
-	public Modelo(Integer codigo, String descricao, Fabricante fabricante) {
+	public Modelo(String codigo, String descricao, Fabricante fabricante) {
 		super();
 		this.codigo = codigo;
 		this.descricao = descricao;
@@ -39,11 +39,11 @@ public class Modelo {
 		this.id = id;
 	}
 
-	public Integer getCodigo() {
+	public String getCodigo() {
 		return codigo;
 	}
 
-	public void setCodigo(Integer codigo) {
+	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
 
