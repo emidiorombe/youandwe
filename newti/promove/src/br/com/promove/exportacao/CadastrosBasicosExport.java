@@ -7,8 +7,10 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import br.com.promove.entity.Clima;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Usuario;
 
 public class CadastrosBasicosExport {
@@ -20,7 +22,26 @@ public class CadastrosBasicosExport {
 		createTagUsuario(root, listas.get("usuario"));
 		createTagOrigem(root, listas.get("origem"));
 		createLocalAvaria(root, listas.get("local"));
+		createTipoAvaria(root, listas.get("tipo"));
+		createClima(root, listas.get("clima"));
 		return xml.asXML();
+	}
+
+	private static void createClima(Element root, List<Clima> list) {
+		for (Clima clima : list) {
+			Element el_clima = root.addElement("clima");
+			el_clima.addAttribute("codigo", clima.getCodigo().toString());
+			el_clima.addAttribute("descricao", clima.getDescricao());
+		}
+		
+	}
+
+	private static void createTipoAvaria(Element root, List<TipoAvaria> list) { 
+		for (TipoAvaria tipo : list) {
+			Element el_tipo = root.addElement("tipo_avaria");
+			el_tipo.addAttribute("codigo", tipo.getCodigo().toString());
+			el_tipo.addElement("descricao").addText(tipo.getDescricao());
+		}
 	}
 
 	private static void createLocalAvaria(Element root, List<LocalAvaria> list) {
