@@ -22,7 +22,16 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Promove</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/gwt/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>export</servlet-name>
+		<servlet-class>br.com.promove.servlet.ExportacaoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>export</servlet-name>
+		<url-pattern>/export</url-pattern>
 	</servlet-mapping>
 	
 	<filter>

@@ -13,6 +13,7 @@ public class ServiceInjector  extends AbstractModule {
 	protected void configure() {
 		bind(AvariaService.class).to(AvariaServiceImpl.class);
 		bind(CadastroService.class).to(CadastroServiceImpl.class);
+		bind(ExportacaoService.class).to(ExportacaoServiceImpl.class);
 		
 	}
 }
