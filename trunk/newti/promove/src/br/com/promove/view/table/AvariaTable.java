@@ -100,7 +100,10 @@ public class AvariaTable extends Table{
 			if(columnId.toString().equals("dataLancamento")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(av.getDataLancamento()));
 			}else if(columnId.toString().equals("observacao")) {
-					return new Label(av.getObservacao().substring(0, 5) + "...");
+					if(av.getObservacao().length() > 5)
+						return new Label(av.getObservacao().substring(0, 5) + "...");
+					else
+						return new Label(av.getObservacao());
 			}else {
 				return null;
 			}

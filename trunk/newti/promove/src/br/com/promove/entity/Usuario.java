@@ -95,6 +95,11 @@ public class Usuario {
 	public void setFilial(Filial filial) {
 		this.filial = filial;
 	}
+
+	@Override
+	public String toString() {
+		return  nome;
+	}
 	
 	
 	
