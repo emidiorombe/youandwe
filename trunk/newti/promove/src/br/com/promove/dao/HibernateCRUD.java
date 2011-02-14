@@ -17,11 +17,13 @@ public class HibernateCRUD implements Serializable{
 	/**
 	 * Executa uma query baseada no HQL informado.
 	 * @param hql
+	 * @param end 
+	 * @param init 
 	 * @return
 	 * @throws DAOException
 	 */
-	public static List executeQuery(String hql) throws DAOException {
-		return executeQuery(hql, null);
+	public static List executeQuery(String hql, int init, int end) throws DAOException {
+		return executeQuery(hql, null, init, end);
 	}
 	
 	/**
@@ -30,7 +32,7 @@ public class HibernateCRUD implements Serializable{
 	 * @param params
 	 * @return
 	 */
-	public static List executeQuery(String hql, Map params) throws DAOException {
+	public static List executeQuery(String hql, Map params, int init, int end) throws DAOException {
 		Session session = null;
 		try {
 			session = HibernateSessionFactory.getSession();
@@ -43,6 +45,8 @@ public class HibernateCRUD implements Serializable{
 					query.setParameter(key, value);
 				}
 			}
+			query.setFirstResult(init);
+			query.setMaxResults(end);
 			List retorno  = query.list();
 			return retorno;
 		}catch (Exception he) {

@@ -67,8 +67,8 @@ public abstract class BaseDAO<Id extends Serializable, Entity> implements Serial
 	 * @return
 	 * @throws DAOException
 	 */
-	public List executeQuery(String hql) throws DAOException {
-		return HibernateCRUD.executeQuery(hql);
+	public List executeQuery(String hql, int init, int end) throws DAOException {
+		return HibernateCRUD.executeQuery(hql, init, end);
 	}
 	
 	/**
@@ -78,8 +78,8 @@ public abstract class BaseDAO<Id extends Serializable, Entity> implements Serial
 	 * @return
 	 * @throws DAOException
 	 */
-	public List executeQuery(String hql, Map params) throws DAOException {
-		List retorno = HibernateCRUD.executeQuery(hql, params);
+	public List executeQuery(String hql, Map params, int init, int end) throws DAOException {
+		List retorno = HibernateCRUD.executeQuery(hql, params, init, end);
 		params.clear();
 		return retorno;
 	}

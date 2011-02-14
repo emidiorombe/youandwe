@@ -38,7 +38,7 @@ public class Veiculo implements Serializable{
 	}
 
 	public void setId(Integer id) {
-		this.id = id;
+		this.id = id.compareTo(id);
 	}
 
 	public Modelo getModelo() {
