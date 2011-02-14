@@ -231,7 +231,7 @@ public class CadastroServiceImpl implements CadastroService{
 	public List<Veiculo> buscarTodosVeiculos() throws PromoveException {
 		List<Veiculo> lista = null;
 		try {
-			lista = veiculoDAO.getAllCustom();
+			lista = veiculoDAO.getAll();
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
