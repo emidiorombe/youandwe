@@ -219,7 +219,6 @@ public class HibernateCRUD implements Serializable{
 			session = HibernateSessionFactory.getSession();
 			String hql = "from " + entityName + " x";
 			Query query = session.createQuery(hql);
-			query.setMaxResults(20);
 			List retorno = query.list();
 			return retorno;
 		}catch(HibernateException he) {
@@ -281,7 +280,7 @@ public class HibernateCRUD implements Serializable{
 		Session session = null;
 		try {
 			session = HibernateSessionFactory.getSession();
-			session.clear();
+			session.flush();
 		}catch(Exception he) {
 			he.printStackTrace();
 			throw new DAOException(he);

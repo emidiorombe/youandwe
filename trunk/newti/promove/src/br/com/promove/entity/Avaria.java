@@ -2,12 +2,16 @@ package br.com.promove.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
@@ -42,7 +46,8 @@ public class Avaria implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataLancamento = new Date();
 	
-	private String foto;
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private List<FotoAvaria> fotos;
 	
 	@OneToOne
 	private Usuario usuario;
@@ -113,14 +118,6 @@ public class Avaria implements Serializable{
 		this.dataLancamento = dataLancamento;
 	}
 
-	public String getFoto() {
-		return foto;
-	}
-
-	public void setFoto(String foto) {
-		this.foto = foto;
-	}
-
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -135,6 +132,14 @@ public class Avaria implements Serializable{
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+
+	public List<FotoAvaria> getFotos() {
+		return fotos;
+	}
+
+	public void setFotos(List<FotoAvaria> fotos) {
+		this.fotos = fotos;
 	}
 	
 	
