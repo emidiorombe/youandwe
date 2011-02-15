@@ -9,6 +9,6 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 	public List<Avaria> getAllCustom() throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select av from Avaria av");
-		return executeQuery(hql.toString(), 1, 50);
+		return executeQuery(hql.toString(), 1, 100);
 	}
 }

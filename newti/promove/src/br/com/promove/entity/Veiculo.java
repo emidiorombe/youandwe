@@ -25,7 +25,7 @@ public class Veiculo implements Serializable{
 	@OneToOne
 	private Modelo modelo;
 	
-	@OneToMany(mappedBy="veiculo", targetEntity=Avaria.class, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="veiculo", targetEntity=Avaria.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Avaria> avarias;
 	
 	@OneToOne

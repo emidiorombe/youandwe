@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity
@@ -15,6 +16,7 @@ public class FotoAvaria implements Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_foto_avaria")
 	private Integer id;
 	
+	@ManyToOne(targetEntity=Avaria.class)
 	private Avaria avaria;
 	
 	private String nome;
