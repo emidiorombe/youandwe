@@ -46,7 +46,7 @@ public class Avaria implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataLancamento = new Date();
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="avaria", targetEntity=FotoAvaria.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<FotoAvaria> fotos;
 	
 	@OneToOne
