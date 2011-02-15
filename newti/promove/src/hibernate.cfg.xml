@@ -27,6 +27,10 @@
 		<mapping class="br.com.promove.entity.Cor" />
 		<mapping class="br.com.promove.entity.Clima" />
 		<mapping class="br.com.promove.entity.TipoUsuario" />
+		<mapping class="br.com.promove.entity.ResponsabilidadeAvaria" />
+		<mapping class="br.com.promove.entity.FotoAvaria" />
+		
+		
 		
 
 	</session-factory>

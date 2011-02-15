@@ -31,7 +31,7 @@ public class CadastrosBasicosExport {
 		for (Clima clima : list) {
 			Element el_clima = root.addElement("clima");
 			el_clima.addAttribute("codigo", clima.getCodigo().toString());
-			el_clima.addAttribute("descricao", clima.getDescricao());
+			el_clima.addElement("descricao").addText(clima.getDescricao());
 		}
 		
 	}

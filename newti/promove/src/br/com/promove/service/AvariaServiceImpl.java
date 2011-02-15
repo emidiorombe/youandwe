@@ -216,7 +216,7 @@ public class AvariaServiceImpl implements AvariaService {
 	public List<Avaria> buscarTodasAvarias() throws PromoveException {
 		List<Avaria> lista = null;
 		try {
-			lista = avariaDAO.getAll();
+			lista = avariaDAO.getAllCustom();
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

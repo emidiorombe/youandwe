@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity
@@ -15,7 +16,9 @@ public class OrigemAvaria {
 	private Integer id;
 	private Integer codigo;
 	private String descricao;
-	private String responsabilidade;
+	
+	@OneToOne
+	private ResponsabilidadeAvaria responsabilidade;
 	private String sigla;
 	
 	public Integer getId() {
@@ -36,10 +39,10 @@ public class OrigemAvaria {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public String getResponsabilidade() {
+	public ResponsabilidadeAvaria getResponsabilidade() {
 		return responsabilidade;
 	}
-	public void setResponsabilidade(String responsabilidade) {
+	public void setResponsabilidade(ResponsabilidadeAvaria responsabilidade) {
 		this.responsabilidade = responsabilidade;
 	}
 	public String getSigla() {
