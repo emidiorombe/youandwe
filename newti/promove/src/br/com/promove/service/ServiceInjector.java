@@ -14,6 +14,7 @@ public class ServiceInjector  extends AbstractModule {
 		bind(AvariaService.class).to(AvariaServiceImpl.class);
 		bind(CadastroService.class).to(CadastroServiceImpl.class);
 		bind(ExportacaoService.class).to(ExportacaoServiceImpl.class);
+		bind(ImportacaoService.class).to(ImportacaoServiceImpl.class);
 		
 	}
 }

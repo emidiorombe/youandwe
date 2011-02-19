@@ -20,16 +20,26 @@ public class ExportacaoServlet extends HttpServlet{
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		try {
-			ExportacaoService export = ServiceFactory.getService(ExportacaoService.class);
+		String action = request.getParameter("action");
+		
+		if("cadastro".equals(action)) {
+			try {
+				ExportacaoService export = ServiceFactory.getService(ExportacaoService.class);
+				
+				response.setContentType("applicaton/xml");
+				response.setHeader("Content-Disposition", "attachment; filename=cadastro.xml");
+				response.getWriter().print(export.exportarCadastrosBasicos());
+			}catch(PromoveException pe) {
+				response.getWriter().write(pe.getMessage());
+			}
+		}else if("avgabardo".equals(action)) {
 			
-			resp.setContentType("applicaton/xml");
-			resp.setHeader("Content-Disposition", "attachment; filename=cadastro.xml");
-			resp.getWriter().print(export.exportarCadastrosBasicos());
-		}catch(PromoveException pe) {
-			resp.getWriter().write(pe.getMessage());
+		}else if("avterca".equals(action)) {
+			
+		}else if("avkuhlmann".equals(action)) {
+			
 		}
 	}
 	

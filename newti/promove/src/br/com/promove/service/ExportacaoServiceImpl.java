@@ -1,5 +1,6 @@
 package br.com.promove.service;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ import br.com.promove.exportacao.CadastrosBasicosExport;
  * @author Rafael Nunes
  *
  */
-public class ExportacaoServiceImpl implements ExportacaoService{
+public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	private UsuarioDAO usuarioDAO;
 	private LocalAvariaDAO localDAO;
 	private OrigemAvariaDAO origemDAO;

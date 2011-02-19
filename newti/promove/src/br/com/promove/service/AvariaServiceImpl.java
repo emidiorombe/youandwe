@@ -1,5 +1,6 @@
 package br.com.promove.service;
 
+import java.io.Serializable;
 import java.util.List;
 
 import br.com.promove.dao.AvariaDAO;
@@ -17,7 +18,7 @@ import br.com.promove.entity.TipoAvaria;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
 
-public class AvariaServiceImpl implements AvariaService {
+public class AvariaServiceImpl implements AvariaService, Serializable {
 	private TipoAvariaDAO tipoDAO;
 	private LocalAvariaDAO localDAO;
 	private OrigemAvariaDAO origemDAO;

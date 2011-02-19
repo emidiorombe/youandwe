@@ -45,8 +45,6 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class MenuGeral extends CssLayout{
 	private PromoveApplication app;
-	private Button add_veiculo;
-	private Button list_veiculo;
 	private Button usuario;
 	private Button filial;
 	private Button fabricante;
@@ -71,8 +69,6 @@ public class MenuGeral extends CssLayout{
 		Label title = new Label("Gerenciar Cadastros");
 		title.addStyleName("section");
 		
-		add_veiculo = new NativeButton("Incluir Veículo");
-		list_veiculo = new NativeButton("Listar Veículos");
 		usuario = new NativeButton("Usuario");
 		filial = new NativeButton("Filial");
 		fabricante = new NativeButton("Fabricante");
@@ -86,7 +82,7 @@ public class MenuGeral extends CssLayout{
 		export = new NativeButton("Exportar Cadastros Básicos");
 		
 		
-		addListeners(add_veiculo, list_veiculo, usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima, export);
+		addListeners(usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima, export);
 		addComponents(title, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, export);
 		
 	}
@@ -108,13 +104,7 @@ public class MenuGeral extends CssLayout{
 		@Override
 		public void buttonClick(ClickEvent event) {
 			addAndRemoveStyle(event.getButton(), usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima);
-			if(event.getButton() == add_veiculo) {
-				VeiculoForm form = new VeiculoForm();
-				app.setMainView(form.getFormLayout());
-			}else if(event.getButton() == list_veiculo) {
-				VeiculoTable table = new VeiculoTable(app);
-				app.setMainView(table);
-			}else if(event.getButton() == usuario) {
+			if(event.getButton() == usuario) {
 				UsuarioTable table = new UsuarioTable();
 				UsuarioForm form = new UsuarioForm();
 				app.setMainView(new UsuarioView(table, form));

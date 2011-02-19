@@ -1,5 +1,6 @@
 package br.com.promove.service;
 
+import java.io.Serializable;
 import java.util.List;
 
 import br.com.promove.dao.CorDAO;
@@ -20,7 +21,7 @@ import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
 
 
-public class CadastroServiceImpl implements CadastroService{
+public class CadastroServiceImpl implements CadastroService, Serializable{
 	private CorDAO corDAO;
 	private ModeloDAO modeloDAO;
 	private FabricanteDAO fabricanteDAO;
