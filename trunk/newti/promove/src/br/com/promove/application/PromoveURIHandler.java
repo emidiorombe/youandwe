@@ -21,8 +21,16 @@ public class PromoveURIHandler implements URIHandler{
 	             return ds;
 			 }catch(PromoveException pe) {
 	        	   return null;
-	           }
-         } else {
+	          }
+         }else if (relativeUri.contains("import")) {
+        	 try {
+				 ExportacaoService exportService = ServiceFactory.getService(ExportacaoService.class);
+	             DownloadStream ds = new DownloadStream(new ByteArrayInputStream(exportService.exportarCadastrosBasicos().getBytes()), "application/octet-stream", "cadastro.xml");
+	             return ds;
+			 }catch(PromoveException pe) {
+	        	   return null;
+	          }
+		 }else {
              return null;
          }
 	}
