@@ -96,12 +96,24 @@ public class ModeloForm extends BaseForm{
 				
 			}else if(propertyId.equals("fabricante")) {
 				try {
-					ComboBox c = new ComboBox("Fabricante", cadastroService.buscarTodosFabricantes());
+					ComboBox c = new ComboBox("Fabricante");
+					c.addContainerProperty("label", String.class, null);
+					
+					for(Fabricante fab : cadastroService.buscarTodosFabricantes()) {
+						Item i = c.addItem(fab);
+						i.getItemProperty("label").setValue(fab.getNome());
+					}
+					
 					c.setRequired(true);
 					c.setRequiredError("Fabricante obrigatório");
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 					c.setImmediate(true);
 					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					
+					if (c.size() > 0)
+	                    c.setValue(c.getItemIds().iterator().next());
 					
 					return c;
 				}catch (PromoveException e) {
