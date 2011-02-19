@@ -1,6 +1,8 @@
 package br.com.promove.view;
 
 
+import java.io.Serializable;
+
 import br.com.promove.application.PromoveApplication;
 
 import com.vaadin.terminal.ExternalResource;
@@ -10,7 +12,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.VerticalLayout;
 
-public class ExportCadastroView {
+public class ExportCadastroView implements Serializable{
 	private VerticalLayout layout = new VerticalLayout();
 	private Button exportar;
 	private PromoveApplication app;
