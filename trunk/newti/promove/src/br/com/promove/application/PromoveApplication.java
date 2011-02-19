@@ -1,10 +1,13 @@
 package br.com.promove.application;
 
 
+import java.io.ByteArrayInputStream;
+
 import br.com.promove.menu.MenuAvaria;
 import br.com.promove.menu.MenuGeral;
 import br.com.promove.menu.PromoveToolbar;
 import com.vaadin.Application;
+import com.vaadin.terminal.DownloadStream;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.SplitPanel;
@@ -28,7 +31,7 @@ public class PromoveApplication extends Application {
 	private void buildMainLayout() {
 		setTheme("reindeermods");
 		
-		Window mainWindow = new Window("Promove", main);
+		Window mainWindow = new Window("SICA", main);
 		setMainWindow(mainWindow);
 		main.setSizeFull();
 
@@ -38,6 +41,8 @@ public class PromoveApplication extends Application {
 		main.setExpandRatio(center_layout, 1);
 
 		setMenuView(getMenuAvaria());
+		
+		getMainWindow().addURIHandler(new PromoveURIHandler());
 
 	}
 	
@@ -75,5 +80,7 @@ public class PromoveApplication extends Application {
 			toolbar = new PromoveToolbar(this);
 		return toolbar;
 	}
+	
+	
 	
 }

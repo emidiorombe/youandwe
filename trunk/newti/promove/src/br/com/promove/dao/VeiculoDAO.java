@@ -8,7 +8,7 @@ import br.com.promove.exception.DAOException;
 public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 	public List<Veiculo> getAllCustom() throws DAOException {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select v from Veiculo v");
+		hql.append("select v from Veiculo v left JOIN FETCH v.avarias ");
 		return executeQuery(hql.toString(), 1, 100);
 	}
 }

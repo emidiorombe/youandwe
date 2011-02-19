@@ -23,7 +23,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
 public class AvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento", "foto", "usuario", "observacao"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento", "fotos", "usuario", "observacao"};
 	public static final String[] COL_HEADERS = new String[] {"Veículo", "Tipo", "Local", "Origem", "Extensão", "Clima", "Data", "Foto", "Usuário", "Obs"};
 	
 	private AvariaService avariaService;
@@ -56,6 +56,7 @@ public class AvariaTable extends Table{
 		addGeneratedColumn("dataLancamento", new AvariaTableColumnGenerator(this));
 //		addGeneratedColumn("usuario", new AvariaTableColumnGenerator(this));
 		addGeneratedColumn("observacao", new AvariaTableColumnGenerator(this));
+		addGeneratedColumn("foto", new AvariaTableColumnGenerator(this));
 	}
 
 	
@@ -104,6 +105,8 @@ public class AvariaTable extends Table{
 						return new Label(av.getObservacao().substring(0, 5) + "...");
 					else
 						return new Label(av.getObservacao());
+			}else if(columnId.toString().equals("fotos")) { 
+				return new Label("fotus");
 			}else {
 				return null;
 			}

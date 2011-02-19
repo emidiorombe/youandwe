@@ -46,7 +46,7 @@ public class CadastrosBasicosExport {
 
 	private static void createLocalAvaria(Element root, List<LocalAvaria> list) {
 		for (LocalAvaria loc : list) {
-			Element el_local = root.addElement("origem_avaria");
+			Element el_local = root.addElement("local_avaria");
 			el_local.addAttribute("codigo", loc.getCodigo().toString());
 			el_local.addElement("descricao").addText(loc.getDescricao());
 		}
