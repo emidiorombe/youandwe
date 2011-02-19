@@ -1,5 +1,7 @@
 package br.com.promove.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,7 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-public class Usuario {
+public class Usuario implements Serializable{
 
 	@Id
 	@SequenceGenerator(name="seq_usuario", sequenceName="seq_usuario")
