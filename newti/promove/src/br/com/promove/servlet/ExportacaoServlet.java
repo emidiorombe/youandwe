@@ -25,7 +25,7 @@ public class ExportacaoServlet extends HttpServlet{
 		try {
 			ExportacaoService export = ServiceFactory.getService(ExportacaoService.class);
 			
-			resp.setContentType("text/xml");
+			resp.setContentType("application/octet-stream");
 			resp.getWriter().print(export.exportarCadastrosBasicos());
 		}catch(PromoveException pe) {
 			resp.getWriter().write(pe.getMessage());

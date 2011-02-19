@@ -30,11 +30,6 @@ import com.vaadin.ui.NativeButton;
 public class MenuAvaria  extends CssLayout{
 	private Button add;
 	private Button list;
-	private Button tipo;
-	private Button local;
-	private Button origem;
-	private Button extensao;
-	private Button clima;
 	private PromoveApplication app;
 	
 	public MenuAvaria(PromoveApplication app) {
@@ -51,14 +46,9 @@ public class MenuAvaria  extends CssLayout{
 		
 		add = new NativeButton("Criar Avaria");
 		list = new NativeButton("Listar Avarias");
-		tipo = new NativeButton("Tipos de Avaria");
-		local = new NativeButton("Locais de Avaria");
-		origem = new NativeButton("Origens de Avaria");
-		extensao = new NativeButton("Extensões de Avaria");
-		clima = new NativeButton("Condições Climáticas");
 		
-		addListeners(add, list, tipo, local, origem, extensao, clima);
-		addComponents(title, add, list, tipo, local, origem, extensao, clima);
+		addListeners(add, list);
+		addComponents(add, list);
 				
 	}
 	
@@ -78,33 +68,13 @@ public class MenuAvaria  extends CssLayout{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			addAndRemoveStyle(event.getButton(), add, list, tipo, local, origem, extensao, clima);
+			addAndRemoveStyle(event.getButton(), add, list);
 			if(event.getButton() == add) {
 				AvariaForm form = new AvariaForm();
 				app.setMainView(form.getFormLayout());
 			}else if(event.getButton() == list){
 				AvariaTable table = new AvariaTable(app);
 				app.setMainView(table);
-			}else if(event.getButton() == tipo){
-				TipoAvariaTable table = new TipoAvariaTable();
-				TipoAvariaForm form = new TipoAvariaForm();
-				app.setMainView(new TipoAvariaView(table, form));
-			}else if(event.getButton() == local){
-				LocalAvariaTable table = new LocalAvariaTable();
-				LocalAvariaForm form = new LocalAvariaForm();
-				app.setMainView(new LocalAvariaView(table, form));
-			}else if(event.getButton() == origem){
-				OrigemAvariaTable table = new OrigemAvariaTable();
-				OrigemAvariaForm form = new OrigemAvariaForm();
-				app.setMainView(new OrigemAvariaView(table, form));
-			}else if(event.getButton() == extensao){
-				ExtensaoAvariaTable table = new ExtensaoAvariaTable();
-				ExtensaoAvariaForm form = new ExtensaoAvariaForm();
-				app.setMainView(new ExtensaoAvariaView(table, form));
-			}else if(event.getButton() == clima){
-				ClimaTable table = new ClimaTable();
-				ClimaForm form = new ClimaForm();
-				app.setMainView(new ClimaAvariaView(table, form));
 			}
 		}
 

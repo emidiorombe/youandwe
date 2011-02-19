@@ -11,7 +11,7 @@ import com.vaadin.ui.Button.ClickListener;
 public class PromoveToolbar extends CssLayout{
 	//Toolbar items
 	private NativeButton toolbar_avaria = new NativeButton("Avarias");
-	private NativeButton toolbar_geral = new NativeButton("Cadastros Gerais");
+	private NativeButton toolbar_geral = new NativeButton("Cadastros");
 	private PromoveApplication app;
 	
 	public PromoveToolbar(PromoveApplication app) {
@@ -38,7 +38,7 @@ public class PromoveToolbar extends CssLayout{
 		left.addStyleName("left");
 		addComponent(left);
 
-		Label title = new Label("Promove");
+		Label title = new Label("SICA");
 		title.addStyleName("h1");
 		left.addComponent(title);
 		
