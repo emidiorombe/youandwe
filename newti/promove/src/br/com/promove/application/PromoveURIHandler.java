@@ -18,7 +18,6 @@ public class PromoveURIHandler implements URIHandler{
 			 try {
 				 ExportacaoService exportService = ServiceFactory.getService(ExportacaoService.class);
 	             DownloadStream ds = new DownloadStream(new ByteArrayInputStream(exportService.exportarCadastrosBasicos().getBytes()), "application/octet-stream", "cadastro.xml");
-	             ds.setParameter("Content-Disposition", "attachment; filename=cadastro.xml");
 	             return ds;
 			 }catch(PromoveException pe) {
 	        	   return null;
