@@ -9,18 +9,19 @@ import br.com.promove.entity.Avaria;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.view.AvariaSearchView;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 
 public class AvariaTable extends Table{
 	public static final Object[] NATURAL_COL_ORDER = new Object[] {"veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento", "fotos", "usuario", "observacao"};
@@ -29,6 +30,7 @@ public class AvariaTable extends Table{
 	private AvariaService avariaService;
 	private AvariaTableContainer container;
 	private PromoveApplication app;
+	private AvariaSearchView view;
 	
 	public AvariaTable(PromoveApplication app) {
 		this.app = app;
@@ -66,27 +68,25 @@ public class AvariaTable extends Table{
 		return container;
 	}
 	
-	class AvariaTableContainer extends BeanItemContainer<Avaria> implements Serializable {
-		
-		public AvariaTableContainer(){
+	public void filterTable(List<Avaria> avarias) {
+		container.populate(avarias);
+	}
+
+	class AvariaTableContainer extends BeanItemContainer<Avaria> implements
+			Serializable {
+
+		public AvariaTableContainer() {
 			super(Avaria.class);
-			populate();
 		}
-		
-		private void populate() {
-			try {
-				List<Avaria> list = avariaService.buscarTodasAvarias();
-				for (Avaria mo : list) {
-					addItem(mo);
-				}
-			} catch (PromoveException e) {
-				e.printStackTrace();
+
+		private void populate(List<Avaria> avarias) {
+			for (Avaria mo : avarias) {
+				addItem(mo);
 			}
-			
 		}
 
 	}
-	
+
 	class AvariaTableColumnGenerator implements Table.ColumnGenerator{
 
 		private AvariaTable table;
@@ -149,5 +149,10 @@ public class AvariaTable extends Table{
 			return right;
 		}
 
+	}
+
+	public void setView(AvariaSearchView view) {
+		this.view = view;
+		
 	}
 }

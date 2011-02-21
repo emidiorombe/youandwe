@@ -21,7 +21,12 @@ public class LocalAvaria implements Serializable{
 	private Boolean acessorio = false;
 	private static final long serialVersionUID = 5053227920409244439L;
 	
+	public LocalAvaria() {
+	}
 	
+	public LocalAvaria(Integer id) {
+		this.id = id;
+	}
 	public Integer getId() {
 		return id;
 	}

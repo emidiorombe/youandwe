@@ -1,5 +1,6 @@
 package br.com.promove.service;
 
+import java.util.Date;
 import java.util.List;
 
 import br.com.promove.entity.Clima;
@@ -55,5 +56,7 @@ public interface CadastroService {
 	public void excluirVeiculo(Veiculo bean)throws PromoveException;
 
 	public List<Veiculo> buscarTodosVeiculos()throws PromoveException;
+
+	public List<Veiculo> buscarVeiculoPorFiltro(String chassi, Date dtInicio, Date dtFim)throws PromoveException;
 
 }

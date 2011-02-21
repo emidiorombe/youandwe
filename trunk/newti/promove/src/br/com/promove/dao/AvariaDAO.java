@@ -11,4 +11,11 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		hql.append("select av from Avaria av left JOIN FETCH av.fotos");
 		return executeQuery(hql.toString(), 1, 100);
 	}
+
+	public List<Avaria> getAvariasPorFiltro(String chassi) throws DAOException {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select av from Avaria av left JOIN FETCH av.fotos left join fetch av.veiculo veic where veic.chassi = :txtChassi");
+		addParamToQuery("txtChassi", chassi);
+		return executeQuery(hql.toString(), paramsToQuery, 1, Integer.MAX_VALUE);
+	}
 }

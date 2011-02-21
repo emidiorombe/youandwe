@@ -18,7 +18,13 @@ public class Clima implements Serializable{
 	private Integer codigo;
 	
 	private String descricao;
-
+	
+	public Clima() {}
+	
+	public Clima(Integer id) {
+		this.id = id;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
