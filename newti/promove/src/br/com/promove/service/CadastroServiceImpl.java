@@ -1,6 +1,7 @@
 package br.com.promove.service;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import br.com.promove.dao.CorDAO;
@@ -233,6 +234,17 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		List<Veiculo> lista = null;
 		try {
 			lista = veiculoDAO.getAllCustom();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public List<Veiculo> buscarVeiculoPorFiltro(String chassi, Date dtInicio, Date dtFim) throws PromoveException {
+		List<Veiculo> lista = null;
+		try {
+			lista = veiculoDAO.getByFilter(chassi, dtInicio, dtFim);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

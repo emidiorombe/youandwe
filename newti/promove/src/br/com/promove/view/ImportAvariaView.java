@@ -38,7 +38,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 
 	private ProgressIndicator pi = new ProgressIndicator();
 
-	private Upload upload = new Upload(null, new ImportAvariaUploader());
+	private Upload upload = new Upload(null, new ImportAvariaUploader(this));
 
 	public ImportAvariaView() {
 		buildLayout();
@@ -61,6 +61,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
                 upload.interruptUpload();
             }
         });
+        
         cancelProcessing.setVisible(false);
         cancelProcessing.setStyleName("small");
 
@@ -111,9 +112,18 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 	class ImportAvariaUploader implements Receiver{
 		private String fileName;
         private String mtype;
+		private ImportAvariaView view;
         
+		public ImportAvariaUploader(ImportAvariaView view) {
+			this.view = view;
+		}
+
 		@Override
 		public OutputStream receiveUpload(String filename, String MIMEType) {
+			if(!filename.endsWith("xml")) {
+				showErrorMessage(view.getLayout(), "Formato de arquivo não reconhecido.");
+				upload.interruptUpload();
+			}
 			this.fileName = filename;
 			this.mtype = MIMEType;
 			return file;
@@ -132,7 +142,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
             pi.setVisible(true);
             pi.setPollingInterval(500); 
             textualProgress.setVisible(true);
-            state.setValue("Uploading");
+            state.setValue("Enviando...");
             fileName.setValue(event.getFilename());
 
             cancelProcessing.setVisible(true);
@@ -163,7 +173,11 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 		@Override
 		public void uploadSucceeded(SucceededEvent event) {
 			try {
+				cancelProcessing.setVisible(false);
+				state.setValue("Recebido...");
+				pi.setValue(100f);
 				importService.importAvaria(new String(file.toByteArray()));
+				showSuccessMessage(view.getLayout(), "Arquivo importado com sucesso...");
 			}catch (PromoveException pe) {
 				showErrorMessage(view, "Não foi possivel importar o arquivo de Avarias.");
 			}
@@ -179,7 +193,13 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 
 		@Override
 		public void uploadFailed(FailedEvent event) {
-			System.out.println(":::::::::::::::::::::UPLOAD FALHOU - " + event.getReason().getMessage());
+			pi.setValue(0f);
+            pi.setVisible(false);
+            textualProgress.setVisible(false);
+            state.setValue("Falhou...");
+            fileName.setValue(event.getFilename());
+
+            cancelProcessing.setVisible(false);
 		}
 	}
 	

@@ -1,19 +1,23 @@
 package br.com.promove.menu;
 
 import br.com.promove.application.PromoveApplication;
+import br.com.promove.view.AvariaSearchView;
 import br.com.promove.view.ClimaAvariaView;
 import br.com.promove.view.ExtensaoAvariaView;
 import br.com.promove.view.ImportAvariaView;
 import br.com.promove.view.LocalAvariaView;
 import br.com.promove.view.OrigemAvariaView;
 import br.com.promove.view.TipoAvariaView;
+import br.com.promove.view.VeiculoListView;
 import br.com.promove.view.form.AvariaForm;
+import br.com.promove.view.form.AvariaSearchForm;
 import br.com.promove.view.form.ClimaForm;
 import br.com.promove.view.form.ExtensaoAvariaForm;
 import br.com.promove.view.form.LocalAvariaForm;
 import br.com.promove.view.form.OrigemAvariaForm;
 import br.com.promove.view.form.TipoAvariaForm;
 import br.com.promove.view.form.VeiculoForm;
+import br.com.promove.view.form.VeiculoSearchForm;
 import br.com.promove.view.table.AvariaTable;
 import br.com.promove.view.table.ClimaTable;
 import br.com.promove.view.table.ExtensaoAvariaTable;
@@ -93,14 +97,16 @@ public class MenuAvaria  extends CssLayout{
 				AvariaForm form = new AvariaForm();
 				app.setMainView(form.getFormLayout());
 			}else if(event.getButton() == list){
+				AvariaSearchForm form = new AvariaSearchForm();
 				AvariaTable table = new AvariaTable(app);
-				app.setMainView(table);
+				app.setMainView(new AvariaSearchView(table, form));
 			}else if(event.getButton() == add_veiculo) {
 				VeiculoForm form = new VeiculoForm();
 				app.setMainView(form.getFormLayout());
 			}else if(event.getButton() == list_veiculo) {
+				VeiculoSearchForm form = new VeiculoSearchForm();
 				VeiculoTable table = new VeiculoTable(app);
-				app.setMainView(table);
+				app.setMainView(new VeiculoListView(table, form));
 			}else if(event.getButton() == import_avaria) {
 				ImportAvariaView view = new ImportAvariaView();
 				app.setMainView(view.getLayout());

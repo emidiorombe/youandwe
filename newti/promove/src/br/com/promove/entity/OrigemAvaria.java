@@ -18,11 +18,21 @@ public class OrigemAvaria implements Serializable{
 	private Integer id;
 	private Integer codigo;
 	private String descricao;
+	private String tipo;
+	
+	@OneToOne
+	private Filial filial;
 	
 	@OneToOne
 	private ResponsabilidadeAvaria responsabilidade;
 	private String sigla;
 	
+	public OrigemAvaria() {
+	}
+	
+	public OrigemAvaria(Integer id) {
+		this.id = id;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -57,6 +67,22 @@ public class OrigemAvaria implements Serializable{
 	@Override
 	public String toString() {
 		return descricao;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public Filial getFilial() {
+		return filial;
+	}
+
+	public void setFilial(Filial filial) {
+		this.filial = filial;
 	}
 	
 	

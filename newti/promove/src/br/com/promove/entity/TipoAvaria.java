@@ -41,6 +41,10 @@ public class TipoAvaria implements Serializable{
 		
 	}
 
+	public TipoAvaria(Integer id) {
+		this.id = id;
+	}
+
 	public Integer getId() {
 		return id;
 	}

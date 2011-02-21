@@ -6,12 +6,14 @@ import java.util.List;
 import br.com.promove.dao.AvariaDAO;
 import br.com.promove.dao.ClimaDAO;
 import br.com.promove.dao.ExtensaoDAO;
+import br.com.promove.dao.FotoAvariaDAO;
 import br.com.promove.dao.LocalAvariaDAO;
 import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
+import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
@@ -25,6 +27,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	private ExtensaoDAO extensaoDAO;
 	private ClimaDAO climaDAO;
 	private AvariaDAO avariaDAO;
+	private FotoAvariaDAO fotoDAO;
 
 	AvariaServiceImpl() {
 		tipoDAO = new TipoAvariaDAO();
@@ -33,6 +36,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		extensaoDAO = new ExtensaoDAO();
 		climaDAO = new ClimaDAO();
 		avariaDAO = new AvariaDAO();
+		fotoDAO = new FotoAvariaDAO();
 	}
 
 	@Override
@@ -195,8 +199,16 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 
 	@Override
 	public void salvarAvaria(Avaria bean) throws PromoveException {
+		salvarAvaria(bean, false);		
+	}
+	
+	@Override
+	public void salvarAvaria(Avaria bean, boolean isFlush)
+			throws PromoveException {
 		try {
 			avariaDAO.save(bean);
+			if(isFlush)
+				avariaDAO.flushSession();
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -224,4 +236,26 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		return lista;
 	}
 
+	@Override
+	public void salvarFotoAvaria(FotoAvaria foto, boolean isFlush) throws PromoveException {
+		try {
+			fotoDAO.save(foto);
+			if(isFlush)
+				fotoDAO.flushSession();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public List<Avaria> buscarAvariaPorFiltros(String chassi)throws PromoveException {
+		List<Avaria> lista = null;
+		try {
+			lista = avariaDAO.getAvariasPorFiltro(chassi);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
 }

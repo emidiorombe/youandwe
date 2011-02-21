@@ -6,6 +6,7 @@ import java.util.List;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
+import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
@@ -109,4 +110,10 @@ public interface AvariaService extends Serializable{
 	void excluirAvaria(Avaria bean)throws PromoveException;
 
 	List<Avaria> buscarTodasAvarias() throws PromoveException;
+
+	void salvarFotoAvaria(FotoAvaria foto, boolean isFlush) throws PromoveException;
+
+	void salvarAvaria(Avaria av, boolean isFlush)throws PromoveException;
+
+	List<Avaria> buscarAvariaPorFiltros(String string)throws PromoveException;
 }

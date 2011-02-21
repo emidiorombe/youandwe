@@ -1,6 +1,7 @@
 package br.com.promove.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Veiculo implements Serializable{
@@ -25,13 +28,16 @@ public class Veiculo implements Serializable{
 	@OneToOne
 	private Modelo modelo;
 	
-	@OneToMany(mappedBy="veiculo", targetEntity=Avaria.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="veiculo", targetEntity=Avaria.class, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<Avaria> avarias;
 	
 	@OneToOne
 	private Cor cor;
 	
 	private String chassi;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataCadastro;
 	
 	public Integer getId() {
 		return id;
@@ -85,6 +91,15 @@ public class Veiculo implements Serializable{
 	public String toString() {
 		return chassi;
 	}
+
+	public Date getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+	
 	
 	
 }

@@ -18,6 +18,8 @@ public class Modelo implements Serializable{
 	private Integer id;
 	private String codigo;
 	private String descricao;
+	private String codigoExternoNacional;
+	private String codigoExternoImportacao;
 	
 	@OneToOne
 	private Fabricante fabricante;
@@ -63,6 +65,22 @@ public class Modelo implements Serializable{
 
 	public void setFabricante(Fabricante fabricante) {
 		this.fabricante = fabricante;
+	}
+
+	public String getCodigoExternoNacional() {
+		return codigoExternoNacional;
+	}
+
+	public void setCodigoExternoNacional(String codigoExternoNacional) {
+		this.codigoExternoNacional = codigoExternoNacional;
+	}
+
+	public String getCodigoExternoImportacao() {
+		return codigoExternoImportacao;
+	}
+
+	public void setCodigoExternoImportacao(String codigoExternoImportacao) {
+		this.codigoExternoImportacao = codigoExternoImportacao;
 	}
 	
 	

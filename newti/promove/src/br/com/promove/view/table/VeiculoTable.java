@@ -8,6 +8,7 @@ import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.view.VeiculoListView;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
@@ -30,6 +31,7 @@ public class VeiculoTable extends Table{
 	private CadastroService cadastroService;
 	private VeiculoTableContainer container;
 	private PromoveApplication app;
+	private VeiculoListView view;
 	
 	public VeiculoTable(PromoveApplication app) {
 		this.app = app;
@@ -60,23 +62,27 @@ public class VeiculoTable extends Table{
 		return container;
 	}
 	
-	class VeiculoTableContainer extends BeanItemContainer<Veiculo> implements Serializable {
+	public void filterTable(List<Veiculo> veiculos) {
+		container.populate(veiculos);
+	}
+	
+	public void setView(VeiculoListView view) {
+		this.view = view;
 		
-		public VeiculoTableContainer(){
+	}
+	
+	class VeiculoTableContainer extends BeanItemContainer<Veiculo> implements
+			Serializable {
+
+		public VeiculoTableContainer() {
 			super(Veiculo.class);
-			populate();
 		}
-		
-		private void populate() {
-			try {
-				List<Veiculo> list = cadastroService.buscarTodosVeiculos();
-				for (Veiculo mo : list) {
-					addItem(mo);
-				}
-			} catch (PromoveException e) {
-				e.printStackTrace();
+
+		private void populate(List<Veiculo> veiculos) {
+			removeAllItems();
+			for (Veiculo mo : veiculos) {
+				addItem(mo);
 			}
-			
 		}
 
 	}

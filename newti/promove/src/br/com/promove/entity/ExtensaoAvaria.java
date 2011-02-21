@@ -16,6 +16,13 @@ public class ExtensaoAvaria implements Serializable{
 	private Integer id;
 	private Integer codigo;
 	private String descricao;
+	
+	public ExtensaoAvaria() {}
+	
+	public ExtensaoAvaria(Integer id) {
+		this.id = id;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
