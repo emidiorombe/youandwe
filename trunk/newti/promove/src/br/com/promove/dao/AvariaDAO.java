@@ -17,7 +17,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		StringBuilder hql = new StringBuilder();
 		hql.append("select av from Avaria av left JOIN FETCH av.fotos left join fetch av.veiculo veic where 1 = 1 ");
 		
-		if(chassi != null) {
+		if(chassi != null && !chassi.isEmpty()) {
 			hql.append(" and veic.chassi like :txtChassi ");
 			addParamToQuery("txtChassi", "%"+ chassi);
 		}
@@ -37,7 +37,12 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			hql.append(" and av.local = :loc ");
 			addParamToQuery("loc", av.getLocal());
 		}
-
+		
+		if(de != null && !de.equals("") && ate != null && !ate.equals("")) {
+			hql.append(" and  av.dataLancamento between :dtIni and :dtFim ");
+			addParamToQuery("dtIni", de);
+			addParamToQuery("dtFim", ate);
+		}
 		
 		return executeQuery(hql.toString(), paramsToQuery, 1, Integer.MAX_VALUE);
 	}
