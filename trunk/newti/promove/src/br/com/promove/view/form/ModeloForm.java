@@ -1,5 +1,7 @@
 package br.com.promove.view.form;
 
+import java.util.Iterator;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
@@ -16,7 +18,9 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
 import br.com.promove.entity.Fabricante;
+import br.com.promove.entity.Filial;
 import br.com.promove.entity.Modelo;
+import br.com.promove.entity.Usuario;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
@@ -66,7 +70,7 @@ public class ModeloForm extends BaseForm{
 	public void createFormBody(BeanItem<Modelo> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new ModeloFieldFactory(item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"codigo", "descricao", "fabricante"});
+		setVisibleItemProperties(new Object[]{"codigo", "descricao", "fabricante", "codigoExternoNacional", "codigoExternoImportacao"});
 	}
 	
 	private void addNewModelo() {
@@ -112,14 +116,27 @@ public class ModeloForm extends BaseForm{
 					c.setPropertyDataSource(item.getItemProperty(propertyId));
 					c.setItemCaptionPropertyId("label");
 					
-					if (c.size() > 0)
-	                    c.setValue(c.getItemIds().iterator().next());
+					if (c.size() > 0) {
+						Fabricante f2 = ((BeanItem<Modelo>) getItemDataSource()).getBean().getFabricante();
+						if(f2 != null) {
+							Iterator<Fabricante> it = c.getItemIds().iterator(); 
+							while(it.hasNext()) {
+								Fabricante f1 = it.next();
+								if(f2.getId().equals(f1.getId())) {
+									c.setValue(f1);
+								}
+							}
+						}
+					
+					}
 					
 					return c;
 				}catch (PromoveException e) {
 					showErrorMessage(view,"Não foi possível buscar Fabricantes");
 				}
 				
+			}else if(propertyId.toString().contains("codigoExterno")) {
+				f.setRequired(false);
 			}
 			return f;
 		}

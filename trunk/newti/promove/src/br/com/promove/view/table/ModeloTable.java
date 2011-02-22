@@ -17,8 +17,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 public class ModeloTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "descricao", "fabricante"};
-	public static final String[] COL_HEADERS = new String[] {"Código", "Descrição", "Fabricante"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "descricao", "fabricante", "codigoExternoNacional", "codigoExternoImportacao"};
+	public static final String[] COL_HEADERS = new String[] {"Código", "Descrição", "Fabricante", "Código Nacional", "Código Importação"};
 	
 	private ModeloView view;
 	private CadastroService cadastroService;
