@@ -16,8 +16,8 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Table;
 
 public class CorTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "descricao"};
-	public static final String[] COL_HEADERS = new String[] {"Código", "Descrição"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "descricao", "codigoExterno"};
+	public static final String[] COL_HEADERS = new String[] {"Código", "Descrição", "Código Externo"};
 
 	private CorView view;
 	private CadastroService cadastroService;

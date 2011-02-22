@@ -17,6 +17,7 @@ public class Cor implements Serializable{
 	private Integer id;
 	private Integer codigo;
 	private String descricao;
+	private String codigoExterno;
 	
 	public Cor() {}
 	
@@ -43,6 +44,14 @@ public class Cor implements Serializable{
 	}
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public String getCodigoExterno() {
+		return codigoExterno;
+	}
+
+	public void setCodigoExterno(String codigoExterno) {
+		this.codigoExterno = codigoExterno;
 	}
 	
 	

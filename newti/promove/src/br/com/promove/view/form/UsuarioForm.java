@@ -1,5 +1,7 @@
 package br.com.promove.view.form;
 
+import java.util.Iterator;
+
 import br.com.promove.entity.Filial;
 import br.com.promove.entity.TipoUsuario;
 import br.com.promove.entity.Usuario;
@@ -104,9 +106,6 @@ public class UsuarioForm extends BaseForm{
 					f.setReadOnly(true);
 				
 			}else if(propertyId.equals("senha")) {
-				if(!newUser)
-					return null;
-				else
 					((TextField)f).setSecret(true);
 			}else if(propertyId.equals("filial")) {
 				try {
@@ -127,7 +126,17 @@ public class UsuarioForm extends BaseForm{
 					c.setItemCaptionPropertyId("label");
 					
 					if (c.size() > 0) {
-	                    c.setValue(c.getItemIds().iterator().next());
+						Filial f2 = ((BeanItem<Usuario>) getItemDataSource()).getBean().getFilial();
+						if(f2 != null) {
+							Iterator<Filial> it = c.getItemIds().iterator(); 
+							while(it.hasNext()) {
+								Filial f1 = it.next();
+								if(f2.getId().equals(f1.getId())) {
+									c.setValue(f1);
+								}
+							}
+						}
+					
 					}
 					
 					return c;
@@ -135,6 +144,8 @@ public class UsuarioForm extends BaseForm{
 					showErrorMessage(view,"Não foi possível buscar Filiais");
 				}
 				
+			}else if(propertyId.equals("mail")) {
+				f.setRequired(false);
 			}else if(propertyId.equals("tipo")) {
 				try {
 					ComboBox c = new ComboBox("Tipo");
@@ -153,8 +164,20 @@ public class UsuarioForm extends BaseForm{
 					c.setPropertyDataSource(item.getItemProperty(propertyId));
 					c.setItemCaptionPropertyId("label");
 					
-					if (c.getValue() ==  null && c.size() > 0)
-	                    c.setValue(c.getItemIds().iterator().next());
+					if (c.size() > 0) {
+						TipoUsuario tp2 = ((BeanItem<Usuario>) getItemDataSource()).getBean().getTipo();
+						if(tp2 != null) {
+							Iterator<TipoUsuario> it = c.getItemIds().iterator(); 
+							while(it.hasNext()) {
+								TipoUsuario tp1 = it.next();
+								if(tp2.getId().equals(tp1.getId())) {
+									c.setValue(tp1);
+								}
+							}
+						}
+					
+					}
+	                    
 					
 					return c;
 				}catch (PromoveException e) {

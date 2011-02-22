@@ -54,7 +54,7 @@ public class CorForm extends BaseForm{
 	public void createFormBody(BeanItem<Cor> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new CorFieldFactory(item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"codigo", "descricao"});
+		setVisibleItemProperties(new Object[]{"codigo", "descricao", "codigoExterno"});
 		
 	}
 	
@@ -100,6 +100,8 @@ public class CorForm extends BaseForm{
 			if(propertyId.equals("codigo")) {
 				if(!newLocal)
 					f.setReadOnly(true);
+			}else if(propertyId.equals("codigoExterno")) {
+				f.setRequired(false);
 			}
 			return f;
 		}

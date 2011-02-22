@@ -1,21 +1,16 @@
 package br.com.promove.view.form;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.Modelo;
-import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
-import br.com.promove.utils.StringUtilities;
 import br.com.promove.view.VeiculoListView;
-import br.com.promove.view.form.VeiculoForm.VeiculoFieldFactory;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
@@ -28,8 +23,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
