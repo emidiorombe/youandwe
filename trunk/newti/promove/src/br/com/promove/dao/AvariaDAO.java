@@ -1,5 +1,6 @@
 package br.com.promove.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import br.com.promove.entity.Avaria;
@@ -12,10 +13,32 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		return executeQuery(hql.toString(), 1, 100);
 	}
 
-	public List<Avaria> getAvariasPorFiltro(String chassi) throws DAOException {
+	public List<Avaria> getAvariasPorFiltro(String chassi, Avaria av, Date de, Date ate) throws DAOException {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select av from Avaria av left JOIN FETCH av.fotos left join fetch av.veiculo veic where veic.chassi like :txtChassi");
-		addParamToQuery("txtChassi", "%"+ chassi);
+		hql.append("select av from Avaria av left JOIN FETCH av.fotos left join fetch av.veiculo veic where 1 = 1 ");
+		
+		if(chassi != null) {
+			hql.append(" and veic.chassi like :txtChassi ");
+			addParamToQuery("txtChassi", "%"+ chassi);
+		}
+		
+		if(av.getTipo() != null && av.getTipo().getId() != null) {
+			hql.append(" and av.tipo = :tp ");
+			addParamToQuery("tp", av.getTipo());
+		}
+		
+		if(av.getOrigem() != null && av.getOrigem().getId() != null) {
+			hql.append(" and av.origem = :org ");
+			addParamToQuery("org", av.getOrigem());
+		}
+
+		
+		if(av.getLocal() != null && av.getLocal().getId() != null) {
+			hql.append(" and av.local = :loc ");
+			addParamToQuery("loc", av.getLocal());
+		}
+
+		
 		return executeQuery(hql.toString(), paramsToQuery, 1, Integer.MAX_VALUE);
 	}
 }

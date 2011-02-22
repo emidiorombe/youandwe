@@ -1,5 +1,6 @@
 package br.com.promove.view.form;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -113,6 +114,10 @@ public class AvariaSearchForm extends BaseForm{
 					ComboBox c = new ComboBox("Tipo Avaria");
 					c.addContainerProperty("label", String.class, null);
 					
+					Item i_default = c.addItem(new TipoAvaria());
+					i_default.getItemProperty("label").setValue("Selecione...");
+					
+					
 					for(TipoAvaria tp: avariaService.buscarTodosTipoAvaria()){
 						Item i = c.addItem(tp);
 						i.getItemProperty("label").setValue(tp.getDescricao());
@@ -132,7 +137,11 @@ public class AvariaSearchForm extends BaseForm{
 				}else if(propertyId.equals("local")) {
 					ComboBox c = new ComboBox("Local Avaria");
 					c.addContainerProperty("label", String.class, null);
+
 					
+					Item i_default = c.addItem(new LocalAvaria());
+					i_default.getItemProperty("label").setValue("Selecione...");
+
 					for(LocalAvaria l: avariaService.buscarTodosLocaisAvaria()){
 						Item i = c.addItem(l);
 						i.getItemProperty("label").setValue(l.getDescricao());
@@ -152,7 +161,10 @@ public class AvariaSearchForm extends BaseForm{
 				}else if(propertyId.equals("origem")) {
 					ComboBox c = new ComboBox("Origem Avaria");
 					c.addContainerProperty("label", String.class, null);
-					
+
+					Item i_default = c.addItem(new OrigemAvaria());
+					i_default.getItemProperty("label").setValue("Selecione...");
+
 					for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 						Item i = c.addItem(or);
 						i.getItemProperty("label").setValue(or.getDescricao());
@@ -182,7 +194,12 @@ public class AvariaSearchForm extends BaseForm{
 		@Override
 		public void buttonClick(ClickEvent event) {
 			try {
-				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(txtChassi.getValue().toString());
+				commit();
+				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+				BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
+
+				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(txtChassi.getValue().toString(), item.getBean(), de, ate);
 				view.getTable().filterTable(avarias);
 			} catch (Exception e) {
 				showErrorMessage(view, "Não foi possível buscar as avarias");

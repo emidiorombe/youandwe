@@ -1,6 +1,7 @@
 package br.com.promove.service;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import br.com.promove.dao.AvariaDAO;
@@ -249,10 +250,10 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	}
 
 	@Override
-	public List<Avaria> buscarAvariaPorFiltros(String chassi)throws PromoveException {
+	public List<Avaria> buscarAvariaPorFiltros(String chassi, Avaria av, Date de, Date ate)throws PromoveException {
 		List<Avaria> lista = null;
 		try {
-			lista = avariaDAO.getAvariasPorFiltro(chassi);
+			lista = avariaDAO.getAvariasPorFiltro(chassi, av, de, ate);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
