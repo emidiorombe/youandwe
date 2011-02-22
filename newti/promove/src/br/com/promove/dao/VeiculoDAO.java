@@ -13,13 +13,23 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		return executeQuery(hql.toString(), 1, 100);
 	}
 
-	public List<Veiculo> getByFilter(String chassi, Date dtInicio, Date dtFim) throws DAOException {
+	public List<Veiculo> getByFilter(Veiculo veiculo, Date dtInicio, Date dtFim) throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select v from Veiculo v where 1 = 1 ");
 		
-		if(chassi != null && !chassi.equals("")) {
+		if(veiculo.getChassi() != null && !veiculo.getChassi().equals("")) {
 			hql.append(" and v.chassi like :txtchassi ");
-			addParamToQuery("txtchassi", chassi);
+			addParamToQuery("txtchassi", "%" + veiculo.getChassi());
+		}
+		
+		if(veiculo.getModelo() != null && veiculo.getModelo().getId() != null) {
+			hql.append(" and v.modelo = :txtmodelo ");
+			addParamToQuery("txtmodelo", veiculo.getModelo());
+		}
+		
+		if(veiculo.getCor() != null && veiculo.getCor().getId() != null) {
+			hql.append(" and v.cor = :txtcor ");
+			addParamToQuery("txtcor", veiculo.getCor());
 		}
 		
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {

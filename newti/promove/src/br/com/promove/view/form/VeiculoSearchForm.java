@@ -105,7 +105,7 @@ public class VeiculoSearchForm extends BaseForm{
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
 				
-				List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean().getChassi(), null , null);
+				List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate);
 				view.getTable().filterTable(list);
 			}catch(PromoveException pe) {
 				showErrorMessage(view, "Não foi possível buscar os veículos");
@@ -138,7 +138,11 @@ public class VeiculoSearchForm extends BaseForm{
 				try {
 					ComboBox c = new ComboBox("Modelo");
 					c.addContainerProperty("label", String.class, null);
-				
+					
+					Item item_default = c.addItem(new Modelo());
+					item_default.getItemProperty("label").setValue("Selecione...");
+
+					
 					for(Modelo m: cadastroService.buscarTodosModelos()) {
 						Item i = c.addItem(m);
 						i.getItemProperty("label").setValue(m.getDescricao());
@@ -161,7 +165,10 @@ public class VeiculoSearchForm extends BaseForm{
 				try {
 					ComboBox c = new ComboBox("Cor");
 					c.addContainerProperty("label", String.class, null);
-				
+					
+					Item item_default = c.addItem(new Cor());
+					item_default.getItemProperty("label").setValue("Selecione...");
+					
 					for(Cor cor: cadastroService.buscarTodasCores()) {
 						Item i = c.addItem(cor);
 						i.getItemProperty("label").setValue(cor.getDescricao());

@@ -3,6 +3,8 @@ package br.com.promove.service;
 import java.util.Date;
 import java.util.List;
 
+import com.vaadin.ui.PopupDateField;
+
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.Fabricante;
@@ -57,6 +59,6 @@ public interface CadastroService {
 
 	public List<Veiculo> buscarTodosVeiculos()throws PromoveException;
 
-	public List<Veiculo> buscarVeiculoPorFiltro(String chassi, Date dtInicio, Date dtFim)throws PromoveException;
+	public List<Veiculo> buscarVeiculoPorFiltro(Veiculo veiculo, Date txtDe, Date txtAte)throws PromoveException;
 
 }
