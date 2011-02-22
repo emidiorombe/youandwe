@@ -3,7 +3,7 @@
     <wb-module deploy-name="promove">
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="promove"/>
         <property name="java-output-path" value="/promove/build/classes"/>
+        <property name="context-root" value="sica"/>
     </wb-module>
 </project-modules>

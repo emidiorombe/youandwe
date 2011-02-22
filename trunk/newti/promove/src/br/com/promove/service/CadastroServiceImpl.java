@@ -241,10 +241,10 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	}
 
 	@Override
-	public List<Veiculo> buscarVeiculoPorFiltro(String chassi, Date dtInicio, Date dtFim) throws PromoveException {
+	public List<Veiculo> buscarVeiculoPorFiltro(Veiculo veiculo, Date dtInicio, Date dtFim) throws PromoveException {
 		List<Veiculo> lista = null;
 		try {
-			lista = veiculoDAO.getByFilter(chassi, dtInicio, dtFim);
+			lista = veiculoDAO.getByFilter(veiculo, dtInicio, dtFim);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
