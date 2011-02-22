@@ -1,6 +1,7 @@
 package br.com.promove.service;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import br.com.promove.entity.Avaria;
@@ -115,5 +116,5 @@ public interface AvariaService extends Serializable{
 
 	void salvarAvaria(Avaria av, boolean isFlush)throws PromoveException;
 
-	List<Avaria> buscarAvariaPorFiltros(String string)throws PromoveException;
+	List<Avaria> buscarAvariaPorFiltros(String string, Avaria avaria, Date de, Date ate)throws PromoveException;
 }
