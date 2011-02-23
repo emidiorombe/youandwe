@@ -32,6 +32,11 @@
   	<servlet-class>br.com.yaw.servlet.YaWController</servlet-class>
   </servlet>
   
+  <servlet>
+  	<servlet-name>agenda</servlet-name>
+  	<servlet-class>br.com.yaw.servlet.AgendaController</servlet-class>
+  </servlet>
+  
   <servlet-mapping>
     <servlet-name>ContatoServlet</servlet-name>
     <url-pattern>/contato/contato</url-pattern>
@@ -40,5 +45,10 @@
   <servlet-mapping>
     <servlet-name>controller</servlet-name>
     <url-pattern>/open</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>agenda</servlet-name>
+    <url-pattern>/agenda</url-pattern>
   </servlet-mapping>
 </web-app>
