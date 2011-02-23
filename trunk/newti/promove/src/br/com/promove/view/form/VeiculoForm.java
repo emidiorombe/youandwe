@@ -57,7 +57,7 @@ public class VeiculoForm extends BaseForm{
 	public void createFormBody(BeanItem<Veiculo> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new VeiculoFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"codigo", "chassi", "modelo", "cor"});
+		setVisibleItemProperties(new Object[]{"chassi", "modelo", "cor"});
 		
 	}
 	

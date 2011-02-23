@@ -2,28 +2,14 @@ package br.com.promove.menu;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.view.AvariaSearchView;
-import br.com.promove.view.ClimaAvariaView;
-import br.com.promove.view.ExtensaoAvariaView;
 import br.com.promove.view.ImportAvariaView;
-import br.com.promove.view.LocalAvariaView;
-import br.com.promove.view.OrigemAvariaView;
-import br.com.promove.view.TipoAvariaView;
+import br.com.promove.view.ImportVeiculoView;
 import br.com.promove.view.VeiculoListView;
 import br.com.promove.view.form.AvariaForm;
 import br.com.promove.view.form.AvariaSearchForm;
-import br.com.promove.view.form.ClimaForm;
-import br.com.promove.view.form.ExtensaoAvariaForm;
-import br.com.promove.view.form.LocalAvariaForm;
-import br.com.promove.view.form.OrigemAvariaForm;
-import br.com.promove.view.form.TipoAvariaForm;
 import br.com.promove.view.form.VeiculoForm;
 import br.com.promove.view.form.VeiculoSearchForm;
 import br.com.promove.view.table.AvariaTable;
-import br.com.promove.view.table.ClimaTable;
-import br.com.promove.view.table.ExtensaoAvariaTable;
-import br.com.promove.view.table.LocalAvariaTable;
-import br.com.promove.view.table.OrigemAvariaTable;
-import br.com.promove.view.table.TipoAvariaTable;
 import br.com.promove.view.table.VeiculoTable;
 
 import com.vaadin.ui.Button;
@@ -110,6 +96,9 @@ public class MenuAvaria  extends CssLayout{
 			}else if(event.getButton() == import_avaria) {
 				ImportAvariaView view = new ImportAvariaView();
 				app.setMainView(view.getLayout());
+			}else if(event.getButton() == import_veiculos) {
+				ImportVeiculoView view = new ImportVeiculoView();
+				app.setMainView(view);
 			}
 		}
 

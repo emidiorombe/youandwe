@@ -1,11 +1,11 @@
 package br.com.promove.view.table;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Veiculo;
-import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.VeiculoListView;
@@ -25,8 +25,8 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.BaseTheme;
 
 public class VeiculoTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "chassi", "modelo", "cor", "avarias"};
-	public static final String[] COL_HEADERS = new String[] {"Código", "Chassi", "Modelo", "Cor", "Avarias"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "chassi", "modelo", "cor", "dataCadastro", "avarias"};
+	public static final String[] COL_HEADERS = new String[] {"Código", "Chassi", "Modelo", "Cor", "Data de Cadastro", "Avarias"};
 	
 	private CadastroService cadastroService;
 	private VeiculoTableContainer container;
@@ -52,6 +52,7 @@ public class VeiculoTable extends Table{
 		
 		addGeneratedColumn("modelo", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("cor", new VeiculoTableColumnGenerator(this));
+		addGeneratedColumn("dataCadastro", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("avarias", new VeiculoTableColumnGenerator(this));
 	}
 
@@ -108,6 +109,8 @@ public class VeiculoTable extends Table{
 				b.addListener(new LinkListener(table));
 				return b;
 					
+			}else if(columnId.toString().equals("dataCadastro")) {
+				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataCadastro()));
 			}else {
 				return null;
 			}
