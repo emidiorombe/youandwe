@@ -11,6 +11,7 @@ import br.com.promove.dao.ModeloDAO;
 import br.com.promove.dao.TipoUsuarioDAO;
 import br.com.promove.dao.UsuarioDAO;
 import br.com.promove.dao.VeiculoDAO;
+import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Filial;
@@ -245,6 +246,11 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		List<Veiculo> lista = null;
 		try {
 			lista = veiculoDAO.getByFilter(veiculo, dtInicio, dtFim);
+			for (Veiculo v : lista) {
+				for(Avaria av: v.getAvarias()) {
+					av.getFotos().size();
+				}
+			}
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

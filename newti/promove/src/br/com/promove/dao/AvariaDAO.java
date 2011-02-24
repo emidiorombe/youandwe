@@ -22,20 +22,22 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			addParamToQuery("txtChassi", "%"+ chassi);
 		}
 		
-		if(av.getTipo() != null && av.getTipo().getId() != null) {
-			hql.append(" and av.tipo = :tp ");
-			addParamToQuery("tp", av.getTipo());
-		}
-		
-		if(av.getOrigem() != null && av.getOrigem().getId() != null) {
-			hql.append(" and av.origem = :org ");
-			addParamToQuery("org", av.getOrigem());
-		}
-
-		
-		if(av.getLocal() != null && av.getLocal().getId() != null) {
-			hql.append(" and av.local = :loc ");
-			addParamToQuery("loc", av.getLocal());
+		if(av != null) {
+			if(av.getTipo() != null && av.getTipo().getId() != null) {
+				hql.append(" and av.tipo = :tp ");
+				addParamToQuery("tp", av.getTipo());
+			}
+			
+			if(av.getOrigem() != null && av.getOrigem().getId() != null) {
+				hql.append(" and av.origem = :org ");
+				addParamToQuery("org", av.getOrigem());
+			}
+	
+			
+			if(av.getLocal() != null && av.getLocal().getId() != null) {
+				hql.append(" and av.local = :loc ");
+				addParamToQuery("loc", av.getLocal());
+			}
 		}
 		
 		if(de != null && !de.equals("") && ate != null && !ate.equals("")) {

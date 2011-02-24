@@ -8,7 +8,9 @@ import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.view.AvariaSearchView;
 import br.com.promove.view.VeiculoListView;
+import br.com.promove.view.form.AvariaSearchForm;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
@@ -72,6 +74,10 @@ public class VeiculoTable extends Table{
 		
 	}
 	
+	public VeiculoListView getView() {
+		return view;
+	}
+	
 	class VeiculoTableContainer extends BeanItemContainer<Veiculo> implements
 			Serializable {
 
@@ -123,6 +129,9 @@ public class VeiculoTable extends Table{
 		public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 			Property property = event.getProperty();
 			BeanItem<Veiculo> item =  (BeanItem<Veiculo>) getItem(getValue());
+			AvariaSearchForm avform = new AvariaSearchForm();
+			AvariaTable avtable = new AvariaTable(app, item.getBean());
+			app.setMainView(new AvariaSearchView(avtable, avform) );
 		}
 	}
 	
@@ -136,14 +145,6 @@ public class VeiculoTable extends Table{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			Window w = new Window("Avarias");
-			w.setHeight("400px");
-			w.setWidth("500px");
-			w.setPositionY(table.getWindow().getPositionY() + 30);
-			w.setPositionX(360);
-			app.getMainWindow().addWindow(w);
-			w.setContent(buildComponents());
-
 		}
 
 		private ComponentContainer buildComponents() {

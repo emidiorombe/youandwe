@@ -2,10 +2,12 @@ package br.com.promove.view.table;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.ServiceFactory;
@@ -25,7 +27,7 @@ import com.vaadin.ui.Window;
 
 public class AvariaTable extends Table{
 	public static final Object[] NATURAL_COL_ORDER = new Object[] {"veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento", "fotos", "usuario", "observacao"};
-	public static final String[] COL_HEADERS = new String[] {"Veículo", "Tipo", "Local", "Origem", "Extensão", "Clima", "Data", "Foto", "Usuário", "Obs"};
+	public static final String[] COL_HEADERS = new String[] {"Veículo", "Tipo", "Local", "Origem", "Extensão", "Clima", "Data", "Fotos", "Usuário", "Obs"};
 	
 	private AvariaService avariaService;
 	private AvariaTableContainer container;
@@ -36,6 +38,11 @@ public class AvariaTable extends Table{
 		this.app = app;
 		avariaService = ServiceFactory.getService(AvariaService.class);
 		buildTable();
+	}
+
+	public AvariaTable(PromoveApplication app, Veiculo veiculo) {
+		this(app);
+		filterTable(veiculo.getAvarias());
 	}
 
 	private void buildTable() {
@@ -58,7 +65,7 @@ public class AvariaTable extends Table{
 		addGeneratedColumn("dataLancamento", new AvariaTableColumnGenerator(this));
 //		addGeneratedColumn("usuario", new AvariaTableColumnGenerator(this));
 		addGeneratedColumn("observacao", new AvariaTableColumnGenerator(this));
-		addGeneratedColumn("foto", new AvariaTableColumnGenerator(this));
+		addGeneratedColumn("fotos", new AvariaTableColumnGenerator(this));
 	}
 
 	
@@ -101,12 +108,13 @@ public class AvariaTable extends Table{
 			if(columnId.toString().equals("dataLancamento")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(av.getDataLancamento()));
 			}else if(columnId.toString().equals("observacao")) {
-					if(av.getObservacao().length() > 5)
-						return new Label(av.getObservacao().substring(0, 5) + "...");
-					else
-						return new Label(av.getObservacao());
+//					if(av.getObservacao().length() > 5)
+//						return new Label(av.getObservacao().substring(0, 5) + "...");
+//					else
+//						return new Label(av.getObservacao());
+					return new Label(av.getId().toString());
 			}else if(columnId.toString().equals("fotos")) { 
-				return new Label("fotus");
+				return new Label(Integer.toString(av.getFotos().size()));
 			}else {
 				return null;
 			}
