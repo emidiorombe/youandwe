@@ -41,6 +41,8 @@ public class Veiculo implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataCadastro = new Date();
 	
+	private String chassiOriginal;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -108,6 +110,14 @@ public class Veiculo implements Serializable{
 
 	public void setCodigoExterno(String codigoExterno) {
 		this.codigoExterno = codigoExterno;
+	}
+
+	public String getChassiOriginal() {
+		return chassiOriginal;
+	}
+
+	public void setChassiOriginal(String chassiOriginal) {
+		this.chassiOriginal = chassiOriginal;
 	}
 	
 	

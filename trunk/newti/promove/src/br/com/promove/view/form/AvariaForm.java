@@ -224,24 +224,10 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				tf.setImmediate(true);
 				return tf;
 			}else if(propertyId.equals("veiculo")){
-				ComboBox c = new ComboBox("Veículo");
-				c.addContainerProperty("label", String.class, null);
-				
-				for(Veiculo veic: cadastroService.buscarTodosVeiculos()){
-					Item i = c.addItem(veic);
-					i.getItemProperty("label").setValue(veic.getChassi());
-				}
-				
-				c.setRequired(true);
-				c.setRequiredError("Veículo obrigatório");
-				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-				c.setImmediate(true);
-				c.setNullSelectionAllowed(false);
-				c.setPropertyDataSource(item.getItemProperty(propertyId));
-				c.setItemCaptionPropertyId("label");
-				
-				
-				return c;
+				TextField tf = new TextField("Chassi");
+				tf.setNullRepresentation("");
+				tf.setImmediate(true);
+				return tf;
 			}
 		}catch(PromoveException pe) {
 				showErrorMessage(avariaForm, "Não foi possível montar o formulário de Avaria");
