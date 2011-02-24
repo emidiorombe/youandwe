@@ -1,21 +1,28 @@
 package br.com.promove.view.form;
 
+import java.util.Iterator;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.validator.IntegerValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
+import br.com.promove.entity.Fabricante;
+import br.com.promove.entity.Modelo;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.ServiceFactory;
@@ -32,6 +39,7 @@ public class OrigemAvariaForm extends BaseForm{
 	
 	private VerticalLayout f_layout = new VerticalLayout();
 	private AvariaService avariaService;
+	
 	
 	public OrigemAvariaForm() {
 		avariaService = ServiceFactory.getService(AvariaService.class);
@@ -155,6 +163,42 @@ public class OrigemAvariaForm extends BaseForm{
 				f.addValidator(new StringLengthValidator(
 						"Descrição deve ter no mínimo 3 e no máximo 50 caracteres",
 						3, 50, false));
+			}else if (propertyId.equals("responsabilidade")) {
+				try {
+					ComboBox c = new ComboBox("Responsabilidade");
+					c.addContainerProperty("label", String.class, null);
+					
+					for(ResponsabilidadeAvaria resp : avariaService.buscarTodasResponsabilidades()) {
+						Item i = c.addItem(resp);
+						i.getItemProperty("label").setValue(resp.getNome());
+					}
+					
+					c.setRequired(true);
+					c.setRequiredError("Responsabilidade obrigatória");
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					
+					if (c.size() > 0) {
+						ResponsabilidadeAvaria r2 = ((BeanItem<OrigemAvaria>) getItemDataSource()).getBean().getResponsabilidade();
+						if(r2 != null) {
+							Iterator<ResponsabilidadeAvaria> it = c.getItemIds().iterator(); 
+							while(it.hasNext()) {
+								ResponsabilidadeAvaria r1 = it.next();
+								if(r2.getId().equals(r1.getId())) {
+									c.setValue(r1);
+								}
+							}
+						}
+					
+					}
+					
+					return c;
+				}catch (PromoveException e) {
+					showErrorMessage(view,"Não foi possível buscar Responsabilidades");
+				}
 			}
 
 			return f;
