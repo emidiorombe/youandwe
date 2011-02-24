@@ -10,6 +10,7 @@ import br.com.promove.dao.ExtensaoDAO;
 import br.com.promove.dao.FotoAvariaDAO;
 import br.com.promove.dao.LocalAvariaDAO;
 import br.com.promove.dao.OrigemAvariaDAO;
+import br.com.promove.dao.ResponsabilidadeDAO;
 import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
@@ -17,6 +18,7 @@ import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
@@ -29,6 +31,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	private ClimaDAO climaDAO;
 	private AvariaDAO avariaDAO;
 	private FotoAvariaDAO fotoDAO;
+	private ResponsabilidadeDAO responsaDAO;
 
 	AvariaServiceImpl() {
 		tipoDAO = new TipoAvariaDAO();
@@ -38,6 +41,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		climaDAO = new ClimaDAO();
 		avariaDAO = new AvariaDAO();
 		fotoDAO = new FotoAvariaDAO();
+		responsaDAO = new ResponsabilidadeDAO();
 	}
 
 	@Override
@@ -254,6 +258,17 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		List<Avaria> lista = null;
 		try {
 			lista = avariaDAO.getAvariasPorFiltro(chassi, av, de, ate);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public List<ResponsabilidadeAvaria> buscarTodasResponsabilidades() throws PromoveException {
+		List<ResponsabilidadeAvaria> lista = null;
+		try {
+			lista = responsaDAO.getAll();
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

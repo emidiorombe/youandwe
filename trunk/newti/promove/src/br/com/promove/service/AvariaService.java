@@ -10,6 +10,7 @@ import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.exception.PromoveException;
 
@@ -117,4 +118,6 @@ public interface AvariaService extends Serializable{
 	void salvarAvaria(Avaria av, boolean isFlush)throws PromoveException;
 
 	List<Avaria> buscarAvariaPorFiltros(String string, Avaria avaria, Date de, Date ate)throws PromoveException;
+
+	List<ResponsabilidadeAvaria> buscarTodasResponsabilidades() throws PromoveException;
 }
