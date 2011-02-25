@@ -94,7 +94,7 @@ public class MenuAvaria  extends CssLayout{
 				VeiculoTable table = new VeiculoTable(app);
 				app.setMainView(new VeiculoListView(table, form));
 			}else if(event.getButton() == import_avaria) {
-				ImportAvariaView view = new ImportAvariaView();
+				ImportAvariaView view = new ImportAvariaView(app);
 				app.setMainView(view.getLayout());
 			}else if(event.getButton() == import_veiculos) {
 				ImportVeiculoView view = new ImportVeiculoView();

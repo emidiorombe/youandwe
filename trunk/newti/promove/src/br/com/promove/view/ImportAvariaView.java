@@ -4,13 +4,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
+import br.com.promove.application.PromoveApplication;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.ImportacaoService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.Config;
 import br.com.promove.view.form.BaseForm;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -33,14 +36,17 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 	private Label fileName = new Label();
 	private Label textualProgress = new Label();
 	private Button cancelProcessing;
+	private Button import_from_server;
 	private ByteArrayOutputStream file = new ByteArrayOutputStream();
 	private ImportacaoService importService;
 
 	private ProgressIndicator pi = new ProgressIndicator();
 
 	private Upload upload = new Upload(null, new ImportAvariaUploader(this));
+	private PromoveApplication app;
 
-	public ImportAvariaView() {
+	public ImportAvariaView(PromoveApplication app) {
+		this.app = app;
 		buildLayout();
 		importService = ServiceFactory.getService(ImportacaoService.class);
 		
@@ -48,8 +54,10 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 
 	private void buildLayout() {
 		layout.setSpacing(true);
-
-		layout.addComponent(new Label("Selecione o arquivo a ser importado."));
+		Label label = new Label("<h3>Selecione o arquivo a ser importado.</h3>");
+		label.setContentMode(Label.CONTENT_XHTML);
+		
+		layout.addComponent(label);
 
         upload.setImmediate(true);
         upload.setButtonCaption("Selecione...");
@@ -68,8 +76,17 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 
         Panel p = createStatusPanel(cancelProcessing);
 
-        layout.addComponent(p);
         
+        
+        Label title = new Label("<h3>Importar Arquivos do servidor</h3>");
+        title.setContentMode(Label.CONTENT_XHTML);
+        
+        import_from_server = new Button("Importar", new ImportFromServerListener(this));
+        
+        
+        layout.addComponent(p);
+        layout.addComponent(title);
+        layout.addComponent(import_from_server);
         upload.addListener(new UploadStartListener(this));
         upload.addListener(new UploadProgressListener(this));
         upload.addListener(new UploadSucessListener(this));
@@ -201,6 +218,26 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 
             cancelProcessing.setVisible(false);
 		}
+	}
+	
+	class ImportFromServerListener implements ClickListener{
+
+		private ImportAvariaView view;
+
+		public ImportFromServerListener(ImportAvariaView view) {
+			this.view = view;
+		}
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			try {
+				importService.importAvariasDoDiretorio(Config.getConfig("pasta_avaria_xml"));
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
 	}
 	
 }
