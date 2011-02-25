@@ -29,7 +29,7 @@
 		<mapping class="br.com.promove.entity.TipoUsuario" />
 		<mapping class="br.com.promove.entity.ResponsabilidadeAvaria" />
 		<mapping class="br.com.promove.entity.FotoAvaria" />
-		
+		<mapping class="br.com.promove.entity.InconsistenciaAvaria" />
 		
 		
 

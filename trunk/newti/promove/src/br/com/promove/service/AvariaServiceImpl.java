@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.promove.dao.AvariaDAO;
+import br.com.promove.dao.BaseDAO;
 import br.com.promove.dao.ClimaDAO;
 import br.com.promove.dao.ExtensaoDAO;
 import br.com.promove.dao.FotoAvariaDAO;
+import br.com.promove.dao.InconsistenciaAvariaDAO;
 import br.com.promove.dao.LocalAvariaDAO;
 import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.ResponsabilidadeDAO;
@@ -16,10 +18,12 @@ import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.FotoAvaria;
+import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.TipoAvaria;
+import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
 
@@ -32,7 +36,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	private AvariaDAO avariaDAO;
 	private FotoAvariaDAO fotoDAO;
 	private ResponsabilidadeDAO responsaDAO;
-
+	private InconsistenciaAvariaDAO inconsistenciaAvariaDAO;
 	AvariaServiceImpl() {
 		tipoDAO = new TipoAvariaDAO();
 		localDAO = new LocalAvariaDAO();
@@ -42,6 +46,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		avariaDAO = new AvariaDAO();
 		fotoDAO = new FotoAvariaDAO();
 		responsaDAO = new ResponsabilidadeDAO();
+		inconsistenciaAvariaDAO = new InconsistenciaAvariaDAO(); 
 	}
 
 	@Override
@@ -273,5 +278,45 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 			throw new PromoveException(e);
 		}
 		return lista;
+	}
+
+	@Override
+	public List<Avaria> buscarAvariaDuplicadaPorFiltros(List<Veiculo> veiculos,	Avaria av) throws PromoveException {
+		List<Avaria> lista = null;
+		try {
+			lista = avariaDAO.getAvariasDuplicadasPorFiltro(veiculos, av);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public void salvarInconsistenciaImportAvaria(Avaria avaria, String msgErro)throws PromoveException {
+		try {
+			inconsistenciaAvariaDAO.save(new InconsistenciaAvaria(avaria, msgErro));
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public void cleanUpSession() throws PromoveException {
+		try {
+			inconsistenciaAvariaDAO.rebuildSession();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public <T> T getById(Class<T> clazz, Integer id) throws PromoveException {
+		try {
+			return avariaDAO.getGenericObject(clazz, id);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
 	}
 }

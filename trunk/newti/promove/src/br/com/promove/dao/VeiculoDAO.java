@@ -10,7 +10,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 	public List<Veiculo> getAllCustom() throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select v from Veiculo v left JOIN FETCH v.avarias ");
-		return executeQuery(hql.toString(), 1, 100);
+		return executeQuery(hql.toString(), 1, Integer.MAX_VALUE);
 	}
 
 	public List<Veiculo> getByFilter(Veiculo veiculo, Date dtInicio, Date dtFim) throws DAOException {
@@ -38,6 +38,14 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			addParamToQuery("dtFim", dtFim);
 		}
 		
-		return executeQuery(hql.toString(), paramsToQuery, 0, 100);
+		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
+	}
+
+	public List<Veiculo> getByChassi(String chassi) throws DAOException {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select v from Veiculo v where 1 = 1 ");
+		hql.append(" and v.chassi = :txtchassi ");
+		addParamToQuery("txtchassi",  chassi);
+		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 }

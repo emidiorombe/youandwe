@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
+import br.com.promove.utils.StringUtilities;
 
 public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 	public List<Avaria> getAllCustom() throws DAOException {
@@ -47,5 +49,22 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		}
 		
 		return executeQuery(hql.toString(), paramsToQuery, 1, Integer.MAX_VALUE);
+	}
+
+	public List<Avaria> getAvariasDuplicadasPorFiltro(List<Veiculo> veiculos,Avaria av) throws DAOException{
+		StringBuilder hql = new StringBuilder();
+		hql.append("select av from Avaria av left join fetch av.veiculo veic ");
+		hql.append(" where veic.chassi in (:listchassi) ");
+		hql.append(" and av.tipo = :tpAv ");
+		hql.append(" and av.local = :lcAv ");
+		hql.append(" and av.origem = :orAv ");
+
+		addParamToQuery("listchassi", StringUtilities.listVeiculoToChassiInClause(veiculos));
+		addParamToQuery("tpAv", av.getTipo());
+		addParamToQuery("lcAv", av.getLocal());
+		addParamToQuery("orAv", av.getOrigem());
+		
+		return executeQuery(hql.toString(), paramsToQuery, 1, Integer.MAX_VALUE);
+
 	}
 }

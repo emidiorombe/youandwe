@@ -3,7 +3,6 @@ package br.com.promove.importacao;
 import java.util.HashMap;
 import java.util.List;
 
-import antlr.collections.impl.LList;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;

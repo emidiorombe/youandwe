@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.dom4j.Node;
+
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
@@ -12,6 +14,7 @@ import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.TipoAvaria;
+import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 
 /**
@@ -120,4 +123,12 @@ public interface AvariaService extends Serializable{
 	List<Avaria> buscarAvariaPorFiltros(String string, Avaria avaria, Date de, Date ate)throws PromoveException;
 
 	List<ResponsabilidadeAvaria> buscarTodasResponsabilidades() throws PromoveException;
+
+	List<Avaria> buscarAvariaDuplicadaPorFiltros(List<Veiculo> veiculos, Avaria av) throws PromoveException;
+
+	void salvarInconsistenciaImportAvaria(Avaria avaria, String msgErro)throws PromoveException;
+
+	void cleanUpSession()throws PromoveException;
+
+	<T>T getById(Class<T> clazz, Integer id) throws PromoveException;
 }

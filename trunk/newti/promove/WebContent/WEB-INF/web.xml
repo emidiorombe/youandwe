@@ -8,6 +8,10 @@
 		<param-value>true</param-value>
 	</context-param>
 	
+	<context-param>
+		<param-name>pasta_avaria_xml</param-name>
+		<param-value>/home/rafael/bkp_acer/DADOS/Projetos/promove/avarias</param-value>
+	</context-param>
 	<listener>
 		<listener-class>br.com.promove.servlet.listener.GeneralContextListener</listener-class>
 	</listener>

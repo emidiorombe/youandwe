@@ -256,4 +256,20 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		}
 		return lista;
 	}
+
+	@Override
+	public List<Veiculo> buscarVeiculosPorChassi(String chassi) throws PromoveException {
+		List<Veiculo> lista = null;
+		try {
+			lista = veiculoDAO.getByChassi(chassi);
+			for (Veiculo v : lista) {
+				for(Avaria av: v.getAvarias()) {
+					av.getFotos().size();
+				}
+			}
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
 }
