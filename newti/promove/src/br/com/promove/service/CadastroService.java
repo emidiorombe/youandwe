@@ -61,4 +61,6 @@ public interface CadastroService {
 
 	public List<Veiculo> buscarVeiculoPorFiltro(Veiculo veiculo, Date txtDe, Date txtAte)throws PromoveException;
 
+	public List<Veiculo> buscarVeiculosPorChassi(String chassi)throws PromoveException;
+
 }

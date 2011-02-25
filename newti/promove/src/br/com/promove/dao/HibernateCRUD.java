@@ -287,4 +287,23 @@ public class HibernateCRUD implements Serializable{
 		}
 		
 	}
+	
+
+	/**
+	 * Realiza um rebuild na sessï¿½o do Hibernate.
+	 * @throws DAOException 
+	 */
+	public static void rebuildSession() throws DAOException {
+		Session session = null;
+		try {
+			session = HibernateSessionFactory.getSession();
+			session.getTransaction().rollback();
+			session.close();
+			HibernateSessionFactory.getSession().beginTransaction();
+		}catch(Exception he) {
+			he.printStackTrace();
+			throw new DAOException(he);
+		}
+		
+	}
 }

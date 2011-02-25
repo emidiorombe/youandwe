@@ -188,5 +188,16 @@ public abstract class BaseDAO<Id extends Serializable, Entity> implements Serial
 	public void flushSession() throws DAOException{
 		HibernateCRUD.flushSession();
 	}
-
+	
+	/**
+	 * Realiza um rebuild na sess�o de persist�ncia.
+	 * @throws DAOException 
+	 */
+	public void rebuildSession() throws DAOException{
+		HibernateCRUD.rebuildSession();
+	}
+	
+	public <T>T getGenericObject(Class<T> c, Integer i) throws DAOException{
+		return (T)HibernateCRUD.getById(c, i);
+	}
 }
