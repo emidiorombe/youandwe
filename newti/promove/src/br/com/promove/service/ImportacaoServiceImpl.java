@@ -6,12 +6,15 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 
 import br.com.promove.exception.PromoveException;
 import br.com.promove.importacao.ImportacaoAvaria;
 import br.com.promove.importacao.ImportacaoCAOA;
 import br.com.promove.importacao.ImportacaoTERCA;
+import br.com.promove.utils.FileUtils;
 
 /**
  * 
@@ -58,6 +61,21 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 			}
 			import_terca.importar(linhas);
 		} catch (PromoveException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public void importAvariasDoDiretorio(String config) throws PromoveException {
+		try {
+			List<Document> xmls = FileUtils.readXMlsFromDisk(config);
+			for (Document doc : xmls) {
+				importAvaria(doc.asXML());
+			}
+			
+			FileUtils.removeXMLs(config);
+		} catch (Exception e) {
 			throw new PromoveException(e);
 		}
 		

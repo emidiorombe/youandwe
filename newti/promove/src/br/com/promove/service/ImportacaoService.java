@@ -13,4 +13,6 @@ public interface ImportacaoService {
 	public void importVeiculosNacionais(String csv)throws PromoveException;
 
 	public void importVeiculosImportados(String csv)throws PromoveException;
+
+	public void importAvariasDoDiretorio(String config)throws PromoveException;;
 }
