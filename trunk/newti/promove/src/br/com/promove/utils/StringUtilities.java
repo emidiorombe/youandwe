@@ -32,7 +32,7 @@ public class StringUtilities {
 	}
 
 	public static String listVeiculoToChassiInClause(List<Veiculo> veiculos) {
-		StringBuilder retorno = new StringBuilder("(");
+		StringBuilder retorno = new StringBuilder("");
 		for(int i = 0; i < veiculos.size(); i++) {
 			retorno.append(veiculos.get(i).getChassi());
 			
@@ -40,7 +40,6 @@ public class StringUtilities {
 				retorno.append(",");
 			}
 		}
-		retorno.append(")");
 		return retorno.toString();
 	}
 	

@@ -53,6 +53,13 @@ public class Cor implements Serializable{
 	public void setCodigoExterno(String codigoExterno) {
 		this.codigoExterno = codigoExterno;
 	}
+
+	@Override
+	public String toString() {
+		return descricao;
+	}
+	
+	
 	
 	
 }

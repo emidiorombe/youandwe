@@ -9,6 +9,7 @@ import br.com.promove.entity.Clima;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Filial;
+import br.com.promove.entity.InconsistenciaVeiculo;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.TipoUsuario;
 import br.com.promove.entity.Usuario;
@@ -62,5 +63,15 @@ public interface CadastroService {
 	public List<Veiculo> buscarVeiculoPorFiltro(Veiculo veiculo, Date txtDe, Date txtAte)throws PromoveException;
 
 	public List<Veiculo> buscarVeiculosPorChassi(String chassi)throws PromoveException;
+
+	public void salvarVeiculo(Veiculo veiculo, boolean isFlush)throws PromoveException;
+
+	public void salvarInconsistenciaVeiculo(Veiculo v, String message, Integer tipo)throws PromoveException;
+	
+	public <T> T getById(Class<T> clazz, Integer id) throws PromoveException;
+
+	public List<InconsistenciaVeiculo> buscarTodasInconsistenciasDeVeiculos() throws PromoveException;
+
+	public void excluirInconsistenciaVeiculo(InconsistenciaVeiculo bean)throws PromoveException;
 
 }

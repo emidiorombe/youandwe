@@ -131,4 +131,6 @@ public interface AvariaService extends Serializable{
 	void cleanUpSession()throws PromoveException;
 
 	<T>T getById(Class<T> clazz, Integer id) throws PromoveException;
+
+	OrigemAvaria buscarOrigemPorTipoEFilial(String tipo_id, String filial_id)throws PromoveException;
 }

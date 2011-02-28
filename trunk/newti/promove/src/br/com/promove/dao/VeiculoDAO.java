@@ -43,8 +43,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 
 	public List<Veiculo> getByChassi(String chassi) throws DAOException {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select v from Veiculo v where 1 = 1 ");
-		hql.append(" and v.chassi = :txtchassi ");
+		hql.append("select v from Veiculo v where ");
+		hql.append(" v.chassi = :txtchassi ");
 		addParamToQuery("txtchassi",  chassi);
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}

@@ -41,8 +41,7 @@ public class ImportacaoAvaria {
 		this.xmlContent = xmlContent;
 	}
 
-	public void importar(String xml) throws DocumentException, ParseException,
-			PromoveException {
+	public void importar(String xml) throws DocumentException, ParseException, PromoveException {
 		Document doc = DocumentHelper.parseText(xml);
 		importTagAvaria(doc);
 		importTagMovimento(doc);
@@ -59,7 +58,7 @@ public class ImportacaoAvaria {
 				av.setTipo(avariaService.getById(TipoAvaria.class, new Integer(node_av.selectSingleNode("//avarias/tipo").getText())));
 				av.setLocal(avariaService.getById(LocalAvaria.class, new Integer(node_av.selectSingleNode("//avarias/local").getText())));
 				av.setOrigem(avariaService.getById(OrigemAvaria.class,new Integer(node_av.selectSingleNode("//avarias/origem").getText())));
-				av.setUsuario(avariaService.getById(Usuario.class, new Integer(node_av.selectSingleNode("//avarias/origem").getText())));
+				av.setUsuario(avariaService.getById(Usuario.class, new Integer(node_av.selectSingleNode("//avarias/usuario").getText())));
 				av.setObservacao(node_av.selectSingleNode("//avarias/obs").getText());
 				
 				List<Veiculo> veiculos = cadastroService.buscarVeiculosPorChassi(node_av.selectSingleNode("//avarias/chassi").getText());
@@ -88,35 +87,41 @@ public class ImportacaoAvaria {
 					}
 				}
 			}catch(Exception e) {
-				avariaService.cleanUpSession();
 				avariaService.salvarInconsistenciaImportAvaria(av, e.getMessage());
 			}
 		}
 	}
 
-	private void importTagMovimento(Document doc) throws ParseException,
-			PromoveException {
+	private void importTagMovimento(Document doc) throws ParseException, PromoveException {
 		List<Node> avarias = doc.selectNodes("//dados_coletados/movto");
 		for (Node node_av : avarias) {
 			Avaria av = new Avaria();
-			av.setClima(new Clima(new Integer(node_av.selectSingleNode("//avarias/concli").getText())));
-			av.setExtensao(new ExtensaoAvaria(new Integer(node_av.selectSingleNode("//avarias/gravid").getText())));
-			av.setDataLancamento(date_format.parse(node_av.selectSingleNode("//avarias/data").getText()));
-			av.setTipo(new TipoAvaria(new Integer(node_av.selectSingleNode("//avarias/tipo").getText())));
-			av.setLocal(new LocalAvaria(new Integer(node_av.selectSingleNode("//avarias/local").getText())));
-			av.setOrigem(new OrigemAvaria(new Integer(node_av.selectSingleNode("//avarias/origem").getText())));
-			av.setObservacao(node_av.selectSingleNode("//avarias/obs").getText());
-			// TODO Buscar veiculo
-
-			avariaService.salvarAvaria(av, true);
-
-			List<Node> node_fotos = node_av.selectNodes("//avarias/fotos");
-			for (Node node_foto : node_fotos) {
-				FotoAvaria foto = new FotoAvaria();
-				foto.setAvaria(av);
-				Element node_nome = (Element) node_foto.selectSingleNode("//fotos/arq_foto");
-				foto.setNome(node_nome.getText());
-				avariaService.salvarFotoAvaria(foto, true);
+			try {
+				av.setClima(avariaService.getById(Clima.class, new Integer("4")));
+				av.setExtensao(avariaService.getById(ExtensaoAvaria.class, new Integer("9999")));
+				av.setDataLancamento(date_format.parse(node_av.selectSingleNode("//movto/data").getText()));
+				av.setTipo(avariaService.getById(TipoAvaria.class, new Integer("300")));
+				av.setLocal(avariaService.getById(LocalAvaria.class, new Integer("300")));
+				av.setOrigem(avariaService.buscarOrigemPorTipoEFilial(node_av.selectSingleNode("//movto/tipo").getText(), node_av.selectSingleNode("//movto/filial").getText()));
+				av.setUsuario(avariaService.getById(Usuario.class, new Integer(node_av.selectSingleNode("//movto/usuario").getText())));
+				
+				List<Veiculo> veiculos = cadastroService.buscarVeiculosPorChassi(node_av.selectSingleNode("//movto/chassi").getText());
+				
+				//Se não existir o veículo, gravar a inconsistência
+				if(veiculos.size() == 0) { 
+					throw new Exception("Veiculo " + node_av.selectSingleNode("//movto/chassi").getText() + " não existe");
+				}else {
+					av.setVeiculo(veiculos.get(0));
+					
+					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av).size() > 0) {
+						//Ja existe essa avaria
+						continue;
+					}
+	
+					avariaService.salvarAvaria(av, true);
+				}
+			}catch(Exception e) {
+				avariaService.salvarInconsistenciaImportAvaria(av, e.getMessage());
 			}
 		}
 	}
