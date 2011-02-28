@@ -43,6 +43,12 @@ public class Veiculo implements Serializable{
 	
 	private String chassiOriginal;
 	
+	public Veiculo() {}
+	
+	public Veiculo(String chassi) {
+		this.chassi = chassi;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

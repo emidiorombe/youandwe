@@ -10,6 +10,7 @@ import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.FotoAvaria;
+import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.ResponsabilidadeAvaria;
@@ -133,4 +134,10 @@ public interface AvariaService extends Serializable{
 	<T>T getById(Class<T> clazz, Integer id) throws PromoveException;
 
 	OrigemAvaria buscarOrigemPorTipoEFilial(String tipo_id, String filial_id)throws PromoveException;
+
+	List<InconsistenciaAvaria> buscarTodasInconsistenciasAvaria()throws PromoveException;
+
+	void excluirInconsistenciaImportAvaria(InconsistenciaAvaria inc)throws PromoveException;
+
+	void salvarAvariaDeInconsistencias(Avaria avaria)throws PromoveException;
 }
