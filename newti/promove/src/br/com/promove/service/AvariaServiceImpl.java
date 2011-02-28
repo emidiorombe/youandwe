@@ -14,6 +14,7 @@ import br.com.promove.dao.LocalAvariaDAO;
 import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.ResponsabilidadeDAO;
 import br.com.promove.dao.TipoAvariaDAO;
+import br.com.promove.dao.VeiculoDAO;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
@@ -37,6 +38,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	private FotoAvariaDAO fotoDAO;
 	private ResponsabilidadeDAO responsaDAO;
 	private InconsistenciaAvariaDAO inconsistenciaAvariaDAO;
+	private VeiculoDAO veiculoDAO;
 	AvariaServiceImpl() {
 		tipoDAO = new TipoAvariaDAO();
 		localDAO = new LocalAvariaDAO();
@@ -47,6 +49,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		fotoDAO = new FotoAvariaDAO();
 		responsaDAO = new ResponsabilidadeDAO();
 		inconsistenciaAvariaDAO = new InconsistenciaAvariaDAO(); 
+		veiculoDAO = new VeiculoDAO();
 	}
 
 	@Override
@@ -331,5 +334,40 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
+	}
+
+	@Override
+	public List<InconsistenciaAvaria> buscarTodasInconsistenciasAvaria()throws PromoveException {
+		List<InconsistenciaAvaria> lista = null;
+		try {
+			lista = inconsistenciaAvariaDAO.getAll();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+	
+	@Override
+	public void excluirInconsistenciaImportAvaria(InconsistenciaAvaria inc)throws PromoveException {
+		try {
+			inconsistenciaAvariaDAO.delete(inc);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public void salvarAvariaDeInconsistencias(Avaria avaria)throws PromoveException {
+		try {
+			List<Veiculo> list = veiculoDAO.getByChassi(avaria.getVeiculo().getChassi());
+			if(list.size() > 0) {
+				avaria.setVeiculo(list.get(0));
+				avariaDAO.save(avaria);
+			}
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
 	}
 }

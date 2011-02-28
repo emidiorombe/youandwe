@@ -155,6 +155,23 @@ public class InconsistenciaAvaria implements Serializable{
 	public void setMsgErro(String msgErro) {
 		this.msgErro = msgErro;
 	}
+
+	public Avaria getAvaria() {
+		Avaria av = new Avaria();
+		av.setClima(clima);
+		av.setDataLancamento(dataLancamento);
+		av.setExtensao(extensao);
+		av.setLocal(local);
+		av.setObservacao(observacao);
+		av.setOrigem(origem);
+		av.setTipo(tipo);
+		av.setUsuario(usuario);
+		
+		Veiculo v = new Veiculo(msgErro.split(" ")[1]);
+		av.setVeiculo(v);
+		
+		return av;
+	}
 	
 	
 	
