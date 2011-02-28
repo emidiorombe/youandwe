@@ -2,16 +2,15 @@
 <web-app id="Promove" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<display-name>promove</display-name>
 	<context-param>
-		<description>
-		Vaadin production mode</description>
 		<param-name>productionMode</param-name>
-		<param-value>true</param-value>
+		<param-value>false</param-value>
 	</context-param>
 	
 	<context-param>
 		<param-name>pasta_avaria_xml</param-name>
-		<param-value>/home/rafael/bkp_acer/DADOS/Projetos/promove/avarias</param-value>
+		<param-value>D:/dados/avarias</param-value>
 	</context-param>
+
 	<listener>
 		<listener-class>br.com.promove.servlet.listener.GeneralContextListener</listener-class>
 	</listener>
