@@ -7,6 +7,7 @@ import java.util.List;
 import br.com.promove.dao.CorDAO;
 import br.com.promove.dao.FabricanteDAO;
 import br.com.promove.dao.FilialDAO;
+import br.com.promove.dao.InconsistenciaVeiculoDAO;
 import br.com.promove.dao.ModeloDAO;
 import br.com.promove.dao.TipoUsuarioDAO;
 import br.com.promove.dao.UsuarioDAO;
@@ -15,6 +16,8 @@ import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Filial;
+import br.com.promove.entity.InconsistenciaAvaria;
+import br.com.promove.entity.InconsistenciaVeiculo;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.TipoUsuario;
 import br.com.promove.entity.Usuario;
@@ -31,6 +34,7 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	private UsuarioDAO usuarioDAO;
 	private TipoUsuarioDAO tipoUsuarioDAO;
 	private VeiculoDAO veiculoDAO;
+	private InconsistenciaVeiculoDAO inconsistenciaVeiculoDAO;
 	
 	public CadastroServiceImpl() {
 		corDAO = new CorDAO();
@@ -40,6 +44,7 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		usuarioDAO = new UsuarioDAO();
 		tipoUsuarioDAO = new TipoUsuarioDAO();
 		veiculoDAO = new VeiculoDAO();
+		inconsistenciaVeiculoDAO = new InconsistenciaVeiculoDAO();
 		
 	}
 	
@@ -212,12 +217,7 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 
 	@Override
 	public void salvarVeiculo(Veiculo bean) throws PromoveException {
-		try {
-			veiculoDAO.save(bean);
-		} catch (DAOException e) {
-			throw new PromoveException(e);
-		}
-		
+		salvarVeiculo(bean, false);
 	}
 
 	@Override
@@ -262,14 +262,60 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		List<Veiculo> lista = null;
 		try {
 			lista = veiculoDAO.getByChassi(chassi);
-			for (Veiculo v : lista) {
-				for(Avaria av: v.getAvarias()) {
-					av.getFotos().size();
-				}
-			}
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
 		return lista;
+	}
+
+	@Override
+	public void salvarVeiculo(Veiculo veiculo, boolean isFlush)	throws PromoveException {
+		try {
+			veiculoDAO.save(veiculo);
+			if(isFlush)
+				veiculoDAO.flushSession();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public void salvarInconsistenciaVeiculo(Veiculo v, String message, Integer tipo)throws PromoveException {
+		try {
+			inconsistenciaVeiculoDAO.save(new InconsistenciaVeiculo(v, message, tipo));
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+	
+	@Override
+	public <T> T getById(Class<T> clazz, Integer id) throws PromoveException {
+		try {
+			return veiculoDAO.getGenericObject(clazz, id);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+	}
+
+	@Override
+	public List<InconsistenciaVeiculo> buscarTodasInconsistenciasDeVeiculos()throws PromoveException {
+		List<InconsistenciaVeiculo> lista = null;
+		try {
+			lista = inconsistenciaVeiculoDAO.getAll();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public void excluirInconsistenciaVeiculo(InconsistenciaVeiculo bean)throws PromoveException {
+		try {
+			inconsistenciaVeiculoDAO.delete(bean);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
 	}
 }

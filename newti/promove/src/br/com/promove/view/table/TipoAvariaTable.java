@@ -79,14 +79,6 @@ public class TipoAvariaTable extends Table {
 			}
 			
 		}
-
-
-		public void populateWithMock(){
-			addItem(new TipoAvaria(1, 1, "Tipo1", false, false));
-			addItem(new TipoAvaria(2, 2, "Tipo2", true, true));
-			
-			
-		}
 	}
 	
 	class TipoAvariaColumnGenerator implements Table.ColumnGenerator{

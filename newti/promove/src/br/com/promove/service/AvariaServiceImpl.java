@@ -319,4 +319,17 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 			throw new PromoveException(e);
 		}
 	}
+
+	@Override
+	public OrigemAvaria buscarOrigemPorTipoEFilial(String tipo_id, String filial_id) throws PromoveException {
+		try {
+			List<OrigemAvaria> lista = origemDAO.getOrigemPorTipoEFilial(tipo_id, filial_id);
+			if(lista.size() > 0)
+				return lista.get(0);
+			else
+				return null;
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+	}
 }

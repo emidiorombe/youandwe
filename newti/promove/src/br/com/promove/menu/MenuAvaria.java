@@ -2,14 +2,17 @@ package br.com.promove.menu;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.view.AvariaSearchView;
+import br.com.promove.view.ErroImportVeiculoView;
 import br.com.promove.view.ImportAvariaView;
 import br.com.promove.view.ImportVeiculoView;
 import br.com.promove.view.VeiculoListView;
 import br.com.promove.view.form.AvariaForm;
 import br.com.promove.view.form.AvariaSearchForm;
+import br.com.promove.view.form.ErroImportVeiculoForm;
 import br.com.promove.view.form.VeiculoForm;
 import br.com.promove.view.form.VeiculoSearchForm;
 import br.com.promove.view.table.AvariaTable;
+import br.com.promove.view.table.ErroImportVeiculoTable;
 import br.com.promove.view.table.VeiculoTable;
 
 import com.vaadin.ui.Button;
@@ -99,6 +102,10 @@ public class MenuAvaria  extends CssLayout{
 			}else if(event.getButton() == import_veiculos) {
 				ImportVeiculoView view = new ImportVeiculoView();
 				app.setMainView(view);
+			}else if(event.getButton() == erro_import_veiculos) {
+				ErroImportVeiculoTable table = new ErroImportVeiculoTable();
+				ErroImportVeiculoForm form = new ErroImportVeiculoForm();
+				app.setMainView(new ErroImportVeiculoView(table, form));
 			}
 		}
 
