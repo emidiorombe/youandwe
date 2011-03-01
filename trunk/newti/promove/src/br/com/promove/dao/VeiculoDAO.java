@@ -54,7 +54,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		hql.append("select v from Veiculo v where ");
 		hql.append(" v.chassi like :txtchassi ");
 		hql.append(" and v.modelo.codigoExternoImportacao = :txtmod ");
-		addParamToQuery("txtchassi",  "%"+chassi);
+		addParamToQuery("txtchassi",  "%"+chassi.substring(2));
+		addParamToQuery("txtmod",  chassi.substring(0, 2));
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 }
