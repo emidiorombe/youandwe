@@ -15,8 +15,8 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Table;
 
 public class OrigemAvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "descricao", "responsabilidade", "sigla"};
-	public static final String[] COL_HEADERS = new String[] {"Código", "Descrição", "Responsabilidade", "Sigla"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "descricao", "responsabilidade", "sigla", "filial", "tipo"};
+	public static final String[] COL_HEADERS = new String[] {"Código", "Descrição", "Responsabilidade", "Sigla", "Filial", "Tipo"};
 
 
 	private OrigemAvariaView view;

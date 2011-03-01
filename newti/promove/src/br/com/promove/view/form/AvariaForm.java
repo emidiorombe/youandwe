@@ -1,6 +1,8 @@
 package br.com.promove.view.form;
 
 
+import java.util.Locale;
+
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
@@ -20,9 +22,11 @@ import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -66,7 +70,7 @@ public class AvariaForm extends BaseForm {
 	private void createFormBody(BeanItem<Avaria> avaria){
 		setItemDataSource(avaria);
 		setFormFieldFactory(new AvariaFieldFactory(this, avaria.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento", "foto", "observacao"});
+		setVisibleItemProperties(new Object[]{"veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento","hora", "foto", "observacao"});
 		
 	}
 	
@@ -225,6 +229,16 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				return tf;
 			}else if(propertyId.equals("veiculo")){
 				TextField tf = new TextField("Chassi");
+				tf.setNullRepresentation("");
+				tf.setImmediate(true);
+				return tf;
+			}else if(propertyId.equals("dataLancamento")) {
+				PopupDateField data = new PopupDateField("Data");
+				data.setResolution(DateField.RESOLUTION_DAY);
+				data.setLocale(new Locale("pt", "BR"));
+				return data;
+			}else if(propertyId.equals("hora")) {
+				TextField tf = new TextField("Hora");
 				tf.setNullRepresentation("");
 				tf.setImmediate(true);
 				return tf;

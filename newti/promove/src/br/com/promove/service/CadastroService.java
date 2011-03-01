@@ -74,4 +74,6 @@ public interface CadastroService {
 
 	public void excluirInconsistenciaVeiculo(InconsistenciaVeiculo bean)throws PromoveException;
 
+	public List<Veiculo> buscarVeiculosPorModeloFZ(String chassi)throws PromoveException;
+
 }

@@ -2,22 +2,24 @@ package br.com.promove.utils;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 
 public class FileUtils {
-	public static List<Document> readXMlsFromDisk(String str_dir) throws DocumentException {
-		List<Document> docs = new ArrayList<Document>();
+	public static Map<String, Document> readXMlsFromDisk(String str_dir) throws DocumentException {
+		Map<String, Document> docs = new HashMap<String, Document>();
 		
 		File dir = new File(str_dir);
 		File[] files = dir.listFiles(new FileUtils().new FilterXml());
 		for (File file : files) {
-			docs.add(new SAXReader().read(file));
+			docs.put(file.getName(), new SAXReader().read(file));
 		}
 		
 		return docs;
@@ -39,5 +41,12 @@ public class FileUtils {
 		for (File file : files) {
 			file.delete();
 		}
+	}
+
+
+	public static void moverXML(String dest, Document xml) throws IOException {
+		XMLWriter writer = new XMLWriter(new FileWriter(dest));
+		writer.write(xml);
+		writer.close();
 	}
 }

@@ -271,6 +271,9 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	@Override
 	public void salvarVeiculo(Veiculo veiculo, boolean isFlush)	throws PromoveException {
 		try {
+			if(veiculoDAO.getByChassi(veiculo.getChassi()).size() > 0)
+				throw new IllegalArgumentException("Chassi já cadastrado!");
+			
 			veiculoDAO.save(veiculo);
 			if(isFlush)
 				veiculoDAO.flushSession();
@@ -317,5 +320,16 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
+	}
+
+	@Override
+	public List<Veiculo> buscarVeiculosPorModeloFZ(String chassi)throws PromoveException {
+		List<Veiculo> lista = null;
+		try {
+			lista = veiculoDAO.getByModeloFZ(chassi);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
 	}
 }

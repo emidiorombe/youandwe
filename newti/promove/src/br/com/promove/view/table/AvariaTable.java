@@ -26,8 +26,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.Window;
 
 public class AvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento", "fotos", "usuario", "observacao"};
-	public static final String[] COL_HEADERS = new String[] {"Veículo", "Tipo", "Local", "Origem", "Extensão", "Clima", "Data", "Fotos", "Usuário", "Obs"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento","hora", "fotos", "usuario", "observacao"};
+	public static final String[] COL_HEADERS = new String[] {"Veículo", "Tipo", "Local", "Origem", "Extensão", "Clima", "Data","Hora", "Fotos", "Usuário", "Obs"};
 	
 	private AvariaService avariaService;
 	private AvariaTableContainer container;
@@ -78,6 +78,16 @@ public class AvariaTable extends Table{
 	public void filterTable(List<Avaria> avarias) {
 		container.populate(avarias);
 	}
+	
+	public void filterTable(String chassi) {
+		try {
+			filterTable(avariaService.buscarAvariaPorFiltros(chassi, null, null, null));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 
 	class AvariaTableContainer extends BeanItemContainer<Avaria> implements
 			Serializable {
@@ -108,11 +118,10 @@ public class AvariaTable extends Table{
 			if(columnId.toString().equals("dataLancamento")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(av.getDataLancamento()));
 			}else if(columnId.toString().equals("observacao")) {
-//					if(av.getObservacao().length() > 5)
-//						return new Label(av.getObservacao().substring(0, 5) + "...");
-//					else
-//						return new Label(av.getObservacao());
-					return new Label(av.getId().toString());
+					if(av.getObservacao() != null && av.getObservacao().length() > 5)
+						return new Label(av.getObservacao().substring(0, 5) + "...");
+					else
+						return new Label(av.getObservacao());
 			}else if(columnId.toString().equals("fotos")) { 
 				return new Label(Integer.toString(av.getFotos().size()));
 			}else {
@@ -163,4 +172,5 @@ public class AvariaTable extends Table{
 		this.view = view;
 		
 	}
+
 }

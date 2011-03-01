@@ -53,7 +53,9 @@ public class Avaria implements Serializable{
 	private Usuario usuario;
 	
 	private String observacao;
-
+	
+	private String hora;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -141,6 +143,12 @@ public class Avaria implements Serializable{
 	public void setFotos(List<FotoAvaria> fotos) {
 		this.fotos = fotos;
 	}
-	
-	
+
+	public String getHora() {
+		return hora;
+	}
+
+	public void setHora(String hora) {
+		this.hora = hora;
+	}
 }

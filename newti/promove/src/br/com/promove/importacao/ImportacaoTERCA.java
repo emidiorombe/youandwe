@@ -27,6 +27,8 @@ public class ImportacaoTERCA {
 			String[] campos = linha.split(";");
 			Veiculo v = new Veiculo();
 			try {
+				if(campos[0].length() < 17)
+					continue;
 				v.setChassi(campos[0]);
 				v.setCor(cadastro.getById(Cor.class, new Integer(97)));
 				
@@ -36,6 +38,8 @@ public class ImportacaoTERCA {
 				
 				cadastro.salvarVeiculo(v, true);
 				
+			}catch(IllegalArgumentException ie) {
+				ie.printStackTrace();
 			}catch(Exception e) {
 				cadastro.salvarInconsistenciaVeiculo(v, e.getMessage(), 2);
 			}

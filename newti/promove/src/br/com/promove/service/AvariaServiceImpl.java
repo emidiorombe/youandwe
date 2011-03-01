@@ -219,6 +219,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	public void salvarAvaria(Avaria bean, boolean isFlush)
 			throws PromoveException {
 		try {
+			//TODO validar avaria duplicada.
 			avariaDAO.save(bean);
 			if(isFlush)
 				avariaDAO.flushSession();

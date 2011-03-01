@@ -6,11 +6,14 @@ import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Veiculo;
+import br.com.promove.menu.MenuAvaria;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.AvariaSearchView;
 import br.com.promove.view.VeiculoListView;
+import br.com.promove.view.form.AvariaForm;
 import br.com.promove.view.form.AvariaSearchForm;
+import br.com.promove.view.form.VeiculoForm;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
@@ -27,16 +30,18 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.BaseTheme;
 
 public class VeiculoTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "chassi", "modelo", "cor", "dataCadastro", "avarias"};
-	public static final String[] COL_HEADERS = new String[] {"Código", "Chassi", "Modelo", "Cor", "Data de Cadastro", "Avarias"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "chassi", "chassiOriginal", "codigoInterno","modelo", "cor", "dataCadastro", "avarias"};
+	public static final String[] COL_HEADERS = new String[] {"ID","Chassi", "Chassi Original", "Código Interno","Modelo", "Cor", "Data de Cadastro", "Avarias"};
 	
 	private CadastroService cadastroService;
 	private VeiculoTableContainer container;
 	private PromoveApplication app;
 	private VeiculoListView view;
+	private MenuAvaria menuAvaria;
 	
-	public VeiculoTable(PromoveApplication app) {
+	public VeiculoTable(PromoveApplication app, MenuAvaria menuAvaria) {
 		this.app = app;
+		this.menuAvaria = menuAvaria;
 		cadastroService = ServiceFactory.getService(CadastroService.class);
 		buildTable();
 	}
@@ -52,6 +57,7 @@ public class VeiculoTable extends Table{
 		setColumnHeaders(COL_HEADERS);
 		addListener(new RowSelectedListener());
 		
+		addGeneratedColumn("id", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("modelo", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("cor", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("dataCadastro", new VeiculoTableColumnGenerator(this));
@@ -113,10 +119,17 @@ public class VeiculoTable extends Table{
 				Button b = new Button(Integer.toString(v.getAvarias().size()));	
 				b.setStyleName(BaseTheme.BUTTON_LINK);
 				b.addListener(new LinkListener(table));
+				b.setDebugId("av&"+v.getChassi());
 				return b;
 					
 			}else if(columnId.toString().equals("dataCadastro")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataCadastro()));
+			}else if(columnId.toString().equals("id")) {
+				Button b = new Button(v.getId().toString());	
+				b.setStyleName(BaseTheme.BUTTON_LINK);
+				b.addListener(new LinkListener(table));
+				b.setDebugId("ch");
+				return b;
 			}else {
 				return null;
 			}
@@ -127,11 +140,6 @@ public class VeiculoTable extends Table{
 	class RowSelectedListener implements ValueChangeListener{
 		@Override
 		public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
-			Property property = event.getProperty();
-			BeanItem<Veiculo> item =  (BeanItem<Veiculo>) getItem(getValue());
-			AvariaSearchForm avform = new AvariaSearchForm();
-			AvariaTable avtable = new AvariaTable(app, item.getBean());
-			app.setMainView(new AvariaSearchView(avtable, avform) );
 		}
 	}
 	
@@ -145,6 +153,22 @@ public class VeiculoTable extends Table{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
+			String debug = ((String)event.getButton().getDebugId());
+			if(debug.startsWith("av")) {
+				AvariaSearchForm form = new AvariaSearchForm();
+				AvariaTable table  = new AvariaTable(app);
+				app.setMainView(new AvariaSearchView(table, form));
+				table.filterTable(debug.substring(debug.indexOf("&") + 1));
+			}else if(event.getButton().getDebugId().equals("ch")) {
+				try {
+					VeiculoForm form = new VeiculoForm();
+					Veiculo veic = cadastroService.getById(Veiculo.class, new Integer(event.getButton().getCaption()));
+					app.setMainView(form.getFormLayout());
+					form.createFormBody(new BeanItem<Veiculo>(veic));
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		private ComponentContainer buildComponents() {

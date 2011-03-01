@@ -179,6 +179,8 @@ public class VeiculoForm extends BaseForm{
 					setValidationVisible(true);
 				}catch(PromoveException de){
 					showErrorMessage(form,"Não foi possível salvar Veiculo");
+				}catch(IllegalArgumentException iae){
+					showErrorMessage(form, iae.getMessage());
 				}
 				
 			}else if(event.getButton() == novo){

@@ -29,7 +29,7 @@ public class InconsistenciaVeiculo implements Serializable{
 	
 	private String chassi;
 	
-	private String codigoExterno;
+	private String codigoInterno;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataCadastro = new Date();
@@ -47,7 +47,7 @@ public class InconsistenciaVeiculo implements Serializable{
 		this.tipo = tipo;
 		this.modelo = v.getModelo();
 		this.cor = v.getCor();
-		this.codigoExterno = v.getCodigoExterno();
+		this.codigoInterno = v.getCodigoInterno();
 		this.chassi = v.getChassi();
 		
 	}
@@ -106,12 +106,12 @@ public class InconsistenciaVeiculo implements Serializable{
 		this.dataCadastro = dataCadastro;
 	}
 
-	public String getCodigoExterno() {
-		return codigoExterno;
+	public String getCodigoInterno() {
+		return codigoInterno;
 	}
 
-	public void setCodigoExterno(String codigoExterno) {
-		this.codigoExterno = codigoExterno;
+	public void setCodigoInterno(String codigoExterno) {
+		this.codigoInterno = codigoExterno;
 	}
 
 	public String getChassiOriginal() {
@@ -145,7 +145,7 @@ public class InconsistenciaVeiculo implements Serializable{
 		v.setCor(cor);
 		v.setChassi(chassi);
 		v.setChassiOriginal(chassiOriginal);
-		v.setCodigoExterno(codigoExterno);
+		v.setCodigoInterno(codigoInterno);
 		v.setDataCadastro(dataCadastro);
 		return v;
 	}

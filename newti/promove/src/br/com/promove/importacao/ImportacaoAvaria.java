@@ -48,24 +48,33 @@ public class ImportacaoAvaria {
 	}
 
 	private void importTagAvaria(Document doc) throws ParseException, PromoveException {
-		List<Node> avarias = doc.selectNodes("//dados_coletados/avarias");
-		for (Node node_av : avarias) {
+		List<Element> avarias = doc.selectNodes("//dados_coletados/avarias");
+		for (Element node_av : avarias) {
 			Avaria av = new Avaria();
+			
 			try {
-				av.setClima(avariaService.getById(Clima.class, new Integer(node_av.selectSingleNode("//avarias/concli").getText())));
-				av.setExtensao(avariaService.getById(ExtensaoAvaria.class, new Integer(node_av.selectSingleNode("//avarias/gravid").getText())));
-				av.setDataLancamento(date_format.parse(node_av.selectSingleNode("//avarias/data").getText()));
-				av.setTipo(avariaService.getById(TipoAvaria.class, new Integer(node_av.selectSingleNode("//avarias/tipo").getText())));
-				av.setLocal(avariaService.getById(LocalAvaria.class, new Integer(node_av.selectSingleNode("//avarias/local").getText())));
-				av.setOrigem(avariaService.getById(OrigemAvaria.class,new Integer(node_av.selectSingleNode("//avarias/origem").getText())));
-				av.setUsuario(avariaService.getById(Usuario.class, new Integer(node_av.selectSingleNode("//avarias/usuario").getText())));
-				av.setObservacao(node_av.selectSingleNode("//avarias/obs").getText());
+				av.setClima(avariaService.getById(Clima.class, new Integer(node_av.element("concli").getText())));
+				av.setExtensao(avariaService.getById(ExtensaoAvaria.class, new Integer(node_av.element("gravid").getText())));
+				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
+				av.setTipo(avariaService.getById(TipoAvaria.class, new Integer(node_av.element("tipo").getText())));
+				av.setLocal(avariaService.getById(LocalAvaria.class, new Integer(node_av.element("local").getText())));
+				av.setOrigem(avariaService.getById(OrigemAvaria.class,new Integer(node_av.element("origem").getText())));
+				av.setUsuario(avariaService.getById(Usuario.class, new Integer(node_av.element("usuario").getText())));
+				av.setObservacao(node_av.element("obs").getText());
 				
-				List<Veiculo> veiculos = cadastroService.buscarVeiculosPorChassi(node_av.selectSingleNode("//avarias/chassi").getText());
+				String chassi = node_av.element("chassi").getText();
+				List<Veiculo> veiculos = null;
+				
+				if(chassi.contains("000000000")) {
+					chassi = chassi.replace("000000000", "");
+					veiculos = cadastroService.buscarVeiculosPorModeloFZ(chassi);
+				}else {
+					veiculos = cadastroService.buscarVeiculosPorChassi(chassi);
+				}
 				
 				//Se não existir o veículo, gravar a inconsistência
 				if(veiculos.size() == 0) { 
-					throw new Exception("Veiculo " + node_av.selectSingleNode("//avarias/chassi").getText() + " não existe");
+					throw new Exception("Veiculo " + node_av.element("chassi").getText() + " não existe");
 				}else {
 					av.setVeiculo(veiculos.get(0));
 					
@@ -93,23 +102,32 @@ public class ImportacaoAvaria {
 	}
 
 	private void importTagMovimento(Document doc) throws ParseException, PromoveException {
-		List<Node> avarias = doc.selectNodes("//dados_coletados/movto");
-		for (Node node_av : avarias) {
+		List<Element> avarias = doc.selectNodes("//dados_coletados/movto");
+		for (Element node_av : avarias) {
 			Avaria av = new Avaria();
 			try {
 				av.setClima(avariaService.getById(Clima.class, new Integer("4")));
 				av.setExtensao(avariaService.getById(ExtensaoAvaria.class, new Integer("9999")));
-				av.setDataLancamento(date_format.parse(node_av.selectSingleNode("//movto/data").getText()));
+				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				av.setTipo(avariaService.getById(TipoAvaria.class, new Integer("300")));
 				av.setLocal(avariaService.getById(LocalAvaria.class, new Integer("300")));
-				av.setOrigem(avariaService.buscarOrigemPorTipoEFilial(node_av.selectSingleNode("//movto/tipo").getText(), node_av.selectSingleNode("//movto/filial").getText()));
-				av.setUsuario(avariaService.getById(Usuario.class, new Integer(node_av.selectSingleNode("//movto/usuario").getText())));
+				av.setHora(node_av.element("hora").getText());
+				av.setOrigem(avariaService.buscarOrigemPorTipoEFilial(node_av.element("tipo").getText(), node_av.element("filial").getText()));
+				av.setUsuario(avariaService.getById(Usuario.class, new Integer(node_av.element("usuario").getText())));
 				
-				List<Veiculo> veiculos = cadastroService.buscarVeiculosPorChassi(node_av.selectSingleNode("//movto/chassi").getText());
+				String chassi = node_av.element("chassi").getText();
+				List<Veiculo> veiculos = null;
+				
+				if(chassi.contains("000000000")) {
+					chassi = chassi.replace("000000000", "");
+					veiculos = cadastroService.buscarVeiculosPorModeloFZ(chassi);
+				}else {
+					veiculos = cadastroService.buscarVeiculosPorChassi(chassi);
+				}
 				
 				//Se não existir o veículo, gravar a inconsistência
 				if(veiculos.size() == 0) { 
-					throw new Exception("Veiculo " + node_av.selectSingleNode("//movto/chassi").getText() + " não existe");
+					throw new Exception("Veiculo " + node_av.element("chassi").getText() + " não existe");
 				}else {
 					av.setVeiculo(veiculos.get(0));
 					
