@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -67,14 +69,16 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 	}
 
 	@Override
-	public void importAvariasDoDiretorio(String config) throws PromoveException {
+	public void importAvariasDoDiretorio(String config, String dest) throws PromoveException {
 		try {
-			List<Document> xmls = FileUtils.readXMlsFromDisk(config);
-			for (Document doc : xmls) {
-				importAvaria(doc.asXML());
+			Map<String, Document> xmls = FileUtils.readXMlsFromDisk(config);
+			for (Map.Entry<String, Document> doc : xmls.entrySet()) {
+				importAvaria(doc.getValue().asXML());
+				FileUtils.moverXML(dest+doc.getKey(), doc.getValue());
 			}
 			
 			FileUtils.removeXMLs(config);
+			
 		} catch (Exception e) {
 			throw new PromoveException(e);
 		}

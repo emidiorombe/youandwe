@@ -231,7 +231,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 		@Override
 		public void buttonClick(ClickEvent event) {
 			try {
-				importService.importAvariasDoDiretorio(Config.getConfig("pasta_avaria_xml"));
+				importService.importAvariasDoDiretorio(Config.getConfig("pasta_avaria_xml"), Config.getConfig("pasta_destino_xml"));
 			}catch(Exception e) {
 				e.printStackTrace();
 			}

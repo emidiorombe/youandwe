@@ -29,7 +29,10 @@ public class ImportacaoCAOA {
 				String msgErro = "";
 				boolean temErro = false;
 				
-				v.setCodigoExterno(campos[0]);
+				if(campos[2].length() < 17)
+					continue;
+				
+				v.setCodigoInterno(campos[0]);
 				v.setChassi(campos[2]);
 				
 				if(!cores.containsKey(campos[0].substring(14, 16))) {
@@ -52,8 +55,10 @@ public class ImportacaoCAOA {
 				
 				cadastro.salvarVeiculo(v, true);
 				
+			}catch(IllegalArgumentException ie) {
+				ie.printStackTrace();
 			}catch(Exception e) {
-				cadastro.salvarInconsistenciaVeiculo(v, e.getMessage(), 1);
+				cadastro.salvarInconsistenciaVeiculo(v, e.getMessage(), 2);
 			}
 		}
 	}

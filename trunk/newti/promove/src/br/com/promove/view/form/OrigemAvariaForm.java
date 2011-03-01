@@ -19,12 +19,12 @@ import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
-import br.com.promove.entity.Fabricante;
-import br.com.promove.entity.Modelo;
+import br.com.promove.entity.Filial;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
+import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.utils.StringUtilities;
 import br.com.promove.view.OrigemAvariaView;
@@ -39,10 +39,12 @@ public class OrigemAvariaForm extends BaseForm{
 	
 	private VerticalLayout f_layout = new VerticalLayout();
 	private AvariaService avariaService;
+	private CadastroService cadastroService;
 	
 	
 	public OrigemAvariaForm() {
 		avariaService = ServiceFactory.getService(AvariaService.class);
+		cadastroService = ServiceFactory.getService(CadastroService.class);
 		buildForm();
 	}
 
@@ -65,7 +67,7 @@ public class OrigemAvariaForm extends BaseForm{
 	public void createFormBody(BeanItem<OrigemAvaria> oav){
 		setItemDataSource(oav);
 		setFormFieldFactory(new OrigemAvariaFieldFactory(oav.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"codigo", "descricao", "responsabilidade", "sigla"});
+		setVisibleItemProperties(new Object[]{"codigo", "descricao", "responsabilidade", "sigla", "filial", "tipo"});
 		
 	}
 	
@@ -199,6 +201,43 @@ public class OrigemAvariaForm extends BaseForm{
 				}catch (PromoveException e) {
 					showErrorMessage(view,"Não foi possível buscar Responsabilidades");
 				}
+			}else if(propertyId.equals("filial")) {
+				try {
+					ComboBox c = new ComboBox("Filial");
+					c.addContainerProperty("label", String.class, null);
+					
+					for(Filial fi: cadastroService.buscarTodasFiliais()) {
+						Item i = c.addItem(fi);
+						i.getItemProperty("label").setValue(fi.getNome());
+					}
+					
+					c.setRequired(true);
+					c.setRequiredError("Filial obrigatória");
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					
+					if (c.size() > 0) {
+						Filial f2 = ((BeanItem<OrigemAvaria>) getItemDataSource()).getBean().getFilial();
+						if(f2 != null) {
+							Iterator<Filial> it = c.getItemIds().iterator(); 
+							while(it.hasNext()) {
+								Filial f1 = it.next();
+								if(f2.getId().equals(f1.getId())) {
+									c.setValue(f1);
+								}
+							}
+						}
+					
+					}
+					
+					return c;
+				}catch (PromoveException e) {
+					showErrorMessage(view,"Não foi possível buscar Filiais");
+				}
+				
 			}
 
 			return f;

@@ -48,4 +48,13 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		addParamToQuery("txtchassi",  chassi);
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
+
+	public List<Veiculo> getByModeloFZ(String chassi) throws DAOException {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select v from Veiculo v where ");
+		hql.append(" v.chassi like :txtchassi ");
+		hql.append(" and v.modelo.codigoExternoImportacao = :txtmod ");
+		addParamToQuery("txtchassi",  "%"+chassi);
+		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
+	}
 }
