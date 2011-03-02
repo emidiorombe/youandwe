@@ -20,6 +20,8 @@ public class FotoAvaria implements Serializable{
 	private Avaria avaria;
 	
 	private String nome;
+	
+	private Integer inconsisctencia;
 
 	public Integer getId() {
 		return id;
@@ -43,6 +45,14 @@ public class FotoAvaria implements Serializable{
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public Integer getInconsisctencia() {
+		return inconsisctencia;
+	}
+
+	public void setInconsisctencia(Integer inconsisctencia) {
+		this.inconsisctencia = inconsisctencia;
 	}
 	
 	

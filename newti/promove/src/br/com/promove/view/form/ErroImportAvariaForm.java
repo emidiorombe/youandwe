@@ -131,7 +131,7 @@ public class ErroImportAvariaForm extends BaseForm {
 				try {
 					List<InconsistenciaAvaria> lista = avariaService.buscarTodasInconsistenciasAvaria();
 					for (InconsistenciaAvaria inc : lista) {
-						avariaService.salvarAvariaDeInconsistencias(inc.getAvaria());
+						avariaService.salvarAvariaDeInconsistencias(inc);
 					}
 					view.getTable().reloadTable();
 					showSuccessMessage(view, "Inconsistências salvas!");

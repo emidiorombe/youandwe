@@ -82,6 +82,12 @@ public class Modelo implements Serializable{
 	public void setCodigoExternoImportacao(String codigoExternoImportacao) {
 		this.codigoExternoImportacao = codigoExternoImportacao;
 	}
+
+	@Override
+	public String toString() {
+		return descricao;
+	}
+	
 	
 	
 }

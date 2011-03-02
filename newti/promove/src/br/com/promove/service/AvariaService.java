@@ -127,7 +127,7 @@ public interface AvariaService extends Serializable{
 
 	List<Avaria> buscarAvariaDuplicadaPorFiltros(List<Veiculo> veiculos, Avaria av) throws PromoveException;
 
-	void salvarInconsistenciaImportAvaria(Avaria avaria, String msgErro)throws PromoveException;
+	InconsistenciaAvaria salvarInconsistenciaImportAvaria(Avaria avaria, String msgErro)throws PromoveException;
 
 	void cleanUpSession()throws PromoveException;
 
@@ -139,7 +139,7 @@ public interface AvariaService extends Serializable{
 
 	void excluirInconsistenciaImportAvaria(InconsistenciaAvaria inc)throws PromoveException;
 
-	void salvarAvariaDeInconsistencias(Avaria avaria)throws PromoveException;
+	void salvarAvariaDeInconsistencias(InconsistenciaAvaria inc)throws PromoveException;
 
 	List<Avaria> buscarAvariaDuplicadaPorFiltros(Veiculo veiculo, Avaria av)throws PromoveException;
 }

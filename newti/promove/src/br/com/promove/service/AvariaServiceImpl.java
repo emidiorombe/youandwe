@@ -330,9 +330,11 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	}
 
 	@Override
-	public void salvarInconsistenciaImportAvaria(Avaria avaria, String msgErro)throws PromoveException {
+	public InconsistenciaAvaria salvarInconsistenciaImportAvaria(Avaria avaria, String msgErro)throws PromoveException {
 		try {
-			inconsistenciaAvariaDAO.save(new InconsistenciaAvaria(avaria, msgErro));
+			InconsistenciaAvaria inc = new InconsistenciaAvaria(avaria, msgErro);
+			inconsistenciaAvariaDAO.save(inc);
+			return inc;
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -393,12 +395,19 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	}
 
 	@Override
-	public void salvarAvariaDeInconsistencias(Avaria avaria)throws PromoveException {
+	public void salvarAvariaDeInconsistencias(InconsistenciaAvaria inc)throws PromoveException {
 		try {
+			Avaria avaria = inc.getAvaria();
 			List<Veiculo> list = veiculoDAO.getByChassi(avaria.getVeiculo().getChassi());
 			if(list.size() > 0) {
 				avaria.setVeiculo(list.get(0));
 				avariaDAO.save(avaria);
+				List<FotoAvaria> fotos = fotoDAO.getByInconsistencia(inc.getId());
+				for (FotoAvaria foto : fotos) {
+					foto.setAvaria(avaria);
+					fotoDAO.saveWithId(foto);
+				}
+				inconsistenciaAvariaDAO.delete(inc);
 			}
 		} catch (DAOException e) {
 			throw new PromoveException(e);
