@@ -100,6 +100,7 @@ public class AvariaTable extends Table{
 		}
 
 		private void populate(List<Avaria> avarias) {
+			container.removeAllItems();
 			for (Avaria mo : avarias) {
 				addItem(mo);
 			}
@@ -131,7 +132,6 @@ public class AvariaTable extends Table{
 				Button b = new Button(av.getId().toString());	
 				b.setStyleName(BaseTheme.BUTTON_LINK);
 				b.addListener(new IdLinkListener(table));
-				b.setDebugId(av.getId().toString());
 				return b;
 			}else {
 				return null;
@@ -159,7 +159,7 @@ public class AvariaTable extends Table{
 		@Override
 		public void buttonClick(ClickEvent event) {
 			try {
-				Avaria av = avariaService.getById(Avaria.class, new Integer(event.getButton().getDebugId()));
+				Avaria av = avariaService.getById(Avaria.class, new Integer(event.getButton().getCaption()));
 				AvariaForm form = new AvariaForm();
 				app.setMainView(form.getFormLayout());
 				form.createFormBody(new BeanItem<Avaria>(av));

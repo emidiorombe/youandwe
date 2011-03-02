@@ -5,12 +5,9 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.promove.entity.Avaria;
-import br.com.promove.entity.Clima;
-import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
-import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
@@ -198,7 +195,7 @@ public class AvariaSearchForm extends BaseForm{
 				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 				BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
-
+				
 				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(txtChassi.getValue().toString(), item.getBean(), de, ate);
 				view.getTable().filterTable(avarias);
 			} catch (Exception e) {

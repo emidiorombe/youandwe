@@ -29,17 +29,17 @@ public class ImportacaoCAOA {
 				String msgErro = "";
 				boolean temErro = false;
 				
-				if(campos[2].length() < 17)
+				if(campos.length != 3 || campos[2].length() < 17)
 					continue;
 				
 				v.setCodigoInterno(campos[0]);
 				v.setChassi(campos[2]);
 				
-				if(!cores.containsKey(campos[0].substring(14, 16))) {
+				if(!cores.containsKey(campos[0].substring(campos[0].length()-2))) {
 					temErro = true;
-					msgErro += "Cor " + campos[0].substring(14, 16) + " não existe!; ";
+					msgErro += "Cor " + campos[0].substring(campos[0].length()-2) + " não existe!; ";
 				}else {
-					v.setCor(cores.get(campos[0].substring(14, 16)));
+					v.setCor(cores.get(campos[0].substring(campos[0].length()-2)));
 				}
 				
 				if(!modelos.containsKey(campos[0].substring(0, 5))) {
