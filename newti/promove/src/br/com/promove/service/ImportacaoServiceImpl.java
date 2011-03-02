@@ -1,16 +1,13 @@
 package br.com.promove.service;
 
-import java.io.BufferedReader;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
 
 import br.com.promove.exception.PromoveException;
 import br.com.promove.importacao.ImportacaoAvaria;
