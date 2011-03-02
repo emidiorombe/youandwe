@@ -2,6 +2,7 @@ package br.com.promove.importacao;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class ImportacaoAvaria {
 			try {
 				av.setClima(avariaService.getById(Clima.class, new Integer(node_av.element("concli").getText())));
 				String ext = node_av.element("gravid").getText();
-				ext  = ext.equals("L") ? "9"  : (ext.equals("G") ? "10" : ext);
+				ext  = ext.equals("L") ? "9"  : (ext.equals("G") ? "10" : (ext.equals("0") ? "9999": ext));
 				av.setExtensao(avariaService.getById(ExtensaoAvaria.class, new Integer(ext)));
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				av.setTipo(avariaService.getById(TipoAvaria.class, new Integer(node_av.element("tipo").getText())));
@@ -69,7 +70,11 @@ public class ImportacaoAvaria {
 				
 				if(chassi.contains("000000000")) {
 					chassi = chassi.replace("000000000", "");
-					veiculos = cadastroService.buscarVeiculosPorModeloFZ(chassi);
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(av.getDataLancamento());
+					cal.add(Calendar.DAY_OF_MONTH, -90);
+					
+					veiculos = cadastroService.buscarVeiculosPorModeloFZData(chassi, cal.getTime());
 				}else {
 					veiculos = cadastroService.buscarVeiculosPorChassi(chassi);
 				}
@@ -122,7 +127,11 @@ public class ImportacaoAvaria {
 				
 				if(chassi.contains("000000000")) {
 					chassi = chassi.replace("000000000", "");
-					veiculos = cadastroService.buscarVeiculosPorModeloFZ(chassi);
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(av.getDataLancamento());
+					cal.add(Calendar.DAY_OF_MONTH, -90);
+					
+					veiculos = cadastroService.buscarVeiculosPorModeloFZData(chassi, cal.getTime());
 				}else {
 					veiculos = cadastroService.buscarVeiculosPorChassi(chassi);
 				}

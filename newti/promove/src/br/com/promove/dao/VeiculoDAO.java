@@ -49,13 +49,15 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
-	public List<Veiculo> getByModeloFZ(String chassi) throws DAOException {
+	public List<Veiculo> getByModeloFZAndData(String chassi, Date data) throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select v from Veiculo v where ");
 		hql.append(" v.chassi like :txtchassi ");
 		hql.append(" and v.modelo.codigoExternoImportacao = :txtmod ");
+		hql.append(" and v.datacadastroo > :txtdata ");
 		addParamToQuery("txtchassi",  "%"+chassi.substring(2));
 		addParamToQuery("txtmod",  chassi.substring(0, 2));
+		addParamToQuery("txtdata",  data);
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 }
