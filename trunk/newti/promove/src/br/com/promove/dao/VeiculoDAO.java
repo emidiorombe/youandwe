@@ -10,7 +10,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 	public List<Veiculo> getAllCustom() throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select v from Veiculo v left JOIN FETCH v.avarias ");
-		return executeQuery(hql.toString(), 1, Integer.MAX_VALUE);
+		return executeQuery(hql.toString(), 0, Integer.MAX_VALUE);
 	}
 
 	public List<Veiculo> getByFilter(Veiculo veiculo, Date dtInicio, Date dtFim) throws DAOException {

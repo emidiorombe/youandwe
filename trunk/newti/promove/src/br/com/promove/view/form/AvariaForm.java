@@ -67,7 +67,7 @@ public class AvariaForm extends BaseForm {
 		return f_layout;
 	}
 	
-	private void createFormBody(BeanItem<Avaria> avaria){
+	public void createFormBody(BeanItem<Avaria> avaria){
 		setItemDataSource(avaria);
 		setFormFieldFactory(new AvariaFieldFactory(this, avaria.getBean().getId() == null));
 		setVisibleItemProperties(new Object[]{"veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento","hora", "foto", "observacao"});
@@ -244,7 +244,8 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				return tf;
 			}
 		}catch(PromoveException pe) {
-				showErrorMessage(avariaForm, "Não foi possível montar o formulário de Avaria");
+			pe.printStackTrace();
+			showErrorMessage(avariaForm, "Não foi possível montar o formulário de Avaria");
 		}
 		return null;
 	}
@@ -272,6 +273,8 @@ class FormButtonListener implements ClickListener{
 				}
 			}catch(InvalidValueException ive){
 				setValidationVisible(true);
+			}catch(IllegalArgumentException iae){
+				showErrorMessage(form,iae.getMessage());
 			}catch(PromoveException de){
 				showErrorMessage(form,"Não foi possível salvar Avaria");
 			}

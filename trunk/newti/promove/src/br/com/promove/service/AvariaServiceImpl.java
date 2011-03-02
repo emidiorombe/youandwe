@@ -1,6 +1,7 @@
 package br.com.promove.service;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -219,11 +220,33 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	public void salvarAvaria(Avaria bean, boolean isFlush)
 			throws PromoveException {
 		try {
-			//TODO validar avaria duplicada.
-			avariaDAO.save(bean);
+			
+			//verifica se chassi é válido
+			if(bean.getVeiculo().getId() == null) {
+				List<Veiculo> vs = veiculoDAO.getByChassi(bean.getVeiculo().getChassi());
+				if(vs.size() == 0)
+					throw new IllegalArgumentException("Chassi Inválido!");
+				else
+					bean.setVeiculo(vs.get(0));
+			}
+			
+			//verifica duplicidade para avarias novas
+			if(bean.getId() == null) {
+				List<Avaria> list = buscarAvariaDuplicadaPorFiltros(bean.getVeiculo(), bean);
+				if(list.size() > 0)
+					throw new IllegalArgumentException("Avaria já cadastrada");
+			
+				
+				
+				avariaDAO.save(bean);
+			}else {
+				avariaDAO.saveWithId(bean);
+			}
+			
 			if(isFlush)
 				avariaDAO.flushSession();
 		} catch (DAOException e) {
+			e.printStackTrace();
 			throw new PromoveException(e);
 		}
 		
@@ -289,6 +312,17 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		List<Avaria> lista = null;
 		try {
 			lista = avariaDAO.getAvariasDuplicadasPorFiltro(veiculos, av);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+	
+	@Override
+	public List<Avaria> buscarAvariaDuplicadaPorFiltros(Veiculo veiculo, Avaria av) throws PromoveException {
+		List<Avaria> lista = null;
+		try {
+			lista = avariaDAO.getAvariasDuplicadasPorFiltro(veiculo, av);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

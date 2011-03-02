@@ -151,7 +151,7 @@ public class HibernateCRUD implements Serializable{
 		Session session = null;
 		try {
 			session = HibernateSessionFactory.getSession();
-			session.replicate(obj, ReplicationMode.EXCEPTION);
+			session.merge(obj);
 		}catch(Exception he) {
 			throw new DAOException(he);
 		}finally {

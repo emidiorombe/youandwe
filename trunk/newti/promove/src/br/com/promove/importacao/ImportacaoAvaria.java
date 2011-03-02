@@ -54,7 +54,9 @@ public class ImportacaoAvaria {
 			
 			try {
 				av.setClima(avariaService.getById(Clima.class, new Integer(node_av.element("concli").getText())));
-				av.setExtensao(avariaService.getById(ExtensaoAvaria.class, new Integer(node_av.element("gravid").getText())));
+				String ext = node_av.element("gravid").getText();
+				ext  = ext.equals("L") ? "9"  : (ext.equals("G") ? "10" : ext);
+				av.setExtensao(avariaService.getById(ExtensaoAvaria.class, new Integer(ext)));
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				av.setTipo(avariaService.getById(TipoAvaria.class, new Integer(node_av.element("tipo").getText())));
 				av.setLocal(avariaService.getById(LocalAvaria.class, new Integer(node_av.element("local").getText())));

@@ -271,7 +271,7 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	@Override
 	public void salvarVeiculo(Veiculo veiculo, boolean isFlush)	throws PromoveException {
 		try {
-			if(veiculoDAO.getByChassi(veiculo.getChassi()).size() > 0)
+			if(veiculo.getId() == null &&veiculoDAO.getByChassi(veiculo.getChassi()).size() > 0)
 				throw new IllegalArgumentException("Chassi já cadastrado!");
 			
 			veiculoDAO.save(veiculo);
