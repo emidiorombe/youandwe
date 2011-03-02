@@ -2,6 +2,7 @@ package br.com.promove.importacao;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,7 @@ import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.FotoAvaria;
+import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
@@ -77,8 +79,20 @@ public class ImportacaoAvaria {
 				}
 				
 				//Se não existir o veículo, gravar a inconsistência
-				if(veiculos.size() == 0) { 
-					throw new Exception("Veiculo " + node_av.element("chassi").getText() + " não existe");
+				if(veiculos.size() == 0) {
+					InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, "Veiculo " + node_av.element("chassi").getText() + " não existe");
+					
+					Element node_fotos = ((Element)node_av).element("fotos");
+					Iterator it = node_fotos.elementIterator();
+					List<FotoAvaria> fotos = new ArrayList<FotoAvaria>();
+					while (it.hasNext()) {
+						FotoAvaria foto = new FotoAvaria();
+						foto.setInconsisctencia(inc.getId());
+						Element node_arq = (Element) it.next();
+						foto.setNome(node_arq.attributeValue("nome"));
+						avariaService.salvarFotoAvaria(foto, true);
+					}
+					
 				}else {
 					av.setVeiculo(veiculos.get(0));
 					
