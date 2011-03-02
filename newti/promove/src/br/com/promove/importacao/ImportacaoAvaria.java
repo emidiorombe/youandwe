@@ -70,11 +70,8 @@ public class ImportacaoAvaria {
 				
 				if(chassi.contains("000000000")) {
 					chassi = chassi.replace("000000000", "");
-					Calendar cal = Calendar.getInstance();
-					cal.setTime(av.getDataLancamento());
-					cal.add(Calendar.DAY_OF_MONTH, -90);
 					
-					veiculos = cadastroService.buscarVeiculosPorModeloFZData(chassi, cal.getTime());
+					veiculos = cadastroService.buscarVeiculosPorModeloFZData(chassi, av.getDataLancamento());
 				}else {
 					veiculos = cadastroService.buscarVeiculosPorChassi(chassi);
 				}
@@ -127,11 +124,8 @@ public class ImportacaoAvaria {
 				
 				if(chassi.contains("000000000")) {
 					chassi = chassi.replace("000000000", "");
-					Calendar cal = Calendar.getInstance();
-					cal.setTime(av.getDataLancamento());
-					cal.add(Calendar.DAY_OF_MONTH, -90);
 					
-					veiculos = cadastroService.buscarVeiculosPorModeloFZData(chassi, cal.getTime());
+					veiculos = cadastroService.buscarVeiculosPorModeloFZData(chassi, av.getDataLancamento());
 				}else {
 					veiculos = cadastroService.buscarVeiculosPorChassi(chassi);
 				}
