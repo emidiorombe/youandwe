@@ -16,7 +16,6 @@ import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Filial;
-import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.InconsistenciaVeiculo;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.TipoUsuario;
@@ -323,10 +322,10 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	}
 
 	@Override
-	public List<Veiculo> buscarVeiculosPorModeloFZ(String chassi)throws PromoveException {
+	public List<Veiculo> buscarVeiculosPorModeloFZData(String chassi, Date data )throws PromoveException {
 		List<Veiculo> lista = null;
 		try {
-			lista = veiculoDAO.getByModeloFZ(chassi);
+			lista = veiculoDAO.getByModeloFZAndData(chassi, data);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
