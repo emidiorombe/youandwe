@@ -12,7 +12,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 	public List<Avaria> getAllCustom() throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select av from Avaria av left JOIN FETCH av.fotos");
-		return executeQuery(hql.toString(), 1, 100);
+		return executeQuery(hql.toString(), 0, 100);
 	}
 
 	public List<Avaria> getAvariasPorFiltro(String chassi, Avaria av, Date de, Date ate) throws DAOException {
@@ -48,7 +48,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			addParamToQuery("dtFim", ate);
 		}
 		
-		return executeQuery(hql.toString(), paramsToQuery, 1, Integer.MAX_VALUE);
+		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
 	public List<Avaria> getAvariasDuplicadasPorFiltro(List<Veiculo> veiculos,Avaria av) throws DAOException{
@@ -64,7 +64,23 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		addParamToQuery("lcAv", av.getLocal());
 		addParamToQuery("orAv", av.getOrigem());
 		
-		return executeQuery(hql.toString(), paramsToQuery, 1, Integer.MAX_VALUE);
+		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 
+	}
+
+	public List<Avaria> getAvariasDuplicadasPorFiltro(Veiculo veiculo, Avaria av) throws DAOException {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select av from Avaria av left join fetch av.veiculo veic ");
+		hql.append(" where veic.chassi = :txtchassi ");
+		hql.append(" and av.tipo = :tpAv ");
+		hql.append(" and av.local = :lcAv ");
+		hql.append(" and av.origem = :orAv ");
+
+		addParamToQuery("txtchassi", veiculo.getChassi());
+		addParamToQuery("tpAv", av.getTipo());
+		addParamToQuery("lcAv", av.getLocal());
+		addParamToQuery("orAv", av.getOrigem());
+		
+		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 }

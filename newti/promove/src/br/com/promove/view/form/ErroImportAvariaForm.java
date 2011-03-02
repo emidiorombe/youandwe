@@ -156,6 +156,10 @@ public class ErroImportAvariaForm extends BaseForm {
 			 if(propertyId.equals("veiculo")) {
 				 TextField chassi = new TextField("Chassi");
 				 chassi.setNullRepresentation("");
+				 BeanItem<InconsistenciaAvaria> bitem = (BeanItem<InconsistenciaAvaria>) item;
+				 if(bitem.getBean() != null &&
+						 bitem.getBean().getMsgErro() != null)
+					 chassi.setValue(bitem.getBean().getMsgErro().split(" ")[1]);
 				 return chassi;
 			 }
 			

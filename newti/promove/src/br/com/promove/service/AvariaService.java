@@ -140,4 +140,6 @@ public interface AvariaService extends Serializable{
 	void excluirInconsistenciaImportAvaria(InconsistenciaAvaria inc)throws PromoveException;
 
 	void salvarAvariaDeInconsistencias(Avaria avaria)throws PromoveException;
+
+	List<Avaria> buscarAvariaDuplicadaPorFiltros(Veiculo veiculo, Avaria av)throws PromoveException;
 }

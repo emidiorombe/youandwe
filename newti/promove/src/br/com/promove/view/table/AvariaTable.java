@@ -2,7 +2,6 @@ package br.com.promove.view.table;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
@@ -12,12 +11,15 @@ import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.AvariaSearchView;
+import br.com.promove.view.form.AvariaForm;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.themes.BaseTheme;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CssLayout;
@@ -26,8 +28,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.Window;
 
 public class AvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento","hora", "fotos", "usuario", "observacao"};
-	public static final String[] COL_HEADERS = new String[] {"Veículo", "Tipo", "Local", "Origem", "Extensão", "Clima", "Data","Hora", "Fotos", "Usuário", "Obs"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento","hora", "fotos", "usuario", "observacao"};
+	public static final String[] COL_HEADERS = new String[] {"ID","Veículo", "Tipo", "Local", "Origem", "Extensão", "Clima", "Data","Hora", "Fotos", "Usuário", "Obs"};
 	
 	private AvariaService avariaService;
 	private AvariaTableContainer container;
@@ -66,6 +68,7 @@ public class AvariaTable extends Table{
 //		addGeneratedColumn("usuario", new AvariaTableColumnGenerator(this));
 		addGeneratedColumn("observacao", new AvariaTableColumnGenerator(this));
 		addGeneratedColumn("fotos", new AvariaTableColumnGenerator(this));
+		addGeneratedColumn("id", new AvariaTableColumnGenerator(this));
 	}
 
 	
@@ -124,6 +127,12 @@ public class AvariaTable extends Table{
 						return new Label(av.getObservacao());
 			}else if(columnId.toString().equals("fotos")) { 
 				return new Label(Integer.toString(av.getFotos().size()));
+			}else if(columnId.toString().equals("id")) {
+				Button b = new Button(av.getId().toString());	
+				b.setStyleName(BaseTheme.BUTTON_LINK);
+				b.addListener(new IdLinkListener(table));
+				b.setDebugId(av.getId().toString());
+				return b;
 			}else {
 				return null;
 			}
@@ -139,23 +148,24 @@ public class AvariaTable extends Table{
 		}
 	}
 	
-	class LinkListener implements ClickListener {
+	class IdLinkListener implements ClickListener {
 
 		private AvariaTable table;
 
-		public LinkListener(AvariaTable table) {
+		public IdLinkListener(AvariaTable table) {
 			this.table = table;
 		}
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			Window w = new Window("Avarias");
-			w.setHeight("400px");
-			w.setWidth("500px");
-			w.setPositionY(table.getWindow().getPositionY() + 30);
-			w.setPositionX(360);
-			app.getMainWindow().addWindow(w);
-			w.setContent(buildComponents());
+			try {
+				Avaria av = avariaService.getById(Avaria.class, new Integer(event.getButton().getDebugId()));
+				AvariaForm form = new AvariaForm();
+				app.setMainView(form.getFormLayout());
+				form.createFormBody(new BeanItem<Avaria>(av));
+			}catch(PromoveException pe) {
+				pe.printStackTrace();
+			}
 
 		}
 
@@ -167,6 +177,7 @@ public class AvariaTable extends Table{
 		}
 
 	}
+	
 
 	public void setView(AvariaSearchView view) {
 		this.view = view;

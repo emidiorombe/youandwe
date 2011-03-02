@@ -98,7 +98,7 @@ public class VeiculoForm extends BaseForm{
 				f.setRequiredError("Preenchimento do campo '" + StringUtilities.capitalize(propertyId.toString()) + "' é obrigatório.");
 			}
 			
-			if(propertyId.equals("codigo")) {
+			if(propertyId.equals("chassi")) {
 				if(!newLocal)
 					f.setReadOnly(true);
 			}else if(propertyId.equals("modelo")) {
@@ -151,6 +151,8 @@ public class VeiculoForm extends BaseForm{
 				}catch (PromoveException e) {
 					showErrorMessage(form, "Não foi possível buscar as Cores");
 				}
+			}else if(propertyId.equals("codigo")) {
+				f.setReadOnly(true);
 			}
 			return f;
 		}

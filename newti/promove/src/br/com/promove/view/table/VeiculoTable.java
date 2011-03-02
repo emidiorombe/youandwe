@@ -128,7 +128,7 @@ public class VeiculoTable extends Table{
 				Button b = new Button(v.getId().toString());	
 				b.setStyleName(BaseTheme.BUTTON_LINK);
 				b.addListener(new LinkListener(table));
-				b.setDebugId("ch");
+				b.setDebugId("ch"+v.getChassi());
 				return b;
 			}else {
 				return null;
@@ -153,13 +153,13 @@ public class VeiculoTable extends Table{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			String debug = ((String)event.getButton().getDebugId());
+			String debug = event.getButton().getDebugId();
 			if(debug.startsWith("av")) {
 				AvariaSearchForm form = new AvariaSearchForm();
 				AvariaTable table  = new AvariaTable(app);
 				app.setMainView(new AvariaSearchView(table, form));
 				table.filterTable(debug.substring(debug.indexOf("&") + 1));
-			}else if(event.getButton().getDebugId().equals("ch")) {
+			}else if(event.getButton().getDebugId().startsWith("ch")) {
 				try {
 					VeiculoForm form = new VeiculoForm();
 					Veiculo veic = cadastroService.getById(Veiculo.class, new Integer(event.getButton().getCaption()));
