@@ -1,5 +1,6 @@
 package br.com.promove.dao;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -54,10 +55,21 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		hql.append("select v from Veiculo v where ");
 		hql.append(" v.chassi like :txtchassi ");
 		hql.append(" and v.modelo.codigoExternoImportacao = :txtmod ");
-		hql.append(" and v.datacadastroo > :txtdata ");
+		hql.append(" and v.dataCadastro between :dataini and :datafim ");
 		addParamToQuery("txtchassi",  "%"+chassi.substring(2));
 		addParamToQuery("txtmod",  chassi.substring(0, 2));
-		addParamToQuery("txtdata",  data);
+		
+		Calendar calIni = Calendar.getInstance();
+		Calendar calFim = Calendar.getInstance();
+		
+		calIni.setTime(data);
+		calFim.setTime(data);
+		
+		calIni.set(Calendar.DAY_OF_MONTH, -90);
+		calFim.set(Calendar.DAY_OF_MONTH, +90);
+		
+		addParamToQuery("dataini",  calIni.getTime());
+		addParamToQuery("datafim",  calFim.getTime());
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 }
