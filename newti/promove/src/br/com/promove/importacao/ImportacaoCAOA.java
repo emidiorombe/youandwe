@@ -33,7 +33,7 @@ public class ImportacaoCAOA {
 					continue;
 				
 				v.setCodigoInterno(campos[0]);
-				v.setChassi(campos[2]);
+				v.setChassi(campos[2].substring(0, 17));
 				
 				if(!cores.containsKey(campos[0].substring(campos[0].length()-2))) {
 					temErro = true;
