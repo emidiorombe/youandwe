@@ -17,6 +17,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.vaadin.data.util.BeanItem;
+
 @Entity
 public class InconsistenciaAvaria implements Serializable{
 	
@@ -52,6 +54,8 @@ public class InconsistenciaAvaria implements Serializable{
 	private String observacao;
 	
 	private String msgErro;
+	
+	private String chassiInvalido;
 	
 	public InconsistenciaAvaria() {}
 	
@@ -166,13 +170,16 @@ public class InconsistenciaAvaria implements Serializable{
 		av.setOrigem(origem);
 		av.setTipo(tipo);
 		av.setUsuario(usuario);
-		
-		Veiculo v = new Veiculo(msgErro.split(" ")[1]);
-		av.setVeiculo(v);
-		
+		av.setVeiculo(veiculo);
 		return av;
 	}
 	
-	
+	public String getChassiInvalido() {
+		return chassiInvalido;
+	}
+
+	public void setChassiInvalido(String chassiInvalido) {
+		this.chassiInvalido = chassiInvalido;
+	}
 	
 }

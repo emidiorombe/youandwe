@@ -13,6 +13,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 import br.com.promove.entity.InconsistenciaAvaria;
+import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
@@ -90,8 +91,9 @@ public class ErroImportAvariaTable extends Table{
 		@Override
 		public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 			Property property = event.getProperty();
-				 BeanItem<InconsistenciaAvaria> item =  (BeanItem<InconsistenciaAvaria>) getItem(getValue());
-                 view.getForm().createFormBody(item);
+			BeanItem<InconsistenciaAvaria> item =  (BeanItem<InconsistenciaAvaria>) getItem(getValue());
+			item.getBean().setVeiculo(new Veiculo(item.getBean().getChassiInvalido()));
+            view.getForm().createFormBody(item);
 			
 		}
 		
