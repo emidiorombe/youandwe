@@ -87,8 +87,8 @@ public class ErroImportVeiculoTable extends Table {
 		@Override
 		public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 			Property property = event.getProperty();
-				 BeanItem<InconsistenciaVeiculo> item =  (BeanItem<InconsistenciaVeiculo>) getItem(getValue());
-                 view.getForm().createFormBody(item);
+			BeanItem<InconsistenciaVeiculo> item =  (BeanItem<InconsistenciaVeiculo>) getItem(getValue());
+            view.getForm().createFormBody(item);
 			
 		}
 		

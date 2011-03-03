@@ -222,7 +222,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		try {
 			
 			//verifica se chassi é válido
-			if(bean.getVeiculo().getId() == null) {
+			if(bean.getVeiculo() != null && bean.getVeiculo().getId() == null) {
 				List<Veiculo> vs = veiculoDAO.getByChassi(bean.getVeiculo().getChassi());
 				if(vs.size() == 0)
 					throw new IllegalArgumentException("Chassi Inválido!");
@@ -400,12 +400,14 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 			Avaria avaria = inc.getAvaria();
 			List<Veiculo> list = veiculoDAO.getByChassi(avaria.getVeiculo().getChassi());
 			if(list.size() > 0) {
-				avaria.setVeiculo(list.get(0));
-				avariaDAO.save(avaria);
-				List<FotoAvaria> fotos = fotoDAO.getByInconsistencia(inc.getId());
-				for (FotoAvaria foto : fotos) {
-					foto.setAvaria(avaria);
-					fotoDAO.saveWithId(foto);
+				if(buscarAvariaDuplicadaPorFiltros(list, avaria).size() == 0) {
+					avaria.setVeiculo(list.get(0));
+					avariaDAO.save(avaria);
+					List<FotoAvaria> fotos = fotoDAO.getByInconsistencia(inc.getId());
+					for (FotoAvaria foto : fotos) {
+						foto.setAvaria(avaria);
+						fotoDAO.saveWithId(foto);
+					}
 				}
 				inconsistenciaAvariaDAO.delete(inc);
 			}
