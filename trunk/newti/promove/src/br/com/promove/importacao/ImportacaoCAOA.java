@@ -58,7 +58,7 @@ public class ImportacaoCAOA {
 			}catch(IllegalArgumentException ie) {
 				ie.printStackTrace();
 			}catch(Exception e) {
-				cadastro.salvarInconsistenciaVeiculo(v, e.getMessage(), 2);
+				cadastro.salvarInconsistenciaVeiculo(v, e.getMessage(), 1);
 			}
 		}
 	}
