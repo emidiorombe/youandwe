@@ -113,15 +113,11 @@ public class ErroImportVeiculoForm extends BaseForm{
 				
 			}else if(event.getButton() == remove){
 				try{
-					validate();
-					if(isValid()){
-						commit();
-						BeanItem<InconsistenciaVeiculo> item = (BeanItem<InconsistenciaVeiculo>) getItemDataSource();
-						cadastroService.excluirInconsistenciaVeiculo(item.getBean());
-						view.getTable().reloadTable();
-						showSuccessMessage(view, "Inconsistência excluida!");
+					BeanItem<InconsistenciaVeiculo> item = (BeanItem<InconsistenciaVeiculo>) getItemDataSource();
+					cadastroService.excluirInconsistenciaVeiculo(item.getBean());
+					view.getTable().reloadTable();
+					showSuccessMessage(view, "Inconsistência excluida!");
 						
-					}
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
@@ -131,10 +127,16 @@ public class ErroImportVeiculoForm extends BaseForm{
 				try {
 					List<InconsistenciaVeiculo> buscarTodasInconsistenciasDeVeiculos = cadastroService.buscarTodasInconsistenciasDeVeiculos();
 					for (InconsistenciaVeiculo inc : buscarTodasInconsistenciasDeVeiculos) {
-						cadastroService.salvarVeiculo(inc.getVeiculo());
+						if(cadastroService.buscarVeiculosPorChassi(inc.getChassi()).size() == 0) {
+							cadastroService.salvarVeiculo(inc.getVeiculo());
+							showSuccessMessage(view, "Inconsistências salvas!");
+						}else {
+							cadastroService.excluirInconsistenciaVeiculo(inc);
+							showSuccessMessage(view, "Veículo já cadastrado. Inconsistência foi removida!");
+						}
 					}
 					view.getTable().reloadTable();
-					showSuccessMessage(view, "Inconsistências salvas!");
+					
 
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
@@ -167,7 +169,7 @@ public class ErroImportVeiculoForm extends BaseForm{
 					}
 					
 					c.setRequired(true);
-					c.setRequiredError("Tipo obrigatório");
+					c.setRequiredError("Modelo obrigatório");
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 					c.setImmediate(true);
 					c.setNullSelectionAllowed(false);
