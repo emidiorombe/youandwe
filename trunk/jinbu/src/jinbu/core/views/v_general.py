@@ -13,4 +13,4 @@ def index(request):
         cache.set("m", my_var + 1)
     else:
         cache.set("m", my_var)
-    return render_to_response('index.xhtml', locals())
+    return render_to_response('index.html', locals())
