@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 
-from core.views import v_general
+from core.views import v_general, v_promocao
 
 
 
