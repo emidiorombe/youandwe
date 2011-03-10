@@ -1,60 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>JIMBU - Join Our Buy</title>
-<link rel="stylesheet" type="text/css" href="css/reset.css"/>
-<link href="css/jimbu.css" rel="stylesheet" type="text/css" />
-</head>
+{% extends "base.xhtml" %}
 
-<body>
-
-<!-- Inicio do Div Topo -->
-<div id="Topo">
-  <div id="contTopo"> <img src="imgsFixas/logoJimbu.png" alt="Logo Jimbu" width="499" height="101" class="Logo" /> 
-    
-    <!-- Inicio do Div Box Login -->
-    <div id="boxLogin">
-      <p><a href="#" class="link-txtCadastro">Cadastra</a></p>
-      <p class="txtLogin">Login</p>
-      <input name="Login" type="text" class="inputLogin" id="Login" value="E-Mail" />
-      <input name="Senha" type="password" class="inputLogin" id="Senha" value="Senha" />
-      <a href="#" class="btnOkLogin"><img src="imgsFixas/btnOkLogin.jpg" alt="botão Acessar" width="26" height="22" /></a> </div>
-    <!-- Fim do Box Login --> 
-    
-    <!-- Inicio do Div Box Login -->
-    <div id="boxCidades">
-      <h5 class="txtCidades">Rio Grande do Sul</h5>
-      <span class="boxbtnCidade"><a href="#"><img src="imgsFixas/btnCidades.jpg" alt="Trocar Cidade" width="85" height="21" class="btnCidades"></a></span> </div>
-    <!-- Fim do Box Login --> 
-    
-    <!-- Inicio do Div Menu -->
-    <div id="Menu">
-      <ul>
-        <li><a href="#" class="link-MenuLeft">OFERTAS</a></li>
-        <li><a href="#" class="link-MenuLeft">EMPRESA</a></li>
-        <li><a href="#" class="link-MenuRight">COMO FUNCIONA</a></li>
-      </ul>
-    </div>
-    <!-- Fim do Div Menu --> 
-    
-    <!-- Inicio do Div Categoria -->
-    <div id="boxCategoria">
-      <p class="txtCategoria">CATEGORIA</p>
-      <span class="bgSelecte">
-      <select name="categoria" size="1" class="selecte" dir="ltr" lang="pt">
-        <option>Escolha uma categoria</option>
-        <option>Lazer</option>
-        <option>Bares e Restaurantes</option>
-        <option>Cursos</option>
-      </select>
-      </span> </div>
-    <!-- Fim do Div Categoria --> 
-    
-  </div>
-  <!-- Fim do Div Topo --> 
-  
-</div>
+{% block content%}
 
 <!-- Inicio do Div do meio Contener -->
 <div id="Contener">
@@ -117,50 +63,7 @@
     <div class="clearFloat"></div>
   </div>
   <!-- Fim do Div conteudo --> 
-  
 </div>
 <!-- Fim do Div do meio Contener --> 
 
-<!-- Inicio do Div Rodape -->
-<div id="Rodape">
-  <div id="boxRodape">
-    <div class ="boxAjuda">
-      <h6 class="boxRodapeTitulo">Ajuda</h6>
-      <ul>
-        <li><a href="#" class="link-MenuRodape">Como funciona</a></li>
-        <li><a href="#" class="link-MenuRodape">Perguntas frequentes</a></li>
-        <li><a href="#" class="link-MenuRodape">Parceiro em Destaques</a></li>
-        <li><a href="#" class="link-MenuRodape">Todas Cidades</a></li>
-      </ul>
-    </div>
-    <div class="boxSiganos">
-      <h6 class="boxRodapeTitulo">Siga-nos</h6>
-      <ul>
-        <li><a href="#" class="link-MenuRodape">Receba nossas ofertas</a></li>
-        <li><a href="#" class="link-MenuRodape">Nosso Twitter</a></li>
-        <li><a href="#" class="link-MenuRodape">Nosso FaceBook</a></li>
-      </ul>
-    </div>
-    <div class="boxContato">
-      <h6 class="boxRodapeTitulo">Contato</h6>
-      <ul>
-        <li><a href="#" class="link-MenuRodape">Sugira uma oferta</a></li>
-        <li><a href="#" class="link-MenuRodape">Dê sua Opinião</a></li>
-        <li><a href="#" class="link-MenuRodape">Entre em contato</a></li>
-      </ul>
-    </div>
-    <div class="boxAcompanhe">
-      <h6 class="boxRodapeTitulo">Acompanhe</h6>
-      <ul>
-        <li><a href="#" class="link-MenuRodape">Quem Somos</a></li>
-        <li><a href="#" class="link-MenuRodape">Seja nosso Parceiro</a></li>
-        <li><a href="#" class="link-MenuRodape">Termos &amp; Condições</a></li>
-        <li><a href="#" class="link-MenuRodape">Regulamento</a></li>
-      </ul>
-    </div>
-  </div>
-</div>
-<!-- Fim do Div Rodape -->
-
-</body>
-</html>
+{% endblock%}

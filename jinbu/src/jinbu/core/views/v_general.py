@@ -14,3 +14,6 @@ def index(request):
     else:
         cache.set("m", my_var)
     return render_to_response('index.xhtml', locals())
+
+def add_user(request):
+    return render_to_response('cadastroFisico.xhtml', locals())
