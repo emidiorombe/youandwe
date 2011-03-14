@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
+import settings
 
 from core.views import v_general, v_promocao
 
@@ -20,3 +21,12 @@ urlpatterns += patterns('',
     
 )
 
+
+
+#Para ambiente de desenv
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.MEDIA_ROOT,
+        }),
+   )
