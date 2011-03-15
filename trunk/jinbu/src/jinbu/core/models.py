@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
-    
+from jinbu.core import managers
 
 class Usuario(User):
     t = models.IntegerField(default=0)
@@ -9,12 +8,18 @@ class Usuario(User):
 class Empresa(User):
     x = models.IntegerField(default=0)
     
+class Categoria(models.Model):
+    nome = models.CharField(max_length=255)
+    
 class Promocao(models.Model):
     texto = models.CharField(max_length=255)
     data_cadastro = models.DateField()
     local = models.CharField(max_length=255)
     user_criacao = models.ForeignKey(Usuario)
-    
+    image = models.CharField(max_length=255)
+    categoria = models.ForeignKey(Categoria)
+    interessados = models.IntegerField()
+    objects = managers.PromocaoManager()
     
 class Oferta(models.Model):
     promocao = models.ForeignKey(Promocao)
