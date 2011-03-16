@@ -21,7 +21,7 @@ import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.ErroImportAvariaView;
 
 public class ErroImportAvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"veiculo", "dataLancamento", "origem", "local",  "tipo", "msgErro"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"chassiInvalido", "dataLancamento", "origem", "local",  "tipo", "msgErro"};
 	public static final String[] COL_HEADERS = new String[] {"Chassi", "Data","Origem", "Local", "Tipo", "Mensagem"};
 	
 	private ErroImportAvariaView view;

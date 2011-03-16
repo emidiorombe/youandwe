@@ -14,7 +14,6 @@ public class ImportacaoTERCA {
 
 	private CadastroService cadastro;
 	private HashMap<String, Modelo> modelos;
-	private HashMap<String, Cor> cores;
 	
 	public ImportacaoTERCA() {
 		cadastro = ServiceFactory.getService(CadastroService.class);
@@ -22,7 +21,6 @@ public class ImportacaoTERCA {
 	
 	public void importar(List<String> csv) throws PromoveException{
 		loadModelos();
-		loadCores();
 		for (String linha : csv) {
 			String[] campos = linha.split(";");
 			Veiculo v = new Veiculo();
@@ -33,6 +31,9 @@ public class ImportacaoTERCA {
 				v.setCor(cadastro.getById(Cor.class, new Integer(97)));
 				
 				if(!modelos.containsKey(campos[1])) {
+					Modelo mod = new Modelo();
+					mod.setDescricao(campos[1]);
+					v.setModelo(mod);
 					throw new Exception("Modelo " + campos[1] + " não existe.");
 				}else {
 					v.setModelo(modelos.get(campos[1]));
@@ -57,14 +58,4 @@ public class ImportacaoTERCA {
 		
 	}
 	
-	private void loadCores() throws PromoveException {
-		cores = new HashMap<String, Cor>();
-		List<Cor> lista = cadastro.buscarTodasCores();
-		for (Cor cor : lista) {
-			if(cor.getCodigoExterno() != null && !cor.getCodigoExterno().isEmpty())
-				cores.put(cor.getCodigoExterno(), cor);
-		}
-		
-	}
-
 }

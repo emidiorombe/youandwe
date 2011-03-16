@@ -28,6 +28,7 @@ import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
+import br.com.promove.utils.StringUtilities;
 
 public class AvariaServiceImpl implements AvariaService, Serializable {
 	private TipoAvariaDAO tipoDAO;
@@ -40,6 +41,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	private ResponsabilidadeDAO responsaDAO;
 	private InconsistenciaAvariaDAO inconsistenciaAvariaDAO;
 	private VeiculoDAO veiculoDAO;
+	
 	AvariaServiceImpl() {
 		tipoDAO = new TipoAvariaDAO();
 		localDAO = new LocalAvariaDAO();
@@ -333,6 +335,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	public InconsistenciaAvaria salvarInconsistenciaImportAvaria(Avaria avaria, String msgErro)throws PromoveException {
 		try {
 			InconsistenciaAvaria inc = new InconsistenciaAvaria(avaria, msgErro);
+			inc.setChassiInvalido(StringUtilities.getChassiFromErrorMessage(msgErro));
 			inconsistenciaAvariaDAO.save(inc);
 			return inc;
 		} catch (DAOException e) {
@@ -398,7 +401,17 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	public void salvarAvariaDeInconsistencias(InconsistenciaAvaria inc)throws PromoveException {
 		try {
 			Avaria avaria = inc.getAvaria();
-			List<Veiculo> list = veiculoDAO.getByChassi(avaria.getVeiculo().getChassi());
+			List<Veiculo> list = null;
+			String chassi  = avaria.getVeiculo() != null ? avaria.getVeiculo().getChassi() : 
+				(inc.getChassiInvalido() != null ? inc.getChassiInvalido() : StringUtilities.getChassiFromErrorMessage(inc.getMsgErro()));
+			
+			if(chassi.contains("000000000")) {
+				chassi = chassi.replace("000000000", "");
+				list = veiculoDAO.getByModeloFZAndData(chassi, avaria.getDataLancamento());
+			}else {
+				list = veiculoDAO.getByChassi(chassi);
+			}
+			
 			if(list.size() > 0) {
 				if(buscarAvariaDuplicadaPorFiltros(list, avaria).size() == 0) {
 					avaria.setVeiculo(list.get(0));

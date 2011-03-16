@@ -285,7 +285,14 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	@Override
 	public void salvarInconsistenciaVeiculo(Veiculo v, String message, Integer tipo)throws PromoveException {
 		try {
-			inconsistenciaVeiculoDAO.save(new InconsistenciaVeiculo(v, message, tipo));
+			InconsistenciaVeiculo inc = new InconsistenciaVeiculo(v, message, tipo);
+			if(tipo == 1) {
+				inc.setCorInvalida(v.getCor().getCodigoExterno());
+				inc.setModeloInvalido(v.getModelo().getCodigoExternoNacional());
+			}else if(tipo == 2) {
+				inc.setModeloInvalido(v.getModelo().getDescricao());
+			}
+			inconsistenciaVeiculoDAO.save(inc);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -326,6 +333,30 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		List<Veiculo> lista = null;
 		try {
 			lista = veiculoDAO.getByModeloFZAndData(chassi, data);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public List<Cor> buscaCorPorCodigoExterno(String codigo)
+			throws PromoveException {
+		List<Cor> lista = null;
+		try {
+			lista = corDAO.getByCodigoExterno(codigo);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public List<Modelo> buscarModeloPorCodigoOuDescricao(String codigo,
+			String desc) throws PromoveException {
+		List<Modelo> lista = null;
+		try {
+			lista = modeloDAO.getByCodigoOrDescricao(codigo, desc);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

@@ -42,6 +42,14 @@ public class StringUtilities {
 		}
 		return retorno.toString();
 	}
+
+	public static String getChassiFromErrorMessage(String msgErro) {
+		String tokens[] = msgErro.split(" ");
+		if(tokens.length >= 2)
+			return tokens[1];
+		else
+			return null;
+	}
 	
 	
 }
