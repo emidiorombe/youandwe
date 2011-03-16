@@ -128,13 +128,23 @@ public class ErroImportVeiculoForm extends BaseForm{
 					List<InconsistenciaVeiculo> buscarTodasInconsistenciasDeVeiculos = cadastroService.buscarTodasInconsistenciasDeVeiculos();
 					for (InconsistenciaVeiculo inc : buscarTodasInconsistenciasDeVeiculos) {
 						if(cadastroService.buscarVeiculosPorChassi(inc.getChassi()).size() == 0) {
+							if(inc.getTipo() == 1) {
+								if((inc.getCorInvalida() != null && cadastroService.buscaCorPorCodigoExterno(inc.getCorInvalida()).size() == 0) ||
+										(inc.getModeloInvalido() != null && cadastroService.buscarModeloPorCodigoOuDescricao(inc.getModeloInvalido(), null).size() == 0)) {
+									continue;
+								}
+							}else if(inc.getTipo() == 2) {
+								if(inc.getModeloInvalido() != null && cadastroService.buscarModeloPorCodigoOuDescricao(null, inc.getModeloInvalido()).size() == 0) {
+									continue;
+								}
+							}
 							cadastroService.salvarVeiculo(inc.getVeiculo());
-							showSuccessMessage(view, "Inconsistências salvas!");
+							cadastroService.excluirInconsistenciaVeiculo(inc);
 						}else {
 							cadastroService.excluirInconsistenciaVeiculo(inc);
-							showSuccessMessage(view, "Veículo já cadastrado. Inconsistência foi removida!");
 						}
 					}
+					showSuccessMessage(view, "Inconsistências salvas!");
 					view.getTable().reloadTable();
 					
 

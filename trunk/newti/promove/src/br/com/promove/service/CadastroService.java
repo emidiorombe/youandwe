@@ -77,4 +77,8 @@ public interface CadastroService {
 
 	List<Veiculo> buscarVeiculosPorModeloFZData(String chassi, Date data)throws PromoveException;
 
+	public List<Cor> buscaCorPorCodigoExterno(String codigo)throws PromoveException;
+
+	public List<Modelo> buscarModeloPorCodigoOuDescricao(String codigo, String desc)throws PromoveException;;
+
 }

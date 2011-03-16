@@ -154,7 +154,6 @@ public class ImportacaoAvaria {
 						//Ja existe essa avaria
 						continue;
 					}
-	
 					avariaService.salvarAvaria(av, true);
 				}
 			}catch(Exception e) {

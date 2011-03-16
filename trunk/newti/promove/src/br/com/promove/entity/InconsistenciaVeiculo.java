@@ -39,6 +39,10 @@ public class InconsistenciaVeiculo implements Serializable{
 	private String msgErro;
 	
 	private Integer tipo;
+
+	private String corInvalida;
+
+	private String modeloInvalido;
 	
 	public InconsistenciaVeiculo() {}
 	
@@ -149,7 +153,23 @@ public class InconsistenciaVeiculo implements Serializable{
 		v.setDataCadastro(dataCadastro);
 		return v;
 	}
+
+	public void setCorInvalida(String corInvalida) {
+		this.corInvalida = corInvalida;
+	}
 	
+	public String getCorInvalida() {
+		return corInvalida;
+	}
+
+	public void setModeloInvalido(String modeloinvalido) {
+		this.modeloInvalido = modeloInvalido;
+	}
+	
+	public String getModeloInvalido() {
+		return modeloInvalido;
+	}
+
 	
 	
 }
