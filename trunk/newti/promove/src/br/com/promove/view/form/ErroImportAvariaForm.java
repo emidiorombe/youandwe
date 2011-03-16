@@ -90,6 +90,8 @@ public class ErroImportAvariaForm extends BaseForm {
 					if(isValid()){
 						commit();
 						BeanItem<InconsistenciaAvaria> item = (BeanItem<InconsistenciaAvaria>) getItemDataSource();
+						if(item.getBean().getId() == null)
+							throw new IllegalArgumentException("Selecione um registro!");
 						List<Veiculo> v = cadastroService.buscarVeiculosPorChassi(item.getBean().getVeiculo().getChassi());
 						if( v.size() == 0) {
 							throw new IllegalArgumentException("Veículo com chassi " + item.getBean().getVeiculo().getChassi() + " não encontrado");
