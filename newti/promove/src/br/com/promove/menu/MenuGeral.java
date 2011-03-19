@@ -1,6 +1,7 @@
 package br.com.promove.menu;
 
 import br.com.promove.application.PromoveApplication;
+import br.com.promove.entity.Usuario;
 import br.com.promove.view.ClimaAvariaView;
 import br.com.promove.view.CorView;
 import br.com.promove.view.ExportCadastroView;
@@ -22,7 +23,6 @@ import br.com.promove.view.form.ModeloForm;
 import br.com.promove.view.form.OrigemAvariaForm;
 import br.com.promove.view.form.TipoAvariaForm;
 import br.com.promove.view.form.UsuarioForm;
-import br.com.promove.view.form.VeiculoForm;
 import br.com.promove.view.table.ClimaTable;
 import br.com.promove.view.table.CorTable;
 import br.com.promove.view.table.ExtensaoAvariaTable;
@@ -33,8 +33,8 @@ import br.com.promove.view.table.ModeloTable;
 import br.com.promove.view.table.OrigemAvariaTable;
 import br.com.promove.view.table.TipoAvariaTable;
 import br.com.promove.view.table.UsuarioTable;
-import br.com.promove.view.table.VeiculoTable;
 
+import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
@@ -84,7 +84,17 @@ public class MenuGeral extends CssLayout{
 		
 		addListeners(usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima, export);
 		addComponents(title, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, export);
+		setPermissionVisible(usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima, export);
 		
+	}
+	
+	private void setPermissionVisible(Button... btns) {
+		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
+		for (Button b : btns) {
+			if(user.getTipo().getId() != 1)
+				b.setVisible(false);
+		}
 	}
 	
 	private void addListeners(Button... btns) {
