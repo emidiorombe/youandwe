@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.vaadin.ui.PopupDateField;
+import com.vaadin.ui.TextField;
 
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.Cor;
@@ -79,6 +80,8 @@ public interface CadastroService {
 
 	public List<Cor> buscaCorPorCodigoExterno(String codigo)throws PromoveException;
 
-	public List<Modelo> buscarModeloPorCodigoOuDescricao(String codigo, String desc)throws PromoveException;;
+	public List<Modelo> buscarModeloPorCodigoOuDescricao(String codigo, String desc)throws PromoveException;
+
+	public Usuario autenticarUsuario(String user, String password)throws PromoveException;
 
 }
