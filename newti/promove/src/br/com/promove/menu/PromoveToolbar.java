@@ -1,6 +1,8 @@
 package br.com.promove.menu;
 
 import br.com.promove.application.PromoveApplication;
+
+import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
@@ -29,8 +31,9 @@ public class PromoveToolbar extends CssLayout{
 		addComponent(right);
 
 
-		Button b = new Button("Ajuda");
+		Button b = new Button("sair");
 		b.addStyleName("borderless");
+		b.addListener(new LogoutListener(app));
 		right.addComponent(b);
 
 		CssLayout left = new CssLayout();
@@ -42,8 +45,8 @@ public class PromoveToolbar extends CssLayout{
 		title.addStyleName("h1");
 		left.addComponent(title);
 		
-		toolbar_avaria.addListener(new ToolbarEventListener());
-		toolbar_geral.addListener(new ToolbarEventListener());
+		toolbar_avaria.addListener(new ToolbarEventListener(app));
+		toolbar_geral.addListener(new ToolbarEventListener(app));
 		
 		left.addComponent(new NativeButton(""));
 		left.addComponent(toolbar_avaria);
@@ -53,13 +56,40 @@ public class PromoveToolbar extends CssLayout{
 	
 	class ToolbarEventListener implements ClickListener{
 
+		private PromoveApplication app;
+
+		public ToolbarEventListener(PromoveApplication app) {
+			this.app = app;
+		}
+
 		@Override
 		public void buttonClick(ClickEvent event) {
+			WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+			if(ctx.getHttpSession().getAttribute("loggedUser") == null) {
+				return;
+			}
 			if(event.getSource() == toolbar_avaria) {
 				app.setMenuView(app.getMenuAvaria());
 			}else if(event.getSource() == toolbar_geral) {
 				app.setMenuView(app.getMenuGeral());
 			}
+			
+		}
+		
+	}
+	
+	class LogoutListener implements ClickListener{
+
+		private PromoveApplication app;
+
+		public LogoutListener(PromoveApplication app) {
+			this.app = app;
+		}
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+			ctx.getHttpSession().invalidate();
 			
 		}
 		

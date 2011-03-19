@@ -1,13 +1,14 @@
 package br.com.promove.application;
 
 
-import java.io.ByteArrayInputStream;
 
 import br.com.promove.menu.MenuAvaria;
 import br.com.promove.menu.MenuGeral;
 import br.com.promove.menu.PromoveToolbar;
+import br.com.promove.view.LoginView;
+
 import com.vaadin.Application;
-import com.vaadin.terminal.DownloadStream;
+import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.SplitPanel;
@@ -15,7 +16,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 public class PromoveApplication extends Application {
-	private VerticalLayout main = new VerticalLayout();
+	private VerticalLayout main;
 	private SplitPanel center_layout = new SplitPanel(SplitPanel.ORIENTATION_HORIZONTAL);
 	
 	// Views references
@@ -30,20 +31,31 @@ public class PromoveApplication extends Application {
 
 	private void buildMainLayout() {
 		setTheme("reindeermods");
-		
+		main = new VerticalLayout();
 		Window mainWindow = new Window("SICA", main);
 		setMainWindow(mainWindow);
 		main.setSizeFull();
-
 		main.addComponent(getToolbar());
-
 		main.addComponent(createCenterlayout());
-		main.setExpandRatio(center_layout, 1);
-
-		setMenuView(getMenuAvaria());
 		
+		buildAutenticatedWindow();
+		main.setExpandRatio(center_layout, 1);
 		getMainWindow().addURIHandler(new PromoveURIHandler());
 
+	}
+
+	public void buildAutenticatedWindow() {
+		if(isAutenticated()) {
+			setMenuView(getMenuAvaria());
+			setMainView(new VerticalLayout());
+		}else {
+			setMainView(new LoginView(this));
+		}
+	}
+	
+	public boolean isAutenticated() {
+		WebApplicationContext ctx = (WebApplicationContext) getContext();
+		return ctx.getHttpSession().getAttribute("loggedUser") != null;
 	}
 	
 	public void setMenuView(Component c) {

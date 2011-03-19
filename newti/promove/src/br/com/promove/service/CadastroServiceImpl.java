@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.vaadin.ui.TextField;
+
 import br.com.promove.dao.CorDAO;
 import br.com.promove.dao.FabricanteDAO;
 import br.com.promove.dao.FilialDAO;
@@ -361,5 +363,14 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 			throw new PromoveException(e);
 		}
 		return lista;
+	}
+
+	@Override
+	public Usuario autenticarUsuario(String user, String password)throws PromoveException {
+		try {
+			return usuarioDAO.getByUserAndPass(user, password);
+		} catch (DAOException e) {
+			throw new PromoveException("Erro durante a autenticação");
+		}
 	}
 }
