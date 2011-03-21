@@ -5,19 +5,19 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
+import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.menu.MenuAvaria;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.AvariaSearchView;
 import br.com.promove.view.VeiculoListView;
-import br.com.promove.view.form.AvariaForm;
 import br.com.promove.view.form.AvariaSearchForm;
 import br.com.promove.view.form.VeiculoForm;
 
-import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -26,7 +26,6 @@ import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.BaseTheme;
 
 public class VeiculoTable extends Table{
@@ -125,11 +124,18 @@ public class VeiculoTable extends Table{
 			}else if(columnId.toString().equals("dataCadastro")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataCadastro()));
 			}else if(columnId.toString().equals("id")) {
-				Button b = new Button(v.getId().toString());	
-				b.setStyleName(BaseTheme.BUTTON_LINK);
-				b.addListener(new LinkListener(table));
-				b.setDebugId("ch"+v.getChassi());
-				return b;
+				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+				Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
+				
+				if(user.getTipo().getId() == 1 || user.getTipo().getId() == 2) {
+					Button b = new Button(v.getId().toString());	
+					b.setStyleName(BaseTheme.BUTTON_LINK);
+					b.addListener(new LinkListener(table));
+					b.setDebugId("ch"+v.getChassi());
+					return b;
+				}else {
+					return new Label(v.getId().toString());
+				}
 			}else {
 				return null;
 			}

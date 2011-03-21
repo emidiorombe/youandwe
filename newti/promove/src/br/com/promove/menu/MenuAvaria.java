@@ -1,6 +1,7 @@
 package br.com.promove.menu;
 
 import br.com.promove.application.PromoveApplication;
+import br.com.promove.entity.Usuario;
 import br.com.promove.view.AvariaSearchView;
 import br.com.promove.view.ErroImportAvariaView;
 import br.com.promove.view.ErroImportVeiculoView;
@@ -18,6 +19,7 @@ import br.com.promove.view.table.ErroImportAvariaTable;
 import br.com.promove.view.table.ErroImportVeiculoTable;
 import br.com.promove.view.table.VeiculoTable;
 
+import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -66,6 +68,24 @@ public class MenuAvaria  extends CssLayout{
 		addListeners(add, list, add_veiculo, list_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export_avaria);
 		addComponents(title, add_veiculo, list_veiculo, add, list, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export_avaria);
 				
+		setPermissionVisible();
+		
+	}
+	
+	private void setPermissionVisible() {
+		
+		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
+		
+		if(user.getTipo().getId() != 1 && user.getTipo().getId() != 2) {
+			add.setVisible(false); 
+			add_veiculo.setVisible(false);
+			import_avaria.setVisible(false);
+			erro_import_avaria.setVisible(false);
+			import_veiculos.setVisible(false);
+			erro_import_veiculos.setVisible(false);
+			export_avaria.setVisible(false);
+		}
 	}
 	
 	public void changeStyleToAdd() {
