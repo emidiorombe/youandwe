@@ -96,6 +96,17 @@ public class MenuGeral extends CssLayout{
 			fabricante.setVisible(false);
 			filial.setVisible(false);
 		}
+		
+		if(user.getTipo().getId() != 1 && user.getTipo().getId() != 2) {
+			modelo.setVisible(false); 
+			cor.setVisible(false);
+			tipo.setVisible(false);
+			local.setVisible(false);
+			origem.setVisible(false);
+			extensao.setVisible(false);
+			clima.setVisible(false);
+			export.setVisible(false);
+		}
 	}
 	
 	private void addListeners(Button... btns) {
