@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 public class Avaria implements Serializable{
@@ -55,6 +56,9 @@ public class Avaria implements Serializable{
 	private String observacao;
 	
 	private String hora;
+	
+	@Transient
+	private String modelo;
 	
 	public Integer getId() {
 		return id;
@@ -151,4 +155,14 @@ public class Avaria implements Serializable{
 	public void setHora(String hora) {
 		this.hora = hora;
 	}
+
+	public String getModelo() {
+		return modelo;
+	}
+
+	public void setModelo(String modelo) {
+		this.modelo = modelo;
+	}
+	
+	
 }

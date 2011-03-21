@@ -50,6 +50,26 @@ public class StringUtilities {
 		else
 			return null;
 	}
+
+	public static String getCorFromErrorMessage(String message) {
+		String erros[] = message.split(";");
+		for (String erro : erros) {
+			String campos[] = erro.split(" ");
+			if(erro.startsWith("Cor"))
+				return campos[1];
+		}
+		return null;
+	}
+	
+	public static String getModeloFromErrorMessage(String message) {
+		String erros[] = message.split(";");
+		for (String erro : erros) {
+			String campos[] = erro.split(" ");
+			if(erro.startsWith("Modelo"))
+				return campos[1];
+		}
+		return null;
+	}
 	
 	
 }
