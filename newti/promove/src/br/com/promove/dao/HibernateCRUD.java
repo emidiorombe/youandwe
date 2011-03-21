@@ -217,7 +217,7 @@ public class HibernateCRUD implements Serializable{
 		Session session = null;
 		try {
 			session = HibernateSessionFactory.getSession();
-			String hql = "from " + entityName + " x";
+			String hql = "from " + entityName + " x order by x.id";
 			Query query = session.createQuery(hql);
 			List retorno = query.list();
 			return retorno;

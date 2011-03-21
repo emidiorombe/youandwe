@@ -48,6 +48,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			addParamToQuery("dtFim", ate);
 		}
 		
+		hql.append(" order by av.origem.id");
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
