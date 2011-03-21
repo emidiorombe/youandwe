@@ -76,7 +76,7 @@ public class MenuAvaria  extends CssLayout{
 	public void loadMainView(ClickEvent event) {
 		addAndRemoveStyle(event.getButton(), add, list, add_veiculo, list_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export_avaria);
 		if(event.getButton() == add) {
-			AvariaForm form = new AvariaForm();
+			AvariaForm form = new AvariaForm(app);
 			app.setMainView(form.getFormLayout());
 		}else if(event.getButton() == list){
 			AvariaSearchForm form = new AvariaSearchForm();

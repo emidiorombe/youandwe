@@ -3,12 +3,14 @@ package br.com.promove.view.form;
 
 import java.util.Locale;
 
+import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
+import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
@@ -18,6 +20,7 @@ import br.com.promove.service.ServiceFactory;
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -39,8 +42,10 @@ public class AvariaForm extends BaseForm {
 	private VerticalLayout f_layout = new VerticalLayout();
 	private AvariaService avariaService;
 	private CadastroService cadastroService;
+	private PromoveApplication app;
 	
-	public AvariaForm() {
+	public AvariaForm(PromoveApplication app) {
+		this.app = app;
 		avariaService = ServiceFactory.getService(AvariaService.class);
 		cadastroService = ServiceFactory.getService(CadastroService.class);
 		buildForm();
@@ -267,6 +272,12 @@ class FormButtonListener implements ClickListener{
 				if(isValid()){
 					commit();
 					BeanItem<Avaria> item = (BeanItem<Avaria>) getItemDataSource();
+					
+					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+					Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
+					
+					item.getBean().setUsuario(user);
+					
 					avariaService.salvarAvaria(item.getBean());
 					addNewAvaria();
 					showSuccessMessage(form, "Avaria salva!");
