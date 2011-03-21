@@ -136,7 +136,7 @@ public class AvariaTable extends Table{
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 				Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
 				
-				if(user.getTipo().getId() == 1) {
+				if(user.getTipo().getId() == 1 || user.getTipo().getId() == 2) {
 					Button b = new Button(av.getId().toString());	
 					b.setStyleName(BaseTheme.BUTTON_LINK);
 					b.addListener(new IdLinkListener(table));
