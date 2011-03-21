@@ -27,11 +27,10 @@ import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.Window;
 
 public class AvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento","hora", "fotos", "usuario", "observacao"};
-	public static final String[] COL_HEADERS = new String[] {"ID","Veículo", "Tipo", "Local", "Origem", "Extensão", "Clima", "Data","Hora", "Fotos", "Usuário", "Obs"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "modelo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento","hora", "fotos", "usuario", "observacao"};
+	public static final String[] COL_HEADERS = new String[] {"ID","Veículo", "Modelo", "Tipo", "Local", "Origem", "Extensão", "Clima", "Data","Hora", "Fotos", "Usuário", "Obs"};
 	
 	private AvariaService avariaService;
 	private AvariaTableContainer container;
@@ -66,6 +65,7 @@ public class AvariaTable extends Table{
 //		addGeneratedColumn("origem", new AvariaTableColumnGenerator(this));
 //		addGeneratedColumn("extensao", new AvariaTableColumnGenerator(this));
 //		addGeneratedColumn("clima", new AvariaTableColumnGenerator(this));
+		addGeneratedColumn("modelo", new AvariaTableColumnGenerator(this));
 		addGeneratedColumn("dataLancamento", new AvariaTableColumnGenerator(this));
 //		addGeneratedColumn("usuario", new AvariaTableColumnGenerator(this));
 		addGeneratedColumn("observacao", new AvariaTableColumnGenerator(this));
@@ -92,7 +92,6 @@ public class AvariaTable extends Table{
 		}
 		
 	}
-	
 
 	class AvariaTableContainer extends BeanItemContainer<Avaria> implements
 			Serializable {
@@ -130,6 +129,8 @@ public class AvariaTable extends Table{
 						return new Label(av.getObservacao());
 			}else if(columnId.toString().equals("fotos")) { 
 				return new Label(Integer.toString(av.getFotos().size()));
+			}else if(columnId.toString().equals("modelo")) { 
+				return new Label(av.getVeiculo().getModelo().getDescricao());
 			}else if(columnId.toString().equals("id")) {
 				
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();

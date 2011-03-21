@@ -43,9 +43,6 @@ public class ImportacaoCAOA {
 				if(!cores.containsKey(campos[0].substring(campos[0].length()-2))) {
 					temErro = true;
 					msgErro += "Cor " + campos[0].substring(campos[0].length()-2) + " não existe!; ";
-					Cor cor = new Cor();
-					cor.setCodigoExterno(campos[0].substring(campos[0].length()-2));
-					v.setCor(cor);
 					
 				}else {
 					v.setCor(cores.get(campos[0].substring(campos[0].length()-2)));
@@ -54,9 +51,6 @@ public class ImportacaoCAOA {
 				if(!modelos.containsKey(campos[0].substring(0, 5))) {
 					temErro = true;
 					msgErro += "Modelo " + campos[0].substring(0, 5) + " não existe!; ";
-					Modelo mod = new Modelo();
-					mod.setCodigoExternoNacional(campos[0].substring(0, 5));
-					v.setModelo(mod);
 					
 				}else {
 					v.setModelo(modelos.get(campos[0].substring(0, 5)));

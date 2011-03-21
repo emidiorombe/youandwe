@@ -25,6 +25,7 @@ import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
+import br.com.promove.utils.StringUtilities;
 
 
 public class CadastroServiceImpl implements CadastroService, Serializable{
@@ -289,8 +290,8 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		try {
 			InconsistenciaVeiculo inc = new InconsistenciaVeiculo(v, message, tipo);
 			if(tipo == 1) {
-				inc.setCorInvalida(v.getCor().getCodigoExterno());
-				inc.setModeloInvalido(v.getModelo().getCodigoExternoNacional());
+				inc.setCorInvalida(StringUtilities.getCorFromErrorMessage(message));
+				inc.setModeloInvalido(StringUtilities.getModeloFromErrorMessage(message));
 			}else if(tipo == 2) {
 				inc.setModeloInvalido(v.getModelo().getDescricao());
 			}
