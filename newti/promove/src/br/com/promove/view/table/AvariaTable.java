@@ -6,6 +6,7 @@ import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
@@ -16,6 +17,7 @@ import br.com.promove.view.form.AvariaForm;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.BaseTheme;
@@ -129,10 +131,19 @@ public class AvariaTable extends Table{
 			}else if(columnId.toString().equals("fotos")) { 
 				return new Label(Integer.toString(av.getFotos().size()));
 			}else if(columnId.toString().equals("id")) {
-				Button b = new Button(av.getId().toString());	
-				b.setStyleName(BaseTheme.BUTTON_LINK);
-				b.addListener(new IdLinkListener(table));
-				return b;
+				
+				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+				Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
+				
+				if(user.getTipo().getId() == 1) {
+					Button b = new Button(av.getId().toString());	
+					b.setStyleName(BaseTheme.BUTTON_LINK);
+					b.addListener(new IdLinkListener(table));
+					return b;
+				}else {
+					Label lbl = new Label(av.getId().toString());
+					return lbl;
+				}
 			}else {
 				return null;
 			}
@@ -160,7 +171,7 @@ public class AvariaTable extends Table{
 		public void buttonClick(ClickEvent event) {
 			try {
 				Avaria av = avariaService.getById(Avaria.class, new Integer(event.getButton().getCaption()));
-				AvariaForm form = new AvariaForm();
+				AvariaForm form = new AvariaForm(app);
 				app.setMainView(form.getFormLayout());
 				form.createFormBody(new BeanItem<Avaria>(av));
 			}catch(PromoveException pe) {

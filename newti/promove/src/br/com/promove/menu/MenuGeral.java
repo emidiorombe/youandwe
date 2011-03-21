@@ -84,16 +84,17 @@ public class MenuGeral extends CssLayout{
 		
 		addListeners(usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima, export);
 		addComponents(title, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, export);
-		setPermissionVisible(usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima, export);
+		setPermissionVisible();
 		
 	}
 	
-	private void setPermissionVisible(Button... btns) {
+	private void setPermissionVisible() {
 		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
-		for (Button b : btns) {
-			if(user.getTipo().getId() != 1)
-				b.setVisible(false);
+		if(user.getTipo().getId() != 1) {
+			usuario.setVisible(false);
+			fabricante.setVisible(false);
+			filial.setVisible(false);
 		}
 	}
 	
