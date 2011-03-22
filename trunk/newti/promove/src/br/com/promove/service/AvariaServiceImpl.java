@@ -1,12 +1,10 @@
 package br.com.promove.service;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import br.com.promove.dao.AvariaDAO;
-import br.com.promove.dao.BaseDAO;
 import br.com.promove.dao.ClimaDAO;
 import br.com.promove.dao.ExtensaoDAO;
 import br.com.promove.dao.FotoAvariaDAO;
