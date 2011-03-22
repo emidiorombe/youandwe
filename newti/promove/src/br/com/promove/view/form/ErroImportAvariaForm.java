@@ -60,7 +60,7 @@ public class ErroImportAvariaForm extends BaseForm {
 	public void createFormBody(BeanItem<InconsistenciaAvaria> tpa) {
 		setItemDataSource(tpa);
 		setFormFieldFactory(new ErroVeiculoFieldFactory()); 
-		setVisibleItemProperties(new Object[] {"veiculo"});
+		setVisibleItemProperties(new Object[] {"chassiInvalido"});
 
 	}
 
@@ -92,9 +92,10 @@ public class ErroImportAvariaForm extends BaseForm {
 						BeanItem<InconsistenciaAvaria> item = (BeanItem<InconsistenciaAvaria>) getItemDataSource();
 						if(item.getBean().getId() == null)
 							throw new IllegalArgumentException("Selecione um registro!");
-						List<Veiculo> v = cadastroService.buscarVeiculosPorChassi(item.getBean().getVeiculo().getChassi());
+						String chassi = item.getBean().getChassiInvalido() != null ? item.getBean().getChassiInvalido() : item.getBean().getMsgErro().split(" ")[1];
+						List<Veiculo> v = cadastroService.buscarVeiculosPorChassi(chassi);
 						if( v.size() == 0) {
-							throw new IllegalArgumentException("Veículo com chassi " + item.getBean().getVeiculo().getChassi() + " não encontrado");
+							throw new IllegalArgumentException("Veículo com chassi " + chassi + " não encontrado");
 						}else
 							item.getBean().setVeiculo(v.get(0));
 
@@ -155,13 +156,17 @@ public class ErroImportAvariaForm extends BaseForm {
 		public Field createField(Item item, Object propertyId, Component uiContext) {
 			Field f = super.createField(item, propertyId, uiContext);
 			
-			 if(propertyId.equals("veiculo")) {
+			 if(propertyId.equals("chassiInvalido")) {
 				 TextField chassi = new TextField("Chassi");
 				 chassi.setNullRepresentation("");
 				 BeanItem<InconsistenciaAvaria> bitem = (BeanItem<InconsistenciaAvaria>) item;
-				 if(bitem.getBean() != null &&
-						 bitem.getBean().getMsgErro() != null)
-					 chassi.setValue(bitem.getBean().getMsgErro().split(" ")[1]);
+				 if(bitem.getBean() != null) {
+					 if(bitem.getBean().getChassiInvalido() != null) {
+						 chassi.setValue(bitem.getBean().getChassiInvalido());
+					 }else if(bitem.getBean().getMsgErro() != null)
+						 chassi.setValue(bitem.getBean().getMsgErro().split(" ")[1]);
+				 }
+						 
 				 return chassi;
 			 }
 			

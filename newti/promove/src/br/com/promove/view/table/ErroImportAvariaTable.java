@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Component;
@@ -92,7 +91,7 @@ public class ErroImportAvariaTable extends Table{
 		public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 			Property property = event.getProperty();
 			BeanItem<InconsistenciaAvaria> item =  (BeanItem<InconsistenciaAvaria>) getItem(getValue());
-			item.getBean().setVeiculo(new Veiculo(item.getBean().getChassiInvalido()));
+			//TODO remover isso item.getBean().setVeiculo(new Veiculo(item.getBean().getChassiInvalido()));
             view.getForm().createFormBody(item);
 			
 		}

@@ -78,7 +78,7 @@ public class ImportacaoAvaria {
 				
 				//Se não existir o veículo, gravar a inconsistência
 				if(veiculos.size() == 0) {
-					InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, "Veiculo " + node_av.element("chassi").getText() + " não existe");
+					InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, "Veiculo " + node_av.element("chassi").getText() + " não existe!;");
 					
 					Element node_fotos = ((Element)node_av).element("fotos");
 					Iterator it = node_fotos.elementIterator();
