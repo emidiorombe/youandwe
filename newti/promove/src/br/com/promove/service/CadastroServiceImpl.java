@@ -293,7 +293,7 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 				inc.setCorInvalida(StringUtilities.getCorFromErrorMessage(message));
 				inc.setModeloInvalido(StringUtilities.getModeloFromErrorMessage(message));
 			}else if(tipo == 2) {
-				inc.setModeloInvalido(v.getModelo().getDescricao());
+				inc.setModeloInvalido(StringUtilities.getModeloFromErrorMessage(message));
 			}
 			inconsistenciaVeiculoDAO.save(inc);
 		} catch (DAOException e) {

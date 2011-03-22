@@ -15,6 +15,11 @@
 		<param-name>pasta_destino_xml</param-name>
 		<param-value>D:\dados\avarias\</param-value>
 	</context-param>
+	
+	<context-param>
+		<param-name>tmp_dir</param-name>
+		<param-value>D:\tmp</param-value>
+	</context-param>
 
 	<listener>
 		<listener-class>br.com.promove.servlet.listener.GeneralContextListener</listener-class>

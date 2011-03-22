@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
@@ -11,11 +12,14 @@ import br.com.promove.entity.TipoAvaria;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
+import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.AvariaSearchView;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.terminal.ExternalResource;
+import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -24,6 +28,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -33,15 +38,20 @@ public class AvariaSearchForm extends BaseForm{
 	private VerticalLayout layout = new VerticalLayout();
 	private AvariaService avariaService;
 	private CadastroService cadastroService;
+	private ExportacaoService exportacaoService;
 	private AvariaSearchView view;
 	private Button search;
+	private Button export;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
 	private TextField txtChassi;
+	private PromoveApplication app;
 	
-	public AvariaSearchForm() {
+	public AvariaSearchForm(PromoveApplication app) {
+		this.app = app;
 		avariaService = ServiceFactory.getService(AvariaService.class);
 		cadastroService = ServiceFactory.getService(CadastroService.class);
+		exportacaoService = ServiceFactory.getService(ExportacaoService.class);
 		buildForm();
 	}
 
@@ -53,6 +63,8 @@ public class AvariaSearchForm extends BaseForm{
 		txtChassi = new TextField("Chassi:");
 		
 		search = new Button("Buscar", new AvariaSearchListener());
+		export = new Button("Gerar Arquivo", new AvariaSearchListener());
+		
 		txtDe = new PopupDateField("De:");
 		txtDe.setLocale(new Locale("pt", "BR"));
 		txtDe.setResolution(DateField.RESOLUTION_DAY);
@@ -67,7 +79,7 @@ public class AvariaSearchForm extends BaseForm{
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
 		addField("txtChassi", txtChassi);
-		layout.addComponent(search);
+		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		
 		
@@ -78,6 +90,16 @@ public class AvariaSearchForm extends BaseForm{
 		setFormFieldFactory(new AvariaFieldFactory(this, beanItem.getBean().getId() == null));
 		setVisibleItemProperties(new Object[]{"tipo", "origem", "local"});
 		
+	}
+	
+	private Component createFooter(){
+		HorizontalLayout footer = new HorizontalLayout();
+		footer.setSpacing(true);
+		footer.addComponent(search);
+		footer.addComponent(export);
+		footer.setVisible(true);
+		
+		return footer;
 	}
 
 	public VerticalLayout getLayout() {
@@ -190,16 +212,34 @@ public class AvariaSearchForm extends BaseForm{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			try {
-				commit();
-				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
-				BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
-				
-				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(txtChassi.getValue().toString(), item.getBean(), de, ate);
-				view.getTable().filterTable(avarias);
-			} catch (Exception e) {
-				showErrorMessage(view, "Não foi possível buscar as avarias");
+			if(event.getButton() == search) {
+				try {
+					commit();
+					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
+					
+					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(txtChassi.getValue().toString(), item.getBean(), de, ate);
+					view.getTable().filterTable(avarias);
+				} catch (Exception e) {
+					showErrorMessage(view, "Não foi possível buscar as avarias");
+				}
+			}else if(event.getButton() == export) {
+				try {
+					commit();
+					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
+					
+					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(txtChassi.getValue().toString(), item.getBean(), de, ate);
+					String file = exportacaoService.exportarXLSAvarias(avarias);
+					
+					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+					String path = ctx.getHttpSession().getServletContext().getContextPath();
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_avarias&file=" + file));
+				} catch (Exception e) {
+					showErrorMessage(view, "Não foi possível gerar arquivo.");
+				}
 			}
 			
 		}

@@ -99,7 +99,7 @@ public class MenuAvaria  extends CssLayout{
 			AvariaForm form = new AvariaForm(app);
 			app.setMainView(form.getFormLayout());
 		}else if(event.getButton() == list){
-			AvariaSearchForm form = new AvariaSearchForm();
+			AvariaSearchForm form = new AvariaSearchForm(app);
 			AvariaTable table = new AvariaTable(app);
 			app.setMainView(new AvariaSearchView(table, form));
 		}else if(event.getButton() == add_veiculo) {

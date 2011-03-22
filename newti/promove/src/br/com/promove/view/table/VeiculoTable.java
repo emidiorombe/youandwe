@@ -161,7 +161,7 @@ public class VeiculoTable extends Table{
 		public void buttonClick(ClickEvent event) {
 			String debug = event.getButton().getDebugId();
 			if(debug.startsWith("av")) {
-				AvariaSearchForm form = new AvariaSearchForm();
+				AvariaSearchForm form = new AvariaSearchForm(app);
 				AvariaTable table  = new AvariaTable(app);
 				app.setMainView(new AvariaSearchView(table, form));
 				table.filterTable(debug.substring(debug.indexOf("&") + 1));
