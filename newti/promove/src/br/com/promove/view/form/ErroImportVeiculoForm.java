@@ -151,8 +151,13 @@ public class ErroImportVeiculoForm extends BaseForm{
 								}
 								 
 							}else if(inc.getTipo() == 2) {
-								if(inc.getModeloInvalido() != null && cadastroService.buscarModeloPorCodigoOuDescricao(null, inc.getModeloInvalido()).size() == 0) {
-									continue;
+								if(inc.getModeloInvalido() != null) {
+									List<Modelo> modelos = cadastroService.buscarModeloPorCodigoOuDescricao(null, inc.getModeloInvalido());
+									 if(modelos.size() == 0) {
+										continue;
+									}else {
+										inc.getVeiculo().setModelo(modelos.get(0));
+									}
 								}
 							}
 							cadastroService.salvarVeiculo(inc.getVeiculo());
