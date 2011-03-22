@@ -99,6 +99,8 @@ public class ErroImportVeiculoForm extends BaseForm{
 					if(isValid()){
 						commit();
 						BeanItem<InconsistenciaVeiculo> item = (BeanItem<InconsistenciaVeiculo>) getItemDataSource();
+						item.getBean().getVeiculo().setCor((Cor)item.getItemProperty("cor").getValue());
+						item.getBean().getVeiculo().setModelo((Modelo)item.getItemProperty("modelo").getValue());
 						cadastroService.salvarVeiculo(item.getBean().getVeiculo());
 						cadastroService.excluirInconsistenciaVeiculo(item.getBean());
 						view.getTable().reloadTable();
