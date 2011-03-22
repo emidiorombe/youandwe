@@ -162,7 +162,7 @@ public class InconsistenciaVeiculo implements Serializable{
 		return corInvalida;
 	}
 
-	public void setModeloInvalido(String modeloinvalido) {
+	public void setModeloInvalido(String modeloInvalido) {
 		this.modeloInvalido = modeloInvalido;
 	}
 	

@@ -1,5 +1,7 @@
 package br.com.promove.servlet;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.Config;
 
 public class ExportacaoServlet extends HttpServlet{
 
@@ -40,6 +43,24 @@ public class ExportacaoServlet extends HttpServlet{
 			
 		}else if("avkuhlmann".equals(action)) {
 			
+		}else if("export_avarias".equals(action)) {
+			String filePath = request.getParameter("file");
+			
+			response.setContentType("application/vnd.ms-excel");
+			response.setHeader("Content-Disposition", "attachment; filename=avarias.xls");
+			try {
+				File f = new File(filePath);
+				FileInputStream file = new FileInputStream(f);
+				
+				int b = -1;
+				while((b = file.read()) != -1){
+					response.getOutputStream().write(b);
+				}
+				response.getOutputStream().close();
+				f.delete();
+			}catch(IOException ioe) {
+				ioe.printStackTrace();
+			}
 		}
 	}
 	

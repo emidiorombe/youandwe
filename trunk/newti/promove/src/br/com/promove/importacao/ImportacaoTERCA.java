@@ -31,10 +31,7 @@ public class ImportacaoTERCA {
 				v.setCor(cadastro.getById(Cor.class, new Integer(97)));
 				
 				if(!modelos.containsKey(campos[1])) {
-					Modelo mod = new Modelo();
-					mod.setDescricao(campos[1]);
-					v.setModelo(mod);
-					throw new Exception("Modelo " + campos[1] + " não existe.");
+					throw new Exception("Modelo " + campos[1] + " não existe;");
 				}else {
 					v.setModelo(modelos.get(campos[1]));
 				}
