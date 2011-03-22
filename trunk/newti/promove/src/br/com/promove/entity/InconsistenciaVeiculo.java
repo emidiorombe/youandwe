@@ -11,6 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 public class InconsistenciaVeiculo implements Serializable{
@@ -43,6 +44,9 @@ public class InconsistenciaVeiculo implements Serializable{
 	private String corInvalida;
 
 	private String modeloInvalido;
+	
+	@Transient
+	private Veiculo veiculo;
 	
 	public InconsistenciaVeiculo() {}
 	
@@ -143,15 +147,18 @@ public class InconsistenciaVeiculo implements Serializable{
 	}
 
 	public Veiculo getVeiculo() {
-		Veiculo v = new Veiculo();
-		v.setCodigo(codigo);
-		v.setModelo(modelo);
-		v.setCor(cor);
-		v.setChassi(chassi);
-		v.setChassiOriginal(chassiOriginal);
-		v.setCodigoInterno(codigoInterno);
-		v.setDataCadastro(dataCadastro);
-		return v;
+		if(this.veiculo == null) {
+			Veiculo v = new Veiculo();
+			v.setCodigo(codigo);
+			v.setModelo(modelo);
+			v.setCor(cor);
+			v.setChassi(chassi);
+			v.setChassiOriginal(chassiOriginal);
+			v.setCodigoInterno(codigoInterno);
+			v.setDataCadastro(dataCadastro);
+			this.veiculo = v;
+		}
+		return veiculo;
 	}
 
 	public void setCorInvalida(String corInvalida) {

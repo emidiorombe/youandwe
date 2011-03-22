@@ -131,12 +131,25 @@ public class ErroImportVeiculoForm extends BaseForm{
 					for (InconsistenciaVeiculo inc : buscarTodasInconsistenciasDeVeiculos) {
 						if(cadastroService.buscarVeiculosPorChassi(inc.getChassi()).size() == 0) {
 							if(inc.getTipo() == 1) {
-								if((inc.getCorInvalida() != null && cadastroService.buscaCorPorCodigoExterno(inc.getCorInvalida()).size() == 0)) {
-									continue;
+								
+								if(inc.getCorInvalida() != null) {
+									List<Cor> cores = cadastroService.buscaCorPorCodigoExterno(inc.getCorInvalida());
+									if((cores.size() == 0)) {
+										continue;
+									}else {
+										inc.getVeiculo().setCor(cores.get(0));
+									}
 								}
-								 if(inc.getModeloInvalido() != null && cadastroService.buscarModeloPorCodigoOuDescricao(inc.getModeloInvalido(), null).size() == 0) {
-									continue;
+								
+								if(inc.getModeloInvalido() != null) {
+									List<Modelo> modelos = cadastroService.buscarModeloPorCodigoOuDescricao(inc.getModeloInvalido(), null);
+									 if(modelos.size() == 0) {
+										continue;
+									}else {
+										inc.getVeiculo().setModelo(modelos.get(0));
+									}
 								}
+								 
 							}else if(inc.getTipo() == 2) {
 								if(inc.getModeloInvalido() != null && cadastroService.buscarModeloPorCodigoOuDescricao(null, inc.getModeloInvalido()).size() == 0) {
 									continue;
