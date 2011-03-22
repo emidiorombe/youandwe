@@ -6,15 +6,16 @@ import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
 
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window.Notification;
 
 public class LoginView extends VerticalLayout {
 
@@ -55,6 +56,7 @@ public class LoginView extends VerticalLayout {
 		ok = new Button("Login");
 		ok.addListener(new LoginClickListener(app));
 		ok.setWidth(null);
+		ok.setClickShortcut(KeyCode.ENTER);
 		addComponent(ok);
 		setComponentAlignment(ok, Alignment.MIDDLE_CENTER);
 	}
