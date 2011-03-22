@@ -42,6 +42,7 @@ public class LoginView extends VerticalLayout {
 		user.setRequired(true);
 		user.setRequiredError("Preencimento obrigatório!");
 		user.setWidth(null);
+		user.focus();
 		addComponent(user);
 		setComponentAlignment(user, Alignment.MIDDLE_CENTER);
 
