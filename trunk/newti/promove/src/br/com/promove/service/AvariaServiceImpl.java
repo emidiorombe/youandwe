@@ -26,6 +26,7 @@ import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
+import br.com.promove.utils.DateUtils;
 import br.com.promove.utils.StringUtilities;
 
 public class AvariaServiceImpl implements AvariaService, Serializable {
@@ -289,6 +290,9 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	public List<Avaria> buscarAvariaPorFiltros(String chassi, Avaria av, Date de, Date ate)throws PromoveException {
 		List<Avaria> lista = null;
 		try {
+			DateUtils.montarDataInicialParaQuery(de);
+			DateUtils.montarDataFinalParaQuery(ate);
+			
 			lista = avariaDAO.getAvariasPorFiltro(chassi, av, de, ate);
 		} catch (DAOException e) {
 			e.printStackTrace();
