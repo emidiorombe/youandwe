@@ -13,6 +13,7 @@ def index(request):
     if my_var is not None:
         cache.set("m", my_var + 1)
     Promocao.objects.get_for_index()
+    c_tits = {'tit1':'LAZER', 'tit2':'BARES', 'tit3':'SERVICOS'}
     return render_to_response('index.xhtml', locals())
 
 def add_user(request):
