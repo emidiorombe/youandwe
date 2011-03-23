@@ -219,9 +219,16 @@ public class AvariaSearchForm extends BaseForm{
 					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 					BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
 					
+					if(txtChassi == null || txtChassi.toString().isEmpty()) {
+						if(de == null || ate == null)
+							throw new IllegalArgumentException("Informe um chassi ou período para busca.");
+					}
+					
 					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(txtChassi.getValue().toString(), item.getBean(), de, ate);
 					view.getTable().filterTable(avarias);
-				} catch (Exception e) {
+				}catch(IllegalArgumentException ie) {
+					showErrorMessage(view, ie.getMessage());
+				}catch (Exception e) {
 					showErrorMessage(view, "Não foi possível buscar as avarias");
 				}
 			}else if(event.getButton() == export) {
