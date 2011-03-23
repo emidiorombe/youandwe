@@ -7,6 +7,9 @@ public class DateUtils {
 	private DateUtils() {}
 	
 	public static Date montarDataInicialParaQuery(Date init) {
+		if(init == null)
+			return null;
+		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(init);
 		
@@ -20,6 +23,9 @@ public class DateUtils {
 	}
 	
 	public static Date montarDataFinalParaQuery(Date fim) {
+		if(fim == null)
+			return null;
+		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(fim);
 		cal.set(Calendar.HOUR_OF_DAY, 23);
