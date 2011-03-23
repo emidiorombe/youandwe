@@ -45,7 +45,7 @@ public class AvariaTable extends Table{
 
 	public AvariaTable(PromoveApplication app, Veiculo veiculo) {
 		this(app);
-		filterTable(veiculo.getAvarias());
+		filterTable(veiculo.getChassi());
 	}
 
 	private void buildTable() {
