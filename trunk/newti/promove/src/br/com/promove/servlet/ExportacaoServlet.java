@@ -43,11 +43,12 @@ public class ExportacaoServlet extends HttpServlet{
 			
 		}else if("avkuhlmann".equals(action)) {
 			
-		}else if("export_avarias".equals(action)) {
+		}else if("export_excel".equals(action)) {
 			String filePath = request.getParameter("file");
+			String fileName = request.getParameter("fileName");
 			
 			response.setContentType("application/vnd.ms-excel");
-			response.setHeader("Content-Disposition", "attachment; filename=avarias.xls");
+			response.setHeader("Content-Disposition", "attachment; filename="+fileName);
 			try {
 				File f = new File(filePath);
 				FileInputStream file = new FileInputStream(f);
