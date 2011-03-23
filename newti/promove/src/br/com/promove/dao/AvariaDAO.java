@@ -1,7 +1,5 @@
 package br.com.promove.dao;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +51,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			addParamToQuery("dtFim", ate);
 		}
 		
+		hql.append(" order by av.origem.id");
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
