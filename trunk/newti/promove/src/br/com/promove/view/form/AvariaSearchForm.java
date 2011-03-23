@@ -243,7 +243,7 @@ public class AvariaSearchForm extends BaseForm{
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
-					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_avarias&file=" + file));
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=avarias.xls&file=" + file));
 				} catch (Exception e) {
 					showErrorMessage(view, "Não foi possível gerar arquivo.");
 				}
