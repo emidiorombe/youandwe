@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -37,6 +38,9 @@ public class Veiculo implements Serializable{
 	private String chassi;
 	
 	private String codigoInterno;
+	
+	@Transient
+	private List<Avaria> avarias;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataCadastro = new Date();
@@ -117,6 +121,15 @@ public class Veiculo implements Serializable{
 	public void setChassiOriginal(String chassiOriginal) {
 		this.chassiOriginal = chassiOriginal;
 	}
+
+	public List<Avaria> getAvarias() {
+		return avarias;
+	}
+
+	public void setAvarias(List<Avaria> avarias) {
+		this.avarias = avarias;
+	}
+	
 	
 	
 	
