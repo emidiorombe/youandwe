@@ -290,10 +290,10 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	public List<Avaria> buscarAvariaPorFiltros(String chassi, Avaria av, Date de, Date ate)throws PromoveException {
 		List<Avaria> lista = null;
 		try {
-			DateUtils.montarDataInicialParaQuery(de);
-			DateUtils.montarDataFinalParaQuery(ate);
+			Date init = DateUtils.montarDataInicialParaQuery(de); 
+			Date fim = DateUtils.montarDataFinalParaQuery(ate); 
 			
-			lista = avariaDAO.getAvariasPorFiltro(chassi, av, de, ate);
+			lista = avariaDAO.getAvariasPorFiltro(chassi, av, init, fim);
 		} catch (DAOException e) {
 			e.printStackTrace();
 			throw new PromoveException(e);

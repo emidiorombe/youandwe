@@ -25,6 +25,7 @@ import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
+import br.com.promove.utils.DateUtils;
 import br.com.promove.utils.StringUtilities;
 
 
@@ -247,7 +248,10 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	public List<Veiculo> buscarVeiculoPorFiltro(Veiculo veiculo, Date dtInicio, Date dtFim) throws PromoveException {
 		List<Veiculo> lista = null;
 		try {
-			lista = veiculoDAO.getByFilter(veiculo, dtInicio, dtFim);
+			Date init = DateUtils.montarDataInicialParaQuery(dtInicio); 
+			Date fim = DateUtils.montarDataFinalParaQuery(dtFim); 
+			
+			lista = veiculoDAO.getByFilter(veiculo, init, fim);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
