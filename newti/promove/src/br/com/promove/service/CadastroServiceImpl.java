@@ -248,11 +248,6 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		List<Veiculo> lista = null;
 		try {
 			lista = veiculoDAO.getByFilter(veiculo, dtInicio, dtFim);
-			for (Veiculo v : lista) {
-				for(Avaria av: v.getAvarias()) {
-					av.getFotos().size();
-				}
-			}
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
