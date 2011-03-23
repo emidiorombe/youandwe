@@ -8,6 +8,7 @@ import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.menu.MenuAvaria;
+import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.AvariaSearchView;
@@ -37,11 +38,13 @@ public class VeiculoTable extends Table{
 	private PromoveApplication app;
 	private VeiculoListView view;
 	private MenuAvaria menuAvaria;
+	private AvariaService avariaService;
 	
 	public VeiculoTable(PromoveApplication app, MenuAvaria menuAvaria) {
 		this.app = app;
 		this.menuAvaria = menuAvaria;
 		cadastroService = ServiceFactory.getService(CadastroService.class);
+		avariaService = ServiceFactory.getService(AvariaService.class);
 		buildTable();
 	}
 
@@ -115,7 +118,7 @@ public class VeiculoTable extends Table{
 			}else if(columnId.toString().equals("cor")) {
 					return new Label(v.getCor().getDescricao());
 			}else if(columnId.toString().equals("avarias")) {
-				Button b = new Button(Integer.toString(v.getAvarias().size()));	
+				Button b = new Button("Ver");	
 				b.setStyleName(BaseTheme.BUTTON_LINK);
 				b.addListener(new LinkListener(table));
 				b.setDebugId("av&"+v.getChassi());
