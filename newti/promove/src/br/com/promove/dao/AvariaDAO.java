@@ -1,5 +1,7 @@
 package br.com.promove.dao;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,8 +19,11 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 
 	public List<Avaria> getAvariasPorFiltro(String chassi, Avaria av, Date de, Date ate) throws DAOException {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select av from Avaria av left JOIN FETCH av.fotos left join fetch av.veiculo veic where 1 = 1 ");
-		
+		hql.append("select av from Avaria av left JOIN FETCH av.fotos left join fetch av.veiculo veic ");
+		hql.append(" left JOIN FETCH av.tipo tp left JOIN FETCH av.origem ori left JOIN FETCH av.extensao ext left JOIN FETCH av.local loc left JOIN FETCH av.clima cli ");
+		hql.append(" left JOIN FETCH av.usuario usu left JOIN FETCH usu.tipo tpu left JOIN FETCH veic.modelo mod left JOIN FETCH veic.cor cor left JOIN FETCH mod.fabricante fab ");
+		hql.append(" left JOIN FETCH ori.responsabilidade resp left JOIN FETCH usu.filial usufil left JOIN FETCH ori.filial orifil  ");
+		hql.append(" where 1=1 ");
 		if(chassi != null && !chassi.isEmpty()) {
 			hql.append(" and veic.chassi like :txtChassi ");
 			addParamToQuery("txtChassi", "%"+ chassi);
@@ -48,7 +53,6 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			addParamToQuery("dtFim", ate);
 		}
 		
-		hql.append(" order by av.origem.id");
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
