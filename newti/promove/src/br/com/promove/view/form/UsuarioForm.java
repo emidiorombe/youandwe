@@ -14,7 +14,6 @@ import br.com.promove.view.UsuarioView;
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -200,6 +199,7 @@ public class UsuarioForm extends BaseForm{
 					if(isValid()){
 						commit();
 						BeanItem<Usuario> item = (BeanItem<Usuario>) getItemDataSource();
+						item.getBean().setSenha(item.getBean().getSenha().toUpperCase());
 						cadastroService.salvarUsuario(item.getBean());
 						view.getTable().getContainer().addItem(item.getBean());
 						addNewUsuario();
