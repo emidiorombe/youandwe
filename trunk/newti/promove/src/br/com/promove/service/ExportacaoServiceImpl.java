@@ -113,6 +113,7 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    
 		    return fileName;
 		}catch(Exception e) {
+			e.printStackTrace();
 			throw new PromoveException();
 		}
 		
