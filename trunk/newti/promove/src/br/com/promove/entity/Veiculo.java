@@ -16,6 +16,9 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 public class Veiculo implements Serializable{
 	@Id
@@ -27,9 +30,6 @@ public class Veiculo implements Serializable{
 	
 	@OneToOne
 	private Modelo modelo;
-	
-	@OneToMany(mappedBy="veiculo", targetEntity=Avaria.class, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private List<Avaria> avarias;
 	
 	@OneToOne
 	private Cor cor;
@@ -63,14 +63,6 @@ public class Veiculo implements Serializable{
 
 	public void setModelo(Modelo modelo) {
 		this.modelo = modelo;
-	}
-
-	public List<Avaria> getAvarias() {
-		return avarias;
-	}
-
-	public void setAvarias(List<Avaria> avarias) {
-		this.avarias = avarias;
 	}
 
 	public Cor getCor() {
