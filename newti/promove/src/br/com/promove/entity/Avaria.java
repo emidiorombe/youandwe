@@ -18,6 +18,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 public class Avaria implements Serializable{
 	
@@ -27,6 +30,7 @@ public class Avaria implements Serializable{
 	private Integer id;
 	
 	@ManyToOne(targetEntity=Veiculo.class)
+	@Fetch(FetchMode.JOIN)
 	private Veiculo veiculo;
 	
 	@OneToOne
