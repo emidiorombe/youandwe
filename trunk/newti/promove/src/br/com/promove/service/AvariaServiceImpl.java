@@ -291,6 +291,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		try {
 			lista = avariaDAO.getAvariasPorFiltro(chassi, av, de, ate);
 		} catch (DAOException e) {
+			e.printStackTrace();
 			throw new PromoveException(e);
 		}
 		return lista;
