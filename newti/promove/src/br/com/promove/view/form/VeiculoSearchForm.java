@@ -98,8 +98,15 @@ public class VeiculoSearchForm extends BaseForm{
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
 				
+				if(item.getBean().getChassi() == null || item.getBean().getChassi().isEmpty()) {
+					if(de == null || ate == null)
+						throw new IllegalArgumentException("Informe um chassi ou período para busca.");
+				}
+				
 				List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate);
 				view.getTable().filterTable(list);
+			}catch(IllegalArgumentException ie) {
+				showErrorMessage(view, ie.getMessage());
 			}catch(PromoveException pe) {
 				showErrorMessage(view, "Não foi possível buscar os veículos");
 			} 
