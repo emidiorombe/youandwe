@@ -3,7 +3,7 @@ Created on Mar 14, 2011
 
 @author: Rafael Nunes
 '''
-from django.db import models, connection
+from django.db import models
 
 class PromocaoManager(models.Manager):
     def get_for_index(self):
@@ -11,7 +11,6 @@ class PromocaoManager(models.Manager):
         top_cat = Promocao.objects.all().order_by('-interessados').distinct('categoria.id')[:3]
         top_promo = {}
         for p in top_cat:
-            print p.categoria
             list = Promocao.objects.filter(categoria=p.categoria)
             list_promo=[]
             for promo in list:
