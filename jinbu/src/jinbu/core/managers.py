@@ -7,7 +7,7 @@ from django.db import models
 
 class PromocaoManager(models.Manager):
     def get_for_index(self):
-        from jinbu.core.models import Categoria
-        #TODO Buscar as categorias mais buscadas
-        cats = Categoria.objects.all().filter(nome__in=['LAZER', 'BARES', 'BELEZA'])
-        print cats
+        from jinbu.core.models import Promocao
+        top_promos = Promocao.objects.all().order_by('-interessados').distinct('categoria')[:3]
+        for p in top_promos:
+            print p.categoria.id    

@@ -20,6 +20,7 @@ class Promocao(models.Model):
     categoria = models.ForeignKey(Categoria)
     interessados = models.IntegerField()
     objects = managers.PromocaoManager()
+    status = models.IntegerField(default=0)
     
 class Oferta(models.Model):
     promocao = models.ForeignKey(Promocao)
