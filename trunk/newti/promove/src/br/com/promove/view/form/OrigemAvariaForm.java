@@ -165,6 +165,8 @@ public class OrigemAvariaForm extends BaseForm{
 				f.addValidator(new StringLengthValidator(
 						"Descrição deve ter no mínimo 3 e no máximo 50 caracteres",
 						3, 50, false));
+			} else if (propertyId.equals("sigla") || (propertyId.equals("tipo"))) {
+				f.setRequired(false);
 			}else if (propertyId.equals("responsabilidade")) {
 				try {
 					ComboBox c = new ComboBox("Responsabilidade");
@@ -211,8 +213,6 @@ public class OrigemAvariaForm extends BaseForm{
 						i.getItemProperty("label").setValue(fi.getNome());
 					}
 					
-					c.setRequired(true);
-					c.setRequiredError("Filial obrigatória");
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 					c.setImmediate(true);
 					c.setNullSelectionAllowed(false);
