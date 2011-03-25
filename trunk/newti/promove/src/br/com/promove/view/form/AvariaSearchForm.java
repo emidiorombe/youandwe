@@ -238,6 +238,11 @@ public class AvariaSearchForm extends BaseForm{
 					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 					BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
 					
+					if(txtChassi == null || txtChassi.toString().isEmpty()) {
+						if(de == null || ate == null)
+							throw new IllegalArgumentException("Informe um chassi ou período para gerar arquivo.");
+					}
+					
 					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(txtChassi.getValue().toString(), item.getBean(), de, ate);
 					String file = exportacaoService.exportarXLSAvarias(avarias);
 					

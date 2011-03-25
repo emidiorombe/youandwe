@@ -20,6 +20,7 @@ import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.dao.UsuarioDAO;
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.exportacao.CadastrosBasicosExport;
@@ -118,4 +119,43 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		}
 		
 	}
+
+	@Override
+	public String exportarXLSVeiculos(List<Veiculo> veiculos)throws PromoveException {
+		try {
+			Workbook wb = new HSSFWorkbook();
+		    CreationHelper createHelper = wb.getCreationHelper();
+		    Sheet sheet = wb.createSheet("veiculos");
+		    
+		    //Cabeçalho
+		    Row row_head = sheet.createRow(0);
+		    row_head.createCell(0).setCellValue("ID");
+		    row_head.createCell(1).setCellValue("CHASSI");
+		    row_head.createCell(2).setCellValue("MODELO");
+		    row_head.createCell(3).setCellValue("COR");
+		    row_head.createCell(4).setCellValue("DATA CADASTRO");
+		    
+		    for(int i = 0; i < veiculos.size(); i++) {
+			    Row row = sheet.createRow(i+1);
+			    row.createCell(0).setCellValue(veiculos.get(i).getId());
+			    row.createCell(1).setCellValue(veiculos.get(i).getChassi());
+			    row.createCell(2).setCellValue(veiculos.get(i).getModelo().getDescricao());
+			    row.createCell(3).setCellValue(veiculos.get(i).getCor().getDescricao());
+			    row.createCell(4).setCellValue(veiculos.get(i).getDataCadastro());
+		    }
+
+		    // Write the output to a file/
+		    String fileName = Config.getConfig("tmp_dir") + "veiculos_" + System.currentTimeMillis()+".xls";
+		    FileOutputStream fileOut = new FileOutputStream(fileName);
+		    wb.write(fileOut);
+		    fileOut.close();
+		    
+		    return fileName;
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new PromoveException();
+		}
+		
+	}
+
 }

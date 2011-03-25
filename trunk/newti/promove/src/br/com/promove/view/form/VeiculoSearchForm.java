@@ -4,16 +4,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import br.com.promove.application.PromoveApplication;
+import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
+import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.VeiculoListView;
+import br.com.promove.view.form.AvariaSearchForm.AvariaSearchListener;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.terminal.ExternalResource;
+import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
@@ -23,6 +29,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -30,13 +37,18 @@ import com.vaadin.ui.VerticalLayout;
 public class VeiculoSearchForm extends BaseForm{
 	private VerticalLayout layout = new VerticalLayout();
 	private CadastroService cadastroService;
+	private ExportacaoService exportacaoService;
 	private VeiculoListView view;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
 	private Button search;
+	private Button export;
+	private PromoveApplication app;
 	
-	public VeiculoSearchForm() {
+	public VeiculoSearchForm(PromoveApplication app) {
+		this.app = app;
 		cadastroService = ServiceFactory.getService(CadastroService.class);
+		exportacaoService = ServiceFactory.getService(ExportacaoService.class);
 		buildForm();
 	}
 
@@ -47,6 +59,7 @@ public class VeiculoSearchForm extends BaseForm{
 		layout.setSpacing(true);
 		
 		search = new Button("Buscar", new VeiculoSearchListener());
+		export = new Button("Gerar Arquivo", new VeiculoSearchListener());
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -60,7 +73,7 @@ public class VeiculoSearchForm extends BaseForm{
 		layout.addComponent(this);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
-		layout.addComponent(search);
+		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		
 	}
@@ -72,6 +85,15 @@ public class VeiculoSearchForm extends BaseForm{
 		
 	}
 	
+	private Component createFooter(){
+		HorizontalLayout footer = new HorizontalLayout();
+		footer.setSpacing(true);
+		footer.addComponent(search);
+		footer.addComponent(export);
+		footer.setVisible(true);
+		
+		return footer;
+	}
 	public VerticalLayout getLayout() {
 		return layout;
 	}
@@ -92,25 +114,47 @@ public class VeiculoSearchForm extends BaseForm{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			try {
-				commit();
-				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
-				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
-				
-				if(item.getBean().getChassi() == null || item.getBean().getChassi().isEmpty()) {
-					if(de == null || ate == null)
-						throw new IllegalArgumentException("Informe um chassi ou período para busca.");
+			if(event.getButton() == search) {
+				try {
+					commit();
+					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
+					
+					if(item.getBean().getChassi() == null || item.getBean().getChassi().isEmpty()) {
+						if(de == null || ate == null)
+							throw new IllegalArgumentException("Informe um chassi ou período para busca.");
+					}
+					
+					List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate);
+					view.getTable().filterTable(list);
+				}catch(IllegalArgumentException ie) {
+					showErrorMessage(view, ie.getMessage());
+				}catch(PromoveException pe) {
+					showErrorMessage(view, "Não foi possível buscar os veículos");
+				} 
+			}else if(event.getButton() == export) {
+				try {
+					commit();
+					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
+					
+					if(item.getBean().getChassi() == null || item.getBean().getChassi().isEmpty()) {
+						if(de == null || ate == null)
+							throw new IllegalArgumentException("Informe um chassi ou período para gerar arquivo.");
+					}
+					
+					List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate);
+					String file = exportacaoService.exportarXLSVeiculos(list);
+					
+					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+					String path = ctx.getHttpSession().getServletContext().getContextPath();
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=veiculos.xls&file=" + file));
+				} catch (Exception e) {
+					showErrorMessage(view, "Não foi possível gerar arquivo.");
 				}
-				
-				List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate);
-				view.getTable().filterTable(list);
-			}catch(IllegalArgumentException ie) {
-				showErrorMessage(view, ie.getMessage());
-			}catch(PromoveException pe) {
-				showErrorMessage(view, "Não foi possível buscar os veículos");
-			} 
-			
+			}
 		}
 		
 	}
