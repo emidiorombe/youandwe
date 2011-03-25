@@ -12,8 +12,8 @@ def index(request):
     my_var = cache.get("m")
     if my_var is not None:
         cache.set("m", my_var + 1)
-    Promocao.objects.get_for_index()
-    c_tits = {'tit1':'LAZER', 'tit2':'BARES', 'tit3':'SERVICOS'}
+    promos = Promocao.objects.get_for_index()
+    c_tits = {'tit1':promos.keys()[0], 'tit2':promos.keys()[1], 'tit3':promos.keys()[2]}
     return render_to_response('index.xhtml', locals())
 
 def add_user(request):

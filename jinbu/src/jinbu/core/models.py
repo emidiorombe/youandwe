@@ -10,6 +10,8 @@ class Empresa(User):
     
 class Categoria(models.Model):
     nome = models.CharField(max_length=255)
+    def __unicode__(self):
+        return self.nome
     
 class Promocao(models.Model):
     texto = models.CharField(max_length=255)
@@ -21,6 +23,9 @@ class Promocao(models.Model):
     interessados = models.IntegerField()
     objects = managers.PromocaoManager()
     status = models.IntegerField(default=0)
+    
+    def __unicode__(self):
+        return self.texto
     
 class Oferta(models.Model):
     promocao = models.ForeignKey(Promocao)
