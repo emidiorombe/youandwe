@@ -120,16 +120,12 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				}
 				
 				c.setRequired(true);
-				c.setRequiredError("Tipo Avaria obrigatório");
+				c.setRequiredError("Tipo de Avaria obrigatório");
 				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 				c.setImmediate(true);
 				c.setNullSelectionAllowed(false);
 				c.setPropertyDataSource(item.getItemProperty(propertyId));
 				c.setItemCaptionPropertyId("label");
-				
-				if (c.getValue() ==  null && c.size() > 0)
-                    c.setValue(c.getItemIds().iterator().next());
-				
 				
 				return c;
 			}else if(propertyId.equals("local")) {
@@ -142,16 +138,12 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				}
 				
 				c.setRequired(true);
-				c.setRequiredError("Local obrigatório");
+				c.setRequiredError("Local de Avaria obrigatório");
 				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 				c.setImmediate(true);
 				c.setNullSelectionAllowed(false);
 				c.setPropertyDataSource(item.getItemProperty(propertyId));
 				c.setItemCaptionPropertyId("label");
-				
-				if (c.getValue() ==  null && c.size() > 0)
-                    c.setValue(c.getItemIds().iterator().next());
-				
 				
 				return c;
 			}else if(propertyId.equals("origem")) {
@@ -164,16 +156,12 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				}
 				
 				c.setRequired(true);
-				c.setRequiredError("Origem obrigatória");
+				c.setRequiredError("Origem de Avaria obrigatória");
 				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 				c.setImmediate(true);
 				c.setNullSelectionAllowed(false);
 				c.setPropertyDataSource(item.getItemProperty(propertyId));
 				c.setItemCaptionPropertyId("label");
-				
-				if (c.getValue() ==  null && c.size() > 0)
-                    c.setValue(c.getItemIds().iterator().next());
-				
 				
 				return c;
 			}else if(propertyId.equals("extensao")) {
@@ -193,10 +181,6 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				c.setPropertyDataSource(item.getItemProperty(propertyId));
 				c.setItemCaptionPropertyId("label");
 				
-				if (c.getValue() ==  null && c.size() > 0)
-                    c.setValue(c.getItemIds().iterator().next());
-				
-				
 				return c;
 			}else if(propertyId.equals("clima")) {
 				ComboBox c = new ComboBox("Condições Climáticas");
@@ -208,16 +192,12 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				}
 				
 				c.setRequired(true);
-				c.setRequiredError("Condição Climática obrigatório");
+				c.setRequiredError("Condição Climática obrigatória");
 				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 				c.setImmediate(true);
 				c.setNullSelectionAllowed(false);
 				c.setPropertyDataSource(item.getItemProperty(propertyId));
 				c.setItemCaptionPropertyId("label");
-				
-				if (c.getValue() ==  null && c.size() > 0)
-                    c.setValue(c.getItemIds().iterator().next());
-				
 				
 				return c;
 			}else if(propertyId.equals("observacao")) {
