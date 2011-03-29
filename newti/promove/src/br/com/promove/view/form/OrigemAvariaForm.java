@@ -215,7 +215,7 @@ public class OrigemAvariaForm extends BaseForm{
 					
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 					c.setImmediate(true);
-					c.setNullSelectionAllowed(false);
+					c.setNullSelectionAllowed(true);
 					c.setPropertyDataSource(item.getItemProperty(propertyId));
 					c.setItemCaptionPropertyId("label");
 					
@@ -230,7 +230,6 @@ public class OrigemAvariaForm extends BaseForm{
 								}
 							}
 						}
-					
 					}
 					
 					return c;

@@ -1,7 +1,11 @@
 package br.com.promove.view.form;
 
+import java.util.Iterator;
+
 import br.com.promove.entity.Cor;
+import br.com.promove.entity.Filial;
 import br.com.promove.entity.Modelo;
+import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
@@ -112,15 +116,15 @@ public class VeiculoForm extends BaseForm{
 					}
 					
 					c.setRequired(true);
-					c.setRequiredError("Tipo obrigatório");
+					c.setRequiredError("Modelo obrigatório");
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 					c.setImmediate(true);
 					c.setNullSelectionAllowed(false);
 					c.setPropertyDataSource(item.getItemProperty(propertyId));
 					c.setItemCaptionPropertyId("label");
 					
-					if (c.getValue() ==  null && c.size() > 0)
-	                    c.setValue(c.getItemIds().iterator().next());
+					//if (c.getValue() == null && c.size() > 0)
+                    	//c.setValue(c.getItemIds().iterator().next());
 					
 					return c;
 				}catch (PromoveException e) {
@@ -137,15 +141,12 @@ public class VeiculoForm extends BaseForm{
 					}
 					
 					c.setRequired(true);
-					c.setRequiredError("Tipo obrigatório");
+					c.setRequiredError("Cor obrigatória");
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 					c.setImmediate(true);
 					c.setNullSelectionAllowed(false);
 					c.setPropertyDataSource(item.getItemProperty(propertyId));
 					c.setItemCaptionPropertyId("label");
-					
-					if (c.getValue() ==  null && c.size() > 0)
-	                    c.setValue(c.getItemIds().iterator().next());
 					
 					return c;
 				}catch (PromoveException e) {
