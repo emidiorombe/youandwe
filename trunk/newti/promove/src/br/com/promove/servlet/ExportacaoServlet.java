@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -62,6 +63,16 @@ public class ExportacaoServlet extends HttpServlet{
 			}catch(IOException ioe) {
 				ioe.printStackTrace();
 			}
+		}else if("foto".equals(action)) {
+			String nome = request.getParameter("name");
+			
+			FileInputStream fis = new FileInputStream("/home/rafael/lixo/"+nome);
+			
+			int b = -1;
+			while((b=fis.read()) != -1) {
+				response.getOutputStream().write(b);
+			}
+			
 		}
 	}
 	
