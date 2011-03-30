@@ -6,6 +6,7 @@ import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
@@ -17,6 +18,7 @@ import br.com.promove.view.form.AvariaForm;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -25,8 +27,10 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.Window;
 
 public class AvariaTable extends Table{
 	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "modelo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento","hora", "fotos", "usuario", "observacao"};
@@ -119,7 +123,7 @@ public class AvariaTable extends Table{
 
 		@Override
 		public Component generateCell(Table source, Object itemId, Object columnId) {
-			Avaria av = (Avaria)itemId;
+			final Avaria av = (Avaria)itemId;
 			if(columnId.toString().equals("dataLancamento")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(av.getDataLancamento()));
 			}else if(columnId.toString().equals("observacao")) {
@@ -128,7 +132,32 @@ public class AvariaTable extends Table{
 					else
 						return new Label(av.getObservacao());
 			}else if(columnId.toString().equals("fotos")) { 
-				return new Label(Integer.toString(av.getFotos().size()));
+				Button b = new Button(Integer.toString(av.getFotos().size()));	
+				b.setStyleName(BaseTheme.BUTTON_LINK);
+				b.addListener(new ClickListener() {
+					
+					public void buttonClick(ClickEvent event) {
+						Window w = new Window("Fotos");
+				        w.setHeight("400px");
+				        w.setWidth("800px");
+				        w.setPositionY(50);
+				        w.setPositionX(200);
+				        
+				        WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+						String path = ctx.getHttpSession().getServletContext().getContextPath();
+						
+				        app.getMainWindow().addWindow(w);
+				        
+				        for (FotoAvaria f : av.getFotos()) {
+				        	String req = path+"/export?action=foto&name="+ f.getNome();
+							w.addComponent(new Embedded("", new ExternalResource(req)));
+						}
+				        
+					}
+					
+				});
+				
+				return b;
 			}else if(columnId.toString().equals("modelo")) { 
 				return new Label(av.getVeiculo().getModelo().getDescricao());
 			}else if(columnId.toString().equals("id")) {
@@ -190,7 +219,6 @@ public class AvariaTable extends Table{
 
 	}
 	
-
 	public void setView(AvariaSearchView view) {
 		this.view = view;
 		
