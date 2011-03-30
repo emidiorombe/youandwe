@@ -116,11 +116,11 @@ public class CorForm extends BaseForm{
 				try{
 					validate();
 					if(isValid()){
-						commit();
 						BeanItem<Cor> item = (BeanItem<Cor>) getItemDataSource();
 						cadastroService.salvarCor(item.getBean());
 						view.getTable().getContainer().addItem(item.getBean());
 						addNewCor();
+						commit();
 						showSuccessMessage(view, "Cor salva!");
 					}
 				}catch(InvalidValueException ive){
