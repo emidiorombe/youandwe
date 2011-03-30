@@ -66,7 +66,7 @@ public class ExportacaoServlet extends HttpServlet{
 		}else if("foto".equals(action)) {
 			String nome = request.getParameter("name");
 			
-			FileInputStream fis = new FileInputStream("/home/rafael/lixo/"+nome);
+			FileInputStream fis = new FileInputStream(getServletContext().getInitParameter("pasta_fotos")+nome);
 			
 			int b = -1;
 			while((b=fis.read()) != -1) {
