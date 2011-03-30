@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
 
 import br.com.promove.exception.DAOException;
@@ -137,6 +136,7 @@ public class HibernateCRUD implements Serializable{
 		try {
 			session = HibernateSessionFactory.getSession();
 			session.saveOrUpdate(obj);
+			session.flush();
 		}catch(Exception he) {
 			throw new DAOException(he);
 		}

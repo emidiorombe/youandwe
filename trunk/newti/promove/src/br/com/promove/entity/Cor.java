@@ -2,6 +2,7 @@ package br.com.promove.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,8 @@ public class Cor implements Serializable{
 	@SequenceGenerator(name="seq_cor", sequenceName="seq_cor")
 	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_cor")
 	private Integer id;
+	
+	@Column(unique=true)
 	private Integer codigo;
 	private String descricao;
 	private String codigoExterno;

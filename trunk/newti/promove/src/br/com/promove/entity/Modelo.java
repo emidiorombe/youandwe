@@ -2,6 +2,7 @@ package br.com.promove.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +17,8 @@ public class Modelo implements Serializable{
 	@SequenceGenerator(name="seq_modelo", sequenceName="seq_modelo")
 	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_modelo")
 	private Integer id;
+	
+	@Column(unique=true)
 	private String codigo;
 	private String descricao;
 	private String codigoExternoNacional;
