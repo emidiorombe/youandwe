@@ -174,7 +174,6 @@ public class ErroImportAvariaForm extends BaseForm {
 					c.addContainerProperty("label", String.class, null);
 					c.setRequired(true);
 					c.setRequiredError("Veículo obrigatório");
-					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 					c.setImmediate(true);
 					c.setNullSelectionAllowed(false);
 					c.setItemCaptionPropertyId("label");
@@ -189,7 +188,8 @@ public class ErroImportAvariaForm extends BaseForm {
 						
 						@Override
 						public void addNewItem(String newV) {
-							c.addItem(new Veiculo(newV));
+							Item i = c.addItem(new Veiculo(newV));
+							i.getItemProperty("label").setValue(newV);
 				            c.setValue(new Veiculo(newV));
 							
 						}
