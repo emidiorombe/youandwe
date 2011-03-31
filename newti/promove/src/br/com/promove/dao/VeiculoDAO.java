@@ -72,4 +72,13 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		addParamToQuery("datafim",  calFim.getTime());
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
+
+	public List<Veiculo> getByFz(String fz) throws DAOException {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select v from Veiculo v where ");
+		hql.append(" v.chassi like :txtchassi ");
+		addParamToQuery("txtchassi",  "%" + fz);
+		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
+	}
+
 }

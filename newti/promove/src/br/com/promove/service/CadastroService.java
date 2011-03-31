@@ -84,4 +84,6 @@ public interface CadastroService {
 
 	public Usuario autenticarUsuario(String user, String password)throws PromoveException;
 
+	public List<Veiculo> buscarVeiculosPorFZ(String fz)throws PromoveException;
+
 }
