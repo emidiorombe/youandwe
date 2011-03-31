@@ -2,6 +2,7 @@ package br.com.promove.view.form;
 
 import java.util.List;
 
+import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
@@ -13,9 +14,12 @@ import br.com.promove.view.ErroImportAvariaView;
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.ui.AbstractSelect.NewItemHandler;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
@@ -156,20 +160,47 @@ public class ErroImportAvariaForm extends BaseForm {
 		public Field createField(Item item, Object propertyId, Component uiContext) {
 			Field f = super.createField(item, propertyId, uiContext);
 			
-			 if(propertyId.equals("chassiInvalido")) {
-				 TextField chassi = new TextField("Chassi");
-				 chassi.setNullRepresentation("");
+			if (propertyId.equals("chassiInvalido")) {
+				 String chassi = null;
 				 BeanItem<InconsistenciaAvaria> bitem = (BeanItem<InconsistenciaAvaria>) item;
 				 if(bitem.getBean() != null) {
 					 if(bitem.getBean().getChassiInvalido() != null) {
-						 chassi.setValue(bitem.getBean().getChassiInvalido());
+						 chassi = bitem.getBean().getChassiInvalido();
 					 }else if(bitem.getBean().getMsgErro() != null)
-						 chassi.setValue(bitem.getBean().getMsgErro().split(" ")[1]);
+						 chassi = bitem.getBean().getMsgErro().split(" ")[1];
 				 }
-						 
-				 return chassi;
-			 }
-			
+				final ComboBox c = new ComboBox("Veículos");
+				try {
+					c.addContainerProperty("label", String.class, null);
+					c.setRequired(true);
+					c.setRequiredError("Veículo obrigatório");
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setItemCaptionPropertyId("label");
+					c.setNewItemsAllowed(true);
+					if(chassi != null)
+						for(Veiculo v : cadastroService.buscarVeiculosPorFZ(chassi)) {
+							Item i = c.addItem(v);
+							i.getItemProperty("label").setValue(v.getChassi());
+						}
+					
+					c.setNewItemHandler(new NewItemHandler() {
+						
+						@Override
+						public void addNewItem(String newV) {
+							c.addItem(new Veiculo(newV));
+				            c.setValue(new Veiculo(newV));
+							
+						}
+					});
+				}catch(Exception e) {
+					e.printStackTrace();
+					showErrorMessage(view,"Não foi possível buscar Veículos pelo FZ");
+				}
+				
+				return c;
+			}			
 			
 			return f;
 		}

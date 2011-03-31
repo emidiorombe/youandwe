@@ -373,4 +373,17 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 			throw new PromoveException("Erro durante a autenticação");
 		}
 	}
+
+	@Override
+	public List<Veiculo> buscarVeiculosPorFZ(String fz) throws PromoveException {
+		List<Veiculo> lista = null;
+		try {
+			if (fz.contains("000000000"))
+			    fz = fz.replace("000000000", "");
+			lista = veiculoDAO.getByFz(fz.substring(fz.length()-6));
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
 }
