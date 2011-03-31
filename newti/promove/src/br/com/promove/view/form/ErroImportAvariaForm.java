@@ -1,5 +1,6 @@
 package br.com.promove.view.form;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import br.com.promove.entity.Fabricante;
@@ -24,6 +25,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -96,7 +98,7 @@ public class ErroImportAvariaForm extends BaseForm {
 						BeanItem<InconsistenciaAvaria> item = (BeanItem<InconsistenciaAvaria>) getItemDataSource();
 						if(item.getBean().getId() == null)
 							throw new IllegalArgumentException("Selecione um registro!");
-						String chassi = item.getBean().getChassiInvalido() != null ? item.getBean().getChassiInvalido() : item.getBean().getMsgErro().split(" ")[1];
+						String chassi = item.getBean().getChassiInvalido() != null ? item.getBean().getChassiInvalido().substring(0, 17) : item.getBean().getMsgErro().split(" ")[1];
 						List<Veiculo> v = cadastroService.buscarVeiculosPorChassi(chassi);
 						if( v.size() == 0) {
 							throw new IllegalArgumentException("Veículo com chassi " + chassi + " não encontrado");
@@ -178,10 +180,12 @@ public class ErroImportAvariaForm extends BaseForm {
 					c.setNullSelectionAllowed(false);
 					c.setItemCaptionPropertyId("label");
 					c.setNewItemsAllowed(true);
+					Item i2 = c.addItem(new Veiculo(chassi));
+					i2.getItemProperty("label").setValue(chassi);
 					if(chassi != null)
 						for(Veiculo v : cadastroService.buscarVeiculosPorFZ(chassi)) {
 							Item i = c.addItem(v);
-							i.getItemProperty("label").setValue(v.getChassi());
+							i.getItemProperty("label").setValue(v.getChassi() + " - " + new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataCadastro())) + " - " + v.getModelo().getDescricao());
 						}
 					
 					c.setNewItemHandler(new NewItemHandler() {
