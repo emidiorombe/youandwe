@@ -148,10 +148,10 @@ public class AvariaTable extends Table{
 						
 				        app.getMainWindow().addWindow(w);
 				        
-			        	String req = path+"/export?action=foto";
-			        	Embedded e = new Embedded("", new ExternalResource(req));
-			        	e.setType(Embedded.TYPE_BROWSER);
-						w.addComponent(e);
+				        for (FotoAvaria f : av.getFotos()) {
+				        	String req = path+"/export?action=foto&name="+ f.getNome();
+							w.addComponent(new Embedded("", new ExternalResource(req)));
+						}
 					}
 					
 				});
