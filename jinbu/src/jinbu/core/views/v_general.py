@@ -12,8 +12,14 @@ def index(request):
     my_var = cache.get("m")
     if my_var is not None:
         cache.set("m", my_var + 1)
-    promos = Promocao.objects.get_for_index()
-    c_tits = {'tit1':promos.keys()[0], 'tit2':promos.keys()[1], 'tit3':promos.keys()[2]}
+    categorias = Promocao.objects.get_top_categorias()
+    promos = Promocao.objects.get_promocoes_das_categorias(categorias)
+    c_tits = {}
+    lista1 = []
+    lista2 = []
+    lista3 = []
+    if(promos.__len__() > 0):
+        c_tits = {'tit1':promos.keys()[0], 'tit2':promos.keys()[0], 'tit3':promos.keys()[0]}
     return render_to_response('index.xhtml', locals())
 
 def add_user(request):
