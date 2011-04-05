@@ -31,13 +31,12 @@ USE_I18N = True
 
 USE_L10N = True
 
-#MEDIA_URL = 'http://static.jinbu.com.br'
-MEDIA_URL='http"//localhost:8000/static/'
-CDN_URL='/static/' 
+BUSTER_VERSION=1
+CDN_URL='http://static.jinbu.com.br/'+ str(BUSTER_VERSION) +'/' 
+CDN_DEV_URL='/static/'
 MEDIA_ROOT='/home/rafael/Aptana Studio 3 Workspace/jinbu/src/jinbu/core/static' 
  
-BUSTER_VERSION=1
-#STATIC_URL = '/static/'
+
 
 
 ADMIN_MEDIA_PREFIX = '/media/'

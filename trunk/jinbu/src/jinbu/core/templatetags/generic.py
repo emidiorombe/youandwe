@@ -14,6 +14,9 @@ def BUSTER():
 
 @register.simple_tag
 def CDN():
-    return settings.CDN_URL
+    if settings.DEBUG:
+        return settings.CDN_DEV_URL
+    else:
+        return settings.CDN_URL
 
 
