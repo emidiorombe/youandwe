@@ -52,7 +52,7 @@ public class ExportCadastroView implements Serializable{
 		public void buttonClick(ClickEvent event) {
 			WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 			String path = ctx.getHttpSession().getServletContext().getContextPath();
-			event.getButton().getWindow().open(new ExternalResource(path + "/export?action=cadastro"));
+			event.getButton().getWindow().open(new ExternalResource(path + "/export?action=GSPPRE"));
 			
 		}
 		

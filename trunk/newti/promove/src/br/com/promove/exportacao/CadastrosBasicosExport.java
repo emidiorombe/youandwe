@@ -20,6 +20,7 @@ public class CadastrosBasicosExport {
 		Element root = xml.addElement("dados_pre_req");
 		
 		createTagUsuario(root, listas.get("usuario"));
+		createTagPatio(root);
 		createTagOrigem(root, listas.get("origem"));
 		createLocalAvaria(root, listas.get("local"));
 		createTipoAvaria(root, listas.get("tipo"));
@@ -29,7 +30,7 @@ public class CadastrosBasicosExport {
 
 	private static void createClima(Element root, List<Clima> list) {
 		for (Clima clima : list) {
-			Element el_clima = root.addElement("clima");
+			Element el_clima = root.addElement("climat");
 			el_clima.addAttribute("codigo", clima.getCodigo().toString());
 			el_clima.addElement("descricao").addText(clima.getDescricao());
 		}
@@ -62,13 +63,20 @@ public class CadastrosBasicosExport {
 		
 	}
 
+	private static void createTagPatio(Element root) {
+		Element el_user = root.addElement("patio");
+		el_user.addAttribute("codigo", "1");
+		el_user.addElement("descricao").addText("PATIO");
+	}
+
 	private static void createTagUsuario(Element root, List<Usuario> list) {
 		for (Usuario us : list) {
 			Element el_user = root.addElement("usuario");
 			el_user.addAttribute("codigo", us.getCodigo().toString());
 			el_user.addElement("nome").addText(us.getNome());
 			el_user.addElement("senha").addText(us.getSenha());
-			el_user.addElement("patio");
+			el_user.addElement("patio").addText("1");
+			el_user.addElement("filial").addText(us.getFilial().toString());
 		}
 	}
 	
