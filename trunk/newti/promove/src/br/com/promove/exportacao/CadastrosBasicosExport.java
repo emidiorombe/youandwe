@@ -76,7 +76,7 @@ public class CadastrosBasicosExport {
 			el_user.addElement("nome").addText(us.getNome());
 			el_user.addElement("senha").addText(us.getSenha());
 			el_user.addElement("patio").addText("1");
-			el_user.addElement("filial").addText(us.getFilial().toString());
+			el_user.addElement("filial").addText(us.getFilial().getCodigo().toString());
 		}
 	}
 	
