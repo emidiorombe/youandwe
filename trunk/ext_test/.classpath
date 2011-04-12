@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-2.2.1.jar"/>
+	<classpathentry kind="lib" path="/home/rafael/private/yaw/aj/jdbc_mysql.jar"/>
+	<classpathentry kind="lib" path="/home/rafael/software/java/frameworks/commons-httpclient-3.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/rafael/software/java/frameworks/commons-logging-1.1.1/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/rafael/software/java/frameworks/commons-collections-3.2.1/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="/home/rafael/software/java/frameworks/resteasy-jaxrs-2.0.1.GA/lib/commons-codec-1.2.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gson-1.6.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>
