@@ -33,7 +33,7 @@ public class ExportacaoServlet extends HttpServlet{
 				ExportacaoService export = ServiceFactory.getService(ExportacaoService.class);
 				
 				response.setContentType("applicaton/xml");
-				response.setHeader("Content-Disposition", "attachment; filename=cadastro.xml");
+				response.setHeader("Content-Disposition", "attachment; filename=GSPPRE.xml");
 				response.getWriter().print(export.exportarCadastrosBasicos());
 			}catch(PromoveException pe) {
 				response.getWriter().write(pe.getMessage());
