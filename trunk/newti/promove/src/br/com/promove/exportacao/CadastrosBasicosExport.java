@@ -34,7 +34,6 @@ public class CadastrosBasicosExport {
 			el_clima.addAttribute("codigo", clima.getCodigo().toString());
 			el_clima.addElement("descricao").addText(clima.getDescricao());
 		}
-		
 	}
 
 	private static void createTipoAvaria(Element root, List<TipoAvaria> list) { 
@@ -51,16 +50,16 @@ public class CadastrosBasicosExport {
 			el_local.addAttribute("codigo", loc.getCodigo().toString());
 			el_local.addElement("descricao").addText(loc.getDescricao());
 		}
-		
 	}
 
 	private static void createTagOrigem(Element root, List<OrigemAvaria> list) {
 		for (OrigemAvaria org : list) {
-			Element el_origem = root.addElement("origem_avaria");
-			el_origem.addAttribute("codigo", org.getCodigo().toString());
-			el_origem.addElement("descricao").addText(org.getDescricao());
-		} 
-		
+			if (org.getTipo() != null) {
+				Element el_origem = root.addElement("origem_avaria");
+				el_origem.addAttribute("codigo", org.getCodigo().toString());
+				el_origem.addElement("descricao").addText(org.getDescricao());
+			}
+		}
 	}
 
 	private static void createTagPatio(Element root) {
