@@ -12,6 +12,7 @@ import br.com.promove.view.LocalAvariaView;
 import br.com.promove.view.ModeloView;
 import br.com.promove.view.OrigemAvariaView;
 import br.com.promove.view.TipoAvariaView;
+import br.com.promove.view.TransportadoraView;
 import br.com.promove.view.UsuarioView;
 import br.com.promove.view.form.ClimaForm;
 import br.com.promove.view.form.CorForm;
@@ -22,6 +23,7 @@ import br.com.promove.view.form.LocalAvariaForm;
 import br.com.promove.view.form.ModeloForm;
 import br.com.promove.view.form.OrigemAvariaForm;
 import br.com.promove.view.form.TipoAvariaForm;
+import br.com.promove.view.form.TransportadoraForm;
 import br.com.promove.view.form.UsuarioForm;
 import br.com.promove.view.table.ClimaTable;
 import br.com.promove.view.table.CorTable;
@@ -32,6 +34,7 @@ import br.com.promove.view.table.LocalAvariaTable;
 import br.com.promove.view.table.ModeloTable;
 import br.com.promove.view.table.OrigemAvariaTable;
 import br.com.promove.view.table.TipoAvariaTable;
+import br.com.promove.view.table.TransportadoraTable;
 import br.com.promove.view.table.UsuarioTable;
 
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
@@ -55,6 +58,7 @@ public class MenuGeral extends CssLayout{
 	private Button origem;
 	private Button extensao;
 	private Button clima;
+	private Button transp;
 	private Button export;
 	
 	public MenuGeral(PromoveApplication app) {
@@ -79,11 +83,12 @@ public class MenuGeral extends CssLayout{
 		origem = new NativeButton("Origem de Avaria");
 		extensao = new NativeButton("Extensão de Avaria");
 		clima = new NativeButton("Condição Climática");
+		transp = new NativeButton("Transportadora");
 		export = new NativeButton("Exportar Cadastros Básicos");
 		
 		
-		addListeners(usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima, export);
-		addComponents(title, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, export);
+		addListeners(usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, export);
+		addComponents(title, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, export);
 		setPermissionVisible();
 		
 	}
@@ -95,6 +100,7 @@ public class MenuGeral extends CssLayout{
 			usuario.setVisible(false);
 			fabricante.setVisible(false);
 			filial.setVisible(false);
+			transp.setVisible(false);
 		}
 		
 		if(user.getTipo().getId() != 1 && user.getTipo().getId() != 2) {
@@ -125,7 +131,7 @@ public class MenuGeral extends CssLayout{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			addAndRemoveStyle(event.getButton(), usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima);
+			addAndRemoveStyle(event.getButton(), usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp);
 			if(event.getButton() == usuario) {
 				UsuarioTable table = new UsuarioTable();
 				UsuarioForm form = new UsuarioForm();
@@ -166,6 +172,10 @@ public class MenuGeral extends CssLayout{
 				ClimaTable table = new ClimaTable();
 				ClimaForm form = new ClimaForm();
 				app.setMainView(new ClimaAvariaView(table, form));
+			}else if(event.getButton() == transp){
+				TransportadoraTable table = new TransportadoraTable();
+				TransportadoraForm form = new TransportadoraForm();
+				app.setMainView(new TransportadoraView(table, form));
 			}else if(event.getButton() == export){
 				app.setMainView(new ExportCadastroView(app).getLayout());
 			}

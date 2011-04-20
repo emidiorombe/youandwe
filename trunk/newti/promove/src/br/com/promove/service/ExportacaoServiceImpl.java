@@ -21,6 +21,7 @@ import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.dao.UsuarioDAO;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Veiculo;
+import br.com.promove.entity.Ctrc;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.exportacao.CadastrosBasicosExport;
@@ -142,10 +143,69 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			    row.createCell(2).setCellValue(veiculos.get(i).getModelo().getDescricao());
 			    row.createCell(3).setCellValue(veiculos.get(i).getCor().getDescricao());
 			    row.createCell(4).setCellValue(veiculos.get(i).getDataCadastro());
+			    row.createCell(4).setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(veiculos.get(i).getDataCadastro()));
 		    }
 
 		    // Write the output to a file/
 		    String fileName = Config.getConfig("tmp_dir") + "veiculos_" + System.currentTimeMillis()+".xls";
+		    FileOutputStream fileOut = new FileOutputStream(fileName);
+		    wb.write(fileOut);
+		    fileOut.close();
+		    
+		    return fileName;
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new PromoveException();
+		}
+		
+	}
+
+	@Override
+	public String exportarXLSCtrcs(List<Ctrc> ctrcs) throws PromoveException {
+		try {
+			Workbook wb = new HSSFWorkbook();
+		    CreationHelper createHelper = wb.getCreationHelper();
+		    Sheet sheet = wb.createSheet("ctrcs");
+		    
+		    //Cabeçalho
+		    Row row_head = sheet.createRow(0);
+		    row_head.createCell(0).setCellValue("ID");
+		    row_head.createCell(1).setCellValue("FILIAL");
+		    row_head.createCell(2).setCellValue("NUMERO");
+		    row_head.createCell(3).setCellValue("TIPO");
+		    row_head.createCell(4).setCellValue("SERIE");
+		    row_head.createCell(5).setCellValue("TRANSPORTADORA");
+		    row_head.createCell(6).setCellValue("EMISSAO");
+		    row_head.createCell(7).setCellValue("UF ORIGEM");
+		    row_head.createCell(8).setCellValue("MUNICIPIO ORIGEM");
+		    row_head.createCell(9).setCellValue("UF DESTINO");
+		    row_head.createCell(10).setCellValue("MUNICIPIO DESTINO");
+		    row_head.createCell(11).setCellValue("TAXA RCT");
+		    row_head.createCell(12).setCellValue("TAXA RCF");
+		    row_head.createCell(13).setCellValue("TAXA RR");
+		    row_head.createCell(14).setCellValue("TAXA FLUVIAL");
+		    
+		    for(int i = 0; i < ctrcs.size(); i++) {
+			    Row row = sheet.createRow(i+1);
+			    row.createCell(0).setCellValue(ctrcs.get(i).getId());
+			    row.createCell(1).setCellValue(ctrcs.get(i).getFilial());
+			    row.createCell(2).setCellValue(ctrcs.get(i).getNumero());
+			    row.createCell(3).setCellValue(ctrcs.get(i).getTipo());
+			    row.createCell(4).setCellValue(ctrcs.get(i).getSerie());
+			    row.createCell(5).setCellValue(ctrcs.get(i).getTransp().getDescricao());
+			    row.createCell(6).setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(ctrcs.get(i).getDataEmissao()));
+			    row.createCell(7).setCellValue(ctrcs.get(i).getUfOrigem());
+			    row.createCell(8).setCellValue(ctrcs.get(i).getMunicipioOrigem());
+			    row.createCell(9).setCellValue(ctrcs.get(i).getUfDestino());
+			    row.createCell(10).setCellValue(ctrcs.get(i).getMunicipioDestino());
+			    row.createCell(11).setCellValue(ctrcs.get(i).getTaxaRct());
+			    row.createCell(12).setCellValue(ctrcs.get(i).getTaxaRcf());
+			    row.createCell(13).setCellValue(ctrcs.get(i).getTaxaRr());
+			    row.createCell(14).setCellValue(ctrcs.get(i).getTaxaFluvial());
+		    }
+
+		    // Write the output to a file/
+		    String fileName = Config.getConfig("tmp_dir") + "ctrcs_" + System.currentTimeMillis()+".xls";
 		    FileOutputStream fileOut = new FileOutputStream(fileName);
 		    wb.write(fileOut);
 		    fileOut.close();

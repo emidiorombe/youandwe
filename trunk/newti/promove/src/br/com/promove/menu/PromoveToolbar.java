@@ -13,6 +13,7 @@ import com.vaadin.ui.Button.ClickListener;
 public class PromoveToolbar extends CssLayout{
 	//Toolbar items
 	private NativeButton toolbar_avaria = new NativeButton("Avarias");
+	private NativeButton toolbar_averbacao = new NativeButton("Averbação");
 	private NativeButton toolbar_geral = new NativeButton("Cadastros");
 	private PromoveApplication app;
 	
@@ -31,7 +32,7 @@ public class PromoveToolbar extends CssLayout{
 		addComponent(right);
 
 
-		Button b = new Button("sair");
+		Button b = new Button("Sair");
 		b.addStyleName("borderless");
 		b.addListener(new LogoutListener(app));
 		right.addComponent(b);
@@ -46,10 +47,12 @@ public class PromoveToolbar extends CssLayout{
 		left.addComponent(title);
 		
 		toolbar_avaria.addListener(new ToolbarEventListener(app));
+		toolbar_averbacao.addListener(new ToolbarEventListener(app));
 		toolbar_geral.addListener(new ToolbarEventListener(app));
 		
 		left.addComponent(new NativeButton(""));
 		left.addComponent(toolbar_avaria);
+		left.addComponent(toolbar_averbacao);
 		left.addComponent(toolbar_geral);
 		
 	}
@@ -70,6 +73,8 @@ public class PromoveToolbar extends CssLayout{
 			}
 			if(event.getSource() == toolbar_avaria) {
 				app.setMenuView(app.getMenuAvaria());
+			}else if(event.getSource() == toolbar_averbacao) {
+				app.setMenuView(app.getMenuAverbacao());
 			}else if(event.getSource() == toolbar_geral) {
 				app.setMenuView(app.getMenuGeral());
 			}

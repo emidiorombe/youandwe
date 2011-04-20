@@ -30,10 +30,10 @@ public class ImportacaoTERCA {
 				v.setChassi(campos[0]);
 				v.setCor(cadastro.getById(Cor.class, new Integer(97)));
 				
-				if(!modelos.containsKey(campos[1])) {
+				if(!modelos.containsKey(campos[1].replaceAll("\r", ""))) {
 					throw new Exception("Modelo " + campos[1] + " não existe;");
 				}else {
-					v.setModelo(modelos.get(campos[1]));
+					v.setModelo(modelos.get(campos[1].replaceAll("\r", "")));
 				}
 				
 				cadastro.salvarVeiculo(v, true);

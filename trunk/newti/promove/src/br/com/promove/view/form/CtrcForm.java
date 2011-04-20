@@ -1,0 +1,191 @@
+package br.com.promove.view.form;
+
+import java.util.Iterator;
+import java.util.Locale;
+
+import br.com.promove.entity.Transportadora;
+import br.com.promove.entity.Ctrc;
+import br.com.promove.exception.PromoveException;
+import br.com.promove.service.CtrcService;
+import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.StringUtilities;
+
+import com.vaadin.data.Item;
+import com.vaadin.data.Validator.InvalidValueException;
+import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.validator.DoubleValidator;
+import com.vaadin.data.validator.IntegerValidator;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.DefaultFieldFactory;
+import com.vaadin.ui.Field;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.PopupDateField;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.AbstractSelect.Filtering;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+
+public class CtrcForm extends BaseForm{
+	private VerticalLayout form_layout = new VerticalLayout();
+	private Button save;
+	private Button novo;
+	private Button remove;
+	
+	private CtrcService ctrcService;
+	
+	public CtrcForm() {
+		ctrcService = ServiceFactory.getService(CtrcService.class);
+		buildForm();
+	}
+	
+	private void buildForm() {
+		setWriteThrough(false);
+		setImmediate(true);
+		setSizeFull();
+		
+		save = new Button("Salvar", new CtrcFormListener(this));
+		remove = new Button("Excluir", new CtrcFormListener(this));
+		novo = new Button("Novo", new CtrcFormListener(this));
+		
+		createFormBody(new BeanItem<Ctrc>(new Ctrc()));
+		form_layout.addComponent(this);
+		form_layout.addComponent(createFooter());
+		form_layout.setSpacing(true);
+		
+	}
+
+	public void createFormBody(BeanItem<Ctrc> item) {
+		setItemDataSource(item);
+		setFormFieldFactory(new CtrcFieldFactory(this, item.getBean().getId() == null));
+		setVisibleItemProperties(new Object[]{"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "taxaRct", "taxaRr", "taxaRcf", "taxaFluvial"});
+		
+	}
+	
+	private Component createFooter(){
+		HorizontalLayout footer = new HorizontalLayout();
+		footer.setSpacing(true);
+		footer.addComponent(save);
+		footer.addComponent(remove);
+		footer.addComponent(novo);
+		footer.setVisible(true);
+		
+		return footer;
+	}
+
+	public Component getFormLayout() {
+		return form_layout;
+	}
+	
+	public void addNewCtrc() {
+		createFormBody(new BeanItem<Ctrc>(new Ctrc()));
+	}
+	
+	class CtrcFieldFactory extends DefaultFieldFactory{
+		private boolean newLocal;
+		private CtrcForm form;
+		public CtrcFieldFactory(CtrcForm form, boolean b) {
+			this.form = form;
+			newLocal = b;
+		}
+
+		@Override
+		public Field createField(Item item, Object propertyId, Component uiContext) {
+			Field f = super.createField(item, propertyId, uiContext);
+			
+			if(f instanceof TextField){
+				((TextField)f).setNullRepresentation("");
+				f.setRequired(true);
+				f.setRequiredError("Preenchimento do campo '" + StringUtilities.capitalize(propertyId.toString()) + "' é obrigatório.");
+			}
+			
+			if(propertyId.equals("filial") || propertyId.equals("numero") || propertyId.equals("tipo") || propertyId.equals("serie")) {
+				if(!newLocal)
+					f.setReadOnly(true);
+				if(!propertyId.equals("serie"))
+					f.addValidator(new IntegerValidator(propertyId.toString() + " deve ser numérico"));
+			} else if(propertyId.equals("transp")) {
+				try {
+					ComboBox c = new ComboBox("Transportadora");
+					c.addContainerProperty("label", String.class, null);
+				
+					for(Transportadora t: ctrcService.buscarTodasTransportadoras()) {
+						Item i = c.addItem(t);
+						i.getItemProperty("label").setValue(t.getDescricao());
+					}
+					
+					c.setRequired(true);
+					c.setRequiredError("Transportadora obrigatória");
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					
+					return c;
+				}catch (PromoveException e) {
+					showErrorMessage(form, "Não foi possível buscar as Transportadoras");
+				}
+			} else if(propertyId.equals("dataEmissao")) {
+				PopupDateField data = new PopupDateField("Data");
+				data.setResolution(DateField.RESOLUTION_DAY);
+				data.setLocale(new Locale("pt", "BR"));
+				return data;
+			} else if(propertyId.equals("taxaRct") || propertyId.equals("taxaRcf") || propertyId.equals("taxaRr") || propertyId.equals("taxaFluvial")) {
+				f.setRequired(false);
+				f.addValidator(new DoubleValidator(propertyId.toString() + " deve ser numérico"));
+			} else {
+				f.setRequired(false);
+			}
+			return f;
+		}
+		
+	}
+	
+	class CtrcFormListener implements ClickListener{
+		private CtrcForm form;
+		public CtrcFormListener(CtrcForm form) {
+			 this.form = form;
+		}
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+			if(event.getButton() == save){
+				try{
+					validate();
+					if(isValid()){
+						commit();
+						BeanItem<Ctrc> item = (BeanItem<Ctrc>) getItemDataSource();
+						ctrcService.salvarCtrc(item.getBean());
+						addNewCtrc();
+						showSuccessMessage(form, "CTRC salvo!");
+					}
+				}catch(InvalidValueException ive){
+					setValidationVisible(true);
+				}catch(PromoveException de){
+					showErrorMessage(form,"Não foi possível salvar Ctrc");
+				}catch(IllegalArgumentException iae){
+					showErrorMessage(form, iae.getMessage());
+				}
+				
+			}else if(event.getButton() == novo){
+				addNewCtrc();
+			}else if(event.getButton() == remove){
+				try {
+					BeanItem<Ctrc> item = (BeanItem<Ctrc>) getItemDataSource();
+					if(item.getBean().getId() != null) {
+						ctrcService.excluirCtrc(item.getBean());
+						showSuccessMessage(form, "CTRC removido");
+					}
+					addNewCtrc();
+				}catch(PromoveException de){
+					showErrorMessage(form, "Não foi possível remover CTRC");
+				}
+			}
+		}
+
+	}
+}
