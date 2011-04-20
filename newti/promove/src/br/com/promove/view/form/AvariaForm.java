@@ -53,10 +53,9 @@ public class AvariaForm extends BaseForm {
 	
 	private void buildForm() {
 		setWriteThrough(false);
-		setCaption("Adicionar Nova Avaria");
+		//setCaption("Adicionar Nova Avaria");
 		setImmediate(true);
 		setSizeFull();
-		f_layout.setSpacing(true);
 		
 		save = new Button("Salvar", new FormButtonListener(this));
 		excluir = new Button("Excluir", new FormButtonListener(this));

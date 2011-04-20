@@ -60,25 +60,25 @@ public class AvariaSearchForm extends BaseForm{
 		setImmediate(true);
 		setSizeFull();
 		
-		txtChassi = new TextField("Chassi:");
+		txtChassi = new TextField("Chassi");
 		
 		search = new Button("Buscar", new AvariaSearchListener());
 		export = new Button("Gerar Arquivo", new AvariaSearchListener());
 		
-		txtDe = new PopupDateField("De:");
+		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
 		txtDe.setResolution(DateField.RESOLUTION_DAY);
 		
-		txtAte = new PopupDateField("Até:");
+		txtAte = new PopupDateField("Até");
 		txtAte.setLocale(new Locale("pt", "BR"));
 		txtAte.setResolution(DateField.RESOLUTION_DAY);
 		
 		
 		createFormBody(new BeanItem<Avaria>(new Avaria()));
+		addField("txtChassi", txtChassi);
 		layout.addComponent(this);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
-		addField("txtChassi", txtChassi);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		

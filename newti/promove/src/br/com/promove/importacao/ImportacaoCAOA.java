@@ -36,9 +36,7 @@ public class ImportacaoCAOA {
 					throw new IllegalArgumentException("Chassi já cadastrado");
 					
 				v.setCodigoInterno(campos[0]);
-				v.setChassi(campos[2].substring(0, 17));
-				
-				
+				v.setChassi(campos[2].replaceAll("\r", ""));
 				
 				if(!cores.containsKey(campos[0].substring(campos[0].length()-2))) {
 					temErro = true;

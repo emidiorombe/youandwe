@@ -1,8 +1,7 @@
 package br.com.promove.application;
 
-
-
 import br.com.promove.menu.MenuAvaria;
+import br.com.promove.menu.MenuAverbacao;
 import br.com.promove.menu.MenuGeral;
 import br.com.promove.menu.PromoveToolbar;
 import br.com.promove.view.LoginView;
@@ -22,6 +21,7 @@ public class PromoveApplication extends Application {
 	// Views references
 	private PromoveToolbar toolbar;  
 	private MenuAvaria menu_avaria;
+	private MenuAverbacao menu_averbacao;
 	private MenuGeral menu_geral;
 
 	@Override
@@ -80,6 +80,14 @@ public class PromoveApplication extends Application {
 		return menu_avaria;
 	}
 	
+	public MenuAverbacao getMenuAverbacao() {
+		if(menu_averbacao == null) {
+			menu_averbacao = new MenuAverbacao(this);
+		}
+
+		return menu_averbacao;
+	}
+	
 	public MenuGeral getMenuGeral() {
 		if(menu_geral == null)
 			menu_geral = new MenuGeral(this);
@@ -92,7 +100,4 @@ public class PromoveApplication extends Application {
 			toolbar = new PromoveToolbar(this);
 		return toolbar;
 	}
-	
-	
-	
 }

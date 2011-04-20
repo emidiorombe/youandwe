@@ -30,8 +30,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.BaseTheme;
 
 public class VeiculoTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "chassi", "chassiOriginal", "codigoInterno","modelo", "cor", "dataCadastro", "avarias"};
-	public static final String[] COL_HEADERS = new String[] {"ID","Chassi", "Chassi Original", "Código Interno","Modelo", "Cor", "Data de Cadastro", "Avarias"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "chassi", "modelo", "cor", "dataCadastro", "avarias"};
+	public static final String[] COL_HEADERS = new String[] {"ID","Chassi", "Modelo", "Cor", "Data", "Avarias"};
 	
 	private CadastroService cadastroService;
 	private VeiculoTableContainer container;

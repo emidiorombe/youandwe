@@ -31,8 +31,7 @@
 		<mapping class="br.com.promove.entity.FotoAvaria" />
 		<mapping class="br.com.promove.entity.InconsistenciaAvaria" />
 		<mapping class="br.com.promove.entity.InconsistenciaVeiculo" />
-		
-		
-
+		<mapping class="br.com.promove.entity.Transportadora" />
+		<mapping class="br.com.promove.entity.Ctrc" />
 	</session-factory>
 </hibernate-configuration>

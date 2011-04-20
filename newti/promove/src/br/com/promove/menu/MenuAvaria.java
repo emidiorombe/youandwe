@@ -52,21 +52,20 @@ public class MenuAvaria  extends CssLayout{
 		
 		Label title = new Label("Gerenciar Avarias e Veículos");
 		title.addStyleName("section");
-		
-		add = new NativeButton("Registrar Avaria");
+
 		list = new NativeButton("Listar Avarias");
-		add_veiculo = new NativeButton("Registrar Veículo");
+		add = new NativeButton("Registrar Avaria");
 		list_veiculo = new NativeButton("Listar Veículos");
+		add_veiculo = new NativeButton("Registrar Veículo");
 		import_avaria = new NativeButton("Importar Avarias");
 		erro_import_avaria = new NativeButton("Auditar erros importação Avarias");
-		import_veiculos = new NativeButton("Importar Veículo");
+		import_veiculos = new NativeButton("Importar Veículos");
 		erro_import_veiculos = new NativeButton("Auditar erros importação Veículos");
 		export_avaria = new NativeButton("Exportar Avarias");
 
-		
-		
-		addListeners(add, list, add_veiculo, list_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export_avaria);
-		addComponents(title, add_veiculo, list_veiculo, add, list, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export_avaria);
+
+		addListeners(list, add, list_veiculo, add_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export_avaria);
+		addComponents(title, list, add, list_veiculo, add_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export_avaria);
 				
 		setPermissionVisible();
 		
