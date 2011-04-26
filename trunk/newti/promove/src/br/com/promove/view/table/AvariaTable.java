@@ -33,8 +33,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.Window;
 
 public class AvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "modelo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento","hora", "fotos", "usuario", "observacao"};
-	public static final String[] COL_HEADERS = new String[] {"ID","Veículo", "Modelo", "Tipo", "Local", "Origem", "Extensão", "Clima", "Data","Hora", "Fotos", "Usuário", "Obs"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "modelo", "dataLancamento", "hora", "origem", "local", "tipo", "extensao", "fotos", "clima", "usuario", "observacao"};
+	public static final String[] COL_HEADERS = new String[] {"ID", "Veículo", "Modelo", "Data", "Hora", "Origem", "Local", "Tipo", "Extensão", "Fotos", "Clima", "Usuário", "Obs"};
 	
 	private AvariaService avariaService;
 	private AvariaTableContainer container;
@@ -75,6 +75,20 @@ public class AvariaTable extends Table{
 		addGeneratedColumn("observacao", new AvariaTableColumnGenerator(this));
 		addGeneratedColumn("fotos", new AvariaTableColumnGenerator(this));
 		addGeneratedColumn("id", new AvariaTableColumnGenerator(this));
+		
+		try {
+			setColumnCollapsed("hora", true);
+			setColumnCollapsed("extensao", true);
+			setColumnCollapsed("clima", true);
+			setColumnCollapsed("usuario", true);
+			setColumnCollapsed("observacao", true);
+			if (this instanceof AvariaVeiculoTable) {
+				setColumnCollapsed("veiculo", true);
+				setColumnCollapsed("modelo", true);
+			}
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 
 	
@@ -106,8 +120,8 @@ public class AvariaTable extends Table{
 
 		private void populate(List<Avaria> avarias) {
 			container.removeAllItems();
-			for (Avaria mo : avarias) {
-				addItem(mo);
+			for (Avaria av : avarias) {
+				addItem(av);
 			}
 		}
 

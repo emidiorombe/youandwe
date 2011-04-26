@@ -8,22 +8,22 @@
 	
 	<context-param>
 		<param-name>pasta_avaria_xml</param-name>
-		<param-value>D:\importacao</param-value>
+		<param-value>C:\importacao</param-value>
 	</context-param>
 	
 	<context-param>
 		<param-name>pasta_destino_xml</param-name>
-		<param-value>D:\dados\avarias\</param-value>
+		<param-value>C:\dados\avarias\</param-value>
 	</context-param>
 	
 	<context-param>
 		<param-name>tmp_dir</param-name>
-		<param-value>D:\tmp</param-value>
+		<param-value>C:\tmp</param-value>
 	</context-param>
 	
 	<context-param>
 		<param-name>pasta_fotos</param-name>
-		<param-value>D:\fotos\</param-value>
+		<param-value>C:\dados\fotos\</param-value>
 	</context-param>
 	
 	<listener>

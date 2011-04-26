@@ -13,6 +13,7 @@ import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.view.VeiculoAvariaTables;
 import br.com.promove.view.VeiculoListView;
 import br.com.promove.view.form.AvariaSearchForm.AvariaSearchListener;
 
@@ -126,7 +127,8 @@ public class VeiculoSearchForm extends BaseForm{
 					}
 					
 					List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate);
-					view.getTable().filterTable(list);
+					view.getTables().getTableVeiculo().filterTable(list);
+					view.getTables().getTableAvaria().removeAllItems();
 				}catch(IllegalArgumentException ie) {
 					showErrorMessage(view, ie.getMessage());
 				}catch(PromoveException pe) {
