@@ -3,7 +3,7 @@
 	<classpathentry kind="var" path="VAADIN_DOWNLOAD/gwt-user/2.0.4/gwt-user.jar"/>
 	<classpathentry kind="var" path="VAADIN_DOWNLOAD/gwt-dev/2.0.4/gwt-dev.jar"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-6-openjdk">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
@@ -15,5 +15,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-3.7-20101029.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-ooxml-3.7-20101029.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

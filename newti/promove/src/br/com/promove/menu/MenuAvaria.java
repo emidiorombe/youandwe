@@ -7,6 +7,7 @@ import br.com.promove.view.ErroImportAvariaView;
 import br.com.promove.view.ErroImportVeiculoView;
 import br.com.promove.view.ImportAvariaView;
 import br.com.promove.view.ImportVeiculoView;
+import br.com.promove.view.VeiculoAvariaTables;
 import br.com.promove.view.VeiculoListView;
 import br.com.promove.view.form.AvariaForm;
 import br.com.promove.view.form.AvariaSearchForm;
@@ -15,6 +16,7 @@ import br.com.promove.view.form.ErroImportVeiculoForm;
 import br.com.promove.view.form.VeiculoForm;
 import br.com.promove.view.form.VeiculoSearchForm;
 import br.com.promove.view.table.AvariaTable;
+import br.com.promove.view.table.AvariaVeiculoTable;
 import br.com.promove.view.table.ErroImportAvariaTable;
 import br.com.promove.view.table.ErroImportVeiculoTable;
 import br.com.promove.view.table.VeiculoTable;
@@ -106,8 +108,10 @@ public class MenuAvaria  extends CssLayout{
 			app.setMainView(form.getFormLayout());
 		}else if(event.getButton() == list_veiculo) {
 			VeiculoSearchForm form = new VeiculoSearchForm(app);
-			VeiculoTable table = new VeiculoTable(app, this);
-			app.setMainView(new VeiculoListView(table, form));
+			VeiculoTable tableVeiculo = new VeiculoTable(app, this);
+			AvariaVeiculoTable tableAvaria = new AvariaVeiculoTable(app);
+			VeiculoAvariaTables tables = new VeiculoAvariaTables(tableVeiculo, tableAvaria);
+			app.setMainView(new VeiculoListView(tables, form));
 		}else if(event.getButton() == import_avaria) {
 			ImportAvariaView view = new ImportAvariaView(app);
 			app.setMainView(view.getLayout());
