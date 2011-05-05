@@ -81,8 +81,6 @@ public class AvariaSearchForm extends BaseForm{
 		addField("txtAte", txtAte);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
-		
-		
 	}
 
 	private void createFormBody(BeanItem<Avaria> beanItem) {
@@ -202,7 +200,7 @@ public class AvariaSearchForm extends BaseForm{
 					return c;
 				}
 			}catch(PromoveException pe) {
-					showErrorMessage(avariaForm, "Não foi possível montar o formulário de Avaria");
+				showErrorMessage(avariaForm, "Não foi possível montar o formulário de Avaria");
 			}
 			return null;
 		}
@@ -249,6 +247,8 @@ public class AvariaSearchForm extends BaseForm{
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=avarias.xls&file=" + file));
+				}catch (IllegalArgumentException ie) {
+					showErrorMessage(view, ie.getMessage());
 				} catch (Exception e) {
 					showErrorMessage(view, "Não foi possível gerar arquivo.");
 				}

@@ -20,6 +20,7 @@ import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.dao.UsuarioDAO;
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.entity.Ctrc;
 import br.com.promove.exception.DAOException;
@@ -109,6 +110,56 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 
 		    // Write the output to a file/
 		    String fileName = Config.getConfig("tmp_dir") + "avarias_" + System.currentTimeMillis()+".xls";
+		    FileOutputStream fileOut = new FileOutputStream(fileName);
+		    wb.write(fileOut);
+		    fileOut.close();
+		    
+		    return fileName;
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new PromoveException();
+		}
+		
+	}
+
+	@Override
+	public String exportarXLSInconsistenciaAvarias(List<InconsistenciaAvaria> lista) throws PromoveException {
+		try {
+			Workbook wb = new HSSFWorkbook();
+		    CreationHelper createHelper = wb.getCreationHelper();
+		    Sheet sheet = wb.createSheet("inconsistencias");
+		    
+		    //Cabeçalho
+		    Row row_head = sheet.createRow(0);
+		    row_head.createCell(0).setCellValue("CHASSI");
+		    row_head.createCell(1).setCellValue("DATA");
+		    row_head.createCell(2).setCellValue("HORA");
+		    row_head.createCell(3).setCellValue("ORIGEM");
+		    row_head.createCell(4).setCellValue("LOCAL");
+		    row_head.createCell(5).setCellValue("TIPO");
+		    row_head.createCell(6).setCellValue("EXTENSÃO");
+		    row_head.createCell(7).setCellValue("CLIMA");
+		    row_head.createCell(8).setCellValue("USUÁRIO");
+		    row_head.createCell(9).setCellValue("OBS");
+		    row_head.createCell(10).setCellValue("MENSAGEM");
+		    
+		    for(int i = 0; i < lista.size(); i++) {
+			    Row row = sheet.createRow(i+1);
+			    row.createCell(0).setCellValue(lista.get(i).getChassiInvalido());
+			    row.createCell(1).setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(lista.get(i).getDataLancamento()));
+			    row.createCell(2).setCellValue(lista.get(i).getHora());
+			    row.createCell(3).setCellValue(lista.get(i).getOrigem().getDescricao());
+			    row.createCell(4).setCellValue(lista.get(i).getLocal().getDescricao());
+			    row.createCell(5).setCellValue(lista.get(i).getTipo().getDescricao());
+			    row.createCell(6).setCellValue(lista.get(i).getExtensao().getDescricao());
+			    row.createCell(7).setCellValue(lista.get(i).getClima().getDescricao());
+			    row.createCell(8).setCellValue(lista.get(i).getUsuario().getNome());
+			    row.createCell(9).setCellValue(lista.get(i).getObservacao());
+			    row.createCell(10).setCellValue(lista.get(i).getMsgErro());
+		    }
+
+		    // Write the output to a file/
+		    String fileName = Config.getConfig("tmp_dir") + "incavarias_" + System.currentTimeMillis()+".xls";
 		    FileOutputStream fileOut = new FileOutputStream(fileName);
 		    wb.write(fileOut);
 		    fileOut.close();
