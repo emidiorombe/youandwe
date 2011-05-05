@@ -118,7 +118,7 @@ public class ClimaForm extends BaseForm{
 						avariaService.salvarClima(item.getBean());
 						view.getTable().getContainer().addItem(item.getBean());
 						addNewClima();
-						showSuccessMessage(view, "Clima salva!");
+						showSuccessMessage(view, "Clima salvo!");
 					}
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
@@ -134,7 +134,7 @@ public class ClimaForm extends BaseForm{
 					if(item.getBean().getId() != null) {
 						avariaService.excluirClima(item.getBean());
 						view.getTable().getContainer().removeItem(item.getBean());
-						showSuccessMessage(view, "Clima removida");
+						showSuccessMessage(view, "Clima removido");
 					}
 					addNewClima();
 				}catch(PromoveException de){

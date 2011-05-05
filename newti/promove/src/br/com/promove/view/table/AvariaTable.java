@@ -34,7 +34,7 @@ import com.vaadin.ui.Window;
 
 public class AvariaTable extends Table{
 	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "modelo", "dataLancamento", "hora", "origem", "local", "tipo", "extensao", "fotos", "clima", "usuario", "observacao"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Veículo", "Modelo", "Data", "Hora", "Origem", "Local", "Tipo", "Extensão", "Fotos", "Clima", "Usuário", "Obs"};
+	public static final String[] COL_HEADERS = new String[] {"ID", "Veículo", "Modelo", "Data Lanc.", "Hora", "Origem", "Local", "Tipo", "Extensão", "Fotos", "Clima", "Usuário", "Obs"};
 	
 	private AvariaService avariaService;
 	private AvariaTableContainer container;

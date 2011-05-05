@@ -236,8 +236,6 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 				List<Avaria> list = buscarAvariaDuplicadaPorFiltros(bean.getVeiculo(), bean);
 				if(list.size() > 0)
 					throw new IllegalArgumentException("Avaria já cadastrada");
-			
-				
 				
 				avariaDAO.save(bean);
 			}else {

@@ -124,7 +124,7 @@ public class MenuAvaria  extends CssLayout{
 			app.setMainView(new ErroImportVeiculoView(table, form));
 		}else if(event.getButton() == erro_import_avaria) {
 			ErroImportAvariaTable table = new ErroImportAvariaTable();
-			ErroImportAvariaForm form = new ErroImportAvariaForm();
+			ErroImportAvariaForm form = new ErroImportAvariaForm(app);
 			app.setMainView(new ErroImportAvariaView(table, form));
 		}
 	}

@@ -1,20 +1,27 @@
 package br.com.promove.view.form;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import br.com.promove.application.PromoveApplication;
+import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
+import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.ErroImportAvariaView;
+import br.com.promove.view.form.AvariaSearchForm.AvariaSearchListener;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.terminal.ExternalResource;
+import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.AbstractSelect.NewItemHandler;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.AbstractSelect.Filtering;
@@ -35,14 +42,19 @@ public class ErroImportAvariaForm extends BaseForm {
 	private VerticalLayout layout = new VerticalLayout();
 	private CadastroService cadastroService;
 	private AvariaService avariaService;
+	private ExportacaoService exportacaoService;
+	private PromoveApplication app;
 	
 	private Button save;
 	private Button saveAll;
 	private Button remove;
+	private Button export;
 	
-	public ErroImportAvariaForm() {
+	public ErroImportAvariaForm(PromoveApplication app) {
+		this.app = app;
 		cadastroService = ServiceFactory.getService(CadastroService.class);
 		avariaService = ServiceFactory.getService(AvariaService.class);
+		exportacaoService = ServiceFactory.getService(ExportacaoService.class);
 		buildForm();
 	}
 	
@@ -55,6 +67,7 @@ public class ErroImportAvariaForm extends BaseForm {
 		save = new Button("Salvar", new ErroAvariaFormListener());
 		remove = new Button("Excluir", new ErroAvariaFormListener());
 		saveAll = new Button("Revalidar Todos", new ErroAvariaFormListener());
+		export = new Button("Exportar Lista", new ErroAvariaFormListener());
 
 		createFormBody(new BeanItem<InconsistenciaAvaria>(new InconsistenciaAvaria()));
 		layout.addComponent(this);
@@ -80,6 +93,7 @@ public class ErroImportAvariaForm extends BaseForm {
 		footer.addComponent(save);
 		footer.addComponent(remove);
 		footer.addComponent(saveAll);
+		footer.addComponent(export);
 		footer.setVisible(true);
 
 		return footer;
@@ -107,7 +121,8 @@ public class ErroImportAvariaForm extends BaseForm {
 
 						avariaService.salvarAvaria(item.getBean().getAvaria());
 						avariaService.excluirInconsistenciaImportAvaria(item.getBean());
-						view.getTable().reloadTable();
+						//view.getTable().reloadTable();
+						view.getTable().getContainer().removeItem(item.getBean());
 						showSuccessMessage(view, "Inconsistência salva!");
 						
 					}
@@ -127,7 +142,8 @@ public class ErroImportAvariaForm extends BaseForm {
 						commit();
 						BeanItem<InconsistenciaAvaria> item = (BeanItem<InconsistenciaAvaria>) getItemDataSource();
 						avariaService.excluirInconsistenciaImportAvaria(item.getBean());
-						view.getTable().reloadTable();
+						//view.getTable().reloadTable();
+						view.getTable().getContainer().removeItem(item.getBean());
 						showSuccessMessage(view, "Inconsistência excluida!");
 						
 					}
@@ -149,6 +165,17 @@ public class ErroImportAvariaForm extends BaseForm {
 					setValidationVisible(true);
 				}catch(PromoveException de){
 					showErrorMessage(view,"Não foi possível salvar Inconsistências");
+				}
+			}else if(event.getButton() == export) {
+				try {
+					List<InconsistenciaAvaria> lista = avariaService.buscarTodasInconsistenciasAvaria();
+					String file = exportacaoService.exportarXLSInconsistenciaAvarias(lista);
+					
+					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+					String path = ctx.getHttpSession().getServletContext().getContextPath();
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=incavarias.xls&file=" + file));
+				} catch (Exception e) {
+					showErrorMessage(view, "Não foi possível gerar arquivo.");
 				}
 			}
 			

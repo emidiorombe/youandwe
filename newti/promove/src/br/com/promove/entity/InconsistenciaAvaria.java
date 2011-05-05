@@ -57,6 +57,8 @@ public class InconsistenciaAvaria implements Serializable{
 	
 	private String chassiInvalido;
 	
+	private String hora;
+	
 	public InconsistenciaAvaria() {}
 	
 	public InconsistenciaAvaria(Avaria av, String msgErro) {
@@ -69,6 +71,7 @@ public class InconsistenciaAvaria implements Serializable{
 		this.dataLancamento = av.getDataLancamento();
 		this.usuario = av.getUsuario();
 		this.observacao = av.getObservacao();
+		this.setHora(av.getHora());
 		this.msgErro = msgErro;
 	}
 
@@ -171,6 +174,7 @@ public class InconsistenciaAvaria implements Serializable{
 		av.setTipo(tipo);
 		av.setUsuario(usuario);
 		av.setVeiculo(veiculo);
+		av.setHora(hora);
 		return av;
 	}
 	
@@ -180,6 +184,14 @@ public class InconsistenciaAvaria implements Serializable{
 
 	public void setChassiInvalido(String chassiInvalido) {
 		this.chassiInvalido = chassiInvalido;
+	}
+
+	public void setHora(String hora) {
+		this.hora = hora;
+	}
+
+	public String getHora() {
+		return hora;
 	}
 	
 }
