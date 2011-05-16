@@ -23,7 +23,7 @@
 	
 	<context-param>
 		<param-name>pasta_fotos</param-name>
-		<param-value>D:\fotos\</param-value>
+		<param-value>D:\dados\fotos\</param-value>
 	</context-param>
 	
 	<listener>
