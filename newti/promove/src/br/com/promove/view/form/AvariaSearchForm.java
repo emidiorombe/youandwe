@@ -1,5 +1,6 @@
 package br.com.promove.view.form;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -42,6 +43,7 @@ public class AvariaSearchForm extends BaseForm{
 	private AvariaSearchView view;
 	private Button search;
 	private Button export;
+	private Button exportXml;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
 	private TextField txtChassi;
@@ -64,6 +66,7 @@ public class AvariaSearchForm extends BaseForm{
 		
 		search = new Button("Buscar", new AvariaSearchListener());
 		export = new Button("Gerar Arquivo", new AvariaSearchListener());
+		exportXml = new Button("Gerar XML", new AvariaSearchListener());
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -72,7 +75,6 @@ public class AvariaSearchForm extends BaseForm{
 		txtAte = new PopupDateField("Até");
 		txtAte.setLocale(new Locale("pt", "BR"));
 		txtAte.setResolution(DateField.RESOLUTION_DAY);
-		
 		
 		createFormBody(new BeanItem<Avaria>(new Avaria()));
 		addField("txtChassi", txtChassi);
@@ -95,6 +97,7 @@ public class AvariaSearchForm extends BaseForm{
 		footer.setSpacing(true);
 		footer.addComponent(search);
 		footer.addComponent(export);
+		//footer.addComponent(exportXml);
 		footer.setVisible(true);
 		
 		return footer;
@@ -251,6 +254,24 @@ public class AvariaSearchForm extends BaseForm{
 					showErrorMessage(view, ie.getMessage());
 				} catch (Exception e) {
 					showErrorMessage(view, "Não foi possível gerar arquivo.");
+				}
+			}else if(event.getButton() == exportXml) {
+				try {
+					commit();
+					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					
+					if(de == null || ate == null)
+						throw new IllegalArgumentException("Informe um período para gerar arquivo.");
+					
+					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+					String path = ctx.getHttpSession().getServletContext().getContextPath();
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_avarias&fileName=avarias.xml&de=" + new SimpleDateFormat("dd/MM/yyyy").format(de) + "&ate=" + new SimpleDateFormat("dd/MM/yyyy").format(ate)));
+					
+				}catch (IllegalArgumentException ie) {
+					showErrorMessage(view, ie.getMessage());
+				} catch (Exception e) {
+					showErrorMessage(view, e.getMessage() + " Não foi possível gerar arquivo.");
 				}
 			}
 			

@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.dom4j.Document;
 
 import br.com.promove.dao.ClimaDAO;
 import br.com.promove.dao.LocalAvariaDAO;
@@ -25,8 +26,10 @@ import br.com.promove.entity.Veiculo;
 import br.com.promove.entity.Ctrc;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
+import br.com.promove.exportacao.AvariasExport;
 import br.com.promove.exportacao.CadastrosBasicosExport;
 import br.com.promove.utils.Config;
+import br.com.promove.utils.FileUtils;
 
 /**
  * 
@@ -60,11 +63,15 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			
 			return CadastrosBasicosExport.gerarXmlExportacao(listas);
 			
-			
 		}catch(DAOException de){
 			throw new PromoveException();
 		}
 		
+	}
+
+	@Override
+	public String exportarXMLAvarias(List<Avaria> avarias) throws PromoveException {
+		return AvariasExport.gerarXmlExportacao(avarias);
 	}
 
 	@Override

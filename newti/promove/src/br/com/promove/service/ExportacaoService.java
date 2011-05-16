@@ -18,6 +18,8 @@ public interface ExportacaoService {
 	
 	public String exportarCadastrosBasicos() throws PromoveException;
 
+	public String exportarXMLAvarias(List<Avaria> avarias) throws PromoveException;
+
 	public String exportarXLSAvarias(List<Avaria> avarias) throws PromoveException;
 
 	public String exportarXLSVeiculos(List<Veiculo> veiculos) throws PromoveException;
