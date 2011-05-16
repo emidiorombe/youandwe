@@ -5,6 +5,7 @@ import br.com.promove.entity.Usuario;
 import br.com.promove.view.AvariaSearchView;
 import br.com.promove.view.ErroImportAvariaView;
 import br.com.promove.view.ErroImportVeiculoView;
+import br.com.promove.view.ExportAvariaView;
 import br.com.promove.view.ImportAvariaView;
 import br.com.promove.view.ImportVeiculoView;
 import br.com.promove.view.VeiculoAvariaTables;
@@ -39,7 +40,7 @@ public class MenuAvaria  extends CssLayout{
 	private Button erro_import_avaria;
 	private Button import_veiculos;
 	private Button erro_import_veiculos;
-	private Button export_avaria;
+	private Button export;
 	
 	private PromoveApplication app;
 	
@@ -63,11 +64,10 @@ public class MenuAvaria  extends CssLayout{
 		erro_import_avaria = new NativeButton("Auditar erros importação Avarias");
 		import_veiculos = new NativeButton("Importar Veículos");
 		erro_import_veiculos = new NativeButton("Auditar erros importação Veículos");
-		export_avaria = new NativeButton("Exportar Avarias");
+		export = new NativeButton("Exportar Avarias");
 
-
-		addListeners(list, add, list_veiculo, add_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export_avaria);
-		addComponents(title, list, add, list_veiculo, add_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export_avaria);
+		addListeners(list, add, list_veiculo, add_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export);
+		addComponents(title, list, add, list_veiculo, add_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export);
 				
 		setPermissionVisible();
 		
@@ -85,17 +85,17 @@ public class MenuAvaria  extends CssLayout{
 			erro_import_avaria.setVisible(false);
 			import_veiculos.setVisible(false);
 			erro_import_veiculos.setVisible(false);
-			export_avaria.setVisible(false);
+			export.setVisible(false);
 		}
 	}
 	
 	public void changeStyleToAdd() {
-		addAndRemoveStyle(add, add, list, add_veiculo, list_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export_avaria);
+		addAndRemoveStyle(add, add, list, add_veiculo, list_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export);
 		
 	}
 	
 	public void loadMainView(ClickEvent event) {
-		addAndRemoveStyle(event.getButton(), add, list, add_veiculo, list_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export_avaria);
+		addAndRemoveStyle(event.getButton(), add, list, add_veiculo, list_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export);
 		if(event.getButton() == add) {
 			AvariaForm form = new AvariaForm(app);
 			app.setMainView(form.getFormLayout());
@@ -115,6 +115,10 @@ public class MenuAvaria  extends CssLayout{
 		}else if(event.getButton() == import_avaria) {
 			ImportAvariaView view = new ImportAvariaView(app);
 			app.setMainView(view.getLayout());
+		}else if(event.getButton() == erro_import_avaria) {
+			ErroImportAvariaTable table = new ErroImportAvariaTable();
+			ErroImportAvariaForm form = new ErroImportAvariaForm(app);
+			app.setMainView(new ErroImportAvariaView(table, form));
 		}else if(event.getButton() == import_veiculos) {
 			ImportVeiculoView view = new ImportVeiculoView();
 			app.setMainView(view);
@@ -122,10 +126,9 @@ public class MenuAvaria  extends CssLayout{
 			ErroImportVeiculoTable table = new ErroImportVeiculoTable();
 			ErroImportVeiculoForm form = new ErroImportVeiculoForm();
 			app.setMainView(new ErroImportVeiculoView(table, form));
-		}else if(event.getButton() == erro_import_avaria) {
-			ErroImportAvariaTable table = new ErroImportAvariaTable();
-			ErroImportAvariaForm form = new ErroImportAvariaForm(app);
-			app.setMainView(new ErroImportAvariaView(table, form));
+		}else if(event.getButton() == export) {
+			ExportAvariaView view = new ExportAvariaView(app);
+			app.setMainView(view.getLayout());
 		}
 	}
 	
