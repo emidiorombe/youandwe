@@ -155,7 +155,7 @@ public class VeiculoTable extends Table{
 		public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 			Property property = event.getProperty();
 			BeanItem<Veiculo> item =  (BeanItem<Veiculo>) getItem(getValue());
-			view.getTableAvaria().filterTable(item.getBean().getChassi());
+			view.getTableAvaria().filterTable(item.getBean());
 		}
 	}
 	
@@ -175,7 +175,9 @@ public class VeiculoTable extends Table{
 				//AvariaTable table  = new AvariaTable(app);
 				//app.setMainView(new AvariaSearchView(table, form));
 				//table.filterTable(debug.substring(debug.indexOf("&") + 1));
-				view.getTableAvaria().filterTable(debug.substring(debug.indexOf("&") + 1));
+				Veiculo veiculo = new Veiculo();
+				veiculo.setChassi(debug.substring(debug.indexOf("&") + 1));
+				view.getTableAvaria().filterTable(veiculo);
 			}else if(event.getButton().getDebugId().startsWith("ch")) {
 				try {
 					VeiculoForm form = new VeiculoForm();

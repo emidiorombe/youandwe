@@ -125,6 +125,7 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				c.setNullSelectionAllowed(false);
 				c.setPropertyDataSource(item.getItemProperty(propertyId));
 				c.setItemCaptionPropertyId("label");
+				c.setWidth("250px");
 				
 				return c;
 			}else if(propertyId.equals("local")) {
@@ -143,6 +144,7 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				c.setNullSelectionAllowed(false);
 				c.setPropertyDataSource(item.getItemProperty(propertyId));
 				c.setItemCaptionPropertyId("label");
+				c.setWidth("250px");
 				
 				return c;
 			}else if(propertyId.equals("origem")) {
@@ -161,6 +163,7 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				c.setNullSelectionAllowed(false);
 				c.setPropertyDataSource(item.getItemProperty(propertyId));
 				c.setItemCaptionPropertyId("label");
+				c.setWidth("250px");
 				
 				return c;
 			}else if(propertyId.equals("extensao")) {
@@ -179,6 +182,7 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				c.setNullSelectionAllowed(false);
 				c.setPropertyDataSource(item.getItemProperty(propertyId));
 				c.setItemCaptionPropertyId("label");
+				c.setWidth("150px");
 				
 				return c;
 			}else if(propertyId.equals("clima")) {
@@ -197,6 +201,7 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				c.setNullSelectionAllowed(false);
 				c.setPropertyDataSource(item.getItemProperty(propertyId));
 				c.setItemCaptionPropertyId("label");
+				c.setWidth("150px");
 				
 				return c;
 			}else if(propertyId.equals("observacao")) {
@@ -215,6 +220,7 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				TextField tf = new TextField("Chassi");
 				tf.setNullRepresentation("");
 				tf.setImmediate(true);
+				tf.setWidth("200px");
 				return tf;
 			}else if(propertyId.equals("dataLancamento")) {
 				PopupDateField data = new PopupDateField("Data");
@@ -225,6 +231,7 @@ class AvariaFieldFactory extends DefaultFieldFactory{
 				TextField tf = new TextField("Hora");
 				tf.setNullRepresentation("");
 				tf.setImmediate(true);
+				tf.setWidth("70px");
 				return tf;
 			}
 		}catch(PromoveException pe) {

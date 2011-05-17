@@ -46,7 +46,6 @@ public class AvariaSearchForm extends BaseForm{
 	private Button exportXml;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
-	private TextField txtChassi;
 	private PromoveApplication app;
 	
 	public AvariaSearchForm(PromoveApplication app) {
@@ -62,8 +61,6 @@ public class AvariaSearchForm extends BaseForm{
 		setImmediate(true);
 		setSizeFull();
 		
-		txtChassi = new TextField("Chassi");
-		
 		search = new Button("Buscar", new AvariaSearchListener());
 		export = new Button("Gerar Arquivo", new AvariaSearchListener());
 		exportXml = new Button("Gerar XML", new AvariaSearchListener());
@@ -77,7 +74,6 @@ public class AvariaSearchForm extends BaseForm{
 		txtAte.setResolution(DateField.RESOLUTION_DAY);
 		
 		createFormBody(new BeanItem<Avaria>(new Avaria()));
-		addField("txtChassi", txtChassi);
 		layout.addComponent(this);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
@@ -88,7 +84,7 @@ public class AvariaSearchForm extends BaseForm{
 	private void createFormBody(BeanItem<Avaria> beanItem) {
 		setItemDataSource(beanItem);
 		setFormFieldFactory(new AvariaFieldFactory(this, beanItem.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"tipo", "origem", "local"});
+		setVisibleItemProperties(new Object[]{"veiculo", "tipo", "origem", "local"});
 		
 	}
 	
@@ -130,7 +126,13 @@ public class AvariaSearchForm extends BaseForm{
 			Field f = super.createField(item, propertyId, uiContext);
 			
 			try {
-				if(propertyId.equals("tipo")) {
+				if(propertyId.equals("veiculo")) {
+					TextField tf = new TextField("Chassi");
+					tf.setNullRepresentation("");
+					tf.setImmediate(true);
+					tf.setWidth("200px");
+					return tf;
+				} else if(propertyId.equals("tipo")) {
 					ComboBox c = new ComboBox("Tipo Avaria");
 					c.addContainerProperty("label", String.class, null);
 					
@@ -220,12 +222,12 @@ public class AvariaSearchForm extends BaseForm{
 					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 					BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
 					
-					if(txtChassi == null || txtChassi.toString().isEmpty()) {
+					if(item.getBean().getVeiculo() == null) {
 						if(de == null || ate == null)
 							throw new IllegalArgumentException("Informe um chassi ou período para busca.");
 					}
 					
-					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(txtChassi.getValue().toString(), item.getBean(), de, ate);
+					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(item.getBean(), de, ate);
 					view.getTable().filterTable(avarias);
 				}catch(IllegalArgumentException ie) {
 					showErrorMessage(view, ie.getMessage());
@@ -239,12 +241,13 @@ public class AvariaSearchForm extends BaseForm{
 					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 					BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
 					
-					if(txtChassi == null || txtChassi.toString().isEmpty()) {
+					//if(txtChassi == null || txtChassi.toString().isEmpty()) {
+					if(item.getBean().getVeiculo() == null) {
 						if(de == null || ate == null)
 							throw new IllegalArgumentException("Informe um chassi ou período para gerar arquivo.");
 					}
 					
-					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(txtChassi.getValue().toString(), item.getBean(), de, ate);
+					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(item.getBean(), de, ate);
 					String file = exportacaoService.exportarXLSAvarias(avarias);
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();

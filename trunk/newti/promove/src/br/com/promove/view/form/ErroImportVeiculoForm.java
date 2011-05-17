@@ -190,7 +190,9 @@ public class ErroImportVeiculoForm extends BaseForm{
 				((TextField)f).setNullRepresentation("");
 			}
 			
-			if(propertyId.equals("modelo")) {
+			if(propertyId.equals("chassi")) {
+				f.setWidth("200px");
+			} else if(propertyId.equals("modelo")) {
 				try {
 					ComboBox c = new ComboBox("Modelo");
 					c.addContainerProperty("label", String.class, null);
