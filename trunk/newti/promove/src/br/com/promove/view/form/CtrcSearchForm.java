@@ -79,6 +79,7 @@ public class CtrcSearchForm extends BaseForm{
 		
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
+		layout.setMargin(false, true, false, true);
 		
 	}
 	

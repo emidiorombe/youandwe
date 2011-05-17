@@ -8,6 +8,7 @@ import br.com.promove.application.PromoveApplication;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.VerticalLayout;
@@ -24,7 +25,12 @@ public class ExportCadastroView implements Serializable{
 
 	private void buildView() {
 		exportar = new Button("Exportar", new ExportCadastroListener(this));
+		Label label = new Label("<h3>Exportar Cadastros Básicos</h3>");
+		label.setContentMode(Label.CONTENT_XHTML);
+		layout.addComponent(label);
 		layout.addComponent(exportar);
+		layout.setSpacing(true);
+		layout.setMargin(false, true, false, true);
 		
 	}
 	

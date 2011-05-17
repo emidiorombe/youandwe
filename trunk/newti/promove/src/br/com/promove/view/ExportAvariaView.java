@@ -15,6 +15,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -47,12 +48,16 @@ public class ExportAvariaView extends BaseForm{
 		
 		exportar = new Button("Exportar", new ExportAvariaListener(this));
 		
+		Label label = new Label("<h3>Exportar Avarias</h3>");
+		label.setContentMode(Label.CONTENT_XHTML);
+		layout.addComponent(label);
 		layout.addComponent(this);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
 		layout.addComponent(createFooter());
-		layout.setSpacing(true);
 		layout.addComponent(exportar);
+		layout.setSpacing(true);
+		layout.setMargin(false, true, false, true);
 		
 	}
 	

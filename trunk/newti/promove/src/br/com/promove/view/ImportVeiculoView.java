@@ -13,5 +13,6 @@ public class ImportVeiculoView extends VerticalLayout{
 		setSpacing(true);
 		addComponent(new ImporVeiculoNacionalForm().getLayout());
 		addComponent(new ImportVeiculoImportadoForm().getLayout());
+		setMargin(false, true, false, true);
 	}
 }

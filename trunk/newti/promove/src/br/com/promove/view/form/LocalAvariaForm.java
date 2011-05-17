@@ -27,7 +27,7 @@ public class LocalAvariaForm extends BaseForm{
 	private Button remove;
 	
 	private LocalAvariaView view;
-	private VerticalLayout f_laytou = new VerticalLayout();
+	private VerticalLayout f_layout = new VerticalLayout();
 	private AvariaService avariaService;
 	
 	public LocalAvariaForm() {
@@ -45,9 +45,10 @@ public class LocalAvariaForm extends BaseForm{
 		novo = new Button("Novo", new LocalAvariaFormListener());
 		
 		createFormBody(new BeanItem<LocalAvaria>(new LocalAvaria()));
-		f_laytou.addComponent(this);
-		f_laytou.addComponent(createFooter());
-		f_laytou.setSpacing(true);
+		f_layout.addComponent(this);
+		f_layout.addComponent(createFooter());
+		f_layout.setSpacing(true);
+		f_layout.setMargin(false, true, false, true);
 		
 	}
 	
@@ -68,7 +69,7 @@ public class LocalAvariaForm extends BaseForm{
 	}
 
 	public Component getFormLayout() {
-		return f_laytou;
+		return f_layout;
 	}
 
 	public void createFormBody(BeanItem<LocalAvaria> item) {

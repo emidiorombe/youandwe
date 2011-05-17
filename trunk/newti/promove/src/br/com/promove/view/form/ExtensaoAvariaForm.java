@@ -49,6 +49,7 @@ public class ExtensaoAvariaForm extends BaseForm{
 		f_layout.addComponent(this);
 		f_layout.addComponent(createFooter());
 		f_layout.setSpacing(true);
+		f_layout.setMargin(false, true, false, true);
 		
 	}
 	

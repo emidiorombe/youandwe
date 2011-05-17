@@ -54,7 +54,8 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 
 	private void buildLayout() {
 		layout.setSpacing(true);
-		Label label = new Label("<h3>Selecione o arquivo a ser importado.</h3>");
+		layout.setMargin(false, true, false, true);
+		Label label = new Label("<h3>Importar um único arquivo</h3>");
 		label.setContentMode(Label.CONTENT_XHTML);
 		
 		layout.addComponent(label);
@@ -78,7 +79,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 
         
         
-        Label title = new Label("<h3>Importar Arquivos do servidor</h3>");
+        Label title = new Label("<h3>Importar arquivos do servidor</h3>");
         title.setContentMode(Label.CONTENT_XHTML);
         
         import_from_server = new Button("Importar", new ImportFromServerListener(this));
