@@ -65,9 +65,14 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 
 	@Override
 	public List<TipoAvaria> buscarTodosTipoAvaria() throws PromoveException {
+		return buscarTodosTipoAvaria("descricao");
+	}
+	
+	@Override
+	public List<TipoAvaria> buscarTodosTipoAvaria(String sortField) throws PromoveException {
 		List<TipoAvaria> lista = null;
 		try {
-			lista = tipoDAO.getAll();
+			lista = tipoDAO.getAll(sortField);
 		} catch (DAOException de) {
 			throw new PromoveException(de);
 		}
@@ -86,9 +91,14 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 
 	@Override
 	public List<LocalAvaria> buscarTodosLocaisAvaria() throws PromoveException {
+		return buscarTodosLocaisAvaria("descricao");
+	}
+	
+	@Override
+	public List<LocalAvaria> buscarTodosLocaisAvaria(String sortField) throws PromoveException {
 		List<LocalAvaria> lista = null;
 		try {
-			lista = localDAO.getAll();
+			lista = localDAO.getAll(sortField);
 		} catch (DAOException de) {
 			throw new PromoveException(de);
 		}
@@ -137,9 +147,14 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 
 	@Override
 	public List<OrigemAvaria> buscarTodasOrigensAvaria() throws PromoveException {
+		return buscarTodasOrigensAvaria("descricao");
+	}
+	
+	@Override
+	public List<OrigemAvaria> buscarTodasOrigensAvaria(String sortField) throws PromoveException {
 		List<OrigemAvaria> lista = null;
 		try {
-			lista = origemDAO.getAll();
+			lista = origemDAO.getAll(sortField);
 		} catch (DAOException de) {
 			throw new PromoveException(de);
 		}
@@ -173,7 +188,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 			throws PromoveException {
 		List<ExtensaoAvaria> lista = null;
 		try {
-			lista = extensaoDAO.getAll();
+			lista = extensaoDAO.getAll("codigo");
 		} catch (DAOException de) {
 			throw new PromoveException(de);
 		}
@@ -185,7 +200,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	public List<Clima> buscarTodosClimas() throws PromoveException {
 		List<Clima> lista = null;
 		try {
-			lista = climaDAO.getAll();
+			lista = climaDAO.getAll("codigo");
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

@@ -66,7 +66,7 @@ public class LocalAvariaTable extends Table{
 		
 		private void populate() {
 			try {
-				List<LocalAvaria> list = avariaService.buscarTodosLocaisAvaria();
+				List<LocalAvaria> list = avariaService.buscarTodosLocaisAvaria("codigo");
 				for (LocalAvaria local : list) {
 					addItem(local);
 				}

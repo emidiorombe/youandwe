@@ -135,7 +135,12 @@ public abstract class BaseDAO<Id extends Serializable, Entity> implements Serial
 	public List getAll() throws DAOException {
 		return HibernateCRUD.getAll(getEntity().getSimpleName());
 	}
+
+	public List getAll(String sortField) throws DAOException {
+		return HibernateCRUD.getAll(getEntity().getSimpleName(), sortField);
+	}
 	
+
 	/**
 	 * Atualiza um objeto j� vinculado a sess�o do HBM
 	 * @param entity

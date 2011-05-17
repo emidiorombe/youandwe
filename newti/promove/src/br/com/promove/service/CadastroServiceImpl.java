@@ -63,9 +63,14 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 
 	@Override
 	public List<Cor> buscarTodasCores() throws PromoveException {
+		return buscarTodasCores("descricao");
+	}
+
+	@Override
+	public List<Cor> buscarTodasCores(String sortField) throws PromoveException {
 		List<Cor> lista = null;
 		try {
-			lista = corDAO.getAll();
+			lista = corDAO.getAll(sortField);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -104,9 +109,14 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 
 	@Override
 	public List<Modelo> buscarTodosModelos() throws PromoveException {
+		return buscarTodosModelos("descricao");
+	}
+	
+	@Override
+	public List<Modelo> buscarTodosModelos(String sortField) throws PromoveException {
 		List<Modelo> lista = null;
 		try {
-			lista = modeloDAO.getAll();
+			lista = modeloDAO.getAll(sortField);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -117,7 +127,7 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	public List<Fabricante> buscarTodosFabricantes() throws PromoveException {
 		List<Fabricante> lista = null;
 		try {
-			lista = fabricanteDAO.getAll();
+			lista = fabricanteDAO.getAll("codigo");
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -168,7 +178,7 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	public List<Filial> buscarTodasFiliais() throws PromoveException {
 		List<Filial> lista = null;
 		try {
-			lista = filialDAO.getAll();
+			lista = filialDAO.getAll("codigo");
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -199,7 +209,7 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	public List<Usuario> buscarTodosUsuarios() throws PromoveException {
 		List<Usuario> lista = null;
 		try {
-			lista = usuarioDAO.getAll();
+			lista = usuarioDAO.getAll("codigo");
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

@@ -44,19 +44,25 @@ public class StringUtilities {
 	}
 
 	public static String getChassiFromErrorMessage(String msgErro) {
-		String tokens[] = msgErro.split(" ");
-		if(tokens.length >= 2)
-			return tokens[1];
-		else
-			return null;
+		String erros[] = msgErro.split(";");
+		for (String erro : erros) {
+			if(erro.startsWith("Veiculo")) {
+				String campos[] = erro.split(" ");
+				if(campos.length >= 2)
+					return campos[1];
+			}
+		}
+		return null;
 	}
 
 	public static String getCorFromErrorMessage(String message) {
 		String erros[] = message.split(";");
 		for (String erro : erros) {
-			String campos[] = erro.split(" ");
-			if(erro.startsWith("Cor"))
-				return campos[1];
+			if(erro.startsWith("Cor")) {
+				String campos[] = erro.split(" ");
+				if(campos.length >= 2)
+					return campos[1];
+			}
 		}
 		return null;
 	}
@@ -64,9 +70,11 @@ public class StringUtilities {
 	public static String getModeloFromErrorMessage(String message) {
 		String erros[] = message.split(";");
 		for (String erro : erros) {
-			String campos[] = erro.split(" ");
-			if(erro.startsWith("Modelo"))
-				return campos[1];
+			if(erro.startsWith("Modelo")) {
+				String campos[] = erro.split(" ");
+				if(campos.length >= 2)
+					return campos[1];
+			}
 		}
 		return null;
 	}

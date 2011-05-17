@@ -64,7 +64,7 @@ public class ModeloTable extends Table{
 		
 		private void populate() {
 			try {
-				List<Modelo> list = cadastroService.buscarTodosModelos();
+				List<Modelo> list = cadastroService.buscarTodosModelos("id");
 				for (Modelo mo : list) {
 					addItem(mo);
 				}

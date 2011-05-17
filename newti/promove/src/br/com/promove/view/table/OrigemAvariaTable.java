@@ -62,7 +62,7 @@ public class OrigemAvariaTable extends Table{
 		
 		private void populate() {
 			try {
-				List<OrigemAvaria> list = avariaService.buscarTodasOrigensAvaria();
+				List<OrigemAvaria> list = avariaService.buscarTodasOrigensAvaria("codigo");
 				for (OrigemAvaria or : list) {
 					addItem(or);
 				}

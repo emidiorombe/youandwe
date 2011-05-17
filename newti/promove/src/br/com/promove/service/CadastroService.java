@@ -27,6 +27,8 @@ public interface CadastroService {
 
 	public List<Cor> buscarTodasCores() throws PromoveException;
 
+	public List<Cor> buscarTodasCores(String sortField) throws PromoveException;
+
 	public void excluirCor(Cor bean)throws PromoveException;
 
 	public void salvarModelo(Modelo bean)throws PromoveException;
@@ -35,6 +37,8 @@ public interface CadastroService {
 	
 	public List<Modelo> buscarTodosModelos()throws PromoveException;
 
+	public List<Modelo> buscarTodosModelos(String sortField) throws PromoveException;
+	
 	public List<Fabricante> buscarTodosFabricantes()throws PromoveException;
 
 	public void salvarFabricante(Fabricante bean) throws PromoveException;
