@@ -75,6 +75,7 @@ public class VeiculoSearchForm extends BaseForm{
 		addField("txtAte", txtAte);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
+		layout.setMargin(false, true, false, true);
 		
 	}
 	

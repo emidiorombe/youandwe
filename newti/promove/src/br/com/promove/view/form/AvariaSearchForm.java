@@ -79,6 +79,7 @@ public class AvariaSearchForm extends BaseForm{
 		addField("txtAte", txtAte);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
+		layout.setMargin(false, true, false, true);
 	}
 
 	private void createFormBody(BeanItem<Avaria> beanItem) {

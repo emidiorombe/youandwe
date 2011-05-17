@@ -29,7 +29,7 @@ public class TipoAvariaForm extends BaseForm {
 	private Button novo;
 	private Button remove;
 
-	private VerticalLayout f_laytou = new VerticalLayout();
+	private VerticalLayout f_layout = new VerticalLayout();
 	private AvariaService avariaService;
 
 	public TipoAvariaForm() {
@@ -47,9 +47,10 @@ public class TipoAvariaForm extends BaseForm {
 		novo = new Button("Novo", new TipoAvariaFormListener());
 
 		createFormBody(new BeanItem<TipoAvaria>(new TipoAvaria()));
-		f_laytou.addComponent(this);
-		f_laytou.addComponent(createFooter());
-		f_laytou.setSpacing(true);
+		f_layout.addComponent(this);
+		f_layout.addComponent(createFooter());
+		f_layout.setSpacing(true);
+		f_layout.setMargin(false, true, false, true);
 
 	}
 
@@ -78,7 +79,7 @@ public class TipoAvariaForm extends BaseForm {
 	}
 
 	public Component getFormLayout() {
-		return f_laytou;
+		return f_layout;
 	}
 
 	public void setView(TipoAvariaView view) {

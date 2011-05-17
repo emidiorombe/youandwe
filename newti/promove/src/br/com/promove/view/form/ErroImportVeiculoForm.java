@@ -55,6 +55,7 @@ public class ErroImportVeiculoForm extends BaseForm{
 		layout.addComponent(this);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
+		layout.setMargin(false, true, false, true);
 		
 	}
 	

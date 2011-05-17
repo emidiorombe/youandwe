@@ -53,6 +53,7 @@ public class ModeloForm extends BaseForm{
 		form_layout.addComponent(this);
 		form_layout.addComponent(createFooter());
 		form_layout.setSpacing(true);
+		form_layout.setMargin(false, true, false, true);
 		
 	}
 	
