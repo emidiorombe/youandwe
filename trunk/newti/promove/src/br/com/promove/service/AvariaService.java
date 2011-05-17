@@ -38,8 +38,9 @@ public interface AvariaService extends Serializable{
 	 * @throws PromoveException 
 	 */
 	List<TipoAvaria> buscarTodosTipoAvaria() throws PromoveException;
-
 	
+	List<TipoAvaria> buscarTodosTipoAvaria(String sortField) throws PromoveException;
+
 	/**
 	 * Remove um Tipo de Avaria
 	 * @param bean
@@ -53,8 +54,10 @@ public interface AvariaService extends Serializable{
 	 */
 	List<LocalAvaria> buscarTodosLocaisAvaria() throws PromoveException;
 	
+	List<LocalAvaria> buscarTodosLocaisAvaria(String sortField) throws PromoveException;
+	
 	/**
-	 * Salva o Locald e Avaria
+	 * Salva o Local de Avaria
 	 * @param class1
 	 */
 	void salvarLocalAvaria(LocalAvaria local) throws PromoveException;
@@ -85,6 +88,7 @@ public interface AvariaService extends Serializable{
 	 */
 	List<OrigemAvaria> buscarTodasOrigensAvaria() throws PromoveException;
 	
+	List<OrigemAvaria> buscarTodasOrigensAvaria(String sortField) throws PromoveException;
 	
 	/**
 	 * Salva a Extensao da Avaria

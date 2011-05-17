@@ -208,16 +208,20 @@ public class HibernateCRUD implements Serializable{
 	}
 	
 	/**
-	 * Retorna todos os registros de uma determinada enidade.
+	 * Retorna todos os registros de uma determinada entidade.
 	 * @param obj
 	 * @return
 	 * @throws DAOException
 	 */
 	public static List getAll(String entityName) throws DAOException {
+		return getAll(entityName, "id");
+	}
+
+	public static List getAll(String entityName, String sortField) throws DAOException {
 		Session session = null;
 		try {
 			session = HibernateSessionFactory.getSession();
-			String hql = "from " + entityName + " x order by x.id";
+			String hql = "from " + entityName + " x order by x." + sortField;
 			Query query = session.createQuery(hql);
 			List retorno = query.list();
 			return retorno;

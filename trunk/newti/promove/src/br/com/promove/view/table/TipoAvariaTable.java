@@ -70,7 +70,7 @@ public class TipoAvariaTable extends Table {
 		
 		private void populate() {
 			try {
-				List<TipoAvaria> list = avariaService.buscarTodosTipoAvaria();
+				List<TipoAvaria> list = avariaService.buscarTodosTipoAvaria("codigo");
 				for (TipoAvaria tipoAvaria : list) {
 					addItem(tipoAvaria);
 				}

@@ -62,7 +62,7 @@ public class CorTable extends Table{
 		
 		private void populate() {
 			try {
-				List<Cor> list = cadastroService.buscarTodasCores();
+				List<Cor> list = cadastroService.buscarTodasCores("codigo");
 				for (Cor cor : list) {
 					addItem(cor);
 				}
