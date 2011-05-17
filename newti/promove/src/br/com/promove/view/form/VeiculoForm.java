@@ -105,6 +105,7 @@ public class VeiculoForm extends BaseForm{
 			if(propertyId.equals("chassi")) {
 				if(!newLocal)
 					f.setReadOnly(true);
+				f.setWidth("200px");
 			}else if(propertyId.equals("modelo")) {
 				try {
 					ComboBox c = new ComboBox("Modelo");

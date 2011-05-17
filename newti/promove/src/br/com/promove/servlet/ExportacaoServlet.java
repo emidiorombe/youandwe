@@ -62,7 +62,7 @@ public class ExportacaoServlet extends HttpServlet{
 				
 				Avaria avaria = new Avaria();
 				String chassi = "";
-				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(chassi, avaria, dataDe, dataAte);
+				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(avaria, dataDe, dataAte);
 				
 				response.getWriter().print(export.exportarXMLAvarias(avarias));
 			}catch(IOException ioe) {

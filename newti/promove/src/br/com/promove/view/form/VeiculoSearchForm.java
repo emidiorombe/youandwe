@@ -176,9 +176,8 @@ public class VeiculoSearchForm extends BaseForm{
 				((TextField)f).setNullRepresentation("");
 			}
 			
-			if(propertyId.equals("codigo")) {
-				if(!newLocal)
-					f.setReadOnly(true);
+			if(propertyId.equals("chassi")) {
+				f.setWidth("200px");
 			}else if(propertyId.equals("modelo")) {
 				try {
 					ComboBox c = new ComboBox("Modelo");

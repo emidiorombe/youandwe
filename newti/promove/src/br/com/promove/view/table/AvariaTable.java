@@ -49,7 +49,7 @@ public class AvariaTable extends Table{
 
 	public AvariaTable(PromoveApplication app, Veiculo veiculo) {
 		this(app);
-		filterTable(veiculo.getChassi());
+		filterTable(veiculo);
 	}
 
 	private void buildTable() {
@@ -102,9 +102,11 @@ public class AvariaTable extends Table{
 		container.populate(avarias);
 	}
 	
-	public void filterTable(String chassi) {
+	public void filterTable(Veiculo veiculo) {
 		try {
-			filterTable(avariaService.buscarAvariaPorFiltros(chassi, null, null, null));
+			Avaria avaria = new Avaria();
+			avaria.setVeiculo(veiculo);
+			filterTable(avariaService.buscarAvariaPorFiltros(avaria, null, null));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -164,7 +166,9 @@ public class AvariaTable extends Table{
 				        
 				        for (FotoAvaria f : av.getFotos()) {
 				        	String req = path+"/export?action=foto&name="+ f.getNome();
-							w.addComponent(new Embedded("", new ExternalResource(req)));
+				        	Embedded emb = new Embedded("", new ExternalResource(req));
+				        	emb.setWidth("745px");
+							w.addComponent(emb);
 						}
 					}
 					
