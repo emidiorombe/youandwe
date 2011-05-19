@@ -12,6 +12,7 @@ import org.dom4j.DocumentException;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.importacao.ImportacaoAvaria;
 import br.com.promove.importacao.ImportacaoCAOA;
+import br.com.promove.importacao.ImportacaoCtrc;
 import br.com.promove.importacao.ImportacaoTERCA;
 import br.com.promove.utils.FileUtils;
 
@@ -77,6 +78,19 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 			FileUtils.removeXMLs(config);
 			
 		} catch (Exception e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public void importCtrc(String xml) throws PromoveException {
+		try {
+			ImportacaoCtrc import_ctrc = new ImportacaoCtrc();
+			import_ctrc.importar(xml);
+		}catch(DocumentException de) {
+			throw new PromoveException(de);
+		} catch (ParseException e) {
 			throw new PromoveException(e);
 		}
 		

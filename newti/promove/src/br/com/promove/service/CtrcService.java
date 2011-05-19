@@ -7,6 +7,7 @@ import java.util.List;
 import org.dom4j.Node;
 
 import br.com.promove.entity.Ctrc;
+import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.Transportadora;
 import br.com.promove.entity.Veiculo;
@@ -50,11 +51,18 @@ public interface CtrcService extends Serializable{
 
 	public List<Ctrc> buscarCtrcPorFiltro(Ctrc ctrc, Date dtInicio, Date dtFim) throws PromoveException;
 
-	//List<Ctrc> buscarCtrcDuplicadoPorFiltros(List<Ctrc> ctrcs, Ctrc ctrc) throws PromoveException;
+	List<Ctrc> buscarCtrcDuplicadoPorFiltros(Ctrc ctrc) throws PromoveException;
 
-	//InconsistenciaCtrc salvarInconsistenciaImportCtrc(Ctrc ctrc, String msgErro) throws PromoveException;
+	InconsistenciaCtrc salvarInconsistenciaImportCtrc(Ctrc ctrc, String msgErro) throws PromoveException;
 
-	//void cleanUpSession()throws PromoveException;
+	List<InconsistenciaCtrc> buscarTodasInconsistenciasCtrc() throws PromoveException;
 
+	void excluirInconsistenciaCtrc(InconsistenciaCtrc inc) throws PromoveException;
+
+	List<Transportadora> buscaTransportadoraPorCnpj(String cnpj) throws PromoveException;
+
+	void cleanUpSession()throws PromoveException;
+	
 	<T>T getById(Class<T> clazz, Integer id) throws PromoveException;
+
 }

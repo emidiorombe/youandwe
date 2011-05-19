@@ -71,7 +71,7 @@ public class InconsistenciaAvaria implements Serializable{
 		this.dataLancamento = av.getDataLancamento();
 		this.usuario = av.getUsuario();
 		this.observacao = av.getObservacao();
-		this.setHora(av.getHora());
+		this.hora = av.getHora();
 		this.msgErro = msgErro;
 	}
 

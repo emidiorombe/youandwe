@@ -264,10 +264,10 @@ public class ImportacaoAvaria {
 		String msgErro = "";
 		
 		if (av.getClima() == null)
-			msgErro += "Clima inexistente: " + node_av.element("concli").getText() + ";";
+			msgErro += "Clima " + node_av.element("concli").getText() + " não existe;";
 
 		if (av.getExtensao() == null)
-			msgErro += "Extensao inexistente: " + node_av.element("gravid").getText() + ";";
+			msgErro += "Extensao " + node_av.element("gravid").getText() + " não existe;";
 
 		if (av.getTipo() == null)
 			msgErro += "Tipo " + node_av.element("tipo").getText() + " não existe;";

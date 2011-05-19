@@ -14,6 +14,7 @@ import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.StringUtilities;
 import br.com.promove.view.ErroImportAvariaView;
 import br.com.promove.view.form.AvariaSearchForm.AvariaSearchListener;
 
@@ -113,7 +114,7 @@ public class ErroImportAvariaForm extends BaseForm {
 						BeanItem<InconsistenciaAvaria> item = (BeanItem<InconsistenciaAvaria>) getItemDataSource();
 						if(item.getBean().getId() == null)
 							throw new IllegalArgumentException("Selecione um registro!");
-						String chassi = item.getBean().getChassiInvalido() != null ? item.getBean().getChassiInvalido().substring(0, 17) : item.getBean().getMsgErro().split(" ")[1];
+						String chassi = item.getBean().getChassiInvalido() != null ? item.getBean().getChassiInvalido().substring(0, 17) : StringUtilities.getChassiFromErrorMessage(item.getBean().getMsgErro());
 						List<Veiculo> v = cadastroService.buscarVeiculosPorChassi(chassi);
 						if( v.size() == 0) {
 							throw new IllegalArgumentException("Veículo com chassi " + chassi + " não encontrado");
@@ -197,7 +198,7 @@ public class ErroImportAvariaForm extends BaseForm {
 					 if(bitem.getBean().getChassiInvalido() != null) {
 						 chassi = bitem.getBean().getChassiInvalido();
 					 }else if(bitem.getBean().getMsgErro() != null)
-						 chassi = bitem.getBean().getMsgErro().split(" ")[1];
+						 chassi = StringUtilities.getChassiFromErrorMessage(bitem.getBean().getMsgErro());
 				 }
 				final ComboBox c = new ComboBox("Veículos");
 				try {
