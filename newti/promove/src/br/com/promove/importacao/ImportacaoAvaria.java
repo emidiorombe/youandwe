@@ -162,7 +162,7 @@ public class ImportacaoAvaria {
 				av.setExtensao(extensoes.get(new Integer("0")));
 				av.setTipo(tipos.get(new Integer("300")));
 				av.setLocal(locais.get(new Integer("300")));
-				av.setOrigem(origensTipoFilial.get(node_av.element("tipo").getText() + "_" + node_av.element("filial").getText()));
+				av.setOrigem(origensTipoFilial.get(node_av.element("filial").getText() + "_" + node_av.element("tipo").getText()));
 				av.setUsuario(usuarios.get(new Integer(node_av.element("usuario").getText())));
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				av.setHora(node_av.element("hora").getText());
