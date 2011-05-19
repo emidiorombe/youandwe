@@ -43,10 +43,10 @@ public class StringUtilities {
 		return retorno.toString();
 	}
 
-	public static String getChassiFromErrorMessage(String msgErro) {
+	public static String getValueFromErrorMessage(String msgErro, String fieldErro) {
 		String erros[] = msgErro.split(";");
 		for (String erro : erros) {
-			if(erro.startsWith("Veiculo")) {
+			if(erro.startsWith(fieldErro)) {
 				String campos[] = erro.split(" ");
 				if(campos.length >= 2)
 					return campos[1];
@@ -55,29 +55,19 @@ public class StringUtilities {
 		return null;
 	}
 
-	public static String getCorFromErrorMessage(String message) {
-		String erros[] = message.split(";");
-		for (String erro : erros) {
-			if(erro.startsWith("Cor")) {
-				String campos[] = erro.split(" ");
-				if(campos.length >= 2)
-					return campos[1];
-			}
-		}
-		return null;
+	public static String getChassiFromErrorMessage(String msgErro) {
+		return getValueFromErrorMessage(msgErro, "Veiculo");
 	}
-	
-	public static String getModeloFromErrorMessage(String message) {
-		String erros[] = message.split(";");
-		for (String erro : erros) {
-			if(erro.startsWith("Modelo")) {
-				String campos[] = erro.split(" ");
-				if(campos.length >= 2)
-					return campos[1];
-			}
-		}
-		return null;
+
+	public static String getModeloFromErrorMessage(String msgErro) {
+		return getValueFromErrorMessage(msgErro, "Modelo");
 	}
-	
-	
+
+	public static String getCorFromErrorMessage(String msgErro) {
+		return getValueFromErrorMessage(msgErro, "Cor");
+	}
+
+	public static String getTranspFromErrorMessage(String msgErro) {
+		return getValueFromErrorMessage(msgErro, "Transportadora");
+	}
 }

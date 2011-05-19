@@ -306,7 +306,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 			Date init = DateUtils.montarDataInicialParaQuery(de); 
 			Date fim = DateUtils.montarDataFinalParaQuery(ate); 
 			
-			lista = avariaDAO.getAvariasPorFiltro(av.getVeiculo().getChassi(), av, init, fim);
+			lista = avariaDAO.getAvariasPorFiltro(av, init, fim);
 		} catch (DAOException e) {
 			e.printStackTrace();
 			throw new PromoveException(e);

@@ -5,8 +5,10 @@ import br.com.promove.entity.Usuario;
 import br.com.promove.view.AvariaSearchView;
 import br.com.promove.view.CtrcView;
 import br.com.promove.view.ErroImportAvariaView;
+import br.com.promove.view.ErroImportCtrcView;
 import br.com.promove.view.ErroImportVeiculoView;
 import br.com.promove.view.ImportAvariaView;
+import br.com.promove.view.ImportCtrcView;
 import br.com.promove.view.ImportVeiculoView;
 import br.com.promove.view.VeiculoListView;
 import br.com.promove.view.form.AvariaForm;
@@ -14,12 +16,14 @@ import br.com.promove.view.form.AvariaSearchForm;
 import br.com.promove.view.form.CtrcForm;
 import br.com.promove.view.form.CtrcSearchForm;
 import br.com.promove.view.form.ErroImportAvariaForm;
+import br.com.promove.view.form.ErroImportCtrcForm;
 import br.com.promove.view.form.ErroImportVeiculoForm;
 import br.com.promove.view.form.VeiculoForm;
 import br.com.promove.view.form.VeiculoSearchForm;
 import br.com.promove.view.table.AvariaTable;
 import br.com.promove.view.table.CtrcTable;
 import br.com.promove.view.table.ErroImportAvariaTable;
+import br.com.promove.view.table.ErroImportCtrcTable;
 import br.com.promove.view.table.ErroImportVeiculoTable;
 import br.com.promove.view.table.VeiculoTable;
 
@@ -92,12 +96,12 @@ public class MenuAverbacao  extends CssLayout{
 			CtrcTable table = new CtrcTable(app);
 			app.setMainView(new CtrcView(table, form));
 		}else if(event.getButton() == import_ctrc) {
-			//ImportCtrcView view = new ImportCtrcView(app);
-			//app.setMainView(view.getLayout());
+			ImportCtrcView view = new ImportCtrcView(app);
+			app.setMainView(view.getLayout());
 		}else if(event.getButton() == erro_import_ctrc) {
-			//ErroImportCtrcTable table = new ErroImportCtrcTable();
-			//ErroImportCtrcForm form = new ErroImportCtrcForm();
-			//app.setMainView(new ErroImportCtrcView(table, form));
+			ErroImportCtrcTable table = new ErroImportCtrcTable();
+			ErroImportCtrcForm form = new ErroImportCtrcForm(app);
+			app.setMainView(new ErroImportCtrcView(table, form));
 		}
 	}
 	

@@ -5,9 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.promove.dao.CtrcDAO;
+import br.com.promove.dao.InconsistenciaCtrcDAO;
 import br.com.promove.dao.TransportadoraDAO;
 //import br.com.promove.dao.InconsistenciaCtrcDAO;
+import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Cor;
 import br.com.promove.entity.Ctrc;
+import br.com.promove.entity.InconsistenciaAvaria;
+import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.entity.Transportadora;
 import br.com.promove.entity.Veiculo;
 //import br.com.promove.entity.InconsistenciaCtrc;
@@ -19,12 +24,12 @@ import br.com.promove.utils.StringUtilities;
 public class CtrcServiceImpl implements CtrcService, Serializable {
 	private TransportadoraDAO transpDAO;
 	private CtrcDAO ctrcDAO;
-	//private InconsistenciaCtrcDAO inconsistenciaCtrcDAO;
+	private InconsistenciaCtrcDAO inconsistenciaCtrcDAO;
 	
 	CtrcServiceImpl() {
 		transpDAO = new TransportadoraDAO();
 		ctrcDAO = new CtrcDAO();
-		//inconsistenciaCtrcDAO = new InconsistenciaCtrcDAO(); 
+		inconsistenciaCtrcDAO = new InconsistenciaCtrcDAO(); 
 	}
 
 	@Override
@@ -64,7 +69,7 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	@Override
 	public void salvarCtrc(Ctrc ctrc, boolean isFlush)throws PromoveException {
 		try {
-			if(ctrc.getId() == null && ctrcDAO.buscarCtrcDuplicadoPorFiltros(ctrc).size() > 0)
+			if(ctrc.getId() == null && ctrcDAO.getCtrcsDuplicadosPorFiltros(ctrc).size() > 0)
 				throw new IllegalArgumentException("CTRC já cadastrado!");
 			
 			ctrcDAO.save(ctrc);
@@ -108,6 +113,72 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 			throw new PromoveException(e);
 		}
 		return lista;
+	}
+
+	@Override
+	public List<Ctrc> buscarCtrcDuplicadoPorFiltros(Ctrc ct) throws PromoveException {
+		List<Ctrc> lista = null;
+		try {
+			lista = ctrcDAO.getCtrcsDuplicadosPorFiltros(ct);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public InconsistenciaCtrc salvarInconsistenciaImportCtrc(Ctrc ctrc, String msgErro)throws PromoveException {
+		try {
+			InconsistenciaCtrc inc = new InconsistenciaCtrc(ctrc, msgErro);
+			inconsistenciaCtrcDAO.save(inc);
+			return inc;
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public List<InconsistenciaCtrc> buscarTodasInconsistenciasCtrc()throws PromoveException {
+		List<InconsistenciaCtrc> lista = null;
+		try {
+			lista = inconsistenciaCtrcDAO.getAll();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+	
+	@Override
+	public void excluirInconsistenciaCtrc(InconsistenciaCtrc inc) throws PromoveException {
+		try {
+			inconsistenciaCtrcDAO.delete(inc);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public List<Transportadora> buscaTransportadoraPorCnpj(String cnpj)
+			throws PromoveException {
+		List<Transportadora> lista = null;
+		try {
+			lista = transpDAO.getByCnpj(cnpj);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public void cleanUpSession() throws PromoveException {
+		try {
+			inconsistenciaCtrcDAO.rebuildSession();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
 	}
 
 	@Override

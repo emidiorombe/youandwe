@@ -39,7 +39,7 @@ public class CtrcDAO extends BaseDAO<Integer, Ctrc>{
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
-	public List<Veiculo> buscarCtrcDuplicadoPorFiltros(Ctrc ctrc) throws DAOException {
+	public List<Ctrc> getCtrcsDuplicadosPorFiltros(Ctrc ctrc) throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select c from Ctrc c");
 		hql.append(" where c.filial = :txtFilial");

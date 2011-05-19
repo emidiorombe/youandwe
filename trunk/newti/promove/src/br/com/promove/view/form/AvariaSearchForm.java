@@ -223,7 +223,7 @@ public class AvariaSearchForm extends BaseForm{
 					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 					BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
 					
-					if(item.getBean().getVeiculo() == null) {
+					if(item.getBean().getVeiculo() == null || item.getBean().getVeiculo().getChassi().isEmpty()) {
 						if(de == null || ate == null)
 							throw new IllegalArgumentException("Informe um chassi ou período para busca.");
 					}
@@ -233,7 +233,8 @@ public class AvariaSearchForm extends BaseForm{
 				}catch(IllegalArgumentException ie) {
 					showErrorMessage(view, ie.getMessage());
 				}catch (Exception e) {
-					showErrorMessage(view, "Não foi possível buscar as avarias");
+					showErrorMessage(view, e.getMessage() + "Não foi possível buscar as avarias");
+					e.printStackTrace();
 				}
 			}else if(event.getButton() == export) {
 				try {
@@ -243,7 +244,7 @@ public class AvariaSearchForm extends BaseForm{
 					BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
 					
 					//if(txtChassi == null || txtChassi.toString().isEmpty()) {
-					if(item.getBean().getVeiculo() == null) {
+					if(item.getBean().getVeiculo() == null || item.getBean().getVeiculo().getChassi().isEmpty()) {
 						if(de == null || ate == null)
 							throw new IllegalArgumentException("Informe um chassi ou período para gerar arquivo.");
 					}
