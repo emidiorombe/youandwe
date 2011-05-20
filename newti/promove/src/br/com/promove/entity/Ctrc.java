@@ -50,6 +50,7 @@ public class Ctrc implements Serializable{
 	private Double taxaRr;
 	private Double taxaRcf;
 	private Double taxaFluvial;
+	private Double valorMercadoria;
 	
 	public Integer getId() {
 		return id;
@@ -185,6 +186,18 @@ public class Ctrc implements Serializable{
 
 	public Double getTaxaFluvial() {
 		return taxaFluvial;
+	}
+
+	public void setValorMercadoria(Double valorMercadoria) {
+		this.valorMercadoria = valorMercadoria;
+	}
+
+	public Double getValorMercadoria() {
+		return valorMercadoria;
+	}
+
+	public Double getTaxas() {
+		return taxaRct + taxaRr + taxaRcf + taxaFluvial;
 	}
 
 }

@@ -19,7 +19,7 @@ public class CtrcDAO extends BaseDAO<Integer, Ctrc>{
 		StringBuilder hql = new StringBuilder();
 		hql.append("select ct from Ctrc ct");
 		hql.append(" where 1=1");
-		if (ctrc.getNumero() != 0) {
+		if (ctrc.getNumero() != null && ctrc.getNumero() != 0) {
 			hql.append(" and ct.numero = :txtNumero");
 			addParamToQuery("txtNumero", ctrc.getNumero());
 		}

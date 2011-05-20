@@ -54,7 +54,7 @@ public class CtrcForm extends BaseForm{
 		createFormBody(new BeanItem<Ctrc>(new Ctrc()));
 		form_layout.addComponent(this);
 		form_layout.addComponent(createFooter());
-		form_layout.setSpacing(true);
+		//form_layout.setSpacing(true);
 		form_layout.setMargin(false, true, false, true);
 		
 	}
@@ -62,7 +62,7 @@ public class CtrcForm extends BaseForm{
 	public void createFormBody(BeanItem<Ctrc> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new CtrcFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "taxaRct", "taxaRr", "taxaRcf", "taxaFluvial"});
+		setVisibleItemProperties(new Object[]{"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "taxaRct", "taxaRr", "taxaRcf", "taxaFluvial", "valorMercadoria"});
 		
 	}
 	
@@ -135,7 +135,7 @@ public class CtrcForm extends BaseForm{
 				data.setResolution(DateField.RESOLUTION_DAY);
 				data.setLocale(new Locale("pt", "BR"));
 				return data;
-			} else if(propertyId.equals("taxaRct") || propertyId.equals("taxaRcf") || propertyId.equals("taxaRr") || propertyId.equals("taxaFluvial")) {
+			} else if(propertyId.equals("taxaRct") || propertyId.equals("taxaRcf") || propertyId.equals("taxaRr") || propertyId.equals("taxaFluvial") || propertyId.equals("valorMercadoria")) {
 				f.setRequired(false);
 				f.addValidator(new DoubleValidator(propertyId.toString() + " deve ser numérico"));
 			} else {

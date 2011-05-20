@@ -11,6 +11,7 @@ import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.CtrcView;
 import br.com.promove.view.form.CtrcForm;
+import br.com.promove.view.table.ErroImportCtrcTable.ErroImportVeiculoColumnGenerator;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
@@ -26,8 +27,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.BaseTheme;
 
 public class CtrcTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "taxaRct", "taxaRr", "taxaRcf", "taxaFluvial"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Filial", "Numero", "Tipo", "Série", "Transportadora", "Data", "Frota", "Carreta", "UF", "Origem", "UF", "Destino", "RCT", "RR", "RCF", "Fluvial"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "taxaRct", "taxaRr", "taxaRcf", "taxaFluvial", "valorMercadoria"};
+	public static final String[] COL_HEADERS = new String[] {"ID", "Filial", "Numero", "Tipo", "Série", "Transportadora", "Data", "Frota", "Carreta", "UF", "Origem", "UF", "Destino", "RCT", "RR", "RCF", "Fluvial", "Valor Mercadoria"};
 	
 	private CtrcService ctrcService;
 	private CtrcTableContainer container;
@@ -52,23 +53,25 @@ public class CtrcTable extends Table{
 		addListener(new RowSelectedListener());
 		
 		addGeneratedColumn("id", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("filial", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("numero", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("tipo", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("serie", new CtrcTableColumnGenerator(this));
 		addGeneratedColumn("transp", new CtrcTableColumnGenerator(this));
 		addGeneratedColumn("dataEmissao", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("placaFrota", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("placaCarreta", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("ufOrigem", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("municipioOrigem", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("ufDestino", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("municipioDestino", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("taxaRct", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("taxaRr", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("taxaRcf", new CtrcTableColumnGenerator(this));
-		//addGeneratedColumn("taxaFluvial", new CtrcTableColumnGenerator(this));
-	}
+		addGeneratedColumn("premio", new CtrcTableColumnGenerator(this));
+		
+		try {
+			setColumnCollapsed("transp", true);
+			setColumnCollapsed("placaFrota", true);
+			setColumnCollapsed("placaCarreta", true);
+			setColumnCollapsed("ufOrigem", true);
+			setColumnCollapsed("municipioOrigem", true);
+			setColumnCollapsed("ufDestino", true);
+			setColumnCollapsed("municipioDestino", true);
+			setColumnCollapsed("taxaRr", true);
+			setColumnCollapsed("taxaRcf", true);
+			setColumnCollapsed("taxaFluvial", true);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+}
 
 	
 	public BeanItemContainer<Ctrc> getContainer() {
@@ -121,6 +124,8 @@ public class CtrcTable extends Table{
 				return new Label(c.getTransp().getDescricao());
 			}else if(columnId.toString().equals("dataEmissao")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(c.getDataEmissao()));
+			}else if(columnId.toString().equals("premio")) {
+				return new Label(String.valueOf(c.getValorMercadoria() * c.getTaxas()));
 			}else if(columnId.toString().equals("id")) {
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 				Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");

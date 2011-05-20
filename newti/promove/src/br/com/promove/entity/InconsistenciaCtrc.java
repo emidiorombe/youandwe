@@ -51,6 +51,7 @@ public class InconsistenciaCtrc implements Serializable{
 	private Double taxaRcf;
 	private Double taxaFluvial;
 	private String msgErro;
+	private Double valorMercadoria;
 	
 	public InconsistenciaCtrc() {}
 	
@@ -71,6 +72,7 @@ public class InconsistenciaCtrc implements Serializable{
 		this.taxaRr = ct.getTaxaRr();
 		this.taxaRcf= ct.getTaxaRcf();
 		this.taxaFluvial = ct.getTaxaFluvial();
+		this.valorMercadoria = ct.getValorMercadoria();
 		this.msgErro = msgErro;
 	}
 
@@ -218,6 +220,14 @@ public class InconsistenciaCtrc implements Serializable{
 		return msgErro;
 	}
 
+	public void setValorMercadoria(Double valorMercadoria) {
+		this.valorMercadoria = valorMercadoria;
+	}
+
+	public Double getValorMercadoria() {
+		return valorMercadoria;
+	}
+
 	public Ctrc getCtrc() {
 		Ctrc ct = new Ctrc();
 		ct.setFilial(filial);
@@ -236,6 +246,7 @@ public class InconsistenciaCtrc implements Serializable{
 		ct.setTaxaRr(taxaRr);
 		ct.setTaxaRcf(taxaRcf);
 		ct.setTaxaFluvial(taxaFluvial);
+		ct.setValorMercadoria(valorMercadoria);
 		
 		return ct;
 	}
