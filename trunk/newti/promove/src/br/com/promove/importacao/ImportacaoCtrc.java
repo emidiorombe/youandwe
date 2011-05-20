@@ -42,7 +42,7 @@ public class ImportacaoCtrc {
 	}
 
 	private void importTagCtrc(Document doc) throws ParseException, PromoveException {
-		List<Element> ctrcs = doc.selectNodes("//ctrc");
+		List<Element> ctrcs = doc.selectNodes("//IncluiCTRC/ctrc");
 		for (Element node_ct : ctrcs) {
 			Ctrc ct = new Ctrc();
 			
@@ -63,6 +63,7 @@ public class ImportacaoCtrc {
 				ct.setTaxaRr(new Double(node_ct.element("taxa_rr").getText()));
 				ct.setTaxaRcf(new Double(node_ct.element("taxa_rcf").getText()));
 				ct.setTaxaFluvial(new Double(node_ct.element("taxa_fluvial").getText()));
+				ct.setValorMercadoria(new Double(node_ct.element("valor_mercadoria").getText()));
 				
 				if (ct.getTransp() == null)
 					throw new Exception("Transportadora " + node_ct.element("cnpj_transportadora").getText() + " não existe;");
