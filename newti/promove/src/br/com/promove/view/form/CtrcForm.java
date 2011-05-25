@@ -135,11 +135,15 @@ public class CtrcForm extends BaseForm{
 				data.setResolution(DateField.RESOLUTION_DAY);
 				data.setLocale(new Locale("pt", "BR"));
 				return data;
-			} else if(propertyId.equals("taxaRct") || propertyId.equals("taxaRcf") || propertyId.equals("taxaRr") || propertyId.equals("taxaFluvial") || propertyId.equals("valorMercadoria")) {
-				f.setRequired(false);
-				f.addValidator(new DoubleValidator(propertyId.toString() + " deve ser numérico"));
 			} else {
 				f.setRequired(false);
+				if(propertyId.equals("taxaRct") || propertyId.equals("taxaRcf") || propertyId.equals("taxaRr") || propertyId.equals("taxaFluvial") || propertyId.equals("valorMercadoria")) {
+					f.setCaption(f.getCaption().replaceAll("Rct", "RCT").replaceAll("Rr", "RR").replaceAll("Rcf", "RCF"));
+					f.addValidator(new DoubleValidator(propertyId.toString() + " deve ser numérico"));
+				}
+				else if(propertyId.equals("ufOrigem") || propertyId.equals("ufDestino")) {					
+					f.setCaption(f.getCaption().replaceAll("Uf", "UF"));
+				}
 			}
 			return f;
 		}

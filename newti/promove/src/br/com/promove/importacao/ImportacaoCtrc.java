@@ -59,11 +59,22 @@ public class ImportacaoCtrc {
 				ct.setMunicipioOrigem(node_ct.element("municipio_origem").getText());
 				ct.setUfDestino(node_ct.element("uf_destino").getText());
 				ct.setMunicipioDestino(node_ct.element("municipio_destino").getText());
-				ct.setTaxaRct(new Double(node_ct.element("taxa_rct").getText()));
-				ct.setTaxaRr(new Double(node_ct.element("taxa_rr").getText()));
-				ct.setTaxaRcf(new Double(node_ct.element("taxa_rcf").getText()));
-				ct.setTaxaFluvial(new Double(node_ct.element("taxa_fluvial").getText()));
-				ct.setValorMercadoria(new Double(node_ct.element("valor_mercadoria").getText()));
+				
+				String taxaRct = node_ct.element("taxa_rct").getText();
+				String taxaRr = node_ct.element("taxa_rr").getText();
+				String taxaRcf = node_ct.element("taxa_rcf").getText();
+				String taxaFluvial = node_ct.element("taxa_fluvial").getText();
+				String valorMercadoria = node_ct.element("valor_mercadoria").getText();
+				if (taxaRct.equals("")) taxaRct = "0";
+				if (taxaRr.equals("")) taxaRr = "0";
+				if (taxaRcf.equals("")) taxaRcf = "0";
+				if (taxaFluvial.equals("")) taxaFluvial = "0";
+				if (valorMercadoria.equals("")) valorMercadoria = "0";
+				ct.setTaxaRct(new Double(taxaRct));
+				ct.setTaxaRr(new Double(taxaRr));
+				ct.setTaxaRcf(new Double(taxaRcf));
+				ct.setTaxaFluvial(new Double(taxaFluvial));
+				ct.setValorMercadoria(new Double(valorMercadoria));
 				
 				if (ct.getTransp() == null)
 					throw new Exception("Transportadora " + node_ct.element("cnpj_transportadora").getText() + " não existe;");
