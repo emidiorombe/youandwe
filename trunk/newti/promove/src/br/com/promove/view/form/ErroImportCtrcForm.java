@@ -122,14 +122,10 @@ public class ErroImportCtrcForm extends BaseForm {
 				
 			}else if(event.getButton() == remove){
 				try{
-					validate();
-					if(isValid()){
-						commit();
-						BeanItem<InconsistenciaCtrc> item = (BeanItem<InconsistenciaCtrc>) getItemDataSource();
-						ctrcService.excluirInconsistenciaCtrc(item.getBean());
-						view.getTable().reloadTable();
-						showSuccessMessage(view, "Inconsistência excluida!");
-					}
+					BeanItem<InconsistenciaCtrc> item = (BeanItem<InconsistenciaCtrc>) getItemDataSource();
+					ctrcService.excluirInconsistenciaCtrc(item.getBean());
+					view.getTable().reloadTable();
+					showSuccessMessage(view, "Inconsistência excluida!");
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
@@ -139,13 +135,13 @@ public class ErroImportCtrcForm extends BaseForm {
 				try {
 					List<InconsistenciaCtrc> buscarTodasInconsistenciasDeCtrcs = ctrcService.buscarTodasInconsistenciasCtrc();
 					for (InconsistenciaCtrc inc : buscarTodasInconsistenciasDeCtrcs) {
-						if(ctrcService.buscarCtrcPorFiltro(inc.getCtrc(), null, null).size() == 0) {
+						if(ctrcService.buscarCtrcDuplicadoPorFiltros(inc.getCtrc()).size() == 0) {
 							if(StringUtilities.getTranspFromErrorMessage(inc.getMsgErro()) != null) {
 								List<Transportadora> transportadoras = ctrcService.buscaTransportadoraPorCnpj(StringUtilities.getTranspFromErrorMessage(inc.getMsgErro()));
 								if((transportadoras.size() == 0)) {
 									continue;
 								}else {
-									inc.getCtrc().setTransp(transportadoras.get(0));
+									inc.setTransp(transportadoras.get(0));
 								}
 							}
 							
@@ -160,7 +156,8 @@ public class ErroImportCtrcForm extends BaseForm {
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
-					showErrorMessage(view,"Não foi possível salvar Inconsistências");
+					de.printStackTrace();
+					showErrorMessage(view,de.getMessage() + " Não foi possível salvar Inconsistências");
 				}
 			}
 		}

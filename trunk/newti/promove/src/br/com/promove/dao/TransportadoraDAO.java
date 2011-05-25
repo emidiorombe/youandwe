@@ -10,10 +10,10 @@ public class TransportadoraDAO extends BaseDAO<Integer, Transportadora>{
 
 	public List<Transportadora> getByCnpj(String cnpj) throws DAOException {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select t from Transp t where ");
-		hql.append("c.cnpj = :txtCnpj");
+		hql.append("select t from Transportadora t where ");
+		hql.append("t.cnpj = :txtCnpj");
 
-		addParamToQuery("txtCodigo", cnpj);
+		addParamToQuery("txtCnpj", cnpj);
 
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}

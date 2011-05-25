@@ -46,10 +46,12 @@ public class CtrcDAO extends BaseDAO<Integer, Ctrc>{
 		hql.append(" and c.numero = :txtNumero");
 		hql.append(" and c.tipo = :txtTipo");
 		hql.append(" and c.serie = :txtSerie");
+		hql.append(" and c.transp = :txtTransp");
 		addParamToQuery("txtFilial",  ctrc.getFilial());
 		addParamToQuery("txtNumero",  ctrc.getNumero());
 		addParamToQuery("txtTipo",  ctrc.getTipo());
 		addParamToQuery("txtSerie",  ctrc.getSerie());
+		addParamToQuery("txtTransp",  ctrc.getTransp());
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 }
