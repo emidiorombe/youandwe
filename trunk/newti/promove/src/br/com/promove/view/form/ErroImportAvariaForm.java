@@ -134,7 +134,7 @@ public class ErroImportAvariaForm extends BaseForm {
 					view.getTable().reloadTable();
 					showErrorMessage(view, ie.getMessage());
 				}catch(PromoveException de){
-					showErrorMessage(view,"Não foi possível salvar Inconsistência");
+					showErrorMessage(view, "Não foi possível salvar Inconsistência");
 				}
 				
 			}else if(event.getButton() == remove){
@@ -152,7 +152,7 @@ public class ErroImportAvariaForm extends BaseForm {
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
-					showErrorMessage(view,"Não foi possível excluir Inconsistência");
+					showErrorMessage(view, "Não foi possível excluir Inconsistência");
 				}
 			}else if(event.getButton() == saveAll) {
 				try {
@@ -166,7 +166,7 @@ public class ErroImportAvariaForm extends BaseForm {
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
-					showErrorMessage(view,"Não foi possível salvar Inconsistências");
+					showErrorMessage(view, "Não foi possível salvar Inconsistências");
 				}
 			}else if(event.getButton() == export) {
 				try {
