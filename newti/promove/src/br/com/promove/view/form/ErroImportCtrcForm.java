@@ -117,7 +117,7 @@ public class ErroImportCtrcForm extends BaseForm {
 					view.getTable().reloadTable();
 					showErrorMessage(view, ie.getMessage());
 				}catch(PromoveException de){
-					showErrorMessage(view,"Não foi possível salvar Inconsistência");
+					showErrorMessage(view, "Não foi possível salvar Inconsistência");
 				}
 				
 			}else if(event.getButton() == remove){
@@ -157,7 +157,7 @@ public class ErroImportCtrcForm extends BaseForm {
 					setValidationVisible(true);
 				}catch(PromoveException de){
 					de.printStackTrace();
-					showErrorMessage(view,de.getMessage() + " Não foi possível salvar Inconsistências");
+					showErrorMessage(view, "Não foi possível salvar Inconsistências");
 				}
 			}
 		}

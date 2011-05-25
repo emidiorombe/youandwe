@@ -17,6 +17,7 @@ import br.com.promove.view.form.AvariaSearchForm.AvariaSearchListener;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.validator.DoubleValidator;
 import com.vaadin.data.validator.IntegerValidator;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
@@ -42,6 +43,7 @@ public class CtrcSearchForm extends BaseForm{
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
 	//private TextField txtNumero;
+	private TextField txtDesconto;
 	private Button search;
 	private Button export;
 	private PromoveApplication app;
@@ -70,12 +72,17 @@ public class CtrcSearchForm extends BaseForm{
 		txtAte = new PopupDateField("Ate");
 		txtAte.setLocale(new Locale("pt", "BR"));
 		txtAte.setResolution(DateField.RESOLUTION_DAY);
+
+		txtDesconto = new TextField("% Desconto");
+		txtDesconto.addValidator(new DoubleValidator("Desconto deve ser numérico"));
+		txtDesconto.setWidth("100px");
 		
 		createFormBody(new BeanItem<Ctrc>(new Ctrc()));
 		layout.addComponent(this);
 		//addField("txtNumero", txtNumero);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
+		addField("txtDesconto", txtDesconto);
 		
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
@@ -122,7 +129,8 @@ public class CtrcSearchForm extends BaseForm{
 				try {
 					commit();
 					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null;
+					Double desconto = txtDesconto.getValue() != null ? Double.parseDouble((String)txtDesconto.getValue()) : 0;
 					BeanItem<Ctrc> item = (BeanItem<Ctrc>)getItemDataSource();
 					
 					//if (!(txtNumero.toString() == null) && !(txtNumero.toString().isEmpty()))
@@ -133,17 +141,21 @@ public class CtrcSearchForm extends BaseForm{
 					}
 					
 					List<Ctrc> list = ctrcService.buscarCtrcPorFiltro(item.getBean(), de, ate);
-					view.getTable().filterTable(list);
+					view.getTable().filterTable(list, desconto);
 				}catch(IllegalArgumentException ie) {
 					showErrorMessage(view, ie.getMessage());
 				}catch(PromoveException pe) {
-					showErrorMessage(view, pe.getMessage() + " Não foi possível buscar os CTRCs");
+					showErrorMessage(view, "Não foi possível buscar os CTRCs");
+				}catch(Exception e) {
+					e.printStackTrace();
+					showErrorMessage(view, e.getMessage() + " Não foi possível buscar os CTRCs");
 				} 
 			}else if(event.getButton() == export) {
 				try {
 					commit();
 					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					String desconto = txtDesconto.getValue() != null ? (String)txtDesconto.getValue() : "";
 					BeanItem<Ctrc> item = (BeanItem<Ctrc>)getItemDataSource();
 					
 					if (item.getBean().getNumero() == null) {
@@ -156,7 +168,7 @@ public class CtrcSearchForm extends BaseForm{
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
-					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=ctrcs.xls&file=" + file));
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=ctrcs.xls&file=" + file + "&desconto=" + desconto));
 				}catch(PromoveException pe) {
 					showErrorMessage(view, "Não foi possível gerar arquivo.");
 				}
@@ -186,6 +198,7 @@ public class CtrcSearchForm extends BaseForm{
 					f.setReadOnly(true);
 			} else if(propertyId.equals("numero")) {
 				f.addValidator(new IntegerValidator(propertyId.toString() + " deve ser numérico"));
+				f.setWidth("100px");
 			} else if(propertyId.equals("transp")) {
 				try {
 					ComboBox c = new ComboBox("Transportadora");

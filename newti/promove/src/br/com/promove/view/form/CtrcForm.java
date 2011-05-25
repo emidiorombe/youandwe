@@ -1,5 +1,7 @@
 package br.com.promove.view.form;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.Locale;
 
@@ -22,6 +24,7 @@ import com.vaadin.ui.DateField;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -108,6 +111,7 @@ public class CtrcForm extends BaseForm{
 					f.setReadOnly(true);
 				if(!propertyId.equals("serie"))
 					f.addValidator(new IntegerValidator(propertyId.toString() + " deve ser numérico"));
+				f.setWidth("100px");
 			} else if(propertyId.equals("transp")) {
 				try {
 					ComboBox c = new ComboBox("Transportadora");
@@ -137,12 +141,17 @@ public class CtrcForm extends BaseForm{
 				return data;
 			} else {
 				f.setRequired(false);
-				if(propertyId.equals("taxaRct") || propertyId.equals("taxaRcf") || propertyId.equals("taxaRr") || propertyId.equals("taxaFluvial") || propertyId.equals("valorMercadoria")) {
-					f.setCaption(f.getCaption().replaceAll("Rct", "RCT").replaceAll("Rr", "RR").replaceAll("Rcf", "RCF"));
+				if(propertyId.equals("taxaRct") || propertyId.equals("taxaRcf") || propertyId.equals("taxaRr") || propertyId.equals("taxaFluvial")) {
 					f.addValidator(new DoubleValidator(propertyId.toString() + " deve ser numérico"));
-				}
-				else if(propertyId.equals("ufOrigem") || propertyId.equals("ufDestino")) {					
+					f.setCaption(f.getCaption().replaceAll("Rct", "RCT").replaceAll("Rr", "RR").replaceAll("Rcf", "RCF"));
+					f.setWidth("100px");
+				} else if(propertyId.equals("valorMercadoria")) {					
+					f.addValidator(new DoubleValidator(propertyId.toString() + " deve ser numérico"));
+				} else if(propertyId.equals("ufOrigem") || propertyId.equals("ufDestino")) {					
 					f.setCaption(f.getCaption().replaceAll("Uf", "UF"));
+					f.setWidth("100px");
+				} else if(propertyId.equals("municipioOrigem") || propertyId.equals("municipioDestino")) {					
+					f.setWidth("300px");
 				}
 			}
 			return f;
@@ -171,7 +180,7 @@ public class CtrcForm extends BaseForm{
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
-					showErrorMessage(form,"Não foi possível salvar Ctrc");
+					showErrorMessage(form,"Não foi possível salvar CTRC");
 				}catch(IllegalArgumentException iae){
 					showErrorMessage(form, iae.getMessage());
 				}
