@@ -300,13 +300,13 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	}
 
 	@Override
-	public List<Avaria> buscarAvariaPorFiltros(Avaria av, Date de, Date ate)throws PromoveException {
+	public List<Avaria> buscarAvariaPorFiltros(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas) throws PromoveException {
 		List<Avaria> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaQuery(de); 
 			Date fim = DateUtils.montarDataFinalParaQuery(ate); 
 			
-			lista = avariaDAO.getAvariasPorFiltro(av, init, fim);
+			lista = avariaDAO.getAvariasPorFiltro(av, init, fim, periodo, movimentacao, registradas);
 		} catch (DAOException e) {
 			e.printStackTrace();
 			throw new PromoveException(e);

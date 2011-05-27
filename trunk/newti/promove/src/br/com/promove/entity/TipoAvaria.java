@@ -20,23 +20,25 @@ public class TipoAvaria implements Serializable{
 	private String descricao;
 	private Boolean falta = false;
 	private Boolean perdaTotal = false;
+	private Boolean movimentacao = false;
 	private static final long serialVersionUID = -5865309663518451811L;
 
 	public TipoAvaria(){}
 	
 	public TipoAvaria(Integer codigo, String descricao, Boolean falta,
-			Boolean perdaTotal) {
+			Boolean perdaTotal, Boolean movimentacao) {
 		super();
 		this.codigo = codigo;
 		this.descricao = descricao;
 		this.falta = falta;
 		this.perdaTotal = perdaTotal;
+		this.movimentacao = movimentacao;
 	}
 	
 	
 	public TipoAvaria(Integer id, Integer codigo, String descricao,
-			Boolean falta, Boolean perdaTotal) {
-		this(codigo, descricao, falta, perdaTotal);
+			Boolean falta, Boolean perdaTotal, Boolean movimentacao) {
+		this(codigo, descricao, falta, perdaTotal, movimentacao);
 		this.id = id;
 		
 	}
@@ -74,6 +76,14 @@ public class TipoAvaria implements Serializable{
 	}
 	public void setPerdaTotal(Boolean perdaTotal) {
 		this.perdaTotal = perdaTotal;
+	}
+
+	public void setMovimentacao(Boolean movimentacao) {
+		this.movimentacao = movimentacao;
+	}
+
+	public Boolean getMovimentacao() {
+		return movimentacao;
 	}
 
 	@Override

@@ -15,12 +15,12 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		return executeQuery(hql.toString(), 0, 100);
 	}
 
-	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate) throws DAOException {
+	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas) throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select av from Avaria av left JOIN FETCH av.fotos left join fetch av.veiculo veic ");
 		hql.append(" left JOIN FETCH av.tipo tp left JOIN FETCH av.origem ori left JOIN FETCH av.extensao ext left JOIN FETCH av.local loc left JOIN FETCH av.clima cli ");
 		hql.append(" left JOIN FETCH av.usuario usu left JOIN FETCH usu.tipo tpu left JOIN FETCH veic.modelo mod left JOIN FETCH veic.cor cor left JOIN FETCH mod.fabricante fab ");
-		hql.append(" left JOIN FETCH ori.responsabilidade resp left JOIN FETCH usu.filial usufil left JOIN FETCH ori.filial orifil  ");
+		hql.append(" left JOIN FETCH ori.responsabilidade resp left JOIN FETCH usu.filial usufil left JOIN FETCH ori.filial orifil ");
 		hql.append(" where 1=1 ");
 		if(av.getVeiculo() != null && !av.getVeiculo().getChassi().isEmpty()) {
 			hql.append(" and veic.chassi like :txtChassi ");
@@ -46,12 +46,21 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		}
 		
 		if(de != null && !de.equals("") && ate != null && !ate.equals("")) {
-			hql.append(" and  av.dataLancamento between :dtIni and :dtFim ");
+			if (periodo == 1) hql.append(" and av.dataLancamento between :dtIni and :dtFim ");
+			else hql.append(" and veic.dataCadastro between :dtIni and :dtFim ");
 			addParamToQuery("dtIni", de);
 			addParamToQuery("dtFim", ate);
 		}
 		
-		hql.append(" order by av.origem.id");
+		if(movimentacao) hql.append(" and tp.movimentacao = false ");
+
+		if(registradas) {
+			//hql.append(" and not (select count(*) from Avaria av2 where av2.veiculo.chassi = av.veiculo.chassi ");
+			//hql.append(" and av2.tipo.id = av.tipo.id and av2.local.id = av.local.id ");
+			//hql.append(" and av2.id < av.id) = 0");
+		}
+
+		hql.append(" order by av.origem.codigo");
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
