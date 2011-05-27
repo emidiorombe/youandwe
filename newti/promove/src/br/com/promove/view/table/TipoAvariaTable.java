@@ -18,8 +18,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 public class TipoAvariaTable extends Table {
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "descricao", "falta", "perdaTotal"};
-	public static final String[] COL_HEADERS = new String[] {"Código", "Descrição", "Falta", "PT"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "descricao", "falta", "perdaTotal", "movimentacao"};
+	public static final String[] COL_HEADERS = new String[] {"Código", "Descrição", "Falta", "PT", "Movimentação"};
 	private TipoAvariaView view;
 	private TipoAvariaContainer container;
 	private AvariaService avariaService;
@@ -41,10 +41,9 @@ public class TipoAvariaTable extends Table {
 		setColumnHeaders(COL_HEADERS);
 		addListener(new RowSelectedListener());
 		
-		
-		
 		addGeneratedColumn("falta", new TipoAvariaColumnGenerator());
 		addGeneratedColumn("perdaTotal", new TipoAvariaColumnGenerator());
+		addGeneratedColumn("movimentacao", new TipoAvariaColumnGenerator());
 
 	}
 	
@@ -86,10 +85,14 @@ public class TipoAvariaTable extends Table {
 		@Override
 		public Component generateCell(Table source, Object itemId, Object columnId) {
 			TipoAvaria tp = (TipoAvaria)itemId;
-			if(columnId.toString().equals("falta"))
-				return new Label(StringUtilities.booleanToReadableString(tp.getFalta()));
-			else if(columnId.toString().equals("perdaTotal"))
+			if(columnId.toString().equals("falta")) {
+				Label l = new Label(StringUtilities.booleanToReadableString(tp.getFalta()));
+				l.setImmediate(true);
+				return l;
+			} else if(columnId.toString().equals("perdaTotal"))
 				return new Label(StringUtilities.booleanToReadableString(tp.getPerdaTotal()));
+			else if(columnId.toString().equals("movimentacao"))
+				return new Label(StringUtilities.booleanToReadableString(tp.getMovimentacao()));
 			else 
 				return null;
 		}

@@ -24,6 +24,7 @@ import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
@@ -44,8 +45,11 @@ public class AvariaSearchForm extends BaseForm{
 	private Button search;
 	private Button export;
 	private Button exportXml;
+	private CheckBox chkMovimentacao;
+	private CheckBox chkRegistradas;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
+	private ComboBox cmbPeriodo;
 	private PromoveApplication app;
 	
 	public AvariaSearchForm(PromoveApplication app) {
@@ -65,6 +69,12 @@ public class AvariaSearchForm extends BaseForm{
 		export = new Button("Gerar Arquivo", new AvariaSearchListener());
 		exportXml = new Button("Gerar XML", new AvariaSearchListener());
 		
+		chkMovimentacao = new CheckBox();
+		chkMovimentacao.setCaption("Desconsiderar movimentações sem avaria");
+		
+		chkRegistradas = new CheckBox();
+		chkRegistradas.setCaption("Desconsiderar avarias previamente registradas");
+		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
 		txtDe.setResolution(DateField.RESOLUTION_DAY);
@@ -73,10 +83,28 @@ public class AvariaSearchForm extends BaseForm{
 		txtAte.setLocale(new Locale("pt", "BR"));
 		txtAte.setResolution(DateField.RESOLUTION_DAY);
 		
+		cmbPeriodo = new ComboBox("Período por");
+		cmbPeriodo.addContainerProperty("label", String.class, null);
+		
+		Item i = cmbPeriodo.addItem(new Integer(1));
+		i.getItemProperty("label").setValue("Data de lançamento da avaria");
+		i = cmbPeriodo.addItem(new Integer(2));
+		i.getItemProperty("label").setValue("Data de cadastro do veículo");
+		
+		cmbPeriodo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+		cmbPeriodo.setImmediate(true);
+		cmbPeriodo.setNullSelectionAllowed(false);
+		cmbPeriodo.setItemCaptionPropertyId("label");
+		cmbPeriodo.setWidth("200px");
+		cmbPeriodo.setValue(cmbPeriodo.getItemIds().iterator().next());
+
 		createFormBody(new BeanItem<Avaria>(new Avaria()));
 		layout.addComponent(this);
+		addField("chkMovimentacao", chkMovimentacao);
+		//addField("chkRegistradas", chkRegistradas);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
+		this.addField("cmbPeriodo", cmbPeriodo);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
@@ -221,6 +249,9 @@ public class AvariaSearchForm extends BaseForm{
 					commit();
 					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					Integer periodo = (Integer)cmbPeriodo.getValue();
+					Boolean movimentacao = (Boolean)chkMovimentacao.getValue();
+					Boolean registradas = (Boolean)chkRegistradas.getValue();
 					BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
 					
 					if(item.getBean().getVeiculo() == null || item.getBean().getVeiculo().getChassi().isEmpty()) {
@@ -228,7 +259,7 @@ public class AvariaSearchForm extends BaseForm{
 							throw new IllegalArgumentException("Informe um chassi ou período para busca.");
 					}
 					
-					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(item.getBean(), de, ate);
+					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(item.getBean(), de, ate, periodo, movimentacao, registradas);
 					view.getTable().filterTable(avarias);
 				}catch(IllegalArgumentException ie) {
 					showErrorMessage(view, ie.getMessage());
@@ -240,7 +271,10 @@ public class AvariaSearchForm extends BaseForm{
 				try {
 					commit();
 					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null;
+					Integer periodo = (Integer)cmbPeriodo.getValue();
+					Boolean movimentacao = (Boolean)chkMovimentacao.getValue();
+					Boolean registradas = (Boolean)chkRegistradas.getValue();
 					BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
 					
 					//if(txtChassi == null || txtChassi.toString().isEmpty()) {
@@ -249,7 +283,7 @@ public class AvariaSearchForm extends BaseForm{
 							throw new IllegalArgumentException("Informe um chassi ou período para gerar arquivo.");
 					}
 					
-					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(item.getBean(), de, ate);
+					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(item.getBean(), de, ate, periodo, movimentacao, registradas);
 					String file = exportacaoService.exportarXLSAvarias(avarias);
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();

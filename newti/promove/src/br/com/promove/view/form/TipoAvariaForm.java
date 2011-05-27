@@ -58,8 +58,7 @@ public class TipoAvariaForm extends BaseForm {
 		setItemDataSource(tpa);
 		setFormFieldFactory(new TipoAvariaFieldFactory(
 				tpa.getBean().getId() == null));
-		setVisibleItemProperties(new Object[] { "codigo", "descricao",
-				"perdaTotal", "falta" });
+		setVisibleItemProperties(new Object[] { "codigo", "descricao", "falta", "perdaTotal", "movimentacao"});
 
 	}
 
@@ -135,13 +134,13 @@ public class TipoAvariaForm extends BaseForm {
 						avariaService.salvarTipoAvaria(item.getBean());
 						view.getTable().getContainer().addItem(item.getBean());
 						addNewTipoAvaria();
-						showSuccessMessage(view, "Tipo Avaria salvo");
+						showSuccessMessage(view, "Tipo de Avaria salvo");
 					}
 				} catch (InvalidValueException ive) {
 					setValidationVisible(true);
 				} catch (PromoveException de) {
 					showErrorMessage(view,
-							"Não foi possível salvar Tipo Avaria");
+							"Não foi possível salvar Tipo de Avaria");
 				}
 
 			} else if (event.getButton() == novo) {
@@ -153,7 +152,7 @@ public class TipoAvariaForm extends BaseForm {
 						avariaService.excluirTipoAvaria(item.getBean());
 						view.getTable().getContainer()
 								.removeItem(item.getBean());
-						showSuccessMessage(view, "Tipo Avaria removido");
+						showSuccessMessage(view, "Tipo de Avaria removido");
 					}
 					addNewTipoAvaria();
 				} catch (PromoveException de) {
