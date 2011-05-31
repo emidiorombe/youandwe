@@ -86,9 +86,9 @@ public class AvariaSearchForm extends BaseForm{
 		cmbPeriodo = new ComboBox("Período por");
 		cmbPeriodo.addContainerProperty("label", String.class, null);
 		
-		Item i = cmbPeriodo.addItem(new Integer(1));
+		Item i = cmbPeriodo.addItem(1);
 		i.getItemProperty("label").setValue("Data de lançamento da avaria");
-		i = cmbPeriodo.addItem(new Integer(2));
+		i = cmbPeriodo.addItem(2);
 		i.getItemProperty("label").setValue("Data de cadastro do veículo");
 		
 		cmbPeriodo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);

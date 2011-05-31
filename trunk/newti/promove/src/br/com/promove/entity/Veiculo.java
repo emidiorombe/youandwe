@@ -46,6 +46,8 @@ public class Veiculo implements Serializable{
 	private Date dataCadastro = new Date();
 	
 	private String chassiOriginal;
+	private Integer tipo;
+	private String navio;
 	
 	public Veiculo() {}
 	
@@ -120,6 +122,22 @@ public class Veiculo implements Serializable{
 
 	public void setChassiOriginal(String chassiOriginal) {
 		this.chassiOriginal = chassiOriginal;
+	}
+
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
+	}
+
+	public Integer getTipo() {
+		return tipo;
+	}
+
+	public void setNavio(String navio) {
+		this.navio = navio;
+	}
+
+	public String getNavio() {
+		return navio;
 	}
 
 	public List<Avaria> getAvarias() {

@@ -34,8 +34,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.BaseTheme;
 
 public class VeiculoTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "chassi", "modelo", "cor", "dataCadastro"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Modelo", "Cor", "Data"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "chassi", "modelo", "cor", "dataCadastro", "tipo", "navio"};
+	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Modelo", "Cor", "Data", "Tipo", "Navio"};
 	
 	private CadastroService cadastroService;
 	private VeiculoTableContainer container;
@@ -67,6 +67,7 @@ public class VeiculoTable extends Table{
 		addGeneratedColumn("modelo", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("cor", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("dataCadastro", new VeiculoTableColumnGenerator(this));
+		addGeneratedColumn("tipo", new VeiculoTableColumnGenerator(this));
 		//addGeneratedColumn("avarias", new VeiculoTableColumnGenerator(this));
 	}
 
@@ -121,6 +122,8 @@ public class VeiculoTable extends Table{
 				return new Label(v.getModelo().getDescricao());
 			}else if(columnId.toString().equals("cor")) {
 					return new Label(v.getCor().getDescricao());
+			}else if(columnId.equals("tipo")) {
+				return v.getTipo() == 1 ? new Label("Nacional") : new Label("Importado");
 			}else if(columnId.toString().equals("avarias")) {
 				Button b = new Button("Ver");	
 				b.setStyleName(BaseTheme.BUTTON_LINK);

@@ -82,7 +82,7 @@ public class VeiculoSearchForm extends BaseForm{
 	public void createFormBody(BeanItem<Veiculo> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new VeiculoFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"chassi", "modelo", "cor", "fabricante"});
+		setVisibleItemProperties(new Object[]{"chassi", "modelo", "cor", "fabricante", "tipo", "navio"});
 		
 	}
 	
@@ -232,6 +232,27 @@ public class VeiculoSearchForm extends BaseForm{
 				}catch (PromoveException e) {
 					showErrorMessage(form, "Não foi possível buscar as Cores");
 				}
+			}else if(propertyId.equals("tipo")) {
+				ComboBox c = new ComboBox("Tipo");
+				c.addContainerProperty("label", String.class, null);
+				
+				Item i = c.addItem(new Integer(0));
+				i.getItemProperty("label").setValue("Selecione...");
+				i = c.addItem(1);
+				i.getItemProperty("label").setValue("Nacional");
+				i = c.addItem(2);
+				i.getItemProperty("label").setValue("Importado");
+				
+				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+				c.setImmediate(true);
+				c.setNullSelectionAllowed(false);
+				c.setPropertyDataSource(item.getItemProperty(propertyId));
+				c.setItemCaptionPropertyId("label");
+				
+				if (c.getValue() ==  null && c.size() > 0)
+                    c.setValue(c.getItemIds().iterator().next());
+				
+				return c;
 			}
 			return f;
 		}

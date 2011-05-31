@@ -83,36 +83,34 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    
 		    //Cabeçalho
 		    Row row_head = sheet.createRow(0);
-		    row_head.createCell(0).setCellValue("ID");
-		    row_head.createCell(1).setCellValue("VEÍCULO");
-		    row_head.createCell(2).setCellValue("MODELO");
-		    row_head.createCell(3).setCellValue("DATA");
-		    row_head.createCell(4).setCellValue("HORA");
-		    row_head.createCell(5).setCellValue("ORIGEM");
-		    row_head.createCell(6).setCellValue("LOCAL");
-		    row_head.createCell(7).setCellValue("TIPO");
-		    row_head.createCell(8).setCellValue("EXTENSÃO");
-		    row_head.createCell(9).setCellValue("FOTOS");
-		    row_head.createCell(10).setCellValue("CLIMA");
-		    row_head.createCell(11).setCellValue("USUÁRIO");
-		    row_head.createCell(12).setCellValue("OBS");
+		    row_head.createCell(0).setCellValue("VEÍCULO");
+		    row_head.createCell(1).setCellValue("MODELO");
+		    row_head.createCell(2).setCellValue("DATA");
+		    row_head.createCell(3).setCellValue("HORA");
+		    row_head.createCell(4).setCellValue("ORIGEM");
+		    row_head.createCell(5).setCellValue("LOCAL");
+		    row_head.createCell(6).setCellValue("TIPO");
+		    row_head.createCell(7).setCellValue("EXTENSÃO");
+		    row_head.createCell(8).setCellValue("FOTOS");
+		    row_head.createCell(9).setCellValue("CLIMA");
+		    row_head.createCell(10).setCellValue("USUÁRIO");
+		    row_head.createCell(11).setCellValue("OBS");
 
 		    
 		    for(int i = 0; i < avarias.size(); i++) {
 			    Row row = sheet.createRow(i+1);
-			    row.createCell(0).setCellValue(avarias.get(i).getId());
-			    row.createCell(1).setCellValue(avarias.get(i).getVeiculo().getChassi());
-			    row.createCell(2).setCellValue(avarias.get(i).getVeiculo().getModelo().getDescricao());
-			    row.createCell(3).setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(avarias.get(i).getDataLancamento()));
-			    row.createCell(4).setCellValue(avarias.get(i).getHora());
-			    row.createCell(5).setCellValue(avarias.get(i).getOrigem().getDescricao());
-			    row.createCell(6).setCellValue(avarias.get(i).getLocal().getDescricao());
-			    row.createCell(7).setCellValue(avarias.get(i).getTipo().getDescricao());
-			    row.createCell(8).setCellValue(avarias.get(i).getExtensao().getDescricao());
-			    row.createCell(9).setCellValue(avarias.get(i).getFotos().size());
-			    row.createCell(10).setCellValue(avarias.get(i).getClima().getDescricao());
-			    row.createCell(11).setCellValue(avarias.get(i).getUsuario().getNome());
-			    row.createCell(12).setCellValue(avarias.get(i).getObservacao());
+			    row.createCell(0).setCellValue(avarias.get(i).getVeiculo().getChassi());
+			    row.createCell(1).setCellValue(avarias.get(i).getVeiculo().getModelo().getDescricao());
+			    row.createCell(2).setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(avarias.get(i).getDataLancamento()));
+			    row.createCell(3).setCellValue(avarias.get(i).getHora());
+			    row.createCell(4).setCellValue(avarias.get(i).getOrigem().getDescricao());
+			    row.createCell(5).setCellValue(avarias.get(i).getLocal().getDescricao());
+			    row.createCell(6).setCellValue(avarias.get(i).getTipo().getDescricao());
+			    row.createCell(7).setCellValue(avarias.get(i).getExtensao().getDescricao());
+			    row.createCell(8).setCellValue(avarias.get(i).getFotos().size());
+			    row.createCell(9).setCellValue(avarias.get(i).getClima().getDescricao());
+			    row.createCell(10).setCellValue(avarias.get(i).getUsuario().getNome());
+			    row.createCell(11).setCellValue(avarias.get(i).getObservacao());
 		    }
 
 		    // Write the output to a file/
@@ -193,6 +191,8 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    row_head.createCell(2).setCellValue("MODELO");
 		    row_head.createCell(3).setCellValue("COR");
 		    row_head.createCell(4).setCellValue("DATA");
+		    row_head.createCell(5).setCellValue("TIPO");
+		    row_head.createCell(6).setCellValue("NAVIO");
 		    
 		    for(int i = 0; i < veiculos.size(); i++) {
 			    Row row = sheet.createRow(i+1);
@@ -201,6 +201,8 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			    row.createCell(2).setCellValue(veiculos.get(i).getModelo().getDescricao());
 			    row.createCell(3).setCellValue(veiculos.get(i).getCor().getDescricao());
 			    row.createCell(4).setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(veiculos.get(i).getDataCadastro()));
+			    row.createCell(5).setCellValue(veiculos.get(i).getTipo() == 1 ? "Nacional" : "Importado");
+			    row.createCell(6).setCellValue(veiculos.get(i).getNavio());
 		    }
 
 		    // Write the output to a file/
