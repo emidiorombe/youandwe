@@ -69,6 +69,13 @@ public class VeiculoTable extends Table{
 		addGeneratedColumn("dataCadastro", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("tipo", new VeiculoTableColumnGenerator(this));
 		//addGeneratedColumn("avarias", new VeiculoTableColumnGenerator(this));
+		
+		try {
+			setColumnCollapsed("cor", true);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	
