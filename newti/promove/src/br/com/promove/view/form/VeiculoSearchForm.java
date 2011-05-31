@@ -7,6 +7,7 @@ import java.util.Locale;
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
+import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
@@ -82,7 +83,7 @@ public class VeiculoSearchForm extends BaseForm{
 	public void createFormBody(BeanItem<Veiculo> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new VeiculoFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"chassi", "modelo", "cor", "fabricante", "tipo", "navio"});
+		setVisibleItemProperties(new Object[]{"chassi", "modelo", "tipo", "navio"});
 		
 	}
 	
@@ -206,17 +207,17 @@ public class VeiculoSearchForm extends BaseForm{
 				}catch (PromoveException e) {
 					showErrorMessage(form, "Não foi possível buscar os Modelos");
 				}
-			}else if(propertyId.equals("cor")) {
+			}else if(propertyId.equals("fabricante")) {
 				try {
-					ComboBox c = new ComboBox("Cor");
+					ComboBox c = new ComboBox("Fabricante");
 					c.addContainerProperty("label", String.class, null);
 					
-					Item item_default = c.addItem(new Cor());
+					Item item_default = c.addItem(new Fabricante());
 					item_default.getItemProperty("label").setValue("Selecione...");
 					
-					for(Cor cor: cadastroService.buscarTodasCores()) {
-						Item i = c.addItem(cor);
-						i.getItemProperty("label").setValue(cor.getDescricao());
+					for(Fabricante fabricante: cadastroService.buscarTodosFabricantes()) {
+						Item i = c.addItem(fabricante);
+						i.getItemProperty("label").setValue(fabricante.getNome());
 					}
 					
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
@@ -230,7 +231,7 @@ public class VeiculoSearchForm extends BaseForm{
 					
 					return c;
 				}catch (PromoveException e) {
-					showErrorMessage(form, "Não foi possível buscar as Cores");
+					showErrorMessage(form, "Não foi possível buscar os Fabricantes");
 				}
 			}else if(propertyId.equals("tipo")) {
 				ComboBox c = new ComboBox("Tipo");

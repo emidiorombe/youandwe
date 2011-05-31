@@ -95,11 +95,6 @@ public class Veiculo implements Serializable{
 		this.codigo = codigo;
 	}
 	
-	@Override
-	public String toString() {
-		return chassi;
-	}
-
 	public Date getDataCadastro() {
 		return dataCadastro;
 	}
@@ -148,7 +143,9 @@ public class Veiculo implements Serializable{
 		this.avarias = avarias;
 	}
 	
-	
-	
+	@Override
+	public String toString() {
+		return chassi;
+	}
 	
 }
