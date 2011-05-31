@@ -47,7 +47,7 @@ public class ImportVeiculoImportadoForm extends BaseForm{
 	private void buildLayout() {
 		layout.setSpacing(true);
 		//Label tit = new Label("<h1>Importar Veículos Importados(TERCA)</h1>");
-		Label tit = new Label("<h3>Importar Veículos</h3><br>Nacionais: Chassi+Modelo<br>Importados: Chassi+Modelo+Navio<br>");
+		Label tit = new Label("<h3>Importar Veículos</h3><br><i><b>Nacionais:</b> Chassi; Modelo<br><b>Importados:</b> Chassi; Modelo; Navio</i><br><br>");
 		tit.setContentMode(Label.CONTENT_XHTML);
 		layout.addComponent(tit);
 

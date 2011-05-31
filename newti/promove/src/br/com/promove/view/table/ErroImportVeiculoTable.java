@@ -18,8 +18,8 @@ import com.vaadin.ui.Table;
 
 public class ErroImportVeiculoTable extends Table {
 	
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"chassi", "modelo", "cor", "tipo", "msgErro"};
-	public static final String[] COL_HEADERS = new String[] {"Chassi", "Modelo", "Cor", "Tipo", "Mensagem"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"chassi", "modelo", "cor", "tipo", "navio", "msgErro"};
+	public static final String[] COL_HEADERS = new String[] {"Chassi", "Modelo", "Cor", "Tipo", "Navio", "Mensagem"};
 	
 	private ErroImportVeiculoView view;
 	private CadastroService cadastroService;

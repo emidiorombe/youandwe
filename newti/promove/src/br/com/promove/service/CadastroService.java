@@ -71,7 +71,7 @@ public interface CadastroService {
 
 	public void salvarVeiculo(Veiculo veiculo, boolean isFlush)throws PromoveException;
 
-	public void salvarInconsistenciaVeiculo(Veiculo v, String message, Integer tipo)throws PromoveException;
+	public void salvarInconsistenciaVeiculo(Veiculo v, String message)throws PromoveException;
 	
 	public <T> T getById(Class<T> clazz, Integer id) throws PromoveException;
 
