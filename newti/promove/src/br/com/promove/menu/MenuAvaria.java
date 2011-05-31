@@ -62,9 +62,6 @@ public class MenuAvaria  extends CssLayout{
 		Label titleVeic = new Label("Gerenciar Veículos");
 		titleVeic.addStyleName("section");
 
-		Label titleRe = new Label("Relatórios Gerenciais");
-		titleRe.addStyleName("section");
-
 		list = new NativeButton("Listar Avarias");
 		add = new NativeButton("Registrar Avaria");
 		import_avaria = new NativeButton("Importar Avarias");
@@ -78,8 +75,8 @@ public class MenuAvaria  extends CssLayout{
 		analise = new NativeButton("Análise de Resultado");
 		resumo = new NativeButton("Resumo de Avarias");
 
-		addListeners(list, add, import_avaria, erro_import_avaria, export, list_veiculo, add_veiculo, import_veiculos, erro_import_veiculos, auditoria, analise, resumo);
-		addComponents(titleAv, list, add, import_avaria, erro_import_avaria, export, titleVeic, list_veiculo, add_veiculo, import_veiculos, erro_import_veiculos, titleRe, auditoria, analise, resumo);
+		addListeners(list, add, import_avaria, erro_import_avaria, export, auditoria, analise, resumo, list_veiculo, add_veiculo, import_veiculos, erro_import_veiculos);
+		addComponents(titleAv, list, add, import_avaria, erro_import_avaria, export, auditoria, analise, resumo, titleVeic, list_veiculo, add_veiculo, import_veiculos, erro_import_veiculos);
 				
 		setPermissionVisible();
 		
@@ -98,16 +95,19 @@ public class MenuAvaria  extends CssLayout{
 			import_veiculos.setVisible(false);
 			erro_import_veiculos.setVisible(false);
 			export.setVisible(false);
+			auditoria.setVisible(false);
+			analise.setVisible(false);
+			resumo.setVisible(false);
 		}
 	}
 	
 	public void changeStyleToAdd() {
-		addAndRemoveStyle(add, add, list, add_veiculo, list_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export);
+		addAndRemoveStyle(add, list, import_avaria, erro_import_avaria, export, auditoria, analise, resumo, add_veiculo, list_veiculo, import_veiculos, erro_import_veiculos);
 		
 	}
 	
 	public void loadMainView(ClickEvent event) {
-		addAndRemoveStyle(event.getButton(), add, list, add_veiculo, list_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export);
+		addAndRemoveStyle(event.getButton(), add, list, import_avaria, erro_import_avaria, export, auditoria, analise, resumo, add_veiculo, list_veiculo, import_veiculos, erro_import_veiculos);
 		if(event.getButton() == add) {
 			AvariaForm form = new AvariaForm(app);
 			app.setMainView(form.getFormLayout());
