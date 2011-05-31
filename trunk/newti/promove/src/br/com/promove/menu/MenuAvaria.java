@@ -34,13 +34,16 @@ import com.vaadin.ui.NativeButton;
 public class MenuAvaria  extends CssLayout{
 	private Button add;
 	private Button list;
-	private Button add_veiculo;
-	private Button list_veiculo;
 	private Button import_avaria;
 	private Button erro_import_avaria;
+	private Button export;
+	private Button add_veiculo;
+	private Button list_veiculo;
 	private Button import_veiculos;
 	private Button erro_import_veiculos;
-	private Button export;
+	private Button auditoria;
+	private Button analise;
+	private Button resumo;
 	
 	private PromoveApplication app;
 	
@@ -53,21 +56,30 @@ public class MenuAvaria  extends CssLayout{
 		addStyleName("menu");
 		setWidth("100%");
 		
-		Label title = new Label("Gerenciar Avarias e Veículos");
-		title.addStyleName("section");
+		Label titleAv = new Label("Gerenciar Avarias");
+		titleAv.addStyleName("section");
+
+		Label titleVeic = new Label("Gerenciar Veículos");
+		titleVeic.addStyleName("section");
+
+		Label titleRe = new Label("Relatórios Gerenciais");
+		titleRe.addStyleName("section");
 
 		list = new NativeButton("Listar Avarias");
 		add = new NativeButton("Registrar Avaria");
-		list_veiculo = new NativeButton("Listar Veículos");
-		add_veiculo = new NativeButton("Registrar Veículo");
 		import_avaria = new NativeButton("Importar Avarias");
 		erro_import_avaria = new NativeButton("Auditar erros importação Avarias");
+		export = new NativeButton("Exportar Avarias");
+		list_veiculo = new NativeButton("Listar Veículos");
+		add_veiculo = new NativeButton("Registrar Veículo");
 		import_veiculos = new NativeButton("Importar Veículos");
 		erro_import_veiculos = new NativeButton("Auditar erros importação Veículos");
-		export = new NativeButton("Exportar Avarias");
+		auditoria = new NativeButton("Auditoria de Vistorias");
+		analise = new NativeButton("Análise de Resultado");
+		resumo = new NativeButton("Resumo de Avarias");
 
-		addListeners(list, add, list_veiculo, add_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export);
-		addComponents(title, list, add, list_veiculo, add_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export);
+		addListeners(list, add, import_avaria, erro_import_avaria, export, list_veiculo, add_veiculo, import_veiculos, erro_import_veiculos, auditoria, analise, resumo);
+		addComponents(titleAv, list, add, import_avaria, erro_import_avaria, export, titleVeic, list_veiculo, add_veiculo, import_veiculos, erro_import_veiculos, titleRe, auditoria, analise, resumo);
 				
 		setPermissionVisible();
 		
@@ -129,6 +141,9 @@ public class MenuAvaria  extends CssLayout{
 		}else if(event.getButton() == export) {
 			ExportAvariaView view = new ExportAvariaView(app);
 			app.setMainView(view.getLayout());
+		}else if(event.getButton() == auditoria) {
+		}else if(event.getButton() == analise) {
+		}else if(event.getButton() == resumo) {
 		}
 	}
 	
