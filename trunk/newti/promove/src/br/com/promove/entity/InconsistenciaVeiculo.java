@@ -45,18 +45,21 @@ public class InconsistenciaVeiculo implements Serializable{
 
 	private String modeloInvalido;
 	
+	private String navio;
+	
 	@Transient
 	private Veiculo veiculo;
 	
 	public InconsistenciaVeiculo() {}
 	
-	public InconsistenciaVeiculo(Veiculo v, String msgErro, Integer tipo) {
-		this.msgErro = msgErro;
-		this.tipo = tipo;
+	public InconsistenciaVeiculo(Veiculo v, String msgErro) {
+		this.chassi = v.getChassi();
 		this.modelo = v.getModelo();
 		this.cor = v.getCor();
 		this.codigoInterno = v.getCodigoInterno();
-		this.chassi = v.getChassi();
+		this.tipo = v.getTipo();
+		this.navio = v.getNavio();
+		this.msgErro = msgErro;
 		
 	}
 	
@@ -146,21 +149,6 @@ public class InconsistenciaVeiculo implements Serializable{
 		this.tipo = tipo;
 	}
 
-	public Veiculo getVeiculo() {
-		if(this.veiculo == null) {
-			Veiculo v = new Veiculo();
-			v.setCodigo(codigo);
-			v.setModelo(modelo);
-			v.setCor(cor);
-			v.setChassi(chassi);
-			v.setChassiOriginal(chassiOriginal);
-			v.setCodigoInterno(codigoInterno);
-			v.setDataCadastro(dataCadastro);
-			this.veiculo = v;
-		}
-		return veiculo;
-	}
-
 	public void setCorInvalida(String corInvalida) {
 		this.corInvalida = corInvalida;
 	}
@@ -177,6 +165,29 @@ public class InconsistenciaVeiculo implements Serializable{
 		return modeloInvalido;
 	}
 
-	
-	
+	public void setNavio(String navio) {
+		this.navio = navio;
+	}
+
+	public String getNavio() {
+		return navio;
+	}
+
+	public Veiculo getVeiculo() {
+		if(this.veiculo == null) {
+			Veiculo v = new Veiculo();
+			v.setCodigo(codigo);
+			v.setModelo(modelo);
+			v.setCor(cor);
+			v.setChassi(chassi);
+			v.setChassiOriginal(chassiOriginal);
+			v.setCodigoInterno(codigoInterno);
+			v.setDataCadastro(dataCadastro);
+			v.setTipo(tipo);
+			v.setNavio(navio);
+			this.veiculo = v;
+		}
+		return veiculo;
+	}
+
 }

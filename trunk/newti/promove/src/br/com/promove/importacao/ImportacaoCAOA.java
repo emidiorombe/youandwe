@@ -25,18 +25,19 @@ public class ImportacaoCAOA {
 		for (String linha : csv) {
 			Veiculo v = new Veiculo();
 			try {
-				String[] campos = linha.split(";");
+				String[] campos = linha.replaceAll("\r", "").split(";");
 				String msgErro = "";
 				boolean temErro = false;
 				
 				if(campos.length != 3 || campos[2].length() < 17)
 					continue;
 				
-				if(cadastro.buscarVeiculosPorChassi(campos[2].substring(0, 17)).size() > 0)
+				if(cadastro.buscarVeiculosPorChassi(campos[2]).size() > 0)
 					throw new IllegalArgumentException("Chassi já cadastrado");
 					
 				v.setCodigoInterno(campos[0]);
-				v.setChassi(campos[2].replaceAll("\r", ""));
+				v.setChassi(campos[2]);
+				v.setTipo(1);
 				
 				if(!cores.containsKey(campos[0].substring(campos[0].length()-2))) {
 					temErro = true;
@@ -63,7 +64,7 @@ public class ImportacaoCAOA {
 			}catch(IllegalArgumentException ie) {
 				ie.printStackTrace();
 			}catch(Exception e) {
-				cadastro.salvarInconsistenciaVeiculo(v, e.getMessage(), 1);
+				cadastro.salvarInconsistenciaVeiculo(v, e.getMessage());
 			}
 		}
 	}

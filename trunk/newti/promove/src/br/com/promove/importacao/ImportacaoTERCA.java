@@ -22,8 +22,7 @@ public class ImportacaoTERCA {
 	public void importar(List<String> csv) throws PromoveException{
 		loadModelos();
 		for (String linha : csv) {
-			linha = linha.replaceAll("\r", "");
-			String[] campos = linha.split(";");
+			String[] campos = linha.replaceAll("\r", "; ").split(";");
 			Veiculo v = new Veiculo();
 			try {
 				if(campos[0].length() < 17)
@@ -32,15 +31,15 @@ public class ImportacaoTERCA {
 				v.setCor(cadastro.getById(Cor.class, new Integer(97)));
 				v.setTipo(1);
 				
+				if(campos[2] != null && !campos[2].trim().equals("")) {
+					v.setNavio(campos[2]);
+					v.setTipo(2);
+				}
+				
 				if(!modelos.containsKey(campos[1])) {
 					throw new Exception("Modelo " + campos[1] + " não existe;");
 				}else {
 					v.setModelo(modelos.get(campos[1]));
-				}
-				
-				if(campos[2] != null) {
-					v.setNavio(campos[2]);
-					v.setTipo(2);
 				}
 				
 				cadastro.salvarVeiculo(v, true);
@@ -48,7 +47,7 @@ public class ImportacaoTERCA {
 			}catch(IllegalArgumentException ie) {
 				ie.printStackTrace();
 			}catch(Exception e) {
-				cadastro.salvarInconsistenciaVeiculo(v, e.getMessage(), 2);
+				cadastro.salvarInconsistenciaVeiculo(v, e.getMessage());
 			}
 		}
 	}

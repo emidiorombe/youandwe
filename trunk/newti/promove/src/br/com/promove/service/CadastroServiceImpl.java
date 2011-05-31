@@ -295,15 +295,15 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	}
 
 	@Override
-	public void salvarInconsistenciaVeiculo(Veiculo v, String message, Integer tipo)throws PromoveException {
+	public void salvarInconsistenciaVeiculo(Veiculo v, String message) throws PromoveException {
 		try {
-			InconsistenciaVeiculo inc = new InconsistenciaVeiculo(v, message, tipo);
-			if(tipo == 1) {
-				inc.setCorInvalida(StringUtilities.getCorFromErrorMessage(message));
+			InconsistenciaVeiculo inc = new InconsistenciaVeiculo(v, message);
+			//if(v.getTipo() == 1) {
+			//	inc.setCorInvalida(StringUtilities.getCorFromErrorMessage(message));
+			//	inc.setModeloInvalido(StringUtilities.getModeloFromErrorMessage(message));
+			//}else if(v.getTipo() == 2) {
 				inc.setModeloInvalido(StringUtilities.getModeloFromErrorMessage(message));
-			}else if(tipo == 2) {
-				inc.setModeloInvalido(StringUtilities.getModeloFromErrorMessage(message));
-			}
+			//}
 			inconsistenciaVeiculoDAO.save(inc);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
