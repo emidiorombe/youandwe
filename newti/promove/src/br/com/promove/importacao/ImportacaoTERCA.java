@@ -22,6 +22,7 @@ public class ImportacaoTERCA {
 	public void importar(List<String> csv) throws PromoveException{
 		loadModelos();
 		for (String linha : csv) {
+			linha = linha.replaceAll("\r", "");
 			String[] campos = linha.split(";");
 			Veiculo v = new Veiculo();
 			try {
@@ -29,11 +30,17 @@ public class ImportacaoTERCA {
 					continue;
 				v.setChassi(campos[0]);
 				v.setCor(cadastro.getById(Cor.class, new Integer(97)));
+				v.setTipo(1);
 				
-				if(!modelos.containsKey(campos[1].replaceAll("\r", ""))) {
+				if(!modelos.containsKey(campos[1])) {
 					throw new Exception("Modelo " + campos[1] + " não existe;");
 				}else {
-					v.setModelo(modelos.get(campos[1].replaceAll("\r", "")));
+					v.setModelo(modelos.get(campos[1]));
+				}
+				
+				if(campos[2] != null) {
+					v.setNavio(campos[2]);
+					v.setTipo(2);
 				}
 				
 				cadastro.salvarVeiculo(v, true);

@@ -33,8 +33,18 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			addParamToQuery("txtcor", veiculo.getCor());
 		}
 		
+		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) {
+			hql.append(" and v.tipo = :txttipo ");
+			addParamToQuery("txttipo", veiculo.getTipo());
+		}
+		
+		if(veiculo.getNavio() != null && !veiculo.getNavio().equals("")) {
+			hql.append(" and v.navio = :txtnavio ");
+			addParamToQuery("txtnavio", veiculo.getNavio());
+		}
+		
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
-			hql.append(" and  dataCadastro between :dtIni and :dtFim ");
+			hql.append(" and dataCadastro between :dtIni and :dtFim ");
 			addParamToQuery("dtIni", dtInicio);
 			addParamToQuery("dtFim", dtFim);
 		}

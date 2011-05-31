@@ -62,7 +62,7 @@ public class VeiculoForm extends BaseForm{
 	public void createFormBody(BeanItem<Veiculo> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new VeiculoFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"chassi", "modelo", "cor"});
+		setVisibleItemProperties(new Object[]{"chassi", "modelo", "cor", "tipo", "navio"});
 		
 	}
 	
@@ -99,8 +99,10 @@ public class VeiculoForm extends BaseForm{
 			
 			if(f instanceof TextField){
 				((TextField)f).setNullRepresentation("");
-				f.setRequired(true);
-				f.setRequiredError("Preenchimento do campo '" + StringUtilities.capitalize(propertyId.toString()) + "' é obrigatório.");
+				if(!propertyId.equals("navio")) {
+					f.setRequired(true);
+					f.setRequiredError("Preenchimento do campo '" + StringUtilities.capitalize(propertyId.toString()) + "' é obrigatório.");
+				}
 			}
 			
 			if(propertyId.equals("chassi")) {
@@ -154,8 +156,23 @@ public class VeiculoForm extends BaseForm{
 				}catch (PromoveException e) {
 					showErrorMessage(form, "Não foi possível buscar as Cores");
 				}
-			}else if(propertyId.equals("codigo")) {
-				f.setReadOnly(true);
+			}else if(propertyId.equals("tipo")) {
+				ComboBox c = new ComboBox("Tipo");
+				c.addContainerProperty("label", String.class, null);
+			
+				Item i = c.addItem(1);
+				i.getItemProperty("label").setValue("Nacional");
+				i = c.addItem(2);
+				i.getItemProperty("label").setValue("Importado");
+				c.setRequired(true);
+				c.setRequiredError("Tipo obrigatório");
+				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+				c.setImmediate(true);
+				c.setNullSelectionAllowed(false);
+				c.setPropertyDataSource(item.getItemProperty(propertyId));
+				c.setItemCaptionPropertyId("label");
+				
+				return c;
 			}
 			return f;
 		}
