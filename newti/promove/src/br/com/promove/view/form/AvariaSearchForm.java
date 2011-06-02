@@ -101,7 +101,7 @@ public class AvariaSearchForm extends BaseForm{
 		createFormBody(new BeanItem<Avaria>(new Avaria()));
 		layout.addComponent(this);
 		addField("chkMovimentacao", chkMovimentacao);
-		//addField("chkRegistradas", chkRegistradas);
+		addField("chkRegistradas", chkRegistradas);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
 		this.addField("cmbPeriodo", cmbPeriodo);
@@ -264,7 +264,7 @@ public class AvariaSearchForm extends BaseForm{
 				}catch(IllegalArgumentException ie) {
 					showErrorMessage(view, ie.getMessage());
 				}catch (Exception e) {
-					showErrorMessage(view, e.getMessage() + "Não foi possível buscar as avarias");
+					showErrorMessage(view, "Não foi possível buscar as avarias");
 					e.printStackTrace();
 				}
 			}else if(event.getButton() == export) {

@@ -55,10 +55,11 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		if(movimentacao) hql.append(" and tp.movimentacao = false ");
 
 		if(registradas) {
-			//hql.append(" and not exists (select tp2 from TipoAvaria tp2)");
-			//hql.append(" and not (select count(*) from Avaria av2 where av2.veiculo.chassi = av.veiculo.chassi ");
-			//hql.append(" and av2.tipo.id = av.tipo.id and av2.local.id = av.local.id ");
-			//hql.append(" and av2.id < av.id) = 0");
+			hql.append(" and (tp.movimentacao = true or ");
+			hql.append(" not exists (select av2 from Avaria av2 ");
+			hql.append(" where av2.veiculo = av.veiculo ");
+			hql.append(" and av2.tipo = av.tipo and av2.local = av.local ");
+			hql.append(" and av2.origem.codigo < av.origem.codigo)) ");
 		}
 
 		hql.append(" order by av.origem.codigo");
