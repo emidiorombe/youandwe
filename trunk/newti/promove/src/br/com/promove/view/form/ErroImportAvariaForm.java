@@ -139,16 +139,11 @@ public class ErroImportAvariaForm extends BaseForm {
 				
 			}else if(event.getButton() == remove){
 				try{
-					validate();
-					if(isValid()){
-						commit();
-						BeanItem<InconsistenciaAvaria> item = (BeanItem<InconsistenciaAvaria>) getItemDataSource();
-						avariaService.excluirInconsistenciaImportAvaria(item.getBean());
-						//view.getTable().reloadTable();
-						view.getTable().getContainer().removeItem(item.getBean());
-						showSuccessMessage(view, "Inconsistência excluida!");
-						
-					}
+					BeanItem<InconsistenciaAvaria> item = (BeanItem<InconsistenciaAvaria>) getItemDataSource();
+					avariaService.excluirInconsistenciaImportAvaria(item.getBean());
+					//view.getTable().reloadTable();
+					view.getTable().getContainer().removeItem(item.getBean());
+					showSuccessMessage(view, "Inconsistência excluida!");
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
