@@ -37,13 +37,13 @@ import com.vaadin.ui.NativeButton;
 public class MenuAvaria  extends CssLayout{
 	private Button add;
 	private Button list;
-	private Button import_avaria;
-	private Button erro_import_avaria;
-	private Button export;
 	private Button add_veiculo;
 	private Button list_veiculo;
+	private Button import_avaria;
+	private Button erro_import_avaria;
 	private Button import_veiculos;
 	private Button erro_import_veiculos;
+	private Button export;
 	private Button auditoria;
 	private Button analise;
 	private Button resumo;
@@ -59,27 +59,24 @@ public class MenuAvaria  extends CssLayout{
 		addStyleName("menu");
 		setWidth("100%");
 		
-		Label titleAv = new Label("Gerenciar Avarias");
-		titleAv.addStyleName("section");
-
-		Label titleVeic = new Label("Gerenciar Veículos");
-		titleVeic.addStyleName("section");
+		Label title = new Label("Gerenciar Avarias e Veículos");
+		title.addStyleName("section");
 
 		list = new NativeButton("Listar Avarias");
 		add = new NativeButton("Registrar Avaria");
-		import_avaria = new NativeButton("Importar Avarias");
-		erro_import_avaria = new NativeButton("Auditar erros importação Avarias");
-		export = new NativeButton("Exportar Avarias");
 		list_veiculo = new NativeButton("Listar Veículos");
 		add_veiculo = new NativeButton("Registrar Veículo");
+		import_avaria = new NativeButton("Importar Avarias");
+		erro_import_avaria = new NativeButton("Auditar erros importação Avarias");
 		import_veiculos = new NativeButton("Importar Veículos");
 		erro_import_veiculos = new NativeButton("Auditar erros importação Veículos");
+		export = new NativeButton("Exportar Avarias");
 		auditoria = new NativeButton("Auditoria de Vistorias");
 		analise = new NativeButton("Análise de Resultado");
 		resumo = new NativeButton("Resumo de Avarias");
 
-		addListeners(list, add, import_avaria, erro_import_avaria, export, auditoria, analise, resumo, list_veiculo, add_veiculo, import_veiculos, erro_import_veiculos);
-		addComponents(titleAv, list, add, import_avaria, erro_import_avaria, export, auditoria, analise, resumo, titleVeic, list_veiculo, add_veiculo, import_veiculos, erro_import_veiculos);
+		addListeners(list, add, list_veiculo, add_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export, auditoria, analise, resumo);
+		addComponents(title, list, add, list_veiculo, add_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export, auditoria, analise, resumo);
 				
 		setPermissionVisible();
 		
