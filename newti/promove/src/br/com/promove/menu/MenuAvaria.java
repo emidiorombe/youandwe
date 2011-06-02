@@ -145,9 +145,9 @@ public class MenuAvaria  extends CssLayout{
 			ExportAvariaView view = new ExportAvariaView(app);
 			app.setMainView(view.getLayout());
 		}else if(event.getButton() == auditoria) {
-			AuditoriaVistoriasForm form = new AuditoriaVistoriasForm(app);
-			AuditoriaVistoriasTable table = new AuditoriaVistoriasTable(app);
-			app.setMainView(new AuditoriaVistoriasView(table, form));
+			//AuditoriaVistoriasForm form = new AuditoriaVistoriasForm(app);
+			//AuditoriaVistoriasTable table = new AuditoriaVistoriasTable(app);
+			//app.setMainView(new AuditoriaVistoriasView(table, form));
 		}else if(event.getButton() == analise) {
 		}else if(event.getButton() == resumo) {
 		}
