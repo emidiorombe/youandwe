@@ -116,50 +116,35 @@ public class VeiculoSearchForm extends BaseForm{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			if(event.getButton() == search) {
-				try {
-					commit();
-					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
-					BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
-					
-					if(item.getBean().getChassi() == null || item.getBean().getChassi().isEmpty()) {
-						if(de == null || ate == null)
-							throw new IllegalArgumentException("Informe um chassi ou período para busca.");
-					}
-					
-					List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate);
+			try {
+				commit();
+				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
+				
+				if(item.getBean().getChassi() == null || item.getBean().getChassi().isEmpty()) {
+					if(de == null || ate == null)
+						throw new IllegalArgumentException("Informe um chassi ou período");
+				}
+				
+				List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate);
+				
+				if(event.getButton() == search) {
 					view.getTables().getTableVeiculo().filterTable(list);
 					view.getTables().getTableAvaria().removeAllItems();
-				}catch(IllegalArgumentException ie) {
-					showErrorMessage(view, ie.getMessage());
-				}catch(PromoveException pe) {
-					showErrorMessage(view, "Não foi possível buscar os veículos");
-				} 
-			}else if(event.getButton() == export) {
-				try {
-					commit();
-					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
-					BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
-					
-					if(item.getBean().getChassi() == null || item.getBean().getChassi().isEmpty()) {
-						if(de == null || ate == null)
-							throw new IllegalArgumentException("Informe um chassi ou período para gerar arquivo.");
-					}
-					
-					List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate);
+				} else if(event.getButton() == export) {
 					String file = exportacaoService.exportarXLSVeiculos(list);
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=veiculos.xls&file=" + file));
-				} catch (Exception e) {
-					showErrorMessage(view, "Não foi possível gerar arquivo.");
 				}
-			}
+			} catch(IllegalArgumentException ie) {
+				showErrorMessage(view, ie.getMessage());
+			}catch(PromoveException pe) {
+				showErrorMessage(view, "Não foi possível buscar os veículos");
+			} 
 		}
-		
 	}
 	
 	class VeiculoFieldFactory extends DefaultFieldFactory{

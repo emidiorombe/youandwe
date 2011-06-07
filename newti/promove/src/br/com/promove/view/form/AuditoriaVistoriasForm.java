@@ -10,12 +10,14 @@ import br.com.promove.entity.Avaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
+import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.AuditoriaVistoriasView;
+import br.com.promove.view.form.VeiculoSearchForm.VeiculoFieldFactory;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
@@ -44,8 +46,6 @@ public class AuditoriaVistoriasForm extends BaseForm{
 	private AuditoriaVistoriasView view;
 	private Button search;
 	private Button export;
-	private Button exportXml;
-	private ComboBox cmbTipo;
 	private ComboBox cmbOrigemDe;
 	private ComboBox cmbOrigemAte;
 	private PopupDateField txtDe;
@@ -67,32 +67,15 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		setSizeFull();
 		Item i;
 		
-		search = new Button("Buscar", new AvariaSearchListener());
-		export = new Button("Gerar Arquivo", new AvariaSearchListener());
-		exportXml = new Button("Gerar XML", new AvariaSearchListener());
+		search = new Button("Buscar", new AuditoriaVistoriasListener());
+		export = new Button("Gerar Arquivo", new AuditoriaVistoriasListener());
 		
-		cmbTipo = new ComboBox("Tipo de Veículo");
-		cmbTipo.addContainerProperty("label", String.class, null);
-		
-		i = cmbTipo.addItem(0);
-		i.getItemProperty("label").setValue("Selecione...");
-		i = cmbTipo.addItem(1);
-		i.getItemProperty("label").setValue("Nacional");
-		i = cmbTipo.addItem(2);
-		i.getItemProperty("label").setValue("Importado");
-
-		cmbTipo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-		cmbTipo.setImmediate(true);
-		cmbTipo.setNullSelectionAllowed(false);
-		cmbTipo.setItemCaptionPropertyId("label");
-		cmbTipo.setValue(cmbTipo.getItemIds().iterator().next());
-
 		cmbOrigemDe = new ComboBox("Origem De");
 		cmbOrigemDe.addContainerProperty("label", String.class, null);
 		
 		try {
-			i = cmbOrigemDe.addItem(new OrigemAvaria());
-			i.getItemProperty("label").setValue("Selecione...");
+			//i = cmbOrigemDe.addItem(new OrigemAvaria());
+			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemDe.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
@@ -105,14 +88,15 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		cmbOrigemDe.setImmediate(true);
 		cmbOrigemDe.setNullSelectionAllowed(false);
 		cmbOrigemDe.setItemCaptionPropertyId("label");
-		cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
+		cmbOrigemDe.setWidth("250px");
+		//cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
 		
 		cmbOrigemAte = new ComboBox("Origem Até");
 		cmbOrigemAte.addContainerProperty("label", String.class, null);
-
+		
 		try {
-			i = cmbOrigemAte.addItem(new OrigemAvaria());
-			i.getItemProperty("label").setValue("Selecione...");
+			//i = cmbOrigemAte.addItem(new OrigemAvaria());
+			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemAte.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
@@ -125,7 +109,8 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		cmbOrigemAte.setImmediate(true);
 		cmbOrigemAte.setNullSelectionAllowed(false);
 		cmbOrigemAte.setItemCaptionPropertyId("label");
-		cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
+		cmbOrigemAte.setWidth("250px");
+		//cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -150,9 +135,8 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		cmbPeriodo.setWidth("200px");
 		cmbPeriodo.setValue(cmbPeriodo.getItemIds().iterator().next());
 
-		createFormBody(new BeanItem<Avaria>(new Avaria()));
+		createFormBody(new BeanItem<Veiculo>(new Veiculo()));
 		layout.addComponent(this);
-		addField("cmbTipo", cmbTipo);
 		addField("cmbOrigemDe", cmbOrigemDe);
 		addField("cmbOrigemAte", cmbOrigemAte);
 		addField("txtDe", txtDe);
@@ -163,19 +147,17 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		layout.setMargin(false, true, false, true);
 	}
 
-	private void createFormBody(BeanItem<Avaria> beanItem) {
-		setItemDataSource(beanItem);
-		setFormFieldFactory(new AvariaFieldFactory(this, beanItem.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{});
+	public void createFormBody(BeanItem<Veiculo> item) {
+		setItemDataSource(item);
+		setFormFieldFactory(new AuditoriaFieldFactory(this, item.getBean().getId() == null));
+		setVisibleItemProperties(new Object[]{"tipo"});
 		
 	}
-	
 	private Component createFooter(){
 		HorizontalLayout footer = new HorizontalLayout();
 		footer.setSpacing(true);
 		footer.addComponent(search);
 		footer.addComponent(export);
-		//footer.addComponent(exportXml);
 		footer.setVisible(true);
 		
 		return footer;
@@ -193,13 +175,13 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		this.view = view;
 	}
 	
-	class AvariaFieldFactory extends DefaultFieldFactory{
+	class AuditoriaFieldFactory extends DefaultFieldFactory{
 		
-		private AuditoriaVistoriasForm avariaForm;
+		private AuditoriaVistoriasForm form;
 		private boolean isNew;
 
-		public AvariaFieldFactory(AuditoriaVistoriasForm avariaForm, boolean isNew) {
-			this.avariaForm = avariaForm;
+		public AuditoriaFieldFactory(AuditoriaVistoriasForm form, boolean isNew) {
+			this.form = form;
 			this.isNew = isNew;
 		}
 
@@ -207,93 +189,33 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		public Field createField(Item item, Object propertyId, Component uiContext) {
 			Field f = super.createField(item, propertyId, uiContext);
 			
-			try {
-				if(propertyId.equals("veiculo")) {
-					TextField tf = new TextField("Chassi");
-					tf.setNullRepresentation("");
-					tf.setImmediate(true);
-					tf.setWidth("200px");
-					return tf;
-				} else if(propertyId.equals("tipo")) {
-					ComboBox c = new ComboBox("Tipo Avaria");
-					c.addContainerProperty("label", String.class, null);
-					
-					Item i_default = c.addItem(new TipoAvaria());
-					i_default.getItemProperty("label").setValue("Selecione...");
-					
-					
-					for(TipoAvaria tp: avariaService.buscarTodosTipoAvaria()){
-						Item i = c.addItem(tp);
-						i.getItemProperty("label").setValue(tp.getDescricao());
-					}
-					
-					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-					c.setImmediate(true);
-					c.setNullSelectionAllowed(false);
-					c.setPropertyDataSource(item.getItemProperty(propertyId));
-					c.setItemCaptionPropertyId("label");
-					
-					if (c.getValue() ==  null && c.size() > 0)
-	                    c.setValue(c.getItemIds().iterator().next());
-					
-					
-					return c;
-				}else if(propertyId.equals("local")) {
-					ComboBox c = new ComboBox("Local Avaria");
-					c.addContainerProperty("label", String.class, null);
-
-					
-					Item i_default = c.addItem(new LocalAvaria());
-					i_default.getItemProperty("label").setValue("Selecione...");
-
-					for(LocalAvaria l: avariaService.buscarTodosLocaisAvaria()){
-						Item i = c.addItem(l);
-						i.getItemProperty("label").setValue(l.getDescricao());
-					}
-					
-					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-					c.setImmediate(true);
-					c.setNullSelectionAllowed(false);
-					c.setPropertyDataSource(item.getItemProperty(propertyId));
-					c.setItemCaptionPropertyId("label");
-					
-					if (c.getValue() ==  null && c.size() > 0)
-	                    c.setValue(c.getItemIds().iterator().next());
-					
-					
-					return c;
-				}else if(propertyId.equals("origem")) {
-					ComboBox c = new ComboBox("Origem Avaria");
-					c.addContainerProperty("label", String.class, null);
-
-					Item i_default = c.addItem(new OrigemAvaria());
-					i_default.getItemProperty("label").setValue("Selecione...");
-
-					for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
-						Item i = c.addItem(or);
-						i.getItemProperty("label").setValue(or.getDescricao());
-					}
-					
-					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-					c.setImmediate(true);
-					c.setNullSelectionAllowed(false);
-					c.setPropertyDataSource(item.getItemProperty(propertyId));
-					c.setItemCaptionPropertyId("label");
-					
-					if (c.getValue() ==  null && c.size() > 0)
-	                    c.setValue(c.getItemIds().iterator().next());
-					
-					
-					return c;
-				}
-			}catch(PromoveException pe) {
-				showErrorMessage(avariaForm, "Não foi possível montar o formulário de Avaria");
+			if(propertyId.equals("tipo")) {
+				ComboBox c = new ComboBox("Tipo");
+				c.addContainerProperty("label", String.class, null);
+				
+				Item i = c.addItem(new Integer(0));
+				i.getItemProperty("label").setValue("Selecione...");
+				i = c.addItem(1);
+				i.getItemProperty("label").setValue("Nacional");
+				i = c.addItem(2);
+				i.getItemProperty("label").setValue("Importado");
+				
+				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+				c.setImmediate(true);
+				c.setNullSelectionAllowed(false);
+				c.setPropertyDataSource(item.getItemProperty(propertyId));
+				c.setItemCaptionPropertyId("label");
+				
+				if (c.getValue() ==  null && c.size() > 0)
+                    c.setValue(c.getItemIds().iterator().next());
+				
+				return c;
 			}
-			return null;
+			return f;
 		}
 	}
 	
-	class AvariaSearchListener implements ClickListener {
+	class AuditoriaVistoriasListener implements ClickListener {
 
 		@Override
 		public void buttonClick(ClickEvent event) {
@@ -301,27 +223,31 @@ public class AuditoriaVistoriasForm extends BaseForm{
 				commit();
 				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
-				Integer periodo = (Integer)cmbPeriodo.getValue();
-				BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
+				OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
+				OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
+				//Integer periodo = (Integer)cmbPeriodo.getValue();
+				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
 				
-				if(de == null || ate == null)
-					throw new IllegalArgumentException("Informe um chassi ou período para gerar arquivo.");
+				if(oride == null || oride.getId() == null || oriate == null || 
+						oriate.getId() == null || de == null || ate == null)
+					throw new IllegalArgumentException("Informe as origens e o período");
 				
-				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(item.getBean(), de, ate, periodo, null, null);
+				List<Veiculo> veiculos = cadastroService.buscarVeiculosAuditoria(item.getBean(), de, ate, oride, oriate);
 				
 				if(event.getButton() == search) {
-					view.getTable().filterTable(avarias);
+					view.getTables().getTableVeiculo().filterTable(veiculos);
+					view.getTables().getTableAvaria().removeAllItems();
 				}else if(event.getButton() == export) {
-					String file = exportacaoService.exportarXLSAvarias(avarias);
+					String file = exportacaoService.exportarXLSVeiculos(veiculos);
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
-					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=avarias.xls&file=" + file));
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=auditoria.xls&file=" + file));
 				}
 			}catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
 			}catch (Exception e) {
-				showErrorMessage(view, e.getMessage() + "Não foi possível buscar as avarias");
+				showErrorMessage(view, e.getMessage() + " Não foi possível buscar os veículos");
 				e.printStackTrace();
 			}
 		}

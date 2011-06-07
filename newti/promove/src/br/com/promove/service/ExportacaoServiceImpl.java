@@ -186,23 +186,21 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    
 		    //Cabeçalho
 		    Row row_head = sheet.createRow(0);
-		    row_head.createCell(0).setCellValue("ID");
-		    row_head.createCell(1).setCellValue("CHASSI");
-		    row_head.createCell(2).setCellValue("MODELO");
-		    row_head.createCell(3).setCellValue("COR");
-		    row_head.createCell(4).setCellValue("DATA");
-		    row_head.createCell(5).setCellValue("TIPO");
-		    row_head.createCell(6).setCellValue("NAVIO");
+		    row_head.createCell(0).setCellValue("CHASSI");
+		    row_head.createCell(1).setCellValue("MODELO");
+		    row_head.createCell(2).setCellValue("COR");
+		    row_head.createCell(3).setCellValue("DATA");
+		    row_head.createCell(4).setCellValue("TIPO");
+		    row_head.createCell(5).setCellValue("NAVIO");
 		    
 		    for(int i = 0; i < veiculos.size(); i++) {
 			    Row row = sheet.createRow(i+1);
-			    row.createCell(0).setCellValue(veiculos.get(i).getId());
-			    row.createCell(1).setCellValue(veiculos.get(i).getChassi());
-			    row.createCell(2).setCellValue(veiculos.get(i).getModelo().getDescricao());
-			    row.createCell(3).setCellValue(veiculos.get(i).getCor().getDescricao());
-			    row.createCell(4).setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(veiculos.get(i).getDataCadastro()));
-			    row.createCell(5).setCellValue(veiculos.get(i).getTipo() == 1 ? "Nacional" : "Importado");
-			    row.createCell(6).setCellValue(veiculos.get(i).getNavio());
+			    row.createCell(0).setCellValue(veiculos.get(i).getChassi());
+			    row.createCell(1).setCellValue(veiculos.get(i).getModelo().getDescricao());
+			    row.createCell(2).setCellValue(veiculos.get(i).getCor().getDescricao());
+			    row.createCell(3).setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(veiculos.get(i).getDataCadastro()));
+			    row.createCell(4).setCellValue(veiculos.get(i).getTipo() == 1 ? "Nacional" : "Importado");
+			    row.createCell(5).setCellValue(veiculos.get(i).getNavio());
 		    }
 
 		    // Write the output to a file/

@@ -20,6 +20,7 @@ import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Filial;
 import br.com.promove.entity.InconsistenciaVeiculo;
 import br.com.promove.entity.Modelo;
+import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoUsuario;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
@@ -341,7 +342,7 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	}
 
 	@Override
-	public List<Veiculo> buscarVeiculosPorModeloFZData(String chassi, Date data )throws PromoveException {
+	public List<Veiculo> buscarVeiculosPorModeloFZData(String chassi, Date data)throws PromoveException {
 		List<Veiculo> lista = null;
 		try {
 			lista = veiculoDAO.getByModeloFZAndData(chassi, data);
@@ -391,6 +392,20 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 			if (fz.contains("000000000"))
 			    fz = fz.replace("000000000", "");
 			lista = veiculoDAO.getByFz(fz.substring(fz.length()-6));
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException {
+		List<Veiculo> lista = null;
+		try {
+			Date init = DateUtils.montarDataInicialParaQuery(de); 
+			Date fim = DateUtils.montarDataFinalParaQuery(ate); 
+			
+			lista = veiculoDAO.buscarVeiculosAuditoria(veiculo, init, fim, oride, oriate);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

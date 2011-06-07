@@ -2,6 +2,7 @@ package br.com.promove.menu;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Usuario;
+import br.com.promove.view.AuditoriaVistoriasTables;
 import br.com.promove.view.AuditoriaVistoriasView;
 import br.com.promove.view.AvariaSearchView;
 import br.com.promove.view.ErroImportAvariaView;
@@ -18,7 +19,6 @@ import br.com.promove.view.form.ErroImportAvariaForm;
 import br.com.promove.view.form.ErroImportVeiculoForm;
 import br.com.promove.view.form.VeiculoForm;
 import br.com.promove.view.form.VeiculoSearchForm;
-import br.com.promove.view.table.AuditoriaVistoriasTable;
 import br.com.promove.view.table.AvariaTable;
 import br.com.promove.view.table.AvariaVeiculoTable;
 import br.com.promove.view.table.ErroImportAvariaTable;
@@ -142,9 +142,11 @@ public class MenuAvaria  extends CssLayout{
 			ExportAvariaView view = new ExportAvariaView(app);
 			app.setMainView(view.getLayout());
 		}else if(event.getButton() == auditoria) {
-			//AuditoriaVistoriasForm form = new AuditoriaVistoriasForm(app);
-			//AuditoriaVistoriasTable table = new AuditoriaVistoriasTable(app);
-			//app.setMainView(new AuditoriaVistoriasView(table, form));
+			AuditoriaVistoriasForm form = new AuditoriaVistoriasForm(app);
+			VeiculoTable tableVeiculo = new VeiculoTable(app, this);
+			AvariaVeiculoTable tableAvaria = new AvariaVeiculoTable(app);
+			AuditoriaVistoriasTables tables = new AuditoriaVistoriasTables(tableVeiculo, tableAvaria);
+			app.setMainView(new AuditoriaVistoriasView(tables, form));
 		}else if(event.getButton() == analise) {
 		}else if(event.getButton() == resumo) {
 		}

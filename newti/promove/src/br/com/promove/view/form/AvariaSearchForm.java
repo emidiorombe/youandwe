@@ -244,78 +244,41 @@ public class AvariaSearchForm extends BaseForm{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			if(event.getButton() == search) {
-				try {
-					commit();
-					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
-					Integer periodo = (Integer)cmbPeriodo.getValue();
-					Boolean movimentacao = (Boolean)chkMovimentacao.getValue();
-					Boolean registradas = (Boolean)chkRegistradas.getValue();
-					BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
-					
-					if(item.getBean().getVeiculo() == null || item.getBean().getVeiculo().getChassi().isEmpty()) {
-						if(de == null || ate == null)
-							throw new IllegalArgumentException("Informe um chassi ou período para busca.");
-					}
-					
-					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(item.getBean(), de, ate, periodo, movimentacao, registradas);
-					view.getTable().filterTable(avarias);
-				}catch(IllegalArgumentException ie) {
-					showErrorMessage(view, ie.getMessage());
-				}catch (Exception e) {
-					showErrorMessage(view, "Não foi possível buscar as avarias");
-					e.printStackTrace();
+			try {
+				commit();
+				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+				Integer periodo = (Integer)cmbPeriodo.getValue();
+				Boolean movimentacao = (Boolean)chkMovimentacao.getValue();
+				Boolean registradas = (Boolean)chkRegistradas.getValue();
+				BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
+				
+				if(item.getBean().getVeiculo() == null || item.getBean().getVeiculo().getChassi().isEmpty()) {
+					if(de == null || ate == null)
+						throw new IllegalArgumentException("Informe um chassi ou período");
 				}
-			}else if(event.getButton() == export) {
-				try {
-					commit();
-					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null;
-					Integer periodo = (Integer)cmbPeriodo.getValue();
-					Boolean movimentacao = (Boolean)chkMovimentacao.getValue();
-					Boolean registradas = (Boolean)chkRegistradas.getValue();
-					BeanItem<Avaria> item = (BeanItem<Avaria>)getItemDataSource();
-					
-					//if(txtChassi == null || txtChassi.toString().isEmpty()) {
-					if(item.getBean().getVeiculo() == null || item.getBean().getVeiculo().getChassi().isEmpty()) {
-						if(de == null || ate == null)
-							throw new IllegalArgumentException("Informe um chassi ou período para gerar arquivo.");
-					}
-					
-					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(item.getBean(), de, ate, periodo, movimentacao, registradas);
+				
+				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(item.getBean(), de, ate, periodo, movimentacao, registradas);
+
+				if(event.getButton() == search) {
+					view.getTable().filterTable(avarias);
+				} else if(event.getButton() == export) {
 					String file = exportacaoService.exportarXLSAvarias(avarias);
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=avarias.xls&file=" + file));
-				}catch (IllegalArgumentException ie) {
-					showErrorMessage(view, ie.getMessage());
-				} catch (Exception e) {
-					showErrorMessage(view, "Não foi possível gerar arquivo.");
-				}
-			}else if(event.getButton() == exportXml) {
-				try {
-					commit();
-					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
-					
-					if(de == null || ate == null)
-						throw new IllegalArgumentException("Informe um período para gerar arquivo.");
-					
+				} else if(event.getButton() == exportXml) {
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_avarias&fileName=avarias.xml&de=" + new SimpleDateFormat("dd/MM/yyyy").format(de) + "&ate=" + new SimpleDateFormat("dd/MM/yyyy").format(ate)));
-					
-				}catch (IllegalArgumentException ie) {
-					showErrorMessage(view, ie.getMessage());
-				} catch (Exception e) {
-					showErrorMessage(view, e.getMessage() + " Não foi possível gerar arquivo.");
 				}
+			}catch(IllegalArgumentException ie) {
+				showErrorMessage(view, ie.getMessage());
+			}catch (Exception e) {
+				showErrorMessage(view, "Não foi possível buscar as avarias");
+				e.printStackTrace();
 			}
-			
 		}
-		
 	}
-	
 }
