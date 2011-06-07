@@ -147,7 +147,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 
 	@Override
 	public List<OrigemAvaria> buscarTodasOrigensAvaria() throws PromoveException {
-		return buscarTodasOrigensAvaria("descricao");
+		return buscarTodasOrigensAvaria("codigo");
 	}
 	
 	@Override

@@ -12,6 +12,7 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.HorizontalLayout;
@@ -24,6 +25,8 @@ import com.vaadin.ui.VerticalLayout;
 public class ExportAvariaView extends BaseForm{
 	private VerticalLayout layout = new VerticalLayout();
 	private Button exportar;
+	private CheckBox chkMovimentacao;
+	private CheckBox chkRegistradas;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
 	private PromoveApplication app;
@@ -37,6 +40,12 @@ public class ExportAvariaView extends BaseForm{
 		setWriteThrough(false);
 		setImmediate(true);
 		setSizeFull();
+		
+		chkMovimentacao = new CheckBox();
+		chkMovimentacao.setCaption("Desconsiderar movimentações sem avaria");
+		
+		chkRegistradas = new CheckBox();
+		chkRegistradas.setCaption("Desconsiderar avarias previamente registradas");
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -52,6 +61,8 @@ public class ExportAvariaView extends BaseForm{
 		label.setContentMode(Label.CONTENT_XHTML);
 		layout.addComponent(label);
 		layout.addComponent(this);
+		addField("chkMovimentacao", chkMovimentacao);
+		addField("chkRegistradas", chkRegistradas);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
 		layout.addComponent(createFooter());
@@ -89,16 +100,18 @@ public class ExportAvariaView extends BaseForm{
 		@Override
 		public void buttonClick(ClickEvent event) {
 			try {
+				String movimentacao = (Boolean)chkMovimentacao.getValue() ? "1" : "0";
+				String registradas = (Boolean)chkRegistradas.getValue() ? "1" : "0";
 				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null;
 				String fileName = "avarias_" + new SimpleDateFormat("yyyyMMdd").format(de) + "_" + new SimpleDateFormat("yyyyMMdd").format(ate) + ".xml";
 				
 				if(de == null || ate == null)
-					throw new IllegalArgumentException("Informe um período para busca.");
+					throw new IllegalArgumentException("Informe um período para busca");
 				
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 				String path = ctx.getHttpSession().getServletContext().getContextPath();
-				event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_avarias&fileName=" + fileName + "&de=" + new SimpleDateFormat("dd/MM/yyyy").format(de) + "&ate=" + new SimpleDateFormat("dd/MM/yyyy").format(ate)));
+				event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_avarias&fileName=" + fileName + "&mov=" + movimentacao + "&reg=" + registradas + "&de=" + new SimpleDateFormat("dd/MM/yyyy").format(de) + "&ate=" + new SimpleDateFormat("dd/MM/yyyy").format(ate)));
 			} catch (IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
 			}

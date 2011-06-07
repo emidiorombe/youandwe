@@ -2,26 +2,24 @@ package br.com.promove.view;
 
 
 import br.com.promove.view.form.AuditoriaVistoriasForm;
-import br.com.promove.view.table.AuditoriaVistoriasTable;
 
 import com.vaadin.ui.SplitPanel;
 
 public class AuditoriaVistoriasView extends SplitPanel {
-
+	private AuditoriaVistoriasTables tables;
 	private AuditoriaVistoriasForm form;
-	private AuditoriaVistoriasTable table;
 	
-	public AuditoriaVistoriasView(AuditoriaVistoriasTable table, AuditoriaVistoriasForm form) {
-		this.table = table;
+	public AuditoriaVistoriasView(AuditoriaVistoriasTables tables, AuditoriaVistoriasForm form) {
+		this.tables = tables;
 		this.form = form;
 		buildListView();
 	}
 
 	private void buildListView() {
-		table.setView(this);
+		tables.setView(this);
 		form.setView(this);
 		setFirstComponent(form.getLayout());
-		setSecondComponent(table);
+		setSecondComponent(tables);
 		setSplitPosition(40);
 		
 	}
@@ -32,11 +30,13 @@ public class AuditoriaVistoriasView extends SplitPanel {
 	public void setForm(AuditoriaVistoriasForm form) {
 		this.form = form;
 	}
-	public AuditoriaVistoriasTable getTable() {
-		return table;
+	
+	public AuditoriaVistoriasTables getTables() {
+		return tables;
 	}
-	public void setTable(AuditoriaVistoriasTable table) {
-		this.table = table;
+	
+	public void setTable(AuditoriaVistoriasTables tables) {
+		this.tables = tables;
 	}
 	
 	

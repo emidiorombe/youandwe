@@ -12,6 +12,7 @@ import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Filial;
 import br.com.promove.entity.InconsistenciaVeiculo;
 import br.com.promove.entity.Modelo;
+import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoUsuario;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
@@ -89,5 +90,7 @@ public interface CadastroService {
 	public Usuario autenticarUsuario(String user, String password)throws PromoveException;
 
 	public List<Veiculo> buscarVeiculosPorFZ(String fz)throws PromoveException;
+
+	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate)throws PromoveException;
 
 }

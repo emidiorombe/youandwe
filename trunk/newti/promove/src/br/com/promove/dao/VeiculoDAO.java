@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 
@@ -94,4 +95,28 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
+	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oride, OrigemAvaria oriate) throws DAOException {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select v from Veiculo v left JOIN FETCH v.modelo mod ");
+		hql.append(" where dataCadastro between :dtIni and :dtFim ");
+		addParamToQuery("dtIni", dtInicio);
+		addParamToQuery("dtFim", dtFim);
+		
+		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) {
+			hql.append(" and v.tipo = :txttipo ");
+			addParamToQuery("txttipo", veiculo.getTipo());
+		}
+		
+		for (Integer i = oride.getCodigo(); i <= oriate.getCodigo(); i++) {
+			if (i == oride.getCodigo()) hql.append(" and ( ");
+			else hql.append(" or ");
+			hql.append(" not exists (select av from Avaria av ");
+			hql.append(" where av.veiculo = v ");
+			hql.append(" and av.origem.codigo = :origem" + i + ") ");
+			addParamToQuery("origem" + i, i);
+			if (i == oriate.getCodigo()) hql.append(" ) ");
+		}
+
+		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
+	}
 }

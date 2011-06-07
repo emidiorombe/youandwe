@@ -53,6 +53,8 @@ public class ExportacaoServlet extends HttpServlet{
 			try {
 				Date dataDe = date_format.parse(request.getParameter("de"));
 				Date dataAte = date_format.parse(request.getParameter("ate"));
+				Boolean movimentacao = request.getParameter("mov").equals("1");
+				Boolean registradas = request.getParameter("reg").equals("1");
 				
 				ExportacaoService export = ServiceFactory.getService(ExportacaoService.class);
 				AvariaService avariaService = ServiceFactory.getService(AvariaService.class);
@@ -61,8 +63,7 @@ public class ExportacaoServlet extends HttpServlet{
 				response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 				
 				Avaria avaria = new Avaria();
-				String chassi = "";
-				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(avaria, dataDe, dataAte, 1, null, null);
+				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(avaria, dataDe, dataAte, 1, movimentacao, registradas);
 				
 				response.getWriter().print(export.exportarXMLAvarias(avarias));
 			}catch(IOException ioe) {
