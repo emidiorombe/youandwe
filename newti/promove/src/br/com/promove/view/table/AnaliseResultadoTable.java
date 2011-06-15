@@ -39,6 +39,7 @@ public class AnaliseResultadoTable extends Table{
 		setContainerDataSource(getContainer());
 		setVisibleColumns(NATURAL_COL_ORDER);
 		setColumnHeaders(COL_HEADERS);
+		setColumnAlignment("codigo", ALIGN_RIGHT);
 		addListener(new RowSelectedListener());
 	}
 

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.exception.SQLGrammarException;
 
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
@@ -186,21 +187,21 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 
 	public List<Cor> buscarAnaliseResultado(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oriInicio, OrigemAvaria oriFim) throws DAOException {
 		StringBuilder subsql = new StringBuilder();
-		subsql.append(" select ':tipo'::text as tipo, modelo.descricao as descricao");
+		subsql.append(" select cast(':tipo' as text) as tipo, modelo.descricao as descricao");
 		subsql.append(" from veiculo, modelo");
 		
 		subsql.append(" where veiculo.datacadastro");
-		subsql.append(" between '" + new SimpleDateFormat("yyyy-MM-dd").format(dtInicio) +"'");
-		subsql.append(" and '" + new SimpleDateFormat("yyyy-MM-dd").format(dtFim) +"'");
+		subsql.append(" between '" + new SimpleDateFormat("yyyy-MM-dd").format(dtInicio) + "'");
+		subsql.append(" and '" + new SimpleDateFormat("yyyy-MM-dd").format(dtFim) + "'");
 		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) 
-			subsql.append(" and veiculo.tipo = " + veiculo.getTipo());
+			subsql.append(" and veiculo.tipo = " + veiculo.getTipo().toString());
 		
 		subsql.append(" and veiculo.modelo_id = modelo.id");
 		
 		subsql.append(" and :existe (select avaria.id from avaria, tipoavaria, origemavaria");
 		subsql.append(" where origemavaria.codigo");
 		subsql.append(" between " + oriInicio.getCodigo().toString());
-		subsql.append(" and '" + oriFim.getCodigo().toString());
+		subsql.append(" and " + oriFim.getCodigo().toString());
 		subsql.append(" and tipoavaria.movimentacao = false");
 		
 		subsql.append(" and veiculo.id = avaria.veiculo_id");
@@ -209,15 +210,20 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("select tipo, descricao, count(*) from ("); 
+		sql.append("select tipo, descricao, cast(count(*) as integer) from ("); 
 		sql.append(subsql.toString().replaceAll(":tipo", "Avariados").replaceAll(":existe", "exists"));
 		sql.append(" UNION ALL");
-		sql.append(subsql.toString().replaceAll(":tipo", "Não avariados").replaceAll(":existe", "not exists"));
+		sql.append(subsql.toString().replaceAll(":tipo", "Nao avariados").replaceAll(":existe", "not exists"));
 		sql.append(" ) as subconsulta");
 		sql.append(" group by tipo, descricao");
-		sql.append(" order by tipo, descricao");
+		sql.append(" order by tipo, count(*) desc, descricao");
 
-		List lista = executeSQLQuery(sql.toString());
+		List lista = new ArrayList();
+		try {
+			lista = executeSQLQuery(sql.toString());
+		} catch (SQLGrammarException sge) {
+			throw new DAOException(sge);
+		}
 		
 		List<Cor> cores = new ArrayList<Cor>();
 		for (int i = 0; i < lista.size(); i++) {
