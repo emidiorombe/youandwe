@@ -8,6 +8,7 @@ import org.dom4j.Node;
 
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
+import br.com.promove.entity.Cor;
 import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.InconsistenciaAvaria;
@@ -146,4 +147,6 @@ public interface AvariaService extends Serializable{
 	void salvarAvariaDeInconsistencias(InconsistenciaAvaria inc)throws PromoveException;
 
 	List<Avaria> buscarAvariaDuplicadaPorFiltros(Veiculo veiculo, Avaria av)throws PromoveException;
+	
+	public List<Cor> buscarResumo(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, String subitem) throws PromoveException;
 }

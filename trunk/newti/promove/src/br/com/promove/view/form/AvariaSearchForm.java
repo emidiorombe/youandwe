@@ -100,10 +100,10 @@ public class AvariaSearchForm extends BaseForm{
 
 		createFormBody(new BeanItem<Avaria>(new Avaria()));
 		layout.addComponent(this);
-		addField("chkMovimentacao", chkMovimentacao);
-		addField("chkRegistradas", chkRegistradas);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
+		addField("chkMovimentacao", chkMovimentacao);
+		addField("chkRegistradas", chkRegistradas);
 		this.addField("cmbPeriodo", cmbPeriodo);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);

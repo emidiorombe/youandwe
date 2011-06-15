@@ -1,9 +1,16 @@
 package br.com.promove.dao;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Cor;
+import br.com.promove.entity.ExtensaoAvaria;
+import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 import br.com.promove.utils.StringUtilities;
@@ -97,5 +104,61 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		addParamToQuery("orAv", av.getOrigem());
 		
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
+	}
+
+	public List<Cor> buscarResumo(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, String item, String subitem) throws DAOException {
+		String nomeItem = (item == null ? "''" : item + (item == "fabricante" ? ".nome" : ".descricao"));
+		String nomeSubitem = (subitem == null ? "''" : subitem + (subitem == "fabricante" ? ".nome" : ".descricao"));
+		String idItem = (item == null ? "" : (item == "fabricante" || item == "modelo" ? "veiculo." : "avaria.") + item.replaceAll("avaria", "") + "_id");
+		String idSubitem = (subitem == null ? "" : (subitem == "fabricante" || subitem == "modelo" ? "veiculo." : "avaria.") + subitem.replaceAll("avaria", "") + "_id");
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("select " + nomeItem + ", " + nomeSubitem + ", count(*)");
+		sql.append(" from avaria, origemavaria, veiculo");
+		if (item != "origemavaria") sql.append(", " + item);
+		if (subitem != null && subitem != "origemavaria" && subitem != item) sql.append(", " + subitem);
+		
+		sql.append(" where " + (periodo == 1 ? "avaria.datalancamento" : "veiculo.datacadastro"));
+		sql.append(" between '" + new SimpleDateFormat("yyyy-MM-dd").format(dtInicio) +"'");
+		sql.append(" and '" + new SimpleDateFormat("yyyy-MM-dd").format(dtFim) +"'");
+
+		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) 
+			sql.append(" and veiculo.tipo = " + veiculo.getTipo());
+
+		sql.append(" and origemavaria.codigo");
+		sql.append(" between " + oriInicio.getCodigo().toString());
+		sql.append(" and '" + oriFim.getCodigo().toString());
+		
+		sql.append(" and avaria.origem_id = origemavaria.id");
+		sql.append(" and avaria.veiculo_id = veiculo.id");
+		if (item != null && item != "origemavaria") sql.append(" and " + idItem + " = " + item + ".id");
+		if (subitem != null && subitem != "origemavaria" && subitem != item) sql.append(" and " + idSubitem + " = " + subitem + ".id");
+		
+		if (item != null || subitem != null) {
+			sql.append(" group by");
+			if (item != null) sql.append(" " + nomeItem);
+			if (item != null && subitem != null) sql.append(","); 
+			if (subitem != null) sql.append(" " + nomeSubitem);
+			sql.append(" order by");
+			if (item != null) sql.append(" " + nomeItem);
+			if (item != null && subitem != null) sql.append(","); 
+			if (subitem != null) sql.append(" " + nomeSubitem);
+		}
+
+		List lista = executeSQLQuery(sql.toString());
+		
+		List<Cor> cores = new ArrayList<Cor>();
+		for (int i = 0; i < lista.size(); i++) {
+			//System.out.println(((Object[])lista.get(i))[0].toString() + " - " + // item
+			//                   ((Object[])lista.get(i))[1].toString() + " - " + // subitem
+			//                   ((Object[])lista.get(i))[2].toString()); // qtde
+			Cor cor = new Cor();
+			cor.setDescricao((String)(((Object[])lista.get(i))[0]));
+			cor.setCodigoExterno((String)(((Object[])lista.get(i))[1]));
+			cor.setCodigo((Integer)(((Object[])lista.get(i))[2]));
+			cores.add(cor);
+		}
+		
+		return cores;
 	}
 }

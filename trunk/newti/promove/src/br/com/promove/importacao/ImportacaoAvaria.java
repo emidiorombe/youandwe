@@ -85,7 +85,8 @@ public class ImportacaoAvaria {
 				av.setLocal(locais.get(new Integer(node_av.element("local").getText())));
 				av.setOrigem(origens.get(new Integer(node_av.element("origem").getText())));
 				av.setUsuario(usuarios.get(new Integer(node_av.element("usuario").getText())));
-				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
+				av.setDataLancamento(date_format.parse(node_av.element("data").getText().replaceAll(".", "/")));
+				av.setHora(node_av.element("hora").getText());
 				av.setObservacao(node_av.element("obs").getText());
 				
 				String msgErro = verificaInconsistencias(av, node_av, "avarias");
@@ -164,7 +165,7 @@ public class ImportacaoAvaria {
 				av.setLocal(locais.get(new Integer("300")));
 				av.setOrigem(origensTipoFilial.get(node_av.element("filial").getText() + "_" + node_av.element("tipo").getText()));
 				av.setUsuario(usuarios.get(new Integer(node_av.element("usuario").getText())));
-				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
+				av.setDataLancamento(date_format.parse(node_av.element("data").getText().replaceAll(".", "/")));
 				av.setHora(node_av.element("hora").getText());
 				
 				String msgErro = verificaInconsistencias(av, node_av, "movto");

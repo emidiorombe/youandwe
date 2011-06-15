@@ -39,7 +39,7 @@ public class Veiculo implements Serializable{
 	
 	private String codigoInterno;
 	
-	@Transient
+	@OneToMany(mappedBy="veiculo", targetEntity=Avaria.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Avaria> avarias;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -48,6 +48,9 @@ public class Veiculo implements Serializable{
 	private String chassiOriginal;
 	private Integer tipo;
 	private String navio;
+	
+	@Transient
+	private String origensfaltantes;
 	
 	public Veiculo() {}
 	
@@ -135,6 +138,14 @@ public class Veiculo implements Serializable{
 		return navio;
 	}
 
+	public void setOrigensfaltantes(String origensfaltantes) {
+		this.origensfaltantes = origensfaltantes;
+	}
+
+	public String getOrigensfaltantes() {
+		return origensfaltantes;
+	}
+	
 	public List<Avaria> getAvarias() {
 		return avarias;
 	}
@@ -147,5 +158,5 @@ public class Veiculo implements Serializable{
 	public String toString() {
 		return chassi;
 	}
-	
+
 }
