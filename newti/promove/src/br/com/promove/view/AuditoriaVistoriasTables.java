@@ -16,5 +16,4 @@ public class AuditoriaVistoriasTables extends VeiculoAvariaTables {
 	public void setView(AuditoriaVistoriasView view) {
 		this.view = view;
 	}
-	
 }

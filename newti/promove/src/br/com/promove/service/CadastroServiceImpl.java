@@ -411,4 +411,19 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		}
 		return lista;
 	}
+
+	@Override
+	public List<Cor> buscarAnaliseResultado(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException {
+		List<Cor> lista = null;
+		try {
+			Date init = DateUtils.montarDataInicialParaQuery(de); 
+			Date fim = DateUtils.montarDataFinalParaQuery(ate); 
+			
+			lista = veiculoDAO.buscarAnaliseResultado(veiculo, init, fim, oride, oriate);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
 }

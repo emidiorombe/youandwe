@@ -16,6 +16,7 @@ import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.dao.VeiculoDAO;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
+import br.com.promove.entity.Cor;
 import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.InconsistenciaAvaria;
@@ -444,5 +445,19 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 			throw new PromoveException(e);
 		}
 		
+	}
+
+	@Override
+	public List<Cor> buscarResumo(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, String subitem) throws PromoveException {
+		List<Cor> lista = null;
+		try {
+			Date init = DateUtils.montarDataInicialParaQuery(de); 
+			Date fim = DateUtils.montarDataFinalParaQuery(ate); 
+			
+			lista = avariaDAO.buscarResumo(veiculo, init, fim, periodo, oride, oriate, item, subitem);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
 	}
 }

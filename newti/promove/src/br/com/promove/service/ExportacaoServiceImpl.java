@@ -192,6 +192,8 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    row_head.createCell(3).setCellValue("DATA");
 		    row_head.createCell(4).setCellValue("TIPO");
 		    row_head.createCell(5).setCellValue("NAVIO");
+		    if (veiculos.size() > 0 && veiculos.get(0).getOrigensfaltantes() != null)
+		    	row_head.createCell(6).setCellValue("ORIGENS FALTANTES");
 		    
 		    for(int i = 0; i < veiculos.size(); i++) {
 			    Row row = sheet.createRow(i+1);
@@ -201,6 +203,8 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			    row.createCell(3).setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(veiculos.get(i).getDataCadastro()));
 			    row.createCell(4).setCellValue(veiculos.get(i).getTipo() == 1 ? "Nacional" : "Importado");
 			    row.createCell(5).setCellValue(veiculos.get(i).getNavio());
+			    if (veiculos.size() > 0 && veiculos.get(i).getOrigensfaltantes() != null)
+			    	row.createCell(6).setCellValue(veiculos.get(i).getOrigensfaltantes());
 		    }
 
 		    // Write the output to a file/

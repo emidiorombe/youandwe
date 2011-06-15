@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Cor;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
@@ -16,7 +17,7 @@ import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
-import br.com.promove.view.AuditoriaVistoriasView;
+import br.com.promove.view.AnaliseResultadoView;
 import br.com.promove.view.form.VeiculoSearchForm.VeiculoFieldFactory;
 
 import com.vaadin.data.Item;
@@ -38,12 +39,12 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.AbstractSelect.Filtering;
 
-public class AuditoriaVistoriasForm extends BaseForm{
+public class AnaliseResultadoForm extends BaseForm{
 	private VerticalLayout layout = new VerticalLayout();
 	private AvariaService avariaService;
 	private CadastroService cadastroService;
 	private ExportacaoService exportacaoService;
-	private AuditoriaVistoriasView view;
+	private AnaliseResultadoView view;
 	private Button search;
 	private Button export;
 	private ComboBox cmbOrigemDe;
@@ -52,7 +53,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 	private PopupDateField txtAte;
 	private PromoveApplication app;
 	
-	public AuditoriaVistoriasForm(PromoveApplication app) {
+	public AnaliseResultadoForm(PromoveApplication app) {
 		this.app = app;
 		avariaService = ServiceFactory.getService(AvariaService.class);
 		cadastroService = ServiceFactory.getService(CadastroService.class);
@@ -66,8 +67,8 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		setSizeFull();
 		Item i;
 		
-		search = new Button("Buscar", new AuditoriaVistoriasListener());
-		export = new Button("Gerar Arquivo", new AuditoriaVistoriasListener());
+		search = new Button("Buscar", new AnaliseResultadoListener());
+		export = new Button("Gerar Arquivo", new AnaliseResultadoListener());
 		
 		cmbOrigemDe = new ComboBox("Origem De");
 		cmbOrigemDe.addContainerProperty("label", String.class, null);
@@ -154,16 +155,16 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		this.layout = layout;
 	}
 
-	public void setView(AuditoriaVistoriasView view) {
+	public void setView(AnaliseResultadoView view) {
 		this.view = view;
 	}
 	
 	class AuditoriaFieldFactory extends DefaultFieldFactory{
 		
-		private AuditoriaVistoriasForm form;
+		private AnaliseResultadoForm form;
 		private boolean isNew;
 
-		public AuditoriaFieldFactory(AuditoriaVistoriasForm form, boolean isNew) {
+		public AuditoriaFieldFactory(AnaliseResultadoForm form, boolean isNew) {
 			this.form = form;
 			this.isNew = isNew;
 		}
@@ -198,7 +199,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		}
 	}
 	
-	class AuditoriaVistoriasListener implements ClickListener {
+	class AnaliseResultadoListener implements ClickListener {
 
 		@Override
 		public void buttonClick(ClickEvent event) {
@@ -208,28 +209,28 @@ public class AuditoriaVistoriasForm extends BaseForm{
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 				OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
 				OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
+				//Integer periodo = (Integer)cmbPeriodo.getValue();
 				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
 				
 				if(oride == null || oride.getId() == null || oriate == null || 
 						oriate.getId() == null || de == null || ate == null)
 					throw new IllegalArgumentException("Informe as origens e o período");
 				
-				List<Veiculo> veiculos = cadastroService.buscarVeiculosAuditoria(item.getBean(), de, ate, oride, oriate);
+				List<Cor> cores = cadastroService.buscarAnaliseResultado(item.getBean(), de, ate, oride, oriate);
 				
 				if(event.getButton() == search) {
-					view.getTables().getTableVeiculo().filterTable(veiculos);
-					view.getTables().getTableAvaria().removeAllItems();
+					view.getTable().filterTable(cores);
 				}else if(event.getButton() == export) {
-					String file = exportacaoService.exportarXLSVeiculos(veiculos);
+					//String file = exportacaoService.exportarXLSVeiculos(veiculos);
 					
-					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
-					String path = ctx.getHttpSession().getServletContext().getContextPath();
-					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=auditoria.xls&file=" + file));
+					//WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+					//String path = ctx.getHttpSession().getServletContext().getContextPath();
+					//event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=auditoria.xls&file=" + file));
 				}
 			}catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
 			}catch (Exception e) {
-				showErrorMessage(view, e.getMessage() + " Não foi possível buscar os veículos");
+				showErrorMessage(view, e.getMessage() + " Não foi possível apurar");
 				e.printStackTrace();
 			}
 		}

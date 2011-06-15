@@ -1,9 +1,18 @@
 package br.com.promove.dao;
 
+import java.sql.Array;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import org.hibernate.Session;
+
+import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Cor;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
@@ -11,7 +20,7 @@ import br.com.promove.exception.DAOException;
 public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 	public List<Veiculo> getAllCustom() throws DAOException {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select v from Veiculo v left JOIN FETCH v.avarias ");
+		hql.append("select v from Veiculo v ");
 		return executeQuery(hql.toString(), 0, Integer.MAX_VALUE);
 	}
 
@@ -52,6 +61,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			addParamToQuery("dtIni", dtInicio);
 			addParamToQuery("dtFim", dtFim);
 		}
+		
+		hql.append(" order by v.chassi ");
 		
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
@@ -95,10 +106,27 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
-	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oride, OrigemAvaria oriate) throws DAOException {
+	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oriInicio, OrigemAvaria oriFim) throws DAOException {
+		StringBuilder origens = new StringBuilder();
+		
 		StringBuilder hql = new StringBuilder();
-		hql.append("select v from Veiculo v left JOIN FETCH v.modelo mod ");
-		hql.append(" where dataCadastro between :dtIni and :dtFim ");
+		hql.append("select ori from OrigemAvaria ori ");
+		hql.append(" where ori.codigo between :oriDe and :oriAte ");
+		addParamToQuery("oriDe", oriInicio.getCodigo());
+		addParamToQuery("oriAte", oriFim.getCodigo());
+		hql.append(" order by ori.codigo ");
+		
+		List<OrigemAvaria> listaOr = executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
+
+		for (OrigemAvaria or : listaOr) {
+			origens.append(or.getDescricao() + ";");
+		}
+
+		hql = new StringBuilder();
+		hql.append("select v from Veiculo v");
+		hql.append(" where not exists (select av2 from Avaria av2 ");
+		hql.append(" where av2.veiculo = v) ");
+		hql.append(" and v.dataCadastro between :dtIni and :dtFim ");
 		addParamToQuery("dtIni", dtInicio);
 		addParamToQuery("dtFim", dtFim);
 		
@@ -107,16 +135,102 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			addParamToQuery("txttipo", veiculo.getTipo());
 		}
 		
-		for (Integer i = oride.getCodigo(); i <= oriate.getCodigo(); i++) {
-			if (i == oride.getCodigo()) hql.append(" and ( ");
-			else hql.append(" or ");
-			hql.append(" not exists (select av from Avaria av ");
-			hql.append(" where av.veiculo = v ");
-			hql.append(" and av.origem.codigo = :origem" + i + ") ");
-			addParamToQuery("origem" + i, i);
-			if (i == oriate.getCodigo()) hql.append(" ) ");
-		}
+		hql.append(" order by v.chassi ");
 
-		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
+		List<Veiculo> listaVe = executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
+		List<Veiculo> lista = new ArrayList<Veiculo>();
+		
+		for (Veiculo ve : listaVe) {
+			ve.setOrigensfaltantes(origens.toString());
+			lista.add(ve);
+		}
+		
+		hql = new StringBuilder();
+		hql.append("select av from Avaria av left join fetch av.veiculo v ");
+		hql.append(" where v.dataCadastro between :dtIni and :dtFim ");
+		addParamToQuery("dtIni", dtInicio);
+		addParamToQuery("dtFim", dtFim);
+		
+		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) { 
+			hql.append(" and v.tipo = :txttipo ");
+			addParamToQuery("txttipo", veiculo.getTipo());
+		}
+		
+		for (Integer i = oriInicio.getCodigo(); i <= oriFim.getCodigo(); i++) {
+			if (i == oriInicio.getCodigo()) hql.append(" and ( ");
+			else hql.append(" or ");
+			hql.append(" not exists (select av2 from Avaria av2 ");
+			hql.append(" where av2.veiculo = v ");
+			hql.append(" and av2.origem.codigo = :origem" + i + ") ");
+			addParamToQuery("origem" + i, i);
+			if (i == oriFim.getCodigo()) hql.append(" ) ");
+		}
+		hql.append(" order by v.chassi ");
+		
+		List<Avaria> listaAv = executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
+		
+		Veiculo ve = null;
+		
+		for (Avaria av : listaAv) {
+			if (ve == null || !ve.equals(av.getVeiculo())) {
+				if (ve != null) lista.add(ve);  
+				ve = av.getVeiculo();
+				ve.setOrigensfaltantes(origens.toString());
+			}
+			ve.setOrigensfaltantes(ve.getOrigensfaltantes().replaceAll(av.getOrigem().getDescricao()+";", ""));
+		}
+		if (ve != null) lista.add(ve);
+		
+		return lista;
+	}
+
+	public List<Cor> buscarAnaliseResultado(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oriInicio, OrigemAvaria oriFim) throws DAOException {
+		StringBuilder subsql = new StringBuilder();
+		subsql.append(" select ':tipo'::text as tipo, modelo.descricao as descricao");
+		subsql.append(" from veiculo, modelo");
+		
+		subsql.append(" where veiculo.datacadastro");
+		subsql.append(" between '" + new SimpleDateFormat("yyyy-MM-dd").format(dtInicio) +"'");
+		subsql.append(" and '" + new SimpleDateFormat("yyyy-MM-dd").format(dtFim) +"'");
+		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) 
+			subsql.append(" and veiculo.tipo = " + veiculo.getTipo());
+		
+		subsql.append(" and veiculo.modelo_id = modelo.id");
+		
+		subsql.append(" and :existe (select avaria.id from avaria, tipoavaria, origemavaria");
+		subsql.append(" where origemavaria.codigo");
+		subsql.append(" between " + oriInicio.getCodigo().toString());
+		subsql.append(" and '" + oriFim.getCodigo().toString());
+		subsql.append(" and tipoavaria.movimentacao = false");
+		
+		subsql.append(" and veiculo.id = avaria.veiculo_id");
+		subsql.append(" and avaria.origem_id = origemavaria.id");
+		subsql.append(" and avaria.tipo_id = tipoavaria.id)");
+
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("select tipo, descricao, count(*) from ("); 
+		sql.append(subsql.toString().replaceAll(":tipo", "Avariados").replaceAll(":existe", "exists"));
+		sql.append(" UNION ALL");
+		sql.append(subsql.toString().replaceAll(":tipo", "Não avariados").replaceAll(":existe", "not exists"));
+		sql.append(" ) as subconsulta");
+		sql.append(" group by tipo, descricao");
+		sql.append(" order by tipo, descricao");
+
+		List lista = executeSQLQuery(sql.toString());
+		
+		List<Cor> cores = new ArrayList<Cor>();
+		for (int i = 0; i < lista.size(); i++) {
+			//System.out.println(((Object[])lista.get(i))[0].toString() + " - " + // tipo
+			//                   ((Object[])lista.get(i))[1].toString() + " - " + // modelo
+			//                   ((Object[])lista.get(i))[2].toString()); // qtde
+			Cor cor = new Cor();
+			cor.setDescricao((String)(((Object[])lista.get(i))[0]));
+			cor.setCodigoExterno((String)(((Object[])lista.get(i))[1]));
+			cor.setCodigo((Integer)(((Object[])lista.get(i))[2]));
+			cores.add(cor);
+		}
+		
+		return cores;
 	}
 }

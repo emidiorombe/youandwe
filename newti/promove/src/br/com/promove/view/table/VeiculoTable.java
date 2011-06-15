@@ -6,17 +6,18 @@ import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
-import br.com.promove.entity.InconsistenciaAvaria;
+import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
+import br.com.promove.exception.PromoveException;
 import br.com.promove.menu.MenuAvaria;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
-import br.com.promove.view.AvariaSearchView;
+import br.com.promove.view.AuditoriaVistoriasTables;
+import br.com.promove.view.AuditoriaVistoriasView;
 import br.com.promove.view.VeiculoAvariaTables;
 import br.com.promove.view.VeiculoListView;
-import br.com.promove.view.form.AvariaSearchForm;
 import br.com.promove.view.form.VeiculoForm;
 
 import com.vaadin.data.Property;
@@ -41,15 +42,21 @@ public class VeiculoTable extends Table{
 	private VeiculoTableContainer container;
 	private PromoveApplication app;
 	private VeiculoAvariaTables view;
+	private Boolean origens;
 	private MenuAvaria menuAvaria;
 	private AvariaService avariaService;
 	
-	public VeiculoTable(PromoveApplication app, MenuAvaria menuAvaria) {
+	public VeiculoTable(PromoveApplication app, MenuAvaria menuAvaria, Boolean origens) {
+		this.origens = origens;
 		this.app = app;
 		this.menuAvaria = menuAvaria;
 		cadastroService = ServiceFactory.getService(CadastroService.class);
 		avariaService = ServiceFactory.getService(AvariaService.class);
 		buildTable();
+	}
+	
+	public VeiculoTable(PromoveApplication app, MenuAvaria menuAvaria) {
+		this(app, menuAvaria, false);
 	}
 
 	private void buildTable() {
@@ -70,14 +77,17 @@ public class VeiculoTable extends Table{
 		addGeneratedColumn("tipo", new VeiculoTableColumnGenerator(this));
 		//addGeneratedColumn("avarias", new VeiculoTableColumnGenerator(this));
 		
+		if (origens) {
+			addGeneratedColumn("origens", new VeiculoTableColumnGenerator(this));
+			setColumnHeader("origens", "Origens Faltantes");
+		}
+		
 		try {
 			setColumnCollapsed("cor", true);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
 	}
-
 	
 	public BeanItemContainer<Veiculo> getContainer() {
 		if(container == null)
@@ -107,11 +117,10 @@ public class VeiculoTable extends Table{
 
 		private void populate(List<Veiculo> veiculos) {
 			removeAllItems();
-			for (Veiculo mo : veiculos) {
-				addItem(mo);
+			for (Veiculo ve : veiculos) {
+				addItem(ve);
 			}
 		}
-
 	}
 	
 	class VeiculoTableColumnGenerator implements Table.ColumnGenerator{
@@ -132,12 +141,11 @@ public class VeiculoTable extends Table{
 			}else if(columnId.equals("tipo")) {
 				return v.getTipo() == 1 ? new Label("Nacional") : new Label("Importado");
 			}else if(columnId.toString().equals("avarias")) {
-				Button b = new Button("Ver");	
+				Button b = new Button("Ver");
 				b.setStyleName(BaseTheme.BUTTON_LINK);
 				b.addListener(new LinkListener(table));
 				b.setDebugId("av&"+v.getChassi());
 				return b;
-					
 			}else if(columnId.toString().equals("dataCadastro")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataCadastro()));
 			}else if(columnId.toString().equals("id")) {
@@ -153,18 +161,33 @@ public class VeiculoTable extends Table{
 				}else {
 					return new Label(v.getId().toString());
 				}
+			}else if(columnId.toString().equals("origens")) {
+				/*
+				String origens = "";
+				try {
+					Avaria av = new Avaria();
+					av.setVeiculo(v);
+					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(av, null, null, 1, false, false);
+					for (Avaria avaria : avarias) {
+						//origens.replaceAll(avaria.getOrigem().getDescricao() + "; ", "");
+						origens += avaria.getOrigem().getDescricao() + "; ";
+					}
+				} catch (PromoveException e) {
+					e.printStackTrace();
+					origens = "";
+				}*/
+				return new Label(v.getOrigensfaltantes());
 			}else {
 				return null;
 			}
 		}
-		
 	}
 	
 	class RowSelectedListener implements ValueChangeListener{
 		@Override
 		public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 			Property property = event.getProperty();
-			BeanItem<Veiculo> item =  (BeanItem<Veiculo>) getItem(getValue());
+			BeanItem<Veiculo> item = (BeanItem<Veiculo>) getItem(getValue());
 			view.getTableAvaria().filterTable(item.getBean());
 		}
 	}
@@ -206,6 +229,5 @@ public class VeiculoTable extends Table{
 			right.addStyleName("right");
 			return right;
 		}
-
 	}
 }

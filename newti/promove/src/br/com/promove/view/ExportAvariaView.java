@@ -61,10 +61,10 @@ public class ExportAvariaView extends BaseForm{
 		label.setContentMode(Label.CONTENT_XHTML);
 		layout.addComponent(label);
 		layout.addComponent(this);
-		addField("chkMovimentacao", chkMovimentacao);
-		addField("chkRegistradas", chkRegistradas);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
+		addField("chkMovimentacao", chkMovimentacao);
+		addField("chkRegistradas", chkRegistradas);
 		layout.addComponent(createFooter());
 		layout.addComponent(exportar);
 		layout.setSpacing(true);
