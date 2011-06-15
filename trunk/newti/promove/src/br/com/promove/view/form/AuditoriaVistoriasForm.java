@@ -229,7 +229,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 			}catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
 			}catch (Exception e) {
-				showErrorMessage(view, e.getMessage() + " Não foi possível buscar os veículos");
+				showErrorMessage(view, "Não foi possível buscar os veículos");
 				e.printStackTrace();
 			}
 		}

@@ -141,7 +141,7 @@ public class ResumoAvariasForm extends BaseForm{
 		cmbItem = new ComboBox("Resumo por");
 		cmbItem.addContainerProperty("label", String.class, null);
 		
-		i = cmbItem.addItem(new String());
+		i = cmbItem.addItem("");
 		i.getItemProperty("label").setValue("Selecione...");
 		i = cmbItem.addItem("tipoavaria");
 		i.getItemProperty("label").setValue("Tipo de avaria");
@@ -163,7 +163,7 @@ public class ResumoAvariasForm extends BaseForm{
 		cmbSubitem = new ComboBox("Sub-resumo por");
 		cmbSubitem.addContainerProperty("label", String.class, null);
 		
-		i = cmbSubitem.addItem(new String());
+		i = cmbSubitem.addItem("");
 		i.getItemProperty("label").setValue("Selecione...");
 		i = cmbSubitem.addItem("tipoavaria");
 		i.getItemProperty("label").setValue("Tipo de avaria");
@@ -298,6 +298,7 @@ public class ResumoAvariasForm extends BaseForm{
 				showErrorMessage(view, ie.getMessage());
 			}catch (Exception e) {
 				showErrorMessage(view, e.getMessage() + " Não foi possível apurar");
+				// TODO remover getMessage
 				e.printStackTrace();
 			}
 		}

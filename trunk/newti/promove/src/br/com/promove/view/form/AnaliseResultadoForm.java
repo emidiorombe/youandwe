@@ -230,7 +230,7 @@ public class AnaliseResultadoForm extends BaseForm{
 			}catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
 			}catch (Exception e) {
-				showErrorMessage(view, e.getMessage() + " Não foi possível apurar");
+				showErrorMessage(view, "Não foi possível apurar");
 				e.printStackTrace();
 			}
 		}
