@@ -21,6 +21,7 @@ import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.dao.UsuarioDAO;
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Cor;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.entity.Ctrc;
@@ -276,7 +277,39 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			e.printStackTrace();
 			throw new PromoveException();
 		}
-		
+	}
+
+	@Override
+	public String exportarXLSResumo(List<Cor> cores, String item, String subitem) throws PromoveException {
+		try {
+			Workbook wb = new HSSFWorkbook();
+		    CreationHelper createHelper = wb.getCreationHelper();
+		    Sheet sheet = wb.createSheet("veiculos");
+		    
+		    //Cabeçalho
+		    Row row_head = sheet.createRow(0);
+		    row_head.createCell(0).setCellValue(item);
+		    row_head.createCell(1).setCellValue(subitem);
+		    row_head.createCell(2).setCellValue("QUANTIDADE");
+		    
+		    for(int i = 0; i < cores.size(); i++) {
+			    Row row = sheet.createRow(i+1);
+			    row.createCell(0).setCellValue(cores.get(i).getDescricao());
+			    row.createCell(1).setCellValue(cores.get(i).getCodigoExterno());
+			    row.createCell(2).setCellValue(cores.get(i).getCodigo());
+		    }
+
+		    // Write the output to a file/
+		    String fileName = Config.getConfig("tmp_dir") + "veiculos_" + System.currentTimeMillis()+".xls";
+		    FileOutputStream fileOut = new FileOutputStream(fileName);
+		    wb.write(fileOut);
+		    fileOut.close();
+		    
+		    return fileName;
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new PromoveException();
+		}
 	}
 
 }

@@ -3,6 +3,7 @@ package br.com.promove.service;
 import java.util.List;
 
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Cor;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.entity.Ctrc;
@@ -27,4 +28,7 @@ public interface ExportacaoService {
 	public String exportarXLSCtrcs(List<Ctrc> ctrcs) throws PromoveException;
 
 	public String exportarXLSInconsistenciaAvarias(List<InconsistenciaAvaria> lista) throws PromoveException;
+
+	public String exportarXLSResumo(List<Cor> cores, String item, String subitem) throws PromoveException;
+
 }
