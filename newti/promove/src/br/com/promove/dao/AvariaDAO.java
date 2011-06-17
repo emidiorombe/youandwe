@@ -149,9 +149,10 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			if (!item.isEmpty()) sql.append(" " + nomeItem);
 			if (!item.isEmpty() && !subitem.isEmpty()) sql.append(","); 
 			if (!subitem.isEmpty()) sql.append(" " + nomeSubitem);
-			sql.append(" order by count(*) desc");
-			if (!item.isEmpty()) sql.append(", " + nomeItem);
-			if (!subitem.isEmpty()) sql.append(", " + nomeSubitem);
+			sql.append(" order by");
+			if (!item.isEmpty()) sql.append(" " + nomeItem);
+			if (!item.isEmpty() && !subitem.isEmpty()) sql.append(","); 
+			if (!subitem.isEmpty()) sql.append(" " + nomeSubitem);
 		}
 
 		List lista = new ArrayList();
