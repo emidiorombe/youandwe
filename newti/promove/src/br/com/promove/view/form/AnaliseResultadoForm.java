@@ -221,11 +221,11 @@ public class AnaliseResultadoForm extends BaseForm{
 				if(event.getButton() == search) {
 					view.getTable().filterTable(cores);
 				}else if(event.getButton() == export) {
-					//String file = exportacaoService.exportarXLSVeiculos(veiculos);
+					String file = exportacaoService.exportarXLSResumo(cores, "VEÍCULOS", "MODELO");
 					
-					//WebApplicationContext ctx = (WebApplicationContext) app.getContext();
-					//String path = ctx.getHttpSession().getServletContext().getContextPath();
-					//event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=auditoria.xls&file=" + file));
+					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+					String path = ctx.getHttpSession().getServletContext().getContextPath();
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=analise_resultado.xls&file=" + file));
 				}
 			}catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
