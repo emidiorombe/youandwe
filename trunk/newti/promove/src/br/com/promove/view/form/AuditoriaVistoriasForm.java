@@ -224,7 +224,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
-					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=auditoria.xls&file=" + file));
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=auditoria_vistorias.xls&file=" + file));
 				}
 			}catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());

@@ -288,11 +288,11 @@ public class ResumoAvariasForm extends BaseForm{
 				if(event.getButton() == search) {
 					view.getTable().filterTable(cores);
 				}else if(event.getButton() == export) {
-					//String file = exportacaoService.exportarXLSVeiculos(veiculos);
+					String file = exportacaoService.exportarXLSResumo(cores, item.toUpperCase(), subitem.toUpperCase());
 					
-					//WebApplicationContext ctx = (WebApplicationContext) app.getContext();
-					//String path = ctx.getHttpSession().getServletContext().getContextPath();
-					//event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=auditoria.xls&file=" + file));
+					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+					String path = ctx.getHttpSession().getServletContext().getContextPath();
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=resumo_avarias.xls&file=" + file));
 				}
 			}catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());

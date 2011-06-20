@@ -44,12 +44,14 @@ public class StringUtilities {
 	}
 
 	public static String getValueFromErrorMessage(String msgErro, String fieldErro) {
-		String erros[] = msgErro.split(";");
-		for (String erro : erros) {
-			if(erro.startsWith(fieldErro)) {
-				String campos[] = erro.split(" ");
-				if(campos.length >= 2)
-					return campos[1];
+		if (msgErro != null) {
+			String erros[] = msgErro.split(";");
+			for (String erro : erros) {
+				if(erro.startsWith(fieldErro)) {
+					String campos[] = erro.split(" ");
+					if(campos.length >= 2)
+						return campos[1];
+				}
 			}
 		}
 		return null;

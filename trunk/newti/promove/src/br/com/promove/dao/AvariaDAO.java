@@ -134,6 +134,12 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		sql.append(" between " + oriInicio.getCodigo().toString());
 		sql.append(" and " + oriFim.getCodigo().toString());
 		
+		sql.append(" and not exists (select * from avaria av2, origemavaria ori2");
+		sql.append(" where av2.origem_id = ori2.id");
+		sql.append(" and av2.veiculo_id = avaria.veiculo_id");
+		sql.append(" and av2.tipo_id = avaria.tipo_id and av2.local_id = avaria.local_id");
+		sql.append(" and ori2.codigo < origemavaria.codigo)");
+		
 		sql.append(" and tipoavaria.movimentacao = false");
 		sql.append(" and avaria.origem_id = origemavaria.id");
 		sql.append(" and avaria.tipo_id = tipoavaria.id");
@@ -150,8 +156,9 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			if (!item.isEmpty() && !subitem.isEmpty()) sql.append(","); 
 			if (!subitem.isEmpty()) sql.append(" " + nomeSubitem);
 			sql.append(" order by");
+			
 			if (!item.isEmpty()) sql.append(" " + nomeItem);
-			if (!item.isEmpty() && !subitem.isEmpty()) sql.append(","); 
+			if (!item.isEmpty() && !subitem.isEmpty()) sql.append(", count(*) desc,"); 
 			if (!subitem.isEmpty()) sql.append(" " + nomeSubitem);
 		}
 
