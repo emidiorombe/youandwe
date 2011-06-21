@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items>
+	<item region="Avaria de Transporte" value="148" >
+		<subitem region="Transportador" value="60" />
+		<subitem region="Operador Logístico" value="50" />
+		<subitem region="Embarcador" value="38" />
+	</item>
+	<item region="Avaria de Estiva" value="75" >
+		<subitem region="Transportador" value="65" />
+		<subitem region="Operador Logístico" value="8" />
+		<subitem region="Embarcador" value="2" />
+	</item>
+	<item region="Entrada TERCA" value="115" >
+		<subitem region="Transportador" value="60" />
+		<subitem region="Operador Logístico" value="50" />
+		<subitem region="Embarcador" value="5" />
+	</item>
+	<item region="Saída TERCA" value="85" >
+		<subitem region="Transportador" value="50" />
+		<subitem region="Operador Logístico" value="20" />
+		<subitem region="Embarcador" value="15" />
+	</item>
+</items>
