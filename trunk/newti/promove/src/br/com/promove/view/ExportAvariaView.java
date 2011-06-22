@@ -111,7 +111,7 @@ public class ExportAvariaView extends BaseForm{
 				
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 				String path = ctx.getHttpSession().getServletContext().getContextPath();
-				event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_avarias&fileName=" + fileName + "&mov=" + movimentacao + "&reg=" + registradas + "&de=" + new SimpleDateFormat("dd/MM/yyyy").format(de) + "&ate=" + new SimpleDateFormat("dd/MM/yyyy").format(ate)));
+				event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_avarias&fileName=" + fileName + "&mov=" + movimentacao + "&re=" + registradas + "&de=" + new SimpleDateFormat("yyyyMMdd").format(de) + "&ate=" + new SimpleDateFormat("yyyyMMdd").format(ate)));
 			} catch (IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
 			}
