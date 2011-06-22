@@ -97,7 +97,8 @@ public class MenuAvaria  extends CssLayout{
 			add.setVisible(false); 
 			add_veiculo.setVisible(false);
 			import_avaria.setVisible(false);
-			erro_import_avaria.setVisible(false);
+			if(user.getTipo().getId() != 5)
+				erro_import_avaria.setVisible(false);
 			import_veiculos.setVisible(false);
 			erro_import_veiculos.setVisible(false);
 			export.setVisible(false);

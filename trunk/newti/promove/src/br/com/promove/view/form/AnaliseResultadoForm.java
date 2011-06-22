@@ -8,11 +8,13 @@ import java.util.Locale;
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
+import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
+import br.com.promove.menu.PromoveToolbar.RelatorioSWF;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
@@ -23,6 +25,7 @@ import br.com.promove.view.form.VeiculoSearchForm.VeiculoFieldFactory;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.terminal.ExternalResource;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -32,11 +35,14 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.DefaultFieldFactory;
+import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.AbstractSelect.Filtering;
 
 public class AnaliseResultadoForm extends BaseForm{
@@ -47,6 +53,7 @@ public class AnaliseResultadoForm extends BaseForm{
 	private AnaliseResultadoView view;
 	private Button search;
 	private Button export;
+	private Button grafico;
 	private ComboBox cmbOrigemDe;
 	private ComboBox cmbOrigemAte;
 	private PopupDateField txtDe;
@@ -69,6 +76,7 @@ public class AnaliseResultadoForm extends BaseForm{
 		
 		search = new Button("Buscar", new AnaliseResultadoListener());
 		export = new Button("Gerar Arquivo", new AnaliseResultadoListener());
+		grafico = new Button("Gerar Gráfico", new AnaliseResultadoListener());
 		
 		cmbOrigemDe = new ComboBox("Origem De");
 		cmbOrigemDe.addContainerProperty("label", String.class, null);
@@ -142,6 +150,8 @@ public class AnaliseResultadoForm extends BaseForm{
 		footer.setSpacing(true);
 		footer.addComponent(search);
 		footer.addComponent(export);
+		//footer.addComponent(grafico);
+		//TODO descomentar
 		footer.setVisible(true);
 		
 		return footer;
@@ -205,18 +215,23 @@ public class AnaliseResultadoForm extends BaseForm{
 		public void buttonClick(ClickEvent event) {
 			try {
 				commit();
-				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
-				OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
-				OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
-				//Integer periodo = (Integer)cmbPeriodo.getValue();
-				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
+				List<Cor> cores = null;
 				
-				if(oride == null || oride.getId() == null || oriate == null || 
-						oriate.getId() == null || de == null || ate == null)
+				if (event.getButton() != grafico) {
+					//TODO alterar
+					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
+					OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
+					//Integer periodo = (Integer)cmbPeriodo.getValue();
+					BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
+				
+					if(oride == null || oride.getId() == null || oriate == null || 
+							oriate.getId() == null || de == null || ate == null)
 					throw new IllegalArgumentException("Informe as origens e o período");
 				
-				List<Cor> cores = cadastroService.buscarAnaliseResultado(item.getBean(), de, ate, oride, oriate);
+					cores = cadastroService.buscarAnaliseResultado(item.getBean(), de, ate, oride, oriate);
+				}
 				
 				if(event.getButton() == search) {
 					view.getTable().filterTable(cores);
@@ -226,6 +241,31 @@ public class AnaliseResultadoForm extends BaseForm{
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=analise_resultado.xls&file=" + file));
+				}else if(event.getButton() == grafico) {
+					Window w = new Window("Gráfico");
+			        w.setHeight("520px");
+			        w.setWidth("650px");
+			        w.setPositionY(25);
+			        w.setPositionX(300);
+			        
+			        WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+					String path = ctx.getHttpSession().getServletContext().getContextPath();
+					
+			        app.getMainWindow().addWindow(w);
+			        
+			        //w.addComponent(new RelatorioSWF());
+			    	ThemeResource swf = new ThemeResource("swf/pie.swf");
+			        Embedded e = new Embedded(null, swf);
+			        e.setType(Embedded.TYPE_OBJECT);
+			        e.setMimeType("application/x-shockwave-flash");
+			        e.setParameter("allowFullScreen", "true");
+			        e.setWidth("600px");
+			        e.setHeight("400px");
+			        Label lbl = new Label("<h2>Análise de Resultado</h2>");
+			        lbl.setContentMode(Label.CONTENT_XHTML);
+			        w.addComponent(lbl);
+			        w.addComponent(e);
+			        
 				}
 			}catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());

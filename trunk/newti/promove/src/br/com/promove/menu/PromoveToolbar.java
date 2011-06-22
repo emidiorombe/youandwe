@@ -62,7 +62,7 @@ public class PromoveToolbar extends CssLayout{
 		left.addComponent(toolbar_avaria);
 		left.addComponent(toolbar_averbacao);
 		left.addComponent(toolbar_geral);
-		left.addComponent(toolbar_relatorios);
+		//left.addComponent(toolbar_relatorios);
 		
 	}
 	
