@@ -83,9 +83,9 @@ public class CorForm extends BaseForm{
 	}
 	
 	class CorFieldFactory extends DefaultFieldFactory{
-		private boolean newLocal;
+		private boolean newCor;
 		public CorFieldFactory(boolean b) {
-			newLocal = b;
+			newCor = b;
 		}
 
 		@Override
@@ -99,7 +99,7 @@ public class CorForm extends BaseForm{
 			}
 			
 			if(propertyId.equals("codigo")) {
-				if(!newLocal)
+				if(!newCor)
 					f.setReadOnly(true);
 			}else if(propertyId.equals("codigoExterno")) {
 				f.setRequired(false);
@@ -117,11 +117,11 @@ public class CorForm extends BaseForm{
 				try{
 					validate();
 					if(isValid()){
+						commit();
 						BeanItem<Cor> item = (BeanItem<Cor>) getItemDataSource();
 						cadastroService.salvarCor(item.getBean());
 						view.getTable().getContainer().addItem(item.getBean());
 						addNewCor();
-						commit();
 						showSuccessMessage(view, "Cor salva!");
 					}
 				}catch(InvalidValueException ive){
@@ -129,7 +129,6 @@ public class CorForm extends BaseForm{
 				}catch(PromoveException de){
 					showErrorMessage(view,"Não foi possível salvar Cor");
 				}
-				
 			}else if(event.getButton() == novo){
 				addNewCor();
 			}else if(event.getButton() == remove){

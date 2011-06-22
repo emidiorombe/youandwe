@@ -23,6 +23,7 @@ import br.com.promove.view.form.VeiculoSearchForm.VeiculoFieldFactory;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.terminal.ExternalResource;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -32,11 +33,14 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.DefaultFieldFactory;
+import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.AbstractSelect.Filtering;
 
 public class ResumoAvariasForm extends BaseForm{
@@ -47,6 +51,7 @@ public class ResumoAvariasForm extends BaseForm{
 	private ResumoAvariasView view;
 	private Button search;
 	private Button export;
+	private Button grafico;
 	private ComboBox cmbOrigemDe;
 	private ComboBox cmbOrigemAte;
 	private PopupDateField txtDe;
@@ -72,6 +77,7 @@ public class ResumoAvariasForm extends BaseForm{
 		
 		search = new Button("Buscar", new ResumoAvariasListener());
 		export = new Button("Gerar Arquivo", new ResumoAvariasListener());
+		grafico = new Button("Gerar Gráfico", new ResumoAvariasListener());
 		
 		cmbOrigemDe = new ComboBox("Origem De");
 		cmbOrigemDe.addContainerProperty("label", String.class, null);
@@ -207,6 +213,8 @@ public class ResumoAvariasForm extends BaseForm{
 		footer.setSpacing(true);
 		footer.addComponent(search);
 		footer.addComponent(export);
+		//footer.addComponent(grafico);
+		//TODO descomentar
 		footer.setVisible(true);
 		
 		return footer;
@@ -270,20 +278,26 @@ public class ResumoAvariasForm extends BaseForm{
 		public void buttonClick(ClickEvent event) {
 			try {
 				commit();
-				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
-				OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
-				OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
-				Integer periodo = (Integer)cmbPeriodo.getValue();
-				String item = (String)cmbItem.getValue();
-				String subitem = (String)cmbSubitem.getValue();
-				BeanItem<Veiculo> veic = (BeanItem<Veiculo>)getItemDataSource();
+				List<Cor> cores = null; 
+				String item = null;
+				String subitem = null;
 				
-				if(oride == null || oride.getId() == null || oriate == null || 
-						oriate.getId() == null || de == null || ate == null)
-					throw new IllegalArgumentException("Informe as origens e o período");
-				
-				List<Cor> cores = avariaService.buscarResumo(veic.getBean(), de, ate, periodo, oride, oriate, item, subitem);
+				if(event.getButton() != grafico) {
+					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
+					OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
+					Integer periodo = (Integer)cmbPeriodo.getValue();
+					item = (String)cmbItem.getValue();
+					subitem = (String)cmbSubitem.getValue();
+					BeanItem<Veiculo> veic = (BeanItem<Veiculo>)getItemDataSource();
+					
+					if(oride == null || oride.getId() == null || oriate == null || 
+							oriate.getId() == null || de == null || ate == null)
+						throw new IllegalArgumentException("Informe as origens e o período");
+					
+					cores = avariaService.buscarResumo(veic.getBean(), de, ate, periodo, oride, oriate, item, subitem);
+				}
 				
 				if(event.getButton() == search) {
 					view.getTable().filterTable(cores);
@@ -293,12 +307,37 @@ public class ResumoAvariasForm extends BaseForm{
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=resumo_avarias.xls&file=" + file));
+				}else if(event.getButton() == grafico) {
+					//TODO alterar
+					Window w = new Window("Gráfico");
+			        w.setHeight("520px");
+			        w.setWidth("650px");
+			        w.setPositionY(25);
+			        w.setPositionX(300);
+			        
+			        WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+					String path = ctx.getHttpSession().getServletContext().getContextPath();
+					
+			        app.getMainWindow().addWindow(w);
+			        
+			        //w.addComponent(new RelatorioSWF());
+			    	ThemeResource swf = new ThemeResource("swf/pie.swf");
+			        Embedded e = new Embedded(null, swf);
+			        e.setType(Embedded.TYPE_OBJECT);
+			        e.setMimeType("application/x-shockwave-flash");
+			        e.setParameter("allowFullScreen", "true");
+			        e.setWidth("600px");
+			        e.setHeight("400px");
+			        Label lbl = new Label("<h2>Resumo de Avarias por Origem e Tipo de Avaria</h2>");
+			        lbl.setContentMode(Label.CONTENT_XHTML);
+			        w.addComponent(lbl);
+			        w.addComponent(e);
+			        
 				}
 			}catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
 			}catch (Exception e) {
-				showErrorMessage(view, e.getMessage() + " Não foi possível apurar");
-				// TODO remover getMessage
+				showErrorMessage(view, "Não foi possível apurar");
 				e.printStackTrace();
 			}
 		}

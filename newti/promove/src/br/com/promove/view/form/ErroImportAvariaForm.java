@@ -8,6 +8,7 @@ import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.InconsistenciaAvaria;
+import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
@@ -90,10 +91,14 @@ public class ErroImportAvariaForm extends BaseForm {
 	}
 
 	private Component createFooter() {
+		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
+		
 		HorizontalLayout footer = new HorizontalLayout();
 		footer.setSpacing(true);
 		footer.addComponent(save);
-		footer.addComponent(remove);
+		if(user.getTipo().getId() == 1 || user.getTipo().getId() == 2)
+			footer.addComponent(remove);
 		footer.addComponent(saveAll);
 		footer.addComponent(export);
 		footer.setVisible(true);
