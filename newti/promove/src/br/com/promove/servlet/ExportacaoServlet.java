@@ -25,7 +25,7 @@ import br.com.promove.utils.Config;
 
 public class ExportacaoServlet extends HttpServlet{
 
-	private static SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy");
+	private static SimpleDateFormat date_format = new SimpleDateFormat("yyyyMMdd");
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -54,7 +54,7 @@ public class ExportacaoServlet extends HttpServlet{
 				Date dataDe = date_format.parse(request.getParameter("de"));
 				Date dataAte = date_format.parse(request.getParameter("ate"));
 				Boolean movimentacao = request.getParameter("mov").equals("1");
-				Boolean registradas = request.getParameter("reg").equals("1");
+				Boolean registradas = request.getParameter("re").equals("1");
 				
 				ExportacaoService export = ServiceFactory.getService(ExportacaoService.class);
 				AvariaService avariaService = ServiceFactory.getService(AvariaService.class);
