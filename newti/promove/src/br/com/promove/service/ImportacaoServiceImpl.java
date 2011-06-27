@@ -73,9 +73,10 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 			for (Map.Entry<String, Document> doc : xmls.entrySet()) {
 				importAvaria(doc.getValue().asXML());
 				FileUtils.moverXML(dest+doc.getKey(), doc.getValue());
+				FileUtils.removeXML(config+doc.getKey());
 			}
 			
-			FileUtils.removeXMLs(config);
+			//FileUtils.removeXMLs(config);
 			
 		} catch (Exception e) {
 			throw new PromoveException(e);

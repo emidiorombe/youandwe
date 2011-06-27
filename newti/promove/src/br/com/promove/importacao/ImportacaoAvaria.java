@@ -86,7 +86,7 @@ public class ImportacaoAvaria {
 				av.setOrigem(origens.get(new Integer(node_av.element("origem").getText())));
 				av.setUsuario(usuarios.get(new Integer(node_av.element("usuario").getText())));
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
-				av.setHora(node_av.element("hora").getText());
+				//av.setHora(node_av.element("hora").getText());
 				av.setObservacao(node_av.element("obs").getText());
 				
 				String msgErro = verificaInconsistencias(av, node_av, "avarias");
@@ -119,7 +119,7 @@ public class ImportacaoAvaria {
 					}
 					
 				}else {
-					if (!msgErro.equals("")) {
+					if (!msgErro.isEmpty()) {
 						throw new Exception(msgErro);
 					}
 					
@@ -194,7 +194,7 @@ public class ImportacaoAvaria {
 					avariaService.salvarAvaria(av, true);
 				}
 				
-				if (!msgErro.equals("")) {
+				if (!msgErro.isEmpty()) {
 					throw new Exception(msgErro);
 				}
 			}catch(Exception e) {
