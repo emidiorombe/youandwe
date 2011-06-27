@@ -8,7 +8,7 @@
 	
 	<context-param>
 		<param-name>pasta_avaria_xml</param-name>
-		<param-value>D:\importacao</param-value>
+		<param-value>D:\importacao\</param-value>
 	</context-param>
 	
 	<context-param>

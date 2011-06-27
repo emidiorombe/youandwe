@@ -44,6 +44,12 @@ public class FileUtils {
 	}
 
 
+	public static void removeXML(String xml) {
+		File file = new File(xml);
+		file.delete();
+	}
+
+
 	public static void moverXML(String dest, Document xml) throws IOException {
 		XMLWriter writer = new XMLWriter(new FileWriter(dest));
 		writer.write(xml);
