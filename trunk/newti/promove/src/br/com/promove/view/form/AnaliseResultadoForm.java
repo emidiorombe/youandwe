@@ -14,6 +14,7 @@ import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
+import br.com.promove.exportacao.GraficoExport;
 import br.com.promove.menu.PromoveToolbar.RelatorioSWF;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
@@ -219,6 +220,8 @@ public class AnaliseResultadoForm extends BaseForm{
 				
 				if (event.getButton() != grafico) {
 					//TODO alterar
+					String xml = GraficoExport.gerarXmlExportacao(cores);
+
 					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 					OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();

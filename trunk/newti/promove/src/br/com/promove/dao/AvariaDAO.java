@@ -109,6 +109,9 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 	}
 
 	public List<Cor> buscarResumo(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, String item, String subitem) throws DAOException {
+		if (item.isEmpty() && !subitem.isEmpty()) item = subitem;
+		if (subitem.equals(item)) subitem = "";
+		
 		String nomeItem = (item.isEmpty() ? "cast('' as text)" : item + (item.equals("fabricante") ? ".nome" : ".descricao"));
 		String nomeSubitem = (subitem.isEmpty() ? "cast('' as text)" : subitem + (subitem.equals("fabricante") ? ".nome" : ".descricao"));
 		String idItem = (item.isEmpty() ? "" : (item.equals("fabricante") ? "modelo." : (item.equals("modelo") ? "veiculo." : "avaria.")) + item.replaceAll("avaria", "") + "_id");
@@ -118,7 +121,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		sql.append("select " + nomeItem + " as item, " + nomeSubitem + " as subitem, cast(count(*) as integer)");
 		sql.append(" from avaria, origemavaria, tipoavaria, veiculo");
 		if (!item.isEmpty() && !item.equals("origemavaria") && !item.equals("tipoavaria")) sql.append(", " + item);
-		if (!subitem.isEmpty() && !subitem.equals("origemavaria") && !subitem.equals("tipoavaria") && !subitem.equals(item)) sql.append(", " + subitem);
+		if (!subitem.isEmpty() && !subitem.equals("origemavaria") && !subitem.equals("tipoavaria")) sql.append(", " + subitem);
 		if ((!item.isEmpty() && item.equals("fabricante") && !subitem.isEmpty() && !subitem.equals("modelo")) ||
 				(!subitem.isEmpty() && subitem.equals("fabricante") && !item.isEmpty() && !item.equals("modelo")))
 			sql.append(", modelo");
@@ -145,7 +148,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		sql.append(" and avaria.tipo_id = tipoavaria.id");
 		sql.append(" and avaria.veiculo_id = veiculo.id");
 		if (!item.isEmpty() && !item.equals("origemavaria") && !item.equals("tipoavaria")) sql.append(" and " + idItem + " = " + item + ".id");
-		if (!subitem.isEmpty() && !subitem.equals("origemavaria") && !subitem.equals("tipoavaria") && !subitem.equals(item)) sql.append(" and " + idSubitem + " = " + subitem + ".id");
+		if (!subitem.isEmpty() && !subitem.equals("origemavaria") && !subitem.equals("tipoavaria")) sql.append(" and " + idSubitem + " = " + subitem + ".id");
 		if ((!item.isEmpty() && item.equals("fabricante") && !subitem.isEmpty() && !subitem.equals("modelo")) ||
 				(!subitem.isEmpty() && subitem.equals("fabricante") && !item.isEmpty() && !item.equals("modelo")))
 			sql.append(" and veiculo.modelo_id = modelo.id");
@@ -156,9 +159,10 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			if (!item.isEmpty() && !subitem.isEmpty()) sql.append(","); 
 			if (!subitem.isEmpty()) sql.append(" " + nomeSubitem);
 			sql.append(" order by");
-			
+			if (subitem.isEmpty()) sql.append(" count(*) desc,");
 			if (!item.isEmpty()) sql.append(" " + nomeItem);
-			if (!item.isEmpty() && !subitem.isEmpty()) sql.append(", count(*) desc,"); 
+			if (!item.isEmpty() && !subitem.isEmpty()) sql.append(",");
+			if (!subitem.isEmpty()) sql.append(" count(*) desc,");
 			if (!subitem.isEmpty()) sql.append(" " + nomeSubitem);
 		}
 
@@ -170,15 +174,40 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		}
 		
 		List<Cor> cores = new ArrayList<Cor>();
-		for (int i = 0; i < lista.size(); i++) {
-			//System.out.println(((Object[])lista.get(i))[0].toString() + " - " + // item
-			//                   ((Object[])lista.get(i))[1].toString() + " - " + // subitem
-			//                   ((Object[])lista.get(i))[2].toString()); // qtde
-			Cor cor = new Cor();
-			cor.setDescricao((String)(((Object[])lista.get(i))[0]));
-			cor.setCodigoExterno((String)(((Object[])lista.get(i))[1]));
-			cor.setCodigo((Integer)(((Object[])lista.get(i))[2]));
-			cores.add(cor);
+
+		List<Cor> coresSort = new ArrayList<Cor>();
+		String itemAnt = "";
+		Integer total = 0;
+		for(Object obj : lista) {
+			if(total > 0 && !itemAnt.equals((String)(((Object[])obj)[0]))) {
+				coresSort.add(new Cor(itemAnt, "", total));
+				total = 0;
+			}
+			
+			if(item.isEmpty() || subitem.isEmpty())
+				cores.add(new Cor((String)((Object[])obj)[0], (String)((Object[])obj)[1], (Integer)((Object[])obj)[2]));
+			
+			total += (Integer)((Object[])obj)[2];
+			itemAnt = (String)(((Object[])obj)[0]);
+		}
+		coresSort.add(new Cor(itemAnt, "", total));
+		
+		if(!item.isEmpty() && !subitem.isEmpty()) {
+			Cor corMaior;
+			while(coresSort.size() > 0) {
+				corMaior = new Cor("", "", 0);
+				for(Cor cor : coresSort) {
+					if(cor.getCodigo() > corMaior.getCodigo())
+						corMaior = cor;
+				}
+				coresSort.remove(corMaior);
+				
+				for(Object obj : lista) {
+					if(corMaior.getDescricao().equals((String)((Object[])obj)[0]))
+						cores.add(new Cor((String)((Object[])obj)[0], (String)((Object[])obj)[1], (Integer)((Object[])obj)[2]));
+				}
+				cores.add(corMaior);
+			}
 		}
 		
 		return cores;

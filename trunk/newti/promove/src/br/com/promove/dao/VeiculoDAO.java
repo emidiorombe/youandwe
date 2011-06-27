@@ -147,7 +147,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		}
 		
 		hql = new StringBuilder();
-		hql.append("select av from Avaria av left join fetch av.veiculo v ");
+		hql.append("select av from Avaria av inner join fetch av.veiculo v ");
 		hql.append(" where v.dataCadastro between :dtIni and :dtFim ");
 		addParamToQuery("dtIni", dtInicio);
 		addParamToQuery("dtFim", dtFim);
@@ -157,6 +157,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			addParamToQuery("txttipo", veiculo.getTipo());
 		}
 		
+		/*
 		for (Integer i = oriInicio.getCodigo(); i <= oriFim.getCodigo(); i++) {
 			if (i == oriInicio.getCodigo()) hql.append(" and ( ");
 			else hql.append(" or ");
@@ -166,6 +167,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			addParamToQuery("origem" + i, i);
 			if (i == oriFim.getCodigo()) hql.append(" ) ");
 		}
+		*/
+		
 		hql.append(" order by v.chassi ");
 		
 		List<Avaria> listaAv = executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
@@ -174,13 +177,13 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		
 		for (Avaria av : listaAv) {
 			if (ve == null || !ve.equals(av.getVeiculo())) {
-				if (ve != null) lista.add(ve);  
+				if (ve != null && !ve.getOrigensfaltantes().isEmpty()) lista.add(ve);  
 				ve = av.getVeiculo();
 				ve.setOrigensfaltantes(origens.toString());
 			}
 			ve.setOrigensfaltantes(ve.getOrigensfaltantes().replaceAll(av.getOrigem().getDescricao()+";", ""));
 		}
-		if (ve != null) lista.add(ve);
+		if (ve != null && !ve.getOrigensfaltantes().isEmpty()) lista.add(ve);
 		
 		return lista;
 	}
@@ -226,16 +229,20 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		}
 		
 		List<Cor> cores = new ArrayList<Cor>();
-		for (int i = 0; i < lista.size(); i++) {
-			//System.out.println(((Object[])lista.get(i))[0].toString() + " - " + // tipo
-			//                   ((Object[])lista.get(i))[1].toString() + " - " + // modelo
-			//                   ((Object[])lista.get(i))[2].toString()); // qtde
-			Cor cor = new Cor();
-			cor.setDescricao((String)(((Object[])lista.get(i))[0]));
-			cor.setCodigoExterno((String)(((Object[])lista.get(i))[1]));
-			cor.setCodigo((Integer)(((Object[])lista.get(i))[2]));
-			cores.add(cor);
+		String itemAnt = "";
+		Integer total = 0;
+		for(Object obj : lista) {
+			if(total > 0 && !itemAnt.equals((String)(((Object[])obj)[0]))) {
+				cores.add(new Cor(itemAnt, "", total));
+				total = 0;
+			}
+			
+			cores.add(new Cor((String)((Object[])obj)[0], (String)((Object[])obj)[1], (Integer)((Object[])obj)[2]));
+			
+			total += (Integer)((Object[])obj)[2];
+			itemAnt = (String)(((Object[])obj)[0]);
 		}
+		cores.add(new Cor(itemAnt, "", total));
 		
 		return cores;
 	}

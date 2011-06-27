@@ -13,6 +13,8 @@ import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
+import br.com.promove.exportacao.AvariasExport;
+import br.com.promove.exportacao.GraficoExport;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
@@ -292,9 +294,10 @@ public class ResumoAvariasForm extends BaseForm{
 					subitem = (String)cmbSubitem.getValue();
 					BeanItem<Veiculo> veic = (BeanItem<Veiculo>)getItemDataSource();
 					
-					if(oride == null || oride.getId() == null || oriate == null || 
-							oriate.getId() == null || de == null || ate == null)
-						throw new IllegalArgumentException("Informe as origens e o período");
+					if(de == null || ate == null)
+						throw new IllegalArgumentException("Informe o período");
+					if(oride == null || oride.getId() == null || oriate == null || oriate.getId() == null)
+						throw new IllegalArgumentException("Informe as origens");
 					
 					cores = avariaService.buscarResumo(veic.getBean(), de, ate, periodo, oride, oriate, item, subitem);
 				}
@@ -309,6 +312,8 @@ public class ResumoAvariasForm extends BaseForm{
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=resumo_avarias.xls&file=" + file));
 				}else if(event.getButton() == grafico) {
 					//TODO alterar
+					String xml = GraficoExport.gerarXmlExportacao(cores);
+					
 					Window w = new Window("Gráfico");
 			        w.setHeight("520px");
 			        w.setWidth("650px");
