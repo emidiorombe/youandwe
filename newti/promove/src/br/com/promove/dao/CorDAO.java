@@ -9,7 +9,7 @@ public class CorDAO extends BaseDAO<Integer, Cor> {
 
 	public List<Cor> getByCodigoExterno(String codigo) throws DAOException {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select c from Cor c where  ");
+		hql.append("select c from Cor c where ");
 		hql.append("c.codigoExterno = :txtCodigo ");
 
 		addParamToQuery("txtCodigo", codigo);

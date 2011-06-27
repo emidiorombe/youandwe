@@ -32,7 +32,7 @@ public class AnaliseResultadoTable extends Table{
 
 	private void buildTable() {
 		setSizeFull();
-		setColumnCollapsingAllowed(true);
+		//setColumnCollapsingAllowed(true);
 		setSelectable(true);
 		setImmediate(true);
 		setNullSelectionAllowed(false);

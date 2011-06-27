@@ -30,6 +30,11 @@ public class Cor implements Serializable{
 		this.descricao = descricao;
 	}
 
+	public Cor(String descricao, String codigoExterno, Integer codigo) {
+		this(codigo, descricao);
+		this.codigoExterno = codigoExterno; 
+	}
+	
 	public Integer getId() {
 		return id;
 	}

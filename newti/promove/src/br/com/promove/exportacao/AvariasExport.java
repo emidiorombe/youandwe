@@ -9,11 +9,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import br.com.promove.entity.Avaria;
-import br.com.promove.entity.Clima;
-import br.com.promove.entity.LocalAvaria;
-import br.com.promove.entity.OrigemAvaria;
-import br.com.promove.entity.TipoAvaria;
-import br.com.promove.entity.Usuario;
 
 public class AvariasExport {
 	
