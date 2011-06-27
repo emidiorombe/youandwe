@@ -26,49 +26,50 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 
 	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas) throws DAOException {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select av from Avaria av left JOIN FETCH av.fotos left join fetch av.veiculo veic ");
-		hql.append(" left JOIN FETCH av.tipo tp left JOIN FETCH av.origem ori left JOIN FETCH av.extensao ext left JOIN FETCH av.local loc left JOIN FETCH av.clima cli ");
-		hql.append(" left JOIN FETCH av.usuario usu left JOIN FETCH usu.tipo tpu left JOIN FETCH veic.modelo mod left JOIN FETCH veic.cor cor left JOIN FETCH mod.fabricante fab ");
-		hql.append(" left JOIN FETCH ori.responsabilidade resp left JOIN FETCH usu.filial usufil left JOIN FETCH ori.filial orifil ");
-		hql.append(" where 1=1 ");
+		hql.append("select av from Avaria av left JOIN FETCH av.fotos left join fetch av.veiculo veic");
+		hql.append(" left JOIN FETCH av.tipo tp left JOIN FETCH av.origem ori left JOIN FETCH av.extensao ext left JOIN FETCH av.local loc left JOIN FETCH av.clima cli");
+		hql.append(" left JOIN FETCH av.usuario usu left JOIN FETCH usu.tipo tpu left JOIN FETCH veic.modelo mod left JOIN FETCH veic.cor cor left JOIN FETCH mod.fabricante fab");
+		hql.append(" left JOIN FETCH ori.responsabilidade resp left JOIN FETCH usu.filial usufil left JOIN FETCH ori.filial orifil");
+		hql.append(" where 1=1");
 		if(av.getVeiculo() != null && !av.getVeiculo().getChassi().isEmpty()) {
-			hql.append(" and veic.chassi like :txtChassi ");
+			hql.append(" and veic.chassi like :txtChassi");
 			addParamToQuery("txtChassi", "%"+ av.getVeiculo().getChassi());
 		}
 		
 		if(av != null) {
 			if(av.getTipo() != null && av.getTipo().getId() != null) {
-				hql.append(" and av.tipo = :tp ");
+				hql.append(" and av.tipo = :tp");
 				addParamToQuery("tp", av.getTipo());
 			}
 			
 			if(av.getOrigem() != null && av.getOrigem().getId() != null) {
-				hql.append(" and av.origem = :org ");
+				hql.append(" and av.origem = :org");
 				addParamToQuery("org", av.getOrigem());
 			}
 	
 			
 			if(av.getLocal() != null && av.getLocal().getId() != null) {
-				hql.append(" and av.local = :loc ");
+				hql.append(" and av.local = :loc");
 				addParamToQuery("loc", av.getLocal());
 			}
 		}
 		
 		if(de != null && !de.equals("") && ate != null && !ate.equals("")) {
-			if (periodo == 1) hql.append(" and av.dataLancamento between :dtIni and :dtFim ");
-			else hql.append(" and veic.dataCadastro between :dtIni and :dtFim ");
+			if (periodo == 1) hql.append(" and av.dataLancamento between :dtIni and :dtFim");
+			else hql.append(" and veic.dataCadastro between :dtIni and :dtFim");
 			addParamToQuery("dtIni", de);
 			addParamToQuery("dtFim", ate);
 		}
 		
-		if(movimentacao) hql.append(" and tp.movimentacao = false ");
+		if(movimentacao) hql.append(" and tp.movimentacao = false");
 
 		if(registradas) {
-			hql.append(" and (tp.movimentacao = true or ");
-			hql.append(" not exists (select av2 from Avaria av2 ");
-			hql.append(" where av2.veiculo = av.veiculo ");
-			hql.append(" and av2.tipo = av.tipo and av2.local = av.local ");
-			hql.append(" and av2.origem.codigo < av.origem.codigo)) ");
+			hql.append(" and (");
+			if(!movimentacao) hql.append("tp.movimentacao = true or ");
+			hql.append("not exists (select av2 from Avaria av2");
+			hql.append(" where av2.veiculo = av.veiculo");
+			hql.append(" and av2.tipo.id = av.tipo.id and av2.local.id = av.local.id");
+			hql.append(" and av2.origem.codigo < av.origem.codigo))");
 		}
 
 		hql.append(" order by av.origem.codigo");
