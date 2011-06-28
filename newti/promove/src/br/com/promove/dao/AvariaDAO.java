@@ -11,7 +11,9 @@ import org.hibernate.exception.SQLGrammarException;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.ExtensaoAvaria;
+import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
@@ -24,18 +26,13 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		return executeQuery(hql.toString(), 0, 100);
 	}
 
-	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas) throws DAOException {
+	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select av from Avaria av left JOIN FETCH av.fotos left join fetch av.veiculo veic");
 		hql.append(" left JOIN FETCH av.tipo tp left JOIN FETCH av.origem ori left JOIN FETCH av.extensao ext left JOIN FETCH av.local loc left JOIN FETCH av.clima cli");
 		hql.append(" left JOIN FETCH av.usuario usu left JOIN FETCH usu.tipo tpu left JOIN FETCH veic.modelo mod left JOIN FETCH veic.cor cor left JOIN FETCH mod.fabricante fab");
 		hql.append(" left JOIN FETCH ori.responsabilidade resp left JOIN FETCH usu.filial usufil left JOIN FETCH ori.filial orifil");
 		hql.append(" where 1=1");
-		if(av.getVeiculo() != null && !av.getVeiculo().getChassi().isEmpty()) {
-			hql.append(" and veic.chassi like :txtChassi");
-			addParamToQuery("txtChassi", "%"+ av.getVeiculo().getChassi());
-		}
-		
 		if(av != null) {
 			if(av.getTipo() != null && av.getTipo().getId() != null) {
 				hql.append(" and av.tipo = :tp");
@@ -43,14 +40,31 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			}
 			
 			if(av.getOrigem() != null && av.getOrigem().getId() != null) {
-				hql.append(" and av.origem = :org");
+				hql.append(" and av.origem between :org and :org2");
 				addParamToQuery("org", av.getOrigem());
+				addParamToQuery("org2", oriAte.getId() == null ? av.getOrigem() : oriAte);
 			}
 	
-			
 			if(av.getLocal() != null && av.getLocal().getId() != null) {
 				hql.append(" and av.local = :loc");
 				addParamToQuery("loc", av.getLocal());
+			}
+			
+			if(av.getVeiculo() != null) {
+				if(av.getVeiculo().getChassi() != null && !av.getVeiculo().getChassi().isEmpty() && !av.getVeiculo().getChassi().equals("")) {
+					hql.append(" and veic.chassi like :txtChassi");
+					addParamToQuery("txtChassi", "%"+ av.getVeiculo().getChassi());
+				}
+				
+				if(av.getVeiculo().getTipo() != null && av.getVeiculo().getTipo() != 0) {
+					hql.append(" and veic.tipo = :txtTipo");
+					addParamToQuery("txtTipo", av.getVeiculo().getTipo());
+				}
+			
+				if(av.getVeiculo().getModelo() != null && av.getVeiculo().getModelo().getId() != null) {
+					hql.append(" and veic.modelo = :txtModelo");
+					addParamToQuery("txtModelo", av.getVeiculo().getModelo());
+				}
 			}
 		}
 		
@@ -59,6 +73,16 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			else hql.append(" and veic.dataCadastro between :dtIni and :dtFim");
 			addParamToQuery("dtIni", de);
 			addParamToQuery("dtFim", ate);
+		}
+		
+		if(responsabilidade != null && responsabilidade.getId() != null) {
+			hql.append(" and ori.responsabilidade = :txtResponsabilidade");
+			addParamToQuery("txtResponsabilidade", responsabilidade);
+		}
+		
+		if(fabricante != null && fabricante.getId() != null) {
+			hql.append(" and mod.fabricante = :txtFabricante");
+			addParamToQuery("txtFabricante", fabricante);
 		}
 		
 		if(movimentacao) hql.append(" and tp.movimentacao = false");

@@ -18,6 +18,7 @@ import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.ExtensaoAvaria;
+import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
@@ -301,13 +302,13 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	}
 
 	@Override
-	public List<Avaria> buscarAvariaPorFiltros(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas) throws PromoveException {
+	public List<Avaria> buscarAvariaPorFiltros(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws PromoveException {
 		List<Avaria> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaQuery(de); 
 			Date fim = DateUtils.montarDataFinalParaQuery(ate); 
 			
-			lista = avariaDAO.getAvariasPorFiltro(av, init, fim, periodo, movimentacao, registradas);
+			lista = avariaDAO.getAvariasPorFiltro(av, init, fim, periodo, movimentacao, registradas, oriAte, responsabilidade, fabricante);
 		} catch (DAOException e) {
 			e.printStackTrace();
 			throw new PromoveException(e);
