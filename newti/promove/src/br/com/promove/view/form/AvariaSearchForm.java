@@ -54,8 +54,6 @@ public class AvariaSearchForm extends BaseForm{
 	private ComboBox cmbOrigemAte;
 	private ComboBox cmbResponsabilidade;
 	private ComboBox cmbFabricante;
-	private ComboBox cmbModelo;
-	private ComboBox cmbTipo;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
 	private CheckBox chkMovimentacao;
@@ -143,44 +141,6 @@ public class AvariaSearchForm extends BaseForm{
 		cmbFabricante.setItemCaptionPropertyId("label");
 		//cmbFabricante.setWidth("200px");
 		cmbFabricante.setValue(cmbFabricante.getItemIds().iterator().next());
-		
-		cmbModelo = new ComboBox("Modelo");
-		cmbModelo.addContainerProperty("label", String.class, null);
-		
-		try {
-			i = cmbModelo.addItem(new Fabricante());
-			i.getItemProperty("label").setValue("Selecione...");
-			for(Modelo m: cadastroService.buscarTodosModelos()){
-				i = cmbModelo.addItem(m);
-				i.getItemProperty("label").setValue(m.getDescricao());
-			}
-		} catch (PromoveException e) {
-			showErrorMessage(this, "Não foi possível buscar os Modelos");
-		}
-
-		cmbModelo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-		cmbModelo.setImmediate(true);
-		cmbModelo.setNullSelectionAllowed(false);
-		cmbModelo.setItemCaptionPropertyId("label");
-		//cmbModelo.setWidth("200px");
-		cmbModelo.setValue(cmbModelo.getItemIds().iterator().next());
-		
-		cmbTipo = new ComboBox("Tipo de Veículo");
-		cmbTipo.addContainerProperty("label", String.class, null);
-		
-		i = cmbTipo.addItem(new Integer(0));
-		i.getItemProperty("label").setValue("Selecione...");
-		i = cmbTipo.addItem(1);
-		i.getItemProperty("label").setValue("Nacional");
-		i = cmbTipo.addItem(2);
-		i.getItemProperty("label").setValue("Importado");
-
-		cmbTipo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-		cmbTipo.setImmediate(true);
-		cmbTipo.setNullSelectionAllowed(false);
-		cmbTipo.setItemCaptionPropertyId("label");
-		//cmbTipo.setWidth("200px");
-		cmbTipo.setValue(cmbTipo.getItemIds().iterator().next());
 		
 		chkMovimentacao = new CheckBox();
 		chkMovimentacao.setCaption("Desconsiderar movimentações sem avaria");
