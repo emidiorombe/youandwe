@@ -202,7 +202,7 @@ public class AvariaSearchForm extends BaseForm{
 		cmbTipo.setNullSelectionAllowed(false);
 		cmbTipo.setItemCaptionPropertyId("label");
 		//cmbTipo.setWidth("200px");
-		cmbTipo.setValue(cmbModelo.getItemIds().iterator().next());
+		cmbTipo.setValue(cmbTipo.getItemIds().iterator().next());
 		
 		chkMovimentacao = new CheckBox();
 		chkMovimentacao.setCaption("Desconsiderar movimentações sem avaria");
@@ -236,11 +236,11 @@ public class AvariaSearchForm extends BaseForm{
 		//createFormBodyVe(new BeanItem<Veiculo>(new Veiculo()));
 		createFormBody(new BeanItem<Avaria>(new Avaria()));
 		layout.addComponent(this);
-		addField("cmbOrigemAte", cmbOrigemAte);
-		addField("cmbResponsabilidade", cmbResponsabilidade);
-		addField("cmbFabricante", cmbFabricante);
-		addField("cmbModelo", cmbModelo);
-		addField("cmbTipo", cmbTipo);
+		//addField("cmbOrigemAte", cmbOrigemAte);
+		//addField("cmbResponsabilidade", cmbResponsabilidade);
+		//addField("cmbFabricante", cmbFabricante);
+		//addField("cmbModelo", cmbModelo);
+		//addField("cmbTipo", cmbTipo);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
 		addField("cmbPeriodo", cmbPeriodo);
@@ -486,11 +486,11 @@ public class AvariaSearchForm extends BaseForm{
 		public void buttonClick(ClickEvent event) {
 			try {
 				commit();
-				cmbOrigemAte.getValue();
-				cmbResponsabilidade.getValue();
-				Fabricante fab = (Fabricante)cmbFabricante.getValue();
-				Modelo modelo = (Modelo)cmbModelo.getValue();
-				Integer tipo = (Integer)cmbTipo.getValue();
+				//OrigemAvaria oriAte = (OrigemAvaria)cmbOrigemAte.getValue();
+				//ResponsabilidadeAvaria res = (ResponsabilidadeAvaria)cmbResponsabilidade.getValue();
+				//Fabricante fab = (Fabricante)cmbFabricante.getValue();
+				//Modelo modelo = (Modelo)cmbModelo.getValue();
+				//Integer tipo = (Integer)cmbTipo.getValue();
 				
 				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
