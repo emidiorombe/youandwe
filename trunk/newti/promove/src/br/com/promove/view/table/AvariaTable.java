@@ -106,7 +106,7 @@ public class AvariaTable extends Table{
 		try {
 			Avaria avaria = new Avaria();
 			avaria.setVeiculo(veiculo);
-			filterTable(avariaService.buscarAvariaPorFiltros(avaria, null, null, null, false, false));
+			filterTable(avariaService.buscarAvariaPorFiltros(avaria, null, null, null, false, false, null, null, null));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

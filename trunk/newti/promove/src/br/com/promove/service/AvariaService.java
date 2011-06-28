@@ -10,6 +10,7 @@ import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.ExtensaoAvaria;
+import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
@@ -126,7 +127,7 @@ public interface AvariaService extends Serializable{
 
 	void salvarAvaria(Avaria av, boolean isFlush)throws PromoveException;
 
-	List<Avaria> buscarAvariaPorFiltros(Avaria avaria, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas) throws PromoveException;
+	List<Avaria> buscarAvariaPorFiltros(Avaria avaria, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws PromoveException;
 
 	List<ResponsabilidadeAvaria> buscarTodasResponsabilidades() throws PromoveException;
 
