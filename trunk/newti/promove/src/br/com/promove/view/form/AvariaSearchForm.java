@@ -7,9 +7,13 @@ import java.util.Locale;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.LocalAvaria;
+import br.com.promove.entity.Modelo;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.TipoAvaria;
+import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
@@ -45,10 +49,16 @@ public class AvariaSearchForm extends BaseForm{
 	private Button search;
 	private Button export;
 	private Button exportXml;
-	private CheckBox chkMovimentacao;
-	private CheckBox chkRegistradas;
+	//private ComboBox cmbOrigemDe;
+	private ComboBox cmbOrigemAte;
+	private ComboBox cmbResponsabilidade;
+	private ComboBox cmbFabricante;
+	private ComboBox cmbModelo;
+	private ComboBox cmbTipo;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
+	private CheckBox chkMovimentacao;
+	private CheckBox chkRegistradas;
 	private ComboBox cmbPeriodo;
 	private PromoveApplication app;
 	
@@ -64,10 +74,135 @@ public class AvariaSearchForm extends BaseForm{
 		setWriteThrough(false);
 		setImmediate(true);
 		setSizeFull();
+		Item i;
 		
 		search = new Button("Buscar", new AvariaSearchListener());
 		export = new Button("Gerar Arquivo", new AvariaSearchListener());
 		exportXml = new Button("Gerar XML", new AvariaSearchListener());
+		
+		/*
+		cmbOrigemDe = new ComboBox("Origem De");
+		cmbOrigemDe.addContainerProperty("label", String.class, null);
+		
+		try {
+			i = cmbOrigemDe.addItem(new OrigemAvaria());
+			i.getItemProperty("label").setValue("Selecione...");
+			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
+				i = cmbOrigemDe.addItem(or);
+				i.getItemProperty("label").setValue(or.getDescricao());
+			}
+		} catch (PromoveException e) {
+			showErrorMessage(this, "Não foi possível buscar as Origens de Avaria");
+		}
+
+		cmbOrigemDe.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+		cmbOrigemDe.setImmediate(true);
+		cmbOrigemDe.setNullSelectionAllowed(false);
+		cmbOrigemDe.setItemCaptionPropertyId("label");
+		//cmbOrigemDe.setWidth("250px");
+		cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
+		*/
+		
+		cmbOrigemAte = new ComboBox("Origem (De/Até)");
+		cmbOrigemAte.addContainerProperty("label", String.class, null);
+		
+		try {
+			i = cmbOrigemAte.addItem(new OrigemAvaria());
+			i.getItemProperty("label").setValue("Selecione...");
+			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
+				i = cmbOrigemAte.addItem(or);
+				i.getItemProperty("label").setValue(or.getDescricao());
+			}
+		} catch (PromoveException e) {
+			showErrorMessage(this, "Não foi possível buscar as Origens de Avaria");
+		}
+
+		cmbOrigemAte.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+		cmbOrigemAte.setImmediate(true);
+		cmbOrigemAte.setNullSelectionAllowed(false);
+		cmbOrigemAte.setItemCaptionPropertyId("label");
+		//cmbOrigemAte.setWidth("250px");
+		cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
+		
+		cmbResponsabilidade = new ComboBox("Responsabilidade");
+		cmbResponsabilidade.addContainerProperty("label", String.class, null);
+		
+		try {
+			i = cmbResponsabilidade.addItem(new ResponsabilidadeAvaria());
+			i.getItemProperty("label").setValue("Selecione...");
+			for(ResponsabilidadeAvaria res: avariaService.buscarTodasResponsabilidades()){
+				i = cmbResponsabilidade.addItem(res);
+				i.getItemProperty("label").setValue(res.getNome());
+			}
+		} catch (PromoveException e) {
+			showErrorMessage(this, "Não foi possível buscar as Responsabilidades de Avaria");
+		}
+
+		cmbResponsabilidade.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+		cmbResponsabilidade.setImmediate(true);
+		cmbResponsabilidade.setNullSelectionAllowed(false);
+		cmbResponsabilidade.setItemCaptionPropertyId("label");
+		//cmbResponsabilidade.setWidth("200px");
+		cmbResponsabilidade.setValue(cmbResponsabilidade.getItemIds().iterator().next());
+		
+		cmbFabricante = new ComboBox("Fabricante");
+		cmbFabricante.addContainerProperty("label", String.class, null);
+		
+		try {
+			i = cmbFabricante.addItem(new Fabricante());
+			i.getItemProperty("label").setValue("Selecione...");
+			for(Fabricante fab: cadastroService.buscarTodosFabricantes()){
+				i = cmbFabricante.addItem(fab);
+				i.getItemProperty("label").setValue(fab.getNome());
+			}
+		} catch (PromoveException e) {
+			showErrorMessage(this, "Não foi possível buscar os Fabricantes");
+		}
+
+		cmbFabricante.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+		cmbFabricante.setImmediate(true);
+		cmbFabricante.setNullSelectionAllowed(false);
+		cmbFabricante.setItemCaptionPropertyId("label");
+		//cmbFabricante.setWidth("200px");
+		cmbFabricante.setValue(cmbFabricante.getItemIds().iterator().next());
+		
+		cmbModelo = new ComboBox("Modelo");
+		cmbModelo.addContainerProperty("label", String.class, null);
+		
+		try {
+			i = cmbModelo.addItem(new Fabricante());
+			i.getItemProperty("label").setValue("Selecione...");
+			for(Modelo m: cadastroService.buscarTodosModelos()){
+				i = cmbModelo.addItem(m);
+				i.getItemProperty("label").setValue(m.getDescricao());
+			}
+		} catch (PromoveException e) {
+			showErrorMessage(this, "Não foi possível buscar os Modelos");
+		}
+
+		cmbModelo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+		cmbModelo.setImmediate(true);
+		cmbModelo.setNullSelectionAllowed(false);
+		cmbModelo.setItemCaptionPropertyId("label");
+		//cmbModelo.setWidth("200px");
+		cmbModelo.setValue(cmbModelo.getItemIds().iterator().next());
+		
+		cmbTipo = new ComboBox("Tipo de Veículo");
+		cmbTipo.addContainerProperty("label", String.class, null);
+		
+		i = cmbTipo.addItem(new Integer(0));
+		i.getItemProperty("label").setValue("Selecione...");
+		i = cmbTipo.addItem(1);
+		i.getItemProperty("label").setValue("Nacional");
+		i = cmbTipo.addItem(2);
+		i.getItemProperty("label").setValue("Importado");
+
+		cmbTipo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+		cmbTipo.setImmediate(true);
+		cmbTipo.setNullSelectionAllowed(false);
+		cmbTipo.setItemCaptionPropertyId("label");
+		//cmbTipo.setWidth("200px");
+		cmbTipo.setValue(cmbModelo.getItemIds().iterator().next());
 		
 		chkMovimentacao = new CheckBox();
 		chkMovimentacao.setCaption("Desconsiderar movimentações sem avaria");
@@ -86,7 +221,7 @@ public class AvariaSearchForm extends BaseForm{
 		cmbPeriodo = new ComboBox("Período por");
 		cmbPeriodo.addContainerProperty("label", String.class, null);
 		
-		Item i = cmbPeriodo.addItem(1);
+		i = cmbPeriodo.addItem(1);
 		i.getItemProperty("label").setValue("Data de lançamento da avaria");
 		i = cmbPeriodo.addItem(2);
 		i.getItemProperty("label").setValue("Data de cadastro do veículo");
@@ -98,22 +233,36 @@ public class AvariaSearchForm extends BaseForm{
 		cmbPeriodo.setWidth("200px");
 		cmbPeriodo.setValue(cmbPeriodo.getItemIds().iterator().next());
 
+		//createFormBodyVe(new BeanItem<Veiculo>(new Veiculo()));
 		createFormBody(new BeanItem<Avaria>(new Avaria()));
 		layout.addComponent(this);
+		addField("cmbOrigemAte", cmbOrigemAte);
+		addField("cmbResponsabilidade", cmbResponsabilidade);
+		addField("cmbFabricante", cmbFabricante);
+		addField("cmbModelo", cmbModelo);
+		addField("cmbTipo", cmbTipo);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
+		addField("cmbPeriodo", cmbPeriodo);
 		addField("chkMovimentacao", chkMovimentacao);
 		addField("chkRegistradas", chkRegistradas);
-		this.addField("cmbPeriodo", cmbPeriodo);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
 	}
 
+	/*
+	private void createFormBodyVe(BeanItem<Veiculo> beanItem) {
+		setItemDataSource(beanItem);
+		setFormFieldFactory(new VeiculoFieldFactory(this, beanItem.getBean().getId() == null));
+		setVisibleItemProperties(new Object[]{"fabricante", "modelo", "tipo"});
+	}
+	*/
+	
 	private void createFormBody(BeanItem<Avaria> beanItem) {
 		setItemDataSource(beanItem);
 		setFormFieldFactory(new AvariaFieldFactory(this, beanItem.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"veiculo", "tipo", "origem", "local"});
+		setVisibleItemProperties(new Object[]{"veiculo", "tipo", "local", "origem"});
 		
 	}
 	
@@ -240,12 +389,109 @@ public class AvariaSearchForm extends BaseForm{
 		}
 	}
 	
+	class VeiculoFieldFactory extends DefaultFieldFactory{
+		
+		private AvariaSearchForm avariaForm;
+		private boolean isNew;
+
+		public VeiculoFieldFactory(AvariaSearchForm avariaForm, boolean isNew) {
+			this.avariaForm = avariaForm;
+			this.isNew = isNew;
+		}
+
+		@Override
+		public Field createField(Item item, Object propertyId, Component uiContext) {
+			Field f = super.createField(item, propertyId, uiContext);
+			
+			try {
+				if(propertyId.equals("fabricante")) {
+					ComboBox c = new ComboBox("Fabricante");
+					c.addContainerProperty("label", String.class, null);
+	
+					
+					Item i_default = c.addItem(new Fabricante());
+					i_default.getItemProperty("label").setValue("Selecione...");
+	
+					for(Fabricante fab: cadastroService.buscarTodosFabricantes()){
+						Item i = c.addItem(fab);
+						i.getItemProperty("label").setValue(fab.getNome());
+					}
+					
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					
+					if (c.getValue() ==  null && c.size() > 0)
+	                    c.setValue(c.getItemIds().iterator().next());
+					
+					return c;
+				} else if(propertyId.equals("modelo")) {
+					ComboBox c = new ComboBox("Modelo");
+					c.addContainerProperty("label", String.class, null);
+					
+					Item i_default = c.addItem(new Modelo());
+					i_default.getItemProperty("label").setValue("Selecione...");
+					
+					
+					for(Modelo m: cadastroService.buscarTodosModelos()){
+						Item i = c.addItem(m);
+						i.getItemProperty("label").setValue(m.getDescricao());
+					}
+					
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					
+					if (c.getValue() ==  null && c.size() > 0)
+	                    c.setValue(c.getItemIds().iterator().next());
+					
+					return c;
+				}else if(propertyId.equals("tipo")) {
+					ComboBox c = new ComboBox("Tipo de Veículo");
+					c.addContainerProperty("label", String.class, null);
+					
+					Item i = c.addItem(new Integer(0));
+					i.getItemProperty("label").setValue("Selecione...");
+					i = c.addItem(1);
+					i.getItemProperty("label").setValue("Nacional");
+					i = c.addItem(2);
+					i.getItemProperty("label").setValue("Importado");
+					
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					
+					if (c.getValue() ==  null && c.size() > 0)
+	                    c.setValue(c.getItemIds().iterator().next());
+					
+					return c;
+
+				}
+			}catch(PromoveException pe) {
+				showErrorMessage(avariaForm, "Não foi possível montar o formulário de Avaria");
+			}
+			return null;
+		}
+	}
+	
 	class AvariaSearchListener implements ClickListener {
 
 		@Override
 		public void buttonClick(ClickEvent event) {
 			try {
 				commit();
+				cmbOrigemAte.getValue();
+				cmbResponsabilidade.getValue();
+				Fabricante fab = (Fabricante)cmbFabricante.getValue();
+				Modelo modelo = (Modelo)cmbModelo.getValue();
+				Integer tipo = (Integer)cmbTipo.getValue();
+				
 				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 				Integer periodo = (Integer)cmbPeriodo.getValue();

@@ -151,7 +151,7 @@ public class AnaliseResultadoForm extends BaseForm{
 		footer.setSpacing(true);
 		footer.addComponent(search);
 		footer.addComponent(export);
-		//footer.addComponent(grafico);
+		footer.addComponent(grafico);
 		//TODO descomentar
 		footer.setVisible(true);
 		
@@ -219,9 +219,6 @@ public class AnaliseResultadoForm extends BaseForm{
 				List<Cor> cores = null;
 				
 				if (event.getButton() != grafico) {
-					//TODO alterar
-					String xml = GraficoExport.gerarXmlExportacao(cores);
-
 					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 					OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
@@ -245,6 +242,9 @@ public class AnaliseResultadoForm extends BaseForm{
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=analise_resultado.xls&file=" + file));
 				}else if(event.getButton() == grafico) {
+					//TODO alterar
+					//String xml = GraficoExport.gerarXmlExportacao(cores);
+
 					Window w = new Window("Gráfico");
 			        w.setHeight("520px");
 			        w.setWidth("650px");
