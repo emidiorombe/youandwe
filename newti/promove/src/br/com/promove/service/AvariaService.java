@@ -3,6 +3,7 @@ package br.com.promove.service;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.dom4j.Node;
 
@@ -15,6 +16,7 @@ import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.PieData;
 import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Veiculo;
@@ -149,5 +151,5 @@ public interface AvariaService extends Serializable{
 
 	List<Avaria> buscarAvariaDuplicadaPorFiltros(Veiculo veiculo, Avaria av)throws PromoveException;
 	
-	public List<Cor> buscarResumo(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, String subitem) throws PromoveException;
+	public Map<String, List<PieData>> buscarResumo(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, String subitem) throws PromoveException;
 }

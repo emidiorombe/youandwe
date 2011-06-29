@@ -1,15 +1,19 @@
 package br.com.promove.view.form;
 
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.PieData;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
@@ -280,39 +284,40 @@ public class ResumoAvariasForm extends BaseForm{
 		public void buttonClick(ClickEvent event) {
 			try {
 				commit();
-				List<Cor> cores = null; 
+				List<Cor> cores = null;
+				Map<String, List<PieData>> itens = null;
 				String item = null;
 				String subitem = null;
 				
-				if(event.getButton() != grafico) {
-					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
-					OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
-					OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
-					Integer periodo = (Integer)cmbPeriodo.getValue();
-					item = (String)cmbItem.getValue();
-					subitem = (String)cmbSubitem.getValue();
-					BeanItem<Veiculo> veic = (BeanItem<Veiculo>)getItemDataSource();
-					
-					if(de == null || ate == null)
-						throw new IllegalArgumentException("Informe o período");
-					if(oride == null || oride.getId() == null || oriate == null || oriate.getId() == null)
-						throw new IllegalArgumentException("Informe as origens");
-					
-					cores = avariaService.buscarResumo(veic.getBean(), de, ate, periodo, oride, oriate, item, subitem);
-				}
+				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+				OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
+				OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
+				Integer periodo = (Integer)cmbPeriodo.getValue();
+				item = (String)cmbItem.getValue();
+				subitem = (String)cmbSubitem.getValue();
+				BeanItem<Veiculo> veic = (BeanItem<Veiculo>)getItemDataSource();
+				
+				if(de == null || ate == null)
+					throw new IllegalArgumentException("Informe o período");
+				if(oride == null || oride.getId() == null || oriate == null || oriate.getId() == null)
+					throw new IllegalArgumentException("Informe as origens");
+				
+				itens = avariaService.buscarResumo(veic.getBean(), de, ate, periodo, oride, oriate, item, subitem);
 				
 				if(event.getButton() == search) {
+					cores = criaListaCoresComItens(itens);
 					view.getTable().filterTable(cores);
 				}else if(event.getButton() == export) {
+					cores = criaListaCoresComItens(itens);
 					String file = exportacaoService.exportarXLSResumo(cores, item.toUpperCase(), subitem.toUpperCase());
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=resumo_avarias.xls&file=" + file));
 				}else if(event.getButton() == grafico) {
-					//TODO alterar
-					//String xml = GraficoExport.gerarXmlExportacao(cores);
+					String xml = GraficoExport.gerarXmlExportacao(itens);
+					String xmlEncoded = URLEncoder.encode(xml, "UTF-8");
 					
 					Window w = new Window("Gráfico");
 			        w.setHeight("520px");
@@ -333,6 +338,7 @@ public class ResumoAvariasForm extends BaseForm{
 			        e.setParameter("allowFullScreen", "true");
 			        e.setWidth("600px");
 			        e.setHeight("400px");
+			        e.setParameter("FlashVars", "report="+xmlEncoded);
 			        Label lbl = new Label("<h2>Resumo de Avarias por Origem e Tipo de Avaria</h2>");
 			        lbl.setContentMode(Label.CONTENT_XHTML);
 			        w.addComponent(lbl);
@@ -345,6 +351,21 @@ public class ResumoAvariasForm extends BaseForm{
 				showErrorMessage(view, "Não foi possível apurar");
 				e.printStackTrace();
 			}
+		}
+		
+		private List<Cor> criaListaCoresComItens(Map<String, List<PieData>> itens) {
+			List<Cor> cores = new ArrayList<Cor>();
+			for(Map.Entry<String, List<PieData>> entry : itens.entrySet()) {
+				String itemName = entry.getKey();
+				Integer itemTotal = 0;
+				for(PieData pd : entry.getValue()) {
+					int vl = new Integer(pd.getValue());
+					cores.add(new Cor(itemName, pd.getLabel(), vl));
+					itemTotal += vl;
+				}
+				cores.add(new Cor(itemName, "", itemTotal));
+			}
+			return cores;
 		}
 	}
 }
