@@ -3,18 +3,14 @@ package br.com.promove.view.table;
 import java.io.Serializable;
 import java.util.List;
 
-import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
-import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.AnaliseResultadoView;
-import br.com.promove.view.table.AvariaTable.AvariaTableContainer;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Table;
 
 public class AnaliseResultadoTable extends Table{

@@ -215,7 +215,7 @@ public class ResumoAvariasForm extends BaseForm{
 		footer.setSpacing(true);
 		footer.addComponent(search);
 		footer.addComponent(export);
-		//footer.addComponent(grafico);
+		footer.addComponent(grafico);
 		//TODO descomentar
 		footer.setVisible(true);
 		
@@ -312,7 +312,7 @@ public class ResumoAvariasForm extends BaseForm{
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=resumo_avarias.xls&file=" + file));
 				}else if(event.getButton() == grafico) {
 					//TODO alterar
-					String xml = GraficoExport.gerarXmlExportacao(cores);
+					//String xml = GraficoExport.gerarXmlExportacao(cores);
 					
 					Window w = new Window("Gráfico");
 			        w.setHeight("520px");

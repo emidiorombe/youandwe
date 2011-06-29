@@ -2,6 +2,7 @@ package br.com.promove.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
@@ -13,6 +14,7 @@ import br.com.promove.entity.Filial;
 import br.com.promove.entity.InconsistenciaVeiculo;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.PieData;
 import br.com.promove.entity.TipoUsuario;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
@@ -93,6 +95,6 @@ public interface CadastroService {
 
 	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException;
 
-	public List<Cor> buscarAnaliseResultado(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException;
+	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException;
 
 }
