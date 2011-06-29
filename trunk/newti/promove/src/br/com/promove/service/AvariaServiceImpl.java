@@ -3,6 +3,7 @@ package br.com.promove.service;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import br.com.promove.dao.AvariaDAO;
 import br.com.promove.dao.ClimaDAO;
@@ -23,6 +24,7 @@ import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.PieData;
 import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Veiculo;
@@ -449,8 +451,8 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	}
 
 	@Override
-	public List<Cor> buscarResumo(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, String subitem) throws PromoveException {
-		List<Cor> lista = null;
+	public Map<String, List<PieData>> buscarResumo(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, String subitem) throws PromoveException {
+		Map<String, List<PieData>> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaQuery(de); 
 			Date fim = DateUtils.montarDataFinalParaQuery(ate); 

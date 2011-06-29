@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.exception.SQLGrammarException;
 
@@ -13,6 +14,7 @@ import br.com.promove.entity.Cor;
 import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.PieData;
 import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
@@ -133,7 +135,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
-	public List<Cor> buscarResumo(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, String item, String subitem) throws DAOException {
+	public Map<String, List<PieData>> buscarResumo(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, String item, String subitem) throws DAOException {
 		if (item.isEmpty() && !subitem.isEmpty()) item = subitem;
 		if (subitem.equals(item)) subitem = "";
 		
@@ -192,43 +194,20 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		}
 
 		List lista = executeSQLQuery(sql.toString());
-		List<Cor> cores = new ArrayList<Cor>();
-
-		List<Cor> coresSort = new ArrayList<Cor>();
-		String itemAnt = "";
-		Integer total = 0;
+		Map<String, List<PieData>> itens = new HashMap<String, List<PieData>>();
+		
 		for(Object obj : lista) {
-			if(total > 0 && !itemAnt.equals((String)(((Object[])obj)[0]))) {
-				coresSort.add(new Cor(itemAnt, "", total));
-				total = 0;
-			}
-			
-			if(item.isEmpty() || subitem.isEmpty())
-				cores.add(new Cor((String)((Object[])obj)[0], (String)((Object[])obj)[1], (Integer)((Object[])obj)[2]));
-			
-			total += (Integer)((Object[])obj)[2];
-			itemAnt = (String)(((Object[])obj)[0]);
+			montaListaPorItem((Object[])obj, itens);
 		}
-		coresSort.add(new Cor(itemAnt, "", total));
-		
-		if(!item.isEmpty() && !subitem.isEmpty()) {
-			Cor corMaior;
-			while(coresSort.size() > 0) {
-				corMaior = new Cor("", "", 0);
-				for(Cor cor : coresSort) {
-					if(cor.getCodigo() > corMaior.getCodigo())
-						corMaior = cor;
-				}
-				coresSort.remove(corMaior);
-				
-				for(Object obj : lista) {
-					if(corMaior.getDescricao().equals((String)((Object[])obj)[0]))
-						cores.add(new Cor((String)((Object[])obj)[0], (String)((Object[])obj)[1], (Integer)((Object[])obj)[2]));
-				}
-				cores.add(corMaior);
-			}
+		return itens;
+	}
+	
+	private void montaListaPorItem(Object[] obj, Map<String, List<PieData>> itens) {
+		List<PieData> lista = itens.get(obj[0]);
+		if(lista == null) {
+			lista = new ArrayList<PieData>();
 		}
-		
-		return cores;
+		lista.add(new PieData(obj[1].toString(), obj[2].toString()));
+		itens.put(obj[0].toString(), lista);
 	}
 }
