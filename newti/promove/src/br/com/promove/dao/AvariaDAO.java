@@ -191,13 +191,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			if (!subitem.isEmpty()) sql.append(" " + nomeSubitem);
 		}
 
-		List lista = new ArrayList();
-		try {
-			lista = executeSQLQuery(sql.toString());
-		} catch (SQLGrammarException sge) {
-			throw new DAOException(sge);
-		}
-		
+		List lista = executeSQLQuery(sql.toString());
 		List<Cor> cores = new ArrayList<Cor>();
 
 		List<Cor> coresSort = new ArrayList<Cor>();

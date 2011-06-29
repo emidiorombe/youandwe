@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.exception.SQLGrammarException;
@@ -15,6 +16,7 @@ import org.hibernate.exception.SQLGrammarException;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.PieData;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 
@@ -188,7 +190,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		return lista;
 	}
 
-	public List<Cor> buscarAnaliseResultado(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oriInicio, OrigemAvaria oriFim) throws DAOException {
+	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oriInicio, OrigemAvaria oriFim) throws DAOException {
 		StringBuilder subsql = new StringBuilder();
 		subsql.append(" select cast(':tipo' as text) as tipo, modelo.descricao as descricao");
 		subsql.append(" from veiculo, modelo");
@@ -221,29 +223,21 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		sql.append(" group by tipo, descricao");
 		sql.append(" order by tipo, count(*) desc, descricao");
 
-		List lista = new ArrayList();
-		try {
-			lista = executeSQLQuery(sql.toString());
-		} catch (SQLGrammarException sge) {
-			throw new DAOException(sge);
-		}
+		List lista = executeSQLQuery(sql.toString());
+		Map<String, List<PieData>> itens = new HashMap<String, List<PieData>>();
 		
-		List<Cor> cores = new ArrayList<Cor>();
-		String itemAnt = "";
-		Integer total = 0;
 		for(Object obj : lista) {
-			if(total > 0 && !itemAnt.equals((String)(((Object[])obj)[0]))) {
-				cores.add(new Cor(itemAnt, "", total));
-				total = 0;
-			}
-			
-			cores.add(new Cor((String)((Object[])obj)[0], (String)((Object[])obj)[1], (Integer)((Object[])obj)[2]));
-			
-			total += (Integer)((Object[])obj)[2];
-			itemAnt = (String)(((Object[])obj)[0]);
+			montaListaPorItem((Object[])obj, itens);
 		}
-		cores.add(new Cor(itemAnt, "", total));
-		
-		return cores;
+		return itens;
+	}
+
+	private void montaListaPorItem(Object[] obj, Map<String, List<PieData>> itens) {
+		List<PieData> lista = itens.get(obj[0]);
+		if(lista == null) {
+			lista = new ArrayList<PieData>();
+		}
+		lista.add(new PieData(obj[1].toString(), obj[2].toString()));
+		itens.put(obj[0].toString(), lista);
 	}
 }
