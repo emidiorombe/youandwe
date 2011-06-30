@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
@@ -23,6 +24,7 @@ import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.OrdemResumoComparator;
 import br.com.promove.view.ResumoAvariasView;
 import br.com.promove.view.form.VeiculoSearchForm.VeiculoFieldFactory;
 
@@ -355,15 +357,22 @@ public class ResumoAvariasForm extends BaseForm{
 		
 		private List<Cor> criaListaCoresComItens(Map<String, List<PieData>> itens) {
 			List<Cor> cores = new ArrayList<Cor>();
+			Map<Integer, List<Cor>> ordered = new TreeMap<Integer, List<Cor>>(new OrdemResumoComparator());
 			for(Map.Entry<String, List<PieData>> entry : itens.entrySet()) {
+				List<Cor> tmp_cores = new ArrayList<Cor>();
 				String itemName = entry.getKey();
 				Integer itemTotal = 0;
 				for(PieData pd : entry.getValue()) {
 					int vl = new Integer(pd.getValue());
-					cores.add(new Cor(itemName, pd.getLabel(), vl));
+					tmp_cores.add(new Cor(itemName, pd.getLabel(), vl));
 					itemTotal += vl;
 				}
-				cores.add(new Cor(itemName, "", itemTotal));
+				tmp_cores.add(new Cor(itemName, "", itemTotal));
+				ordered.put(itemTotal, tmp_cores);
+			}
+			
+			for(List<Cor> lcor: ordered.values()) {
+				cores.addAll(lcor);
 			}
 			return cores;
 		}
