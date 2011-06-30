@@ -4,6 +4,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -318,7 +319,8 @@ public class ResumoAvariasForm extends BaseForm{
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=resumo_avarias.xls&file=" + file));
 				}else if(event.getButton() == grafico) {
-					String xml = GraficoExport.gerarXmlExportacao(itens);
+					List<Map<String, List<PieData>>> itens_ordenados = ordenarItensMap(itens);
+					String xml = GraficoExport.gerarXmlExportacaoFromList(itens_ordenados);
 					String xmlEncoded = URLEncoder.encode(xml, "UTF-8");
 					
 					Window w = new Window("Gráfico");
@@ -355,6 +357,31 @@ public class ResumoAvariasForm extends BaseForm{
 			}
 		}
 		
+		private List<Map<String, List<PieData>>> ordenarItensMap(Map<String, List<PieData>> itens) {
+			List<Map<String, List<PieData>>> data = new ArrayList<Map<String,List<PieData>>>();
+			Map<Integer, Map<String, List<PieData>>> ordered = new TreeMap<Integer, Map<String, List<PieData>>>(new OrdemResumoComparator());
+			for(Map.Entry<String, List<PieData>> entry : itens.entrySet()) {
+				List<PieData> tmp_pd = new ArrayList<PieData>();
+				String itemName = entry.getKey();
+				Integer itemTotal = 0;
+				for(PieData pd : entry.getValue()) {
+					int vl = new Integer(pd.getValue());
+					tmp_pd.add(new PieData(pd.getLabel(), Integer.toString(vl)));
+					itemTotal += vl;
+				}
+				
+				Map<String, List<PieData>> tmp_map = new HashMap<String, List<PieData>>();
+				tmp_map.put(itemName, tmp_pd);
+				ordered.put(itemTotal, tmp_map);
+			}
+			
+			for(Map.Entry<Integer, Map<String, List<PieData>>> entry : ordered.entrySet()) {
+				data.add(entry.getValue());
+			}
+			
+			return data;
+		}
+
 		private List<Cor> criaListaCoresComItens(Map<String, List<PieData>> itens) {
 			List<Cor> cores = new ArrayList<Cor>();
 			Map<Integer, List<Cor>> ordered = new TreeMap<Integer, List<Cor>>(new OrdemResumoComparator());
