@@ -69,12 +69,12 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		search = new Button("Buscar", new AuditoriaVistoriasListener());
 		export = new Button("Gerar Arquivo", new AuditoriaVistoriasListener());
 		
-		cmbOrigemDe = new ComboBox("Origem De");
+		cmbOrigemDe = new ComboBox("Origem");
 		cmbOrigemDe.addContainerProperty("label", String.class, null);
 		
 		try {
-			//i = cmbOrigemDe.addItem(new OrigemAvaria());
-			//i.getItemProperty("label").setValue("Selecione...");
+			i = cmbOrigemDe.addItem(new OrigemAvaria());
+			i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemDe.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
@@ -88,14 +88,14 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		cmbOrigemDe.setNullSelectionAllowed(false);
 		cmbOrigemDe.setItemCaptionPropertyId("label");
 		cmbOrigemDe.setWidth("250px");
-		//cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
+		cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
 		
-		cmbOrigemAte = new ComboBox("Origem Até");
+		cmbOrigemAte = new ComboBox("Origem (De/Até)");
 		cmbOrigemAte.addContainerProperty("label", String.class, null);
 		
 		try {
-			//i = cmbOrigemAte.addItem(new OrigemAvaria());
-			//i.getItemProperty("label").setValue("Selecione...");
+			i = cmbOrigemAte.addItem(new OrigemAvaria());
+			i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemAte.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
@@ -109,7 +109,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		cmbOrigemAte.setNullSelectionAllowed(false);
 		cmbOrigemAte.setItemCaptionPropertyId("label");
 		cmbOrigemAte.setWidth("250px");
-		//cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
+		cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -210,9 +210,8 @@ public class AuditoriaVistoriasForm extends BaseForm{
 				OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
 				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
 				
-				if(oride == null || oride.getId() == null || oriate == null || 
-						oriate.getId() == null || de == null || ate == null)
-					throw new IllegalArgumentException("Informe as origens e o período");
+				if(de == null || ate == null)
+					throw new IllegalArgumentException("Informe o período");
 				
 				List<Veiculo> veiculos = cadastroService.buscarVeiculosAuditoria(item.getBean(), de, ate, oride, oriate);
 				

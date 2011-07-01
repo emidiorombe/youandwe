@@ -2,6 +2,8 @@ package br.com.promove.service;
 
 import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -15,13 +17,15 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.dom4j.Document;
 
+import com.vaadin.ui.Label;
+
 import br.com.promove.dao.ClimaDAO;
 import br.com.promove.dao.LocalAvariaDAO;
 import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.dao.UsuarioDAO;
 import br.com.promove.entity.Avaria;
-import br.com.promove.entity.Cor;
+import br.com.promove.entity.Resumo;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.entity.Ctrc;
@@ -43,6 +47,7 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	private OrigemAvariaDAO origemDAO;
 	private TipoAvariaDAO tipoDAO;
 	private ClimaDAO climaDAO;
+	private NumberFormat formatPercentual = new DecimalFormat("#0'%'"); //("#0.00'%'")
 	
 	public ExportacaoServiceImpl() {
 		tipoDAO = new TipoAvariaDAO();
@@ -280,7 +285,7 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	}
 
 	@Override
-	public String exportarXLSResumo(List<Cor> cores, String item, String subitem) throws PromoveException {
+	public String exportarXLSResumo(List<Resumo> resumos, String item, String subitem) throws PromoveException {
 		try {
 			Workbook wb = new HSSFWorkbook();
 		    CreationHelper createHelper = wb.getCreationHelper();
@@ -289,18 +294,33 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    //Cabeçalho
 		    Row row_head = sheet.createRow(0);
 		    row_head.createCell(0).setCellValue(item);
-		    row_head.createCell(1).setCellValue(subitem);
-		    row_head.createCell(2).setCellValue("QUANTIDADE");
+		    row_head.createCell(1).setCellValue("QUANTIDADE");
+		    row_head.createCell(2).setCellValue("PERCENTUAL");
+		    row_head.createCell(3).setCellValue(subitem);
+		    row_head.createCell(4).setCellValue("QUANTIDADE");
+		    row_head.createCell(5).setCellValue("PERCENTUAL");
 		    
-		    for(int i = 0; i < cores.size(); i++) {
+		    int i = 0;
+		    int itemTotal = 0;
+		    for(i = 0; i < resumos.size(); i++) {
+		    	Integer vl = resumos.get(i).getQuantidadeItem();
 			    Row row = sheet.createRow(i+1);
-			    row.createCell(0).setCellValue(cores.get(i).getDescricao());
-			    row.createCell(1).setCellValue(cores.get(i).getCodigoExterno());
-			    row.createCell(2).setCellValue(cores.get(i).getCodigo());
+			    row.createCell(0).setCellValue(resumos.get(i).getItem());
+			    if (resumos.get(i).getQuantidadeItem() != null) {
+			    	row.createCell(1).setCellValue(resumos.get(i).getQuantidadeItem());
+				    row.createCell(2).setCellValue(formatPercentual.format(resumos.get(i).getPercentualItem()));
+			    }
+			    row.createCell(3).setCellValue(resumos.get(i).getSubitem());
+			    row.createCell(4).setCellValue(resumos.get(i).getQuantidadeSubitem());
+			    row.createCell(5).setCellValue(formatPercentual.format(resumos.get(i).getPercentualSubitem()));
+			    if (vl != null) itemTotal += vl;
 		    }
+		    Row row_footer = sheet.createRow(i+1);
+		    row_footer.createCell(0).setCellValue("Total");
+		    row_footer.createCell(1).setCellValue(itemTotal);
 
 		    // Write the output to a file/
-		    String fileName = Config.getConfig("tmp_dir") + "veiculos_" + System.currentTimeMillis()+".xls";
+		    String fileName = Config.getConfig("tmp_dir") + "resumo_" + System.currentTimeMillis()+".xls";
 		    FileOutputStream fileOut = new FileOutputStream(fileName);
 		    wb.write(fileOut);
 		    fileOut.close();
