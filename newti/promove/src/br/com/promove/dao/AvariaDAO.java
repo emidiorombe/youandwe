@@ -29,6 +29,11 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 	}
 
 	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws DAOException {
+		if ((oriAte == null || oriAte.getId() == null) &&
+				av.getOrigem() != null && av.getOrigem().getId() != null) oriAte = av.getOrigem();
+		if ((av.getOrigem() == null || av.getOrigem().getId() == null) && 
+				oriAte != null && oriAte.getId() != null) av.setOrigem(oriAte);
+		
 		StringBuilder hql = new StringBuilder();
 		hql.append("select av from Avaria av left JOIN FETCH av.fotos left join fetch av.veiculo veic");
 		hql.append(" left JOIN FETCH av.tipo tp left JOIN FETCH av.origem ori left JOIN FETCH av.extensao ext left JOIN FETCH av.local loc left JOIN FETCH av.clima cli");
@@ -44,7 +49,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			if(av.getOrigem() != null && av.getOrigem().getId() != null) {
 				hql.append(" and av.origem between :org and :org2");
 				addParamToQuery("org", av.getOrigem());
-				addParamToQuery("org2", oriAte.getId() == null ? av.getOrigem() : oriAte);
+				addParamToQuery("org2", oriAte);
 			}
 	
 			if(av.getLocal() != null && av.getLocal().getId() != null) {
@@ -136,15 +141,17 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 	}
 
 	public Map<String, List<PieData>> buscarResumo(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, String item, String subitem) throws DAOException {
-		if (item.isEmpty() && !subitem.isEmpty()) item = subitem;
-		if (subitem.equals(item)) subitem = "";
+		if ((oriFim == null || oriFim.getId() == null) &&
+				oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
+		if ((oriInicio == null || oriInicio.getId() == null) &&
+				oriFim != null && oriFim.getId() != null) oriInicio = oriFim;
 		
 		String nomeItem = (item.isEmpty() ? "cast('' as text)" : item + (item.equals("fabricante") ? ".nome" : ".descricao"));
 		String nomeSubitem = (subitem.isEmpty() ? "cast('' as text)" : subitem + (subitem.equals("fabricante") ? ".nome" : ".descricao"));
 		String idItem = (item.isEmpty() ? "" : (item.equals("fabricante") ? "modelo." : (item.equals("modelo") ? "veiculo." : "avaria.")) + item.replaceAll("avaria", "") + "_id");
 		String idSubitem = (subitem.isEmpty() ? "" : (subitem.equals("fabricante") ? "modelo." : (subitem.equals("modelo") ? "veiculo." : "avaria.")) + subitem.replaceAll("avaria", "") + "_id");
-		
 		StringBuilder sql = new StringBuilder();
+		
 		sql.append("select " + nomeItem + " as item, " + nomeSubitem + " as subitem, cast(count(*) as integer)");
 		sql.append(" from avaria, origemavaria, tipoavaria, veiculo");
 		if (!item.isEmpty() && !item.equals("origemavaria") && !item.equals("tipoavaria")) sql.append(", " + item);
@@ -160,9 +167,11 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) 
 			sql.append(" and veiculo.tipo = " + veiculo.getTipo().toString());
 
-		sql.append(" and origemavaria.codigo");
-		sql.append(" between " + oriInicio.getCodigo().toString());
-		sql.append(" and " + oriFim.getCodigo().toString());
+		if (oriInicio != null && oriInicio.getId() != null) {
+			sql.append(" and origemavaria.codigo");
+			sql.append(" between " + oriInicio.getCodigo().toString());
+			sql.append(" and " + oriFim.getCodigo().toString());
+		}
 		
 		sql.append(" and not exists (select * from avaria av2, origemavaria ori2");
 		sql.append(" where av2.origem_id = ori2.id");

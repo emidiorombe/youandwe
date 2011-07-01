@@ -10,7 +10,7 @@ import java.util.Map;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
-import br.com.promove.entity.Cor;
+import br.com.promove.entity.Resumo;
 import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
@@ -83,12 +83,12 @@ public class AnaliseResultadoForm extends BaseForm{
 		export = new Button("Gerar Arquivo", new AnaliseResultadoListener());
 		grafico = new Button("Gerar Gráfico", new AnaliseResultadoListener());
 		
-		cmbOrigemDe = new ComboBox("Origem De");
+		cmbOrigemDe = new ComboBox("Origem");
 		cmbOrigemDe.addContainerProperty("label", String.class, null);
 		
 		try {
-			//i = cmbOrigemDe.addItem(new OrigemAvaria());
-			//i.getItemProperty("label").setValue("Selecione...");
+			i = cmbOrigemDe.addItem(new OrigemAvaria());
+			i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemDe.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
@@ -102,14 +102,14 @@ public class AnaliseResultadoForm extends BaseForm{
 		cmbOrigemDe.setNullSelectionAllowed(false);
 		cmbOrigemDe.setItemCaptionPropertyId("label");
 		cmbOrigemDe.setWidth("250px");
-		//cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
+		cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
 		
-		cmbOrigemAte = new ComboBox("Origem Até");
+		cmbOrigemAte = new ComboBox("Origem (De/Até)");
 		cmbOrigemAte.addContainerProperty("label", String.class, null);
 		
 		try {
-			//i = cmbOrigemAte.addItem(new OrigemAvaria());
-			//i.getItemProperty("label").setValue("Selecione...");
+			i = cmbOrigemAte.addItem(new OrigemAvaria());
+			i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemAte.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
@@ -123,7 +123,7 @@ public class AnaliseResultadoForm extends BaseForm{
 		cmbOrigemAte.setNullSelectionAllowed(false);
 		cmbOrigemAte.setItemCaptionPropertyId("label");
 		cmbOrigemAte.setWidth("250px");
-		//cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
+		cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -156,7 +156,6 @@ public class AnaliseResultadoForm extends BaseForm{
 		footer.addComponent(search);
 		footer.addComponent(export);
 		footer.addComponent(grafico);
-		//TODO descomentar
 		footer.setVisible(true);
 		
 		return footer;
@@ -220,7 +219,7 @@ public class AnaliseResultadoForm extends BaseForm{
 		public void buttonClick(ClickEvent event) {
 			try {
 				commit();
-				List<Cor> cores = null;
+				List<Resumo> resumos = null;
 				Map<String, List<PieData>> itens = null;
 				
 				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
@@ -230,18 +229,17 @@ public class AnaliseResultadoForm extends BaseForm{
 				//Integer periodo = (Integer)cmbPeriodo.getValue();
 				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
 			
-				if(oride == null || oride.getId() == null || oriate == null || 
-						oriate.getId() == null || de == null || ate == null)
-				throw new IllegalArgumentException("Informe as origens e o período");
+				if(de == null || ate == null)
+					throw new IllegalArgumentException("Informe o período");
 			
 				itens = cadastroService.buscarAnaliseResultado(item.getBean(), de, ate, oride, oriate);
 				
 				if(event.getButton() == search) {
-					cores = criaListaCoresComItens(itens);
-					view.getTable().filterTable(cores);
+					resumos = criaListaResumoesComItens(itens);
+					view.getTable().filterTable(resumos);
 				}else if(event.getButton() == export) {
-					cores = criaListaCoresComItens(itens);
-					String file = exportacaoService.exportarXLSResumo(cores, "VEÍCULOS", "MODELO");
+					resumos = criaListaResumoesComItens(itens);
+					String file = exportacaoService.exportarXLSResumo(resumos, "VEÍCULOS", "MODELO");
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
@@ -283,19 +281,37 @@ public class AnaliseResultadoForm extends BaseForm{
 			}
 		}
 
-		private List<Cor> criaListaCoresComItens(Map<String, List<PieData>> itens) {
-			List<Cor> cores = new ArrayList<Cor>();
+		private List<Resumo> criaListaResumoesComItens(Map<String, List<PieData>> itens) {
+			List<Resumo> resumos = new ArrayList<Resumo>();
+			Integer itemTotalGeral = 0;
+
 			for(Map.Entry<String, List<PieData>> entry : itens.entrySet()) {
+				for(PieData pd : entry.getValue()) {
+					int vl = new Integer(pd.getValue());
+					itemTotalGeral += vl;
+				}
+			}
+	        view.getTable().setColumnFooter("quantidadeItem", itemTotalGeral.toString());
+	        
+	        for(Map.Entry<String, List<PieData>> entry : itens.entrySet()) {
 				String itemName = entry.getKey();
 				Integer itemTotal = 0;
 				for(PieData pd : entry.getValue()) {
 					int vl = new Integer(pd.getValue());
-					cores.add(new Cor(itemName, pd.getLabel(), vl));
 					itemTotal += vl;
 				}
-				cores.add(new Cor(itemName, "", itemTotal));
+				for(PieData pd : entry.getValue()) {
+					int vl = new Integer(pd.getValue());
+					double percentual = ((double)vl / (double)itemTotal) * 100;
+					if (pd == entry.getValue().get(0)) {
+						double percentualTotal = ((double)itemTotal / (double)itemTotalGeral) * 100;
+						resumos.add(new Resumo(itemName, itemTotal, percentualTotal, pd.getLabel(), vl, percentual));
+					}else {
+						resumos.add(new Resumo(null, null, null, pd.getLabel(), vl, percentual));
+					}
+				}
 			}
-			return cores;
+			return resumos;
 		}
 	}
 }

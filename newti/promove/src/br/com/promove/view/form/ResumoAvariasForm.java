@@ -12,7 +12,7 @@ import java.util.TreeMap;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
-import br.com.promove.entity.Cor;
+import br.com.promove.entity.Resumo;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
@@ -88,12 +88,12 @@ public class ResumoAvariasForm extends BaseForm{
 		export = new Button("Gerar Arquivo", new ResumoAvariasListener());
 		grafico = new Button("Gerar Gráfico", new ResumoAvariasListener());
 		
-		cmbOrigemDe = new ComboBox("Origem De");
+		cmbOrigemDe = new ComboBox("Origem");
 		cmbOrigemDe.addContainerProperty("label", String.class, null);
 		
 		try {
-			//i = cmbOrigemDe.addItem(new OrigemAvaria());
-			//i.getItemProperty("label").setValue("Selecione...");
+			i = cmbOrigemDe.addItem(new OrigemAvaria());
+			i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemDe.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
@@ -107,14 +107,14 @@ public class ResumoAvariasForm extends BaseForm{
 		cmbOrigemDe.setNullSelectionAllowed(false);
 		cmbOrigemDe.setItemCaptionPropertyId("label");
 		cmbOrigemDe.setWidth("250px");
-		//cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
+		cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
 		
-		cmbOrigemAte = new ComboBox("Origem Até");
+		cmbOrigemAte = new ComboBox("Origem (De/Até)");
 		cmbOrigemAte.addContainerProperty("label", String.class, null);
 		
 		try {
-			//i = cmbOrigemAte.addItem(new OrigemAvaria());
-			//i.getItemProperty("label").setValue("Selecione...");
+			i = cmbOrigemAte.addItem(new OrigemAvaria());
+			i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemAte.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
@@ -128,7 +128,7 @@ public class ResumoAvariasForm extends BaseForm{
 		cmbOrigemAte.setNullSelectionAllowed(false);
 		cmbOrigemAte.setItemCaptionPropertyId("label");
 		cmbOrigemAte.setWidth("250px");
-		//cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
+		cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -160,13 +160,13 @@ public class ResumoAvariasForm extends BaseForm{
 		i.getItemProperty("label").setValue("Selecione...");
 		i = cmbItem.addItem("tipoavaria");
 		i.getItemProperty("label").setValue("Tipo de avaria");
-		i = cmbItem .addItem("localavaria");
+		i = cmbItem.addItem("localavaria");
 		i.getItemProperty("label").setValue("Local de avaria");
-		i = cmbItem .addItem("origemavaria");
+		i = cmbItem.addItem("origemavaria");
 		i.getItemProperty("label").setValue("Origem de avaria");
-		i = cmbItem .addItem("modelo");
+		i = cmbItem.addItem("modelo");
 		i.getItemProperty("label").setValue("Modelo");
-		i = cmbItem .addItem("fabricante");
+		i = cmbItem.addItem("fabricante");
 		i.getItemProperty("label").setValue("Fabricante");
 		
 		cmbItem.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
@@ -182,13 +182,13 @@ public class ResumoAvariasForm extends BaseForm{
 		i.getItemProperty("label").setValue("Selecione...");
 		i = cmbSubitem.addItem("tipoavaria");
 		i.getItemProperty("label").setValue("Tipo de avaria");
-		i = cmbSubitem .addItem("localavaria");
+		i = cmbSubitem.addItem("localavaria");
 		i.getItemProperty("label").setValue("Local de avaria");
-		i = cmbSubitem .addItem("origemavaria");
+		i = cmbSubitem.addItem("origemavaria");
 		i.getItemProperty("label").setValue("Origem de avaria");
-		i = cmbSubitem .addItem("modelo");
+		i = cmbSubitem.addItem("modelo");
 		i.getItemProperty("label").setValue("Modelo");
-		i = cmbSubitem .addItem("fabricante");
+		i = cmbSubitem.addItem("fabricante");
 		i.getItemProperty("label").setValue("Fabricante");
 		
 		cmbSubitem.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
@@ -223,7 +223,6 @@ public class ResumoAvariasForm extends BaseForm{
 		footer.addComponent(search);
 		footer.addComponent(export);
 		footer.addComponent(grafico);
-		//TODO descomentar
 		footer.setVisible(true);
 		
 		return footer;
@@ -287,7 +286,7 @@ public class ResumoAvariasForm extends BaseForm{
 		public void buttonClick(ClickEvent event) {
 			try {
 				commit();
-				List<Cor> cores = null;
+				List<Resumo> resumos = null;
 				Map<String, List<PieData>> itens = null;
 				String item = null;
 				String subitem = null;
@@ -299,21 +298,27 @@ public class ResumoAvariasForm extends BaseForm{
 				Integer periodo = (Integer)cmbPeriodo.getValue();
 				item = (String)cmbItem.getValue();
 				subitem = (String)cmbSubitem.getValue();
+				
+				if (item.isEmpty() && !subitem.isEmpty()) item = subitem;
+				if (subitem.equals(item)) subitem = "";
+				
+				String itemLabel = (String)cmbItem.getItemCaption(item);
+				String subitemLabel = (String)cmbItem.getItemCaption(subitem);
+
+				
 				BeanItem<Veiculo> veic = (BeanItem<Veiculo>)getItemDataSource();
 				
 				if(de == null || ate == null)
 					throw new IllegalArgumentException("Informe o período");
-				if(oride == null || oride.getId() == null || oriate == null || oriate.getId() == null)
-					throw new IllegalArgumentException("Informe as origens");
 				
 				itens = avariaService.buscarResumo(veic.getBean(), de, ate, periodo, oride, oriate, item, subitem);
 				
 				if(event.getButton() == search) {
-					cores = criaListaCoresComItens(itens);
-					view.getTable().filterTable(cores);
+					resumos = criaListaResumoesComItens(itens);
+					view.getTable().filterTable(resumos);
 				}else if(event.getButton() == export) {
-					cores = criaListaCoresComItens(itens);
-					String file = exportacaoService.exportarXLSResumo(cores, item.toUpperCase(), subitem.toUpperCase());
+					resumos = criaListaResumoesComItens(itens);
+					String file = exportacaoService.exportarXLSResumo(resumos, itemLabel.toUpperCase(), subitemLabel.toUpperCase());
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
@@ -343,7 +348,11 @@ public class ResumoAvariasForm extends BaseForm{
 			        e.setWidth("600px");
 			        e.setHeight("400px");
 			        e.setParameter("FlashVars", "report="+xmlEncoded);
-			        Label lbl = new Label("<h2>Resumo de Avarias por Origem e Tipo de Avaria</h2>");
+			        String titulo = "<h2>Resumo de Avarias";
+			        if (!item.isEmpty()) titulo += " por " + itemLabel;
+			        if (!subitem.isEmpty()) titulo += " e " + subitemLabel;
+			        titulo += "</h2>";
+			        Label lbl = new Label(titulo);
 			        lbl.setContentMode(Label.CONTENT_XHTML);
 			        w.addComponent(lbl);
 			        w.addComponent(e);
@@ -382,26 +391,44 @@ public class ResumoAvariasForm extends BaseForm{
 			return data;
 		}
 
-		private List<Cor> criaListaCoresComItens(Map<String, List<PieData>> itens) {
-			List<Cor> cores = new ArrayList<Cor>();
-			Map<Integer, List<Cor>> ordered = new TreeMap<Integer, List<Cor>>(new OrdemResumoComparator());
+		private List<Resumo> criaListaResumoesComItens(Map<String, List<PieData>> itens) {
+			List<Resumo> resumos = new ArrayList<Resumo>();
+			Map<Integer, List<Resumo>> ordered = new TreeMap<Integer, List<Resumo>>(new OrdemResumoComparator());
+			Integer itemTotalGeral = 0;
+			
 			for(Map.Entry<String, List<PieData>> entry : itens.entrySet()) {
-				List<Cor> tmp_cores = new ArrayList<Cor>();
+				for(PieData pd : entry.getValue()) {
+					int vl = new Integer(pd.getValue());
+					itemTotalGeral += vl;
+				}
+			}
+	        view.getTable().setColumnFooter("quantidadeItem", itemTotalGeral.toString());
+	        
+			for(Map.Entry<String, List<PieData>> entry : itens.entrySet()) {
+				List<Resumo> tmp_resumos = new ArrayList<Resumo>();
 				String itemName = entry.getKey();
 				Integer itemTotal = 0;
 				for(PieData pd : entry.getValue()) {
 					int vl = new Integer(pd.getValue());
-					tmp_cores.add(new Cor(itemName, pd.getLabel(), vl));
 					itemTotal += vl;
 				}
-				tmp_cores.add(new Cor(itemName, "", itemTotal));
-				ordered.put(itemTotal, tmp_cores);
+				for(PieData pd : entry.getValue()) {
+					int vl = new Integer(pd.getValue());
+					double percentual = ((double)vl / (double)itemTotal) * 100;
+					if (pd == entry.getValue().get(0)) {
+						double percentualTotal = ((double)itemTotal / (double)itemTotalGeral) * 100;
+						tmp_resumos.add(new Resumo(itemName, itemTotal, percentualTotal, pd.getLabel(), vl, percentual));
+					}else {
+						tmp_resumos.add(new Resumo(null, null, null, pd.getLabel(), vl, percentual));
+					}
+				}
+				ordered.put(itemTotal, tmp_resumos);
 			}
 			
-			for(List<Cor> lcor: ordered.values()) {
-				cores.addAll(lcor);
+			for(List<Resumo> lresumo: ordered.values()) {
+				resumos.addAll(lresumo);
 			}
-			return cores;
+			return resumos;
 		}
 	}
 }
