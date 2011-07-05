@@ -208,8 +208,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		subsql.append(" from veiculo, modelo");
 		
 		subsql.append(" where veiculo.datacadastro");
-		subsql.append(" between '" + new SimpleDateFormat("yyyy-MM-dd").format(dtInicio) + "'");
-		subsql.append(" and '" + new SimpleDateFormat("yyyy-MM-dd").format(dtFim) + "'");
+		subsql.append(" between '" + dtInicio + "'");
+		subsql.append(" and '" + dtFim + "'");
 		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) 
 			subsql.append(" and veiculo.tipo = " + veiculo.getTipo().toString());
 		
