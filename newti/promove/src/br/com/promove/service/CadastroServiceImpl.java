@@ -261,8 +261,8 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	public List<Veiculo> buscarVeiculoPorFiltro(Veiculo veiculo, Date dtInicio, Date dtFim) throws PromoveException {
 		List<Veiculo> lista = null;
 		try {
-			Date init = DateUtils.montarDataInicialParaQuery(dtInicio); 
-			Date fim = DateUtils.montarDataFinalParaQuery(dtFim); 
+			Date init = DateUtils.montarDataInicialParaHQLQuery(dtInicio); 
+			Date fim = DateUtils.montarDataFinalParaHQLQuery(dtFim); 
 			
 			lista = veiculoDAO.getByFilter(veiculo, init, fim);
 		} catch (DAOException e) {
@@ -404,8 +404,8 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException {
 		List<Veiculo> lista = null;
 		try {
-			Date init = DateUtils.montarDataInicialParaQuery(de); 
-			Date fim = DateUtils.montarDataFinalParaQuery(ate); 
+			Date init = DateUtils.montarDataInicialParaHQLQuery(de); 
+			Date fim = DateUtils.montarDataFinalParaHQLQuery(ate); 
 			
 			lista = veiculoDAO.buscarVeiculosAuditoria(veiculo, init, fim, oride, oriate);
 		} catch (DAOException e) {
@@ -418,8 +418,8 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException {
 		Map<String, List<PieData>> lista = null;
 		try {
-			Date init = DateUtils.montarDataInicialParaQuery(de); 
-			Date fim = DateUtils.montarDataFinalParaQuery(ate); 
+			Date init = DateUtils.montarDataInicialParaSQLQuery(de); 
+			Date fim = DateUtils.montarDataFinalParaSQLQuery(ate);
 			
 			lista = veiculoDAO.buscarAnaliseResultado(veiculo, init, fim, oride, oriate);
 		} catch (DAOException e) {

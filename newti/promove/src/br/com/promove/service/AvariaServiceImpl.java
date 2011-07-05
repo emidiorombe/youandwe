@@ -307,8 +307,8 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	public List<Avaria> buscarAvariaPorFiltros(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws PromoveException {
 		List<Avaria> lista = null;
 		try {
-			Date init = DateUtils.montarDataInicialParaQuery(de); 
-			Date fim = DateUtils.montarDataFinalParaQuery(ate); 
+			Date init = DateUtils.montarDataInicialParaHQLQuery(de); 
+			Date fim = DateUtils.montarDataFinalParaHQLQuery(ate); 
 			
 			lista = avariaDAO.getAvariasPorFiltro(av, init, fim, periodo, movimentacao, registradas, oriAte, responsabilidade, fabricante);
 		} catch (DAOException e) {
@@ -454,8 +454,8 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	public Map<String, List<PieData>> buscarResumo(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, String subitem) throws PromoveException {
 		Map<String, List<PieData>> lista = null;
 		try {
-			Date init = DateUtils.montarDataInicialParaQuery(de); 
-			Date fim = DateUtils.montarDataFinalParaQuery(ate); 
+			Date init = DateUtils.montarDataInicialParaSQLQuery(de); 
+			Date fim = DateUtils.montarDataFinalParaSQLQuery(ate); 
 			
 			lista = avariaDAO.buscarResumo(veiculo, init, fim, periodo, oride, oriate, item, subitem);
 		} catch (DAOException e) {
