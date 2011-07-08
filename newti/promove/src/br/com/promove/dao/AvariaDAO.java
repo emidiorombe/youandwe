@@ -28,11 +28,11 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		return executeQuery(hql.toString(), 0, 100);
 	}
 
-	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws DAOException {
-		if ((oriAte == null || oriAte.getId() == null) &&
-				av.getOrigem() != null && av.getOrigem().getId() != null) oriAte = av.getOrigem();
-		if ((av.getOrigem() == null || av.getOrigem().getId() == null) && 
-				oriAte != null && oriAte.getId() != null) av.setOrigem(oriAte);
+	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws DAOException {
+		//if ((oriAte == null || oriAte.getId() == null) &&
+		//		av.getOrigem() != null && av.getOrigem().getId() != null) oriAte = av.getOrigem();
+		//if ((av.getOrigem() == null || av.getOrigem().getId() == null) && 
+		//		oriAte != null && oriAte.getId() != null) av.setOrigem(oriAte);
 		
 		StringBuilder hql = new StringBuilder();
 		hql.append("select av from Avaria av left JOIN FETCH av.fotos left join fetch av.veiculo veic");
@@ -46,10 +46,20 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 				addParamToQuery("tp", av.getTipo());
 			}
 			
+			//if(av.getOrigem() != null && av.getOrigem().getId() != null) {
+			//	hql.append(" and av.origem.codigo between :org and :org2");
+			//	addParamToQuery("org", av.getOrigem().getCodigo());
+			//	addParamToQuery("org2", oriAte.getCodigo());
+			//}
+	
 			if(av.getOrigem() != null && av.getOrigem().getId() != null) {
-				hql.append(" and av.origem between :org and :org2");
-				addParamToQuery("org", av.getOrigem());
-				addParamToQuery("org2", oriAte);
+				hql.append(" and av.origem.codigo >= :org");
+				addParamToQuery("org", av.getOrigem().getCodigo());
+			}
+	
+			if(oriAte != null && oriAte.getId() != null) {
+				hql.append(" and av.origem.codigo <= :org2");
+				addParamToQuery("org2", oriAte.getCodigo());
 			}
 	
 			if(av.getLocal() != null && av.getLocal().getId() != null) {
@@ -103,6 +113,13 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			hql.append(" and av2.origem.codigo < av.origem.codigo))");
 		}
 
+		if(vistoriaFinal && oriAte != null && oriAte.getId() != null) {
+			hql.append(" and exists (select av2 from Avaria av2");
+			hql.append(" where av2.veiculo = av.veiculo");
+			hql.append(" and av2.origem = :orgFinal)");
+			addParamToQuery("orgFinal", oriAte);
+		}
+
 		hql.append(" order by av.origem.codigo");
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
@@ -141,10 +158,10 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 	}
 
 	public Map<String, List<PieData>> buscarResumo(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, String item, String subitem) throws DAOException {
-		if ((oriFim == null || oriFim.getId() == null) &&
-				oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
-		if ((oriInicio == null || oriInicio.getId() == null) &&
-				oriFim != null && oriFim.getId() != null) oriInicio = oriFim;
+		//if ((oriFim == null || oriFim.getId() == null) &&
+		//		oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
+		//if ((oriInicio == null || oriInicio.getId() == null) &&
+		//		oriFim != null && oriFim.getId() != null) oriInicio = oriFim;
 		
 		String nomeItem = (item.isEmpty() ? "cast('' as text)" : item + (item.equals("fabricante") ? ".nome" : ".descricao"));
 		String nomeSubitem = (subitem.isEmpty() ? "cast('' as text)" : subitem + (subitem.equals("fabricante") ? ".nome" : ".descricao"));
@@ -167,11 +184,10 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) 
 			sql.append(" and veiculo.tipo = " + veiculo.getTipo().toString());
 
-		if (oriInicio != null && oriInicio.getId() != null) {
-			sql.append(" and origemavaria.codigo");
-			sql.append(" between " + oriInicio.getCodigo().toString());
-			sql.append(" and " + oriFim.getCodigo().toString());
-		}
+		if (oriInicio != null && oriInicio.getId() != null)
+			sql.append(" and origemavaria.codigo >= " + oriInicio.getCodigo().toString());
+		if (oriFim != null && oriFim.getId() != null)
+			sql.append(" and origemavaria.codigo <= " + oriFim.getCodigo().toString());
 		
 		sql.append(" and not exists (select * from avaria av2, origemavaria ori2");
 		sql.append(" where av2.origem_id = ori2.id");

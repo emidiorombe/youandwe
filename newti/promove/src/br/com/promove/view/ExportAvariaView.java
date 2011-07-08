@@ -42,10 +42,10 @@ public class ExportAvariaView extends BaseForm{
 		setSizeFull();
 		
 		chkMovimentacao = new CheckBox();
-		chkMovimentacao.setCaption("Desconsiderar movimentações sem avaria");
+		chkMovimentacao.setCaption("Considerar somente avarias");
 		
 		chkRegistradas = new CheckBox();
-		chkRegistradas.setCaption("Desconsiderar avarias previamente registradas");
+		chkRegistradas.setCaption("Considerar somente primeira avaria");
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));

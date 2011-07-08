@@ -18,7 +18,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class PromoveToolbar extends CssLayout{
 	//Toolbar items
-	private NativeButton toolbar_avaria = new NativeButton("Avarias");
+	private NativeButton toolbar_avaria = new NativeButton("Vistorias");
 	private NativeButton toolbar_averbacao = new NativeButton("Averbação");
 	private NativeButton toolbar_geral = new NativeButton("Cadastros");
 	private NativeButton toolbar_relatorios = new NativeButton("Relatórios");

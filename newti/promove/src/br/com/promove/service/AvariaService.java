@@ -129,7 +129,7 @@ public interface AvariaService extends Serializable{
 
 	void salvarAvaria(Avaria av, boolean isFlush)throws PromoveException;
 
-	List<Avaria> buscarAvariaPorFiltros(Avaria avaria, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws PromoveException;
+	List<Avaria> buscarAvariaPorFiltros(Avaria avaria, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws PromoveException;
 
 	List<ResponsabilidadeAvaria> buscarTodasResponsabilidades() throws PromoveException;
 

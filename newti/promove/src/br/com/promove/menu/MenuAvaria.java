@@ -65,18 +65,18 @@ public class MenuAvaria  extends CssLayout{
 		addStyleName("menu");
 		setWidth("100%");
 		
-		Label title = new Label("Gerenciar Avarias e Veículos");
+		Label title = new Label("Gerenciar Vistorias");
 		title.addStyleName("section");
 
-		list = new NativeButton("Listar Avarias");
-		add = new NativeButton("Registrar Avaria");
+		list = new NativeButton("Listar Vistorias");
+		add = new NativeButton("Registrar Vistoria");
 		list_veiculo = new NativeButton("Listar Veículos");
 		add_veiculo = new NativeButton("Registrar Veículo");
-		import_avaria = new NativeButton("Importar Avarias");
-		erro_import_avaria = new NativeButton("Auditar erros importação Avarias");
+		import_avaria = new NativeButton("Importar Vistorias");
+		erro_import_avaria = new NativeButton("Auditar erros de importação de Vistorias");
 		import_veiculos = new NativeButton("Importar Veículos");
-		erro_import_veiculos = new NativeButton("Auditar erros importação Veículos");
-		export = new NativeButton("Exportar Avarias");
+		erro_import_veiculos = new NativeButton("Auditar erros de importação de Veículos");
+		export = new NativeButton("Exportar Vistorias");
 		auditoria = new NativeButton("Auditoria de Vistorias");
 		analise = new NativeButton("Análise de Resultado");
 		resumo = new NativeButton("Resumo de Avarias");
@@ -102,7 +102,8 @@ public class MenuAvaria  extends CssLayout{
 			import_veiculos.setVisible(false);
 			erro_import_veiculos.setVisible(false);
 			export.setVisible(false);
-			auditoria.setVisible(false);
+			if(user.getTipo().getId() != 5) 
+				auditoria.setVisible(false);
 			analise.setVisible(false);
 			resumo.setVisible(false);
 		}

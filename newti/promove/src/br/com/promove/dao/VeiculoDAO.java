@@ -110,18 +110,21 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 	}
 
 	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oriInicio, OrigemAvaria oriFim) throws DAOException {
-		if ((oriFim == null || oriFim.getId() == null) &&
-				oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
-		if ((oriInicio == null || oriInicio.getId() == null) &&
-				oriFim != null && oriFim.getId() != null) oriInicio = oriFim;
+		//if ((oriFim == null || oriFim.getId() == null) &&
+		//		oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
+		//if ((oriInicio == null || oriInicio.getId() == null) &&
+		//		oriFim != null && oriFim.getId() != null) oriInicio = oriFim;
 		
 		StringBuilder origens = new StringBuilder();
 		
 		StringBuilder hql = new StringBuilder();
-		hql.append("select ori from OrigemAvaria ori");
+		hql.append("select ori from OrigemAvaria ori where 1=1");
 		if (oriInicio != null && oriInicio.getId() != null) {
-			hql.append(" where ori.codigo between :oriDe and :oriAte");
+			hql.append(" and ori.codigo >= :oriDe");
 			addParamToQuery("oriDe", oriInicio.getCodigo());
+		}
+		if (oriFim != null && oriFim.getId() != null) {
+			hql.append(" and ori.codigo <= :oriAte");
 			addParamToQuery("oriAte", oriFim.getCodigo());
 		}
 		hql.append(" order by ori.codigo");
@@ -198,10 +201,10 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 	}
 
 	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oriInicio, OrigemAvaria oriFim) throws DAOException {
-		if ((oriFim == null || oriFim.getId() == null) &&
-				oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
-		if ((oriInicio == null || oriInicio.getId() == null) &&
-				oriFim != null && oriFim.getId() != null) oriInicio = oriFim;
+		//if ((oriFim == null || oriFim.getId() == null) &&
+		//		oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
+		//if ((oriInicio == null || oriInicio.getId() == null) &&
+		//		oriFim != null && oriFim.getId() != null) oriInicio = oriFim;
 		
 		StringBuilder subsql = new StringBuilder();
 		subsql.append(" select cast(':tipo' as text) as tipo, modelo.descricao as descricao");
@@ -217,11 +220,10 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		
 		subsql.append(" and :existe (select avaria.id from avaria, tipoavaria, origemavaria");
 		subsql.append(" where tipoavaria.movimentacao = false");
-		if (oriInicio != null && oriInicio.getId() != null) {
-			subsql.append(" and origemavaria.codigo");
-			subsql.append(" between " + oriInicio.getCodigo().toString());
-			subsql.append(" and " + oriFim.getCodigo().toString());
-		}
+		if (oriInicio != null && oriInicio.getId() != null)
+			subsql.append(" and origemavaria.codigo >= " + oriInicio.getCodigo().toString());
+		if (oriFim != null && oriFim.getId() != null)
+			subsql.append(" and origemavaria.codigo <= " + oriFim.getCodigo().toString());
 		
 		subsql.append(" and veiculo.id = avaria.veiculo_id");
 		subsql.append(" and avaria.origem_id = origemavaria.id");
