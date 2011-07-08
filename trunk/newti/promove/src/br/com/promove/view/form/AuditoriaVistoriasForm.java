@@ -69,18 +69,18 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		search = new Button("Buscar", new AuditoriaVistoriasListener());
 		export = new Button("Gerar Arquivo", new AuditoriaVistoriasListener());
 		
-		cmbOrigemDe = new ComboBox("Origem");
+		cmbOrigemDe = new ComboBox("Origem De");
 		cmbOrigemDe.addContainerProperty("label", String.class, null);
 		
 		try {
-			i = cmbOrigemDe.addItem(new OrigemAvaria());
-			i.getItemProperty("label").setValue("Selecione...");
+			//i = cmbOrigemDe.addItem(new OrigemAvaria());
+			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemDe.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
 			}
 		} catch (PromoveException e) {
-			showErrorMessage(this, "Não foi possível buscar as Origens de Avaria");
+			showErrorMessage(this, "Não foi possível buscar as Origens");
 		}
 
 		cmbOrigemDe.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
@@ -90,18 +90,19 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		cmbOrigemDe.setWidth("250px");
 		cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
 		
-		cmbOrigemAte = new ComboBox("Origem (De/Até)");
+		cmbOrigemAte = new ComboBox("Origem Até");
 		cmbOrigemAte.addContainerProperty("label", String.class, null);
 		
 		try {
-			i = cmbOrigemAte.addItem(new OrigemAvaria());
-			i.getItemProperty("label").setValue("Selecione...");
+			//i = cmbOrigemAte.addItem(new OrigemAvaria());
+			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemAte.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
+				cmbOrigemAte.setValue(or);
 			}
 		} catch (PromoveException e) {
-			showErrorMessage(this, "Não foi possível buscar as Origens de Avaria");
+			showErrorMessage(this, "Não foi possível buscar as Origens");
 		}
 
 		cmbOrigemAte.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
@@ -109,7 +110,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		cmbOrigemAte.setNullSelectionAllowed(false);
 		cmbOrigemAte.setItemCaptionPropertyId("label");
 		cmbOrigemAte.setWidth("250px");
-		cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
+		//cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));

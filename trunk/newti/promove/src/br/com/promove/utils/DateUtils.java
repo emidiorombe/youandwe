@@ -34,8 +34,6 @@ public class DateUtils {
 		cal.set(Calendar.SECOND, 59);
 		cal.set(Calendar.MILLISECOND, 999);
 		
-		cal.add(Calendar.DATE, -1);
-		
 		return cal.getTime();
 	}
 

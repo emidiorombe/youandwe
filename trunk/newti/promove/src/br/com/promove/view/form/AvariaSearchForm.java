@@ -58,6 +58,7 @@ public class AvariaSearchForm extends BaseForm{
 	private PopupDateField txtAte;
 	private CheckBox chkMovimentacao;
 	private CheckBox chkRegistradas;
+	private CheckBox chkVistoriaFinal;
 	private ComboBox cmbPeriodo;
 	private PromoveApplication app;
 	
@@ -79,18 +80,19 @@ public class AvariaSearchForm extends BaseForm{
 		export = new Button("Gerar Arquivo", new AvariaSearchListener());
 		exportXml = new Button("Gerar XML", new AvariaSearchListener());
 		
-		cmbOrigemAte = new ComboBox("Origem Avaria (De/Até)");
+		cmbOrigemAte = new ComboBox("Origem Até");
 		cmbOrigemAte.addContainerProperty("label", String.class, null);
 		
 		try {
-			i = cmbOrigemAte.addItem(new OrigemAvaria());
-			i.getItemProperty("label").setValue("Selecione...");
+			//i = cmbOrigemAte.addItem(new OrigemAvaria());
+			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemAte.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
+				cmbOrigemAte.setValue(or);
 			}
 		} catch (PromoveException e) {
-			showErrorMessage(this, "Não foi possível buscar as Origens de Avaria");
+			showErrorMessage(this, "Não foi possível buscar as Origens");
 		}
 
 		cmbOrigemAte.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
@@ -98,7 +100,6 @@ public class AvariaSearchForm extends BaseForm{
 		cmbOrigemAte.setNullSelectionAllowed(false);
 		cmbOrigemAte.setItemCaptionPropertyId("label");
 		cmbOrigemAte.setWidth("250px");
-		cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
 		
 		cmbResponsabilidade = new ComboBox("Responsabilidade");
 		cmbResponsabilidade.addContainerProperty("label", String.class, null);
@@ -143,10 +144,13 @@ public class AvariaSearchForm extends BaseForm{
 		cmbFabricante.setValue(cmbFabricante.getItemIds().iterator().next());
 		
 		chkMovimentacao = new CheckBox();
-		chkMovimentacao.setCaption("Desconsiderar movimentações sem avaria");
+		chkMovimentacao.setCaption("Considerar somente avarias");
 		
 		chkRegistradas = new CheckBox();
-		chkRegistradas.setCaption("Desconsiderar avarias previamente registradas");
+		chkRegistradas.setCaption("Considerar somente primeira avaria");
+		
+		chkVistoriaFinal = new CheckBox();
+		chkVistoriaFinal.setCaption("Considerar somente veículos com vistoria na origem final");
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -160,9 +164,9 @@ public class AvariaSearchForm extends BaseForm{
 		cmbPeriodo.addContainerProperty("label", String.class, null);
 		
 		i = cmbPeriodo.addItem(1);
-		i.getItemProperty("label").setValue("Data de lançamento da avaria");
+		i.getItemProperty("label").setValue("Data da vistoria");
 		i = cmbPeriodo.addItem(2);
-		i.getItemProperty("label").setValue("Data de cadastro do veículo");
+		i.getItemProperty("label").setValue("Data de registro do veículo");
 		
 		cmbPeriodo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		cmbPeriodo.setImmediate(true);
@@ -186,7 +190,7 @@ public class AvariaSearchForm extends BaseForm{
 		
 		coluna2.setItemDataSource(avaria);
 		coluna2.setFormFieldFactory(new AvariaFieldFactory(this, avaria.getBean().getId() == null));
-		coluna2.setVisibleItemProperties(new Object[]{"tipo", "local", "origem"});
+		coluna2.setVisibleItemProperties(new Object[]{"local", "tipo", "origem"});
 		
 		coluna1.addField("cmbFabricante", cmbFabricante);
 		coluna1.addField("txtDe", txtDe);
@@ -196,6 +200,7 @@ public class AvariaSearchForm extends BaseForm{
 		coluna2.addField("cmbResponsabilidade", cmbResponsabilidade);
 		coluna2.addField("chkMovimentacao", chkMovimentacao);
 		coluna2.addField("chkRegistradas", chkRegistradas);
+		coluna2.addField("chkVistoriaFinal", chkVistoriaFinal);
 		//coluna2.addField("cmbModelo", cmbModelo);
 		//coluna2.addField("cmbTipo", cmbTipo);
 		colunas.addComponent(coluna1);
@@ -314,7 +319,7 @@ public class AvariaSearchForm extends BaseForm{
 					return c;
 				}
 			}catch(PromoveException pe) {
-				showErrorMessage(avariaForm, "Não foi possível montar o formulário de Avaria");
+				showErrorMessage(avariaForm, "Não foi possível montar o formulário de Vistoria");
 			}
 			return null;
 		}
@@ -336,7 +341,7 @@ public class AvariaSearchForm extends BaseForm{
 			
 			try {
 				if(propertyId.equals("tipo")) {
-					ComboBox c = new ComboBox("Tipo Avaria");
+					ComboBox c = new ComboBox("Tipo de Avaria");
 					c.addContainerProperty("label", String.class, null);
 					
 					Item i_default = c.addItem(new TipoAvaria());
@@ -361,7 +366,7 @@ public class AvariaSearchForm extends BaseForm{
 					
 					return c;
 				}else if(propertyId.equals("local")) {
-					ComboBox c = new ComboBox("Local Avaria");
+					ComboBox c = new ComboBox("Local da Avaria");
 					c.addContainerProperty("label", String.class, null);
 
 					
@@ -386,11 +391,11 @@ public class AvariaSearchForm extends BaseForm{
 					
 					return c;
 				}else if(propertyId.equals("origem")) {
-					ComboBox c = new ComboBox("Origem Avaria");
+					ComboBox c = new ComboBox("Origem De");
 					c.addContainerProperty("label", String.class, null);
 
-					Item i_default = c.addItem(new OrigemAvaria());
-					i_default.getItemProperty("label").setValue("Selecione...");
+					//Item i_default = c.addItem(new OrigemAvaria());
+					//i_default.getItemProperty("label").setValue("Selecione...");
 
 					for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 						Item i = c.addItem(or);
@@ -411,7 +416,7 @@ public class AvariaSearchForm extends BaseForm{
 					return c;
 				}
 			}catch(PromoveException pe) {
-				showErrorMessage(avariaForm, "Não foi possível montar o formulário de Avaria");
+				showErrorMessage(avariaForm, "Não foi possível montar o formulário de vistorias");
 			}
 			return null;
 		}
@@ -432,6 +437,7 @@ public class AvariaSearchForm extends BaseForm{
 				Integer periodo = (Integer)cmbPeriodo.getValue();
 				Boolean movimentacao = (Boolean)chkMovimentacao.getValue();
 				Boolean registradas = (Boolean)chkRegistradas.getValue();
+				Boolean vistoriaFinal = (Boolean)chkVistoriaFinal.getValue();
 				BeanItem<Veiculo> veiculo = (BeanItem<Veiculo>)coluna1.getItemDataSource();
 				BeanItem<Avaria> avaria = (BeanItem<Avaria>)coluna2.getItemDataSource();
 				avaria.getBean().setVeiculo(veiculo.getBean());
@@ -441,7 +447,7 @@ public class AvariaSearchForm extends BaseForm{
 						throw new IllegalArgumentException("Informe um chassi ou período");
 				}
 				
-				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(avaria.getBean(), de, ate, periodo, movimentacao, registradas, oriAte, responsabilidade, fabricante);
+				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(avaria.getBean(), de, ate, periodo, movimentacao, registradas, vistoriaFinal, oriAte, responsabilidade, fabricante);
 
 				if(event.getButton() == search) {
 					view.getTable().filterTable(avarias);
@@ -459,7 +465,7 @@ public class AvariaSearchForm extends BaseForm{
 			}catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
 			}catch (Exception e) {
-				showErrorMessage(view, "Não foi possível buscar as avarias");
+				showErrorMessage(view, "Não foi possível buscar as vistorias");
 				e.printStackTrace();
 			}
 		}

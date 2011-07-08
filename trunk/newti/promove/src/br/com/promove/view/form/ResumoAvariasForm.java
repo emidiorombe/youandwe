@@ -88,18 +88,18 @@ public class ResumoAvariasForm extends BaseForm{
 		export = new Button("Gerar Arquivo", new ResumoAvariasListener());
 		grafico = new Button("Gerar Gráfico", new ResumoAvariasListener());
 		
-		cmbOrigemDe = new ComboBox("Origem");
+		cmbOrigemDe = new ComboBox("Origem De");
 		cmbOrigemDe.addContainerProperty("label", String.class, null);
 		
 		try {
-			i = cmbOrigemDe.addItem(new OrigemAvaria());
-			i.getItemProperty("label").setValue("Selecione...");
+			//i = cmbOrigemDe.addItem(new OrigemAvaria());
+			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemDe.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
 			}
 		} catch (PromoveException e) {
-			showErrorMessage(this, "Não foi possível buscar as Origens de Avaria");
+			showErrorMessage(this, "Não foi possível buscar as Origens");
 		}
 
 		cmbOrigemDe.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
@@ -109,18 +109,19 @@ public class ResumoAvariasForm extends BaseForm{
 		cmbOrigemDe.setWidth("250px");
 		cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
 		
-		cmbOrigemAte = new ComboBox("Origem (De/Até)");
+		cmbOrigemAte = new ComboBox("Origem Até");
 		cmbOrigemAte.addContainerProperty("label", String.class, null);
 		
 		try {
-			i = cmbOrigemAte.addItem(new OrigemAvaria());
-			i.getItemProperty("label").setValue("Selecione...");
+			//i = cmbOrigemAte.addItem(new OrigemAvaria());
+			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
 				i = cmbOrigemAte.addItem(or);
 				i.getItemProperty("label").setValue(or.getDescricao());
+				cmbOrigemAte.setValue(or);
 			}
 		} catch (PromoveException e) {
-			showErrorMessage(this, "Não foi possível buscar as Origens de Avaria");
+			showErrorMessage(this, "Não foi possível buscar as Origens");
 		}
 
 		cmbOrigemAte.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
@@ -128,7 +129,7 @@ public class ResumoAvariasForm extends BaseForm{
 		cmbOrigemAte.setNullSelectionAllowed(false);
 		cmbOrigemAte.setItemCaptionPropertyId("label");
 		cmbOrigemAte.setWidth("250px");
-		cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
+		//cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -142,9 +143,9 @@ public class ResumoAvariasForm extends BaseForm{
 		cmbPeriodo.addContainerProperty("label", String.class, null);
 		
 		i = cmbPeriodo.addItem(1);
-		i.getItemProperty("label").setValue("Data de lançamento da avaria");
+		i.getItemProperty("label").setValue("Data da vistoria");
 		i = cmbPeriodo.addItem(2);
-		i.getItemProperty("label").setValue("Data de cadastro do veículo");
+		i.getItemProperty("label").setValue("Data de registro do veículo");
 		
 		cmbPeriodo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		cmbPeriodo.setImmediate(true);
@@ -158,12 +159,12 @@ public class ResumoAvariasForm extends BaseForm{
 		
 		i = cmbItem.addItem("");
 		i.getItemProperty("label").setValue("Selecione...");
+		i = cmbItem.addItem("origemavaria");
+		i.getItemProperty("label").setValue("Origem");
+		i = cmbItem.addItem("localavaria");
+		i.getItemProperty("label").setValue("Local da avaria");
 		i = cmbItem.addItem("tipoavaria");
 		i.getItemProperty("label").setValue("Tipo de avaria");
-		i = cmbItem.addItem("localavaria");
-		i.getItemProperty("label").setValue("Local de avaria");
-		i = cmbItem.addItem("origemavaria");
-		i.getItemProperty("label").setValue("Origem de avaria");
 		i = cmbItem.addItem("modelo");
 		i.getItemProperty("label").setValue("Modelo");
 		i = cmbItem.addItem("fabricante");
@@ -180,12 +181,12 @@ public class ResumoAvariasForm extends BaseForm{
 		
 		i = cmbSubitem.addItem("");
 		i.getItemProperty("label").setValue("Selecione...");
+		i = cmbSubitem.addItem("origemavaria");
+		i.getItemProperty("label").setValue("Origem");
+		i = cmbSubitem.addItem("localavaria");
+		i.getItemProperty("label").setValue("Local da avaria");
 		i = cmbSubitem.addItem("tipoavaria");
 		i.getItemProperty("label").setValue("Tipo de avaria");
-		i = cmbSubitem.addItem("localavaria");
-		i.getItemProperty("label").setValue("Local de avaria");
-		i = cmbSubitem.addItem("origemavaria");
-		i.getItemProperty("label").setValue("Origem de avaria");
 		i = cmbSubitem.addItem("modelo");
 		i.getItemProperty("label").setValue("Modelo");
 		i = cmbSubitem.addItem("fabricante");

@@ -34,7 +34,7 @@ import com.vaadin.ui.Window;
 
 public class AvariaTable extends Table{
 	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "modelo", "dataLancamento", "hora", "origem", "local", "tipo", "extensao", "fotos", "clima", "usuario", "observacao"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Veículo", "Modelo", "Data Lanc.", "Hora", "Origem", "Local", "Tipo", "Extensão", "Fotos", "Clima", "Usuário", "Obs"};
+	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Modelo", "Data Lanc.", "Hora", "Origem", "Local", "Tipo", "Extensão", "Fotos", "Clima", "Usuário", "Obs"};
 	
 	private AvariaService avariaService;
 	private AvariaTableContainer container;
@@ -63,25 +63,25 @@ public class AvariaTable extends Table{
 		setColumnHeaders(COL_HEADERS);
 		addListener(new RowSelectedListener());
 		
-//		addGeneratedColumn("veiculo", new AvariaTableColumnGenerator(this));
-//		addGeneratedColumn("tipo", new AvariaTableColumnGenerator(this));
-//		addGeneratedColumn("local", new AvariaTableColumnGenerator(this));
-//		addGeneratedColumn("origem", new AvariaTableColumnGenerator(this));
-//		addGeneratedColumn("extensao", new AvariaTableColumnGenerator(this));
-//		addGeneratedColumn("clima", new AvariaTableColumnGenerator(this));
-		addGeneratedColumn("modelo", new AvariaTableColumnGenerator(this));
-		addGeneratedColumn("dataLancamento", new AvariaTableColumnGenerator(this));
-//		addGeneratedColumn("usuario", new AvariaTableColumnGenerator(this));
-		addGeneratedColumn("observacao", new AvariaTableColumnGenerator(this));
-		addGeneratedColumn("fotos", new AvariaTableColumnGenerator(this));
 		addGeneratedColumn("id", new AvariaTableColumnGenerator(this));
+		//addGeneratedColumn("veiculo", new AvariaTableColumnGenerator(this));
+		addGeneratedColumn("modelo", new AvariaTableColumnGenerator(this));
+		//addGeneratedColumn("origem", new AvariaTableColumnGenerator(this));
+		//addGeneratedColumn("local", new AvariaTableColumnGenerator(this));
+		//addGeneratedColumn("tipo", new AvariaTableColumnGenerator(this));
+		//addGeneratedColumn("extensao", new AvariaTableColumnGenerator(this));
+		//addGeneratedColumn("clima", new AvariaTableColumnGenerator(this));
+		addGeneratedColumn("dataLancamento", new AvariaTableColumnGenerator(this));
+		//addGeneratedColumn("usuario", new AvariaTableColumnGenerator(this));
+		//addGeneratedColumn("observacao", new AvariaTableColumnGenerator(this));
+		addGeneratedColumn("fotos", new AvariaTableColumnGenerator(this));
 		
 		try {
 			setColumnCollapsed("hora", true);
 			setColumnCollapsed("extensao", true);
 			setColumnCollapsed("clima", true);
 			setColumnCollapsed("usuario", true);
-			setColumnCollapsed("observacao", true);
+			//setColumnCollapsed("observacao", true);
 			if (this instanceof AvariaVeiculoTable) {
 				setColumnCollapsed("veiculo", true);
 				setColumnCollapsed("modelo", true);
@@ -106,7 +106,7 @@ public class AvariaTable extends Table{
 		try {
 			Avaria avaria = new Avaria();
 			avaria.setVeiculo(veiculo);
-			filterTable(avariaService.buscarAvariaPorFiltros(avaria, null, null, null, false, false, null, null, null));
+			filterTable(avariaService.buscarAvariaPorFiltros(avaria, null, null, null, false, false, false, null, null, null));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -142,11 +142,11 @@ public class AvariaTable extends Table{
 			final Avaria av = (Avaria)itemId;
 			if(columnId.toString().equals("dataLancamento")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(av.getDataLancamento()));
-			}else if(columnId.toString().equals("observacao")) {
-					if(av.getObservacao() != null && av.getObservacao().length() > 5)
-						return new Label(av.getObservacao().substring(0, 5) + "...");
-					else
-						return new Label(av.getObservacao());
+			//}else if(columnId.toString().equals("observacao")) {
+			//		if(av.getObservacao() != null && av.getObservacao().length() > 5)
+			//			return new Label(av.getObservacao().substring(0, 5) + "...");
+			//		else
+			//			return new Label(av.getObservacao());
 			}else if(columnId.toString().equals("fotos")) { 
 				Button b = new Button(Integer.toString(av.getFotos().size()));	
 				b.setStyleName(BaseTheme.BUTTON_LINK);

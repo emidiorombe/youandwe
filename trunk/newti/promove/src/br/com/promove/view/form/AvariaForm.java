@@ -75,7 +75,7 @@ public class AvariaForm extends BaseForm {
 	public void createFormBody(BeanItem<Avaria> avaria){
 		setItemDataSource(avaria);
 		setFormFieldFactory(new AvariaFieldFactory(this, avaria.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"veiculo", "tipo", "local", "origem", "extensao", "clima", "dataLancamento","hora", "foto", "observacao"});
+		setVisibleItemProperties(new Object[]{"veiculo", "origem", "local", "tipo", "extensao", "clima", "dataLancamento","hora", "foto", "observacao"});
 		
 	}
 	
@@ -94,204 +94,204 @@ public class AvariaForm extends BaseForm {
 		createFormBody(new BeanItem<Avaria>(new Avaria()));
 	}
 	
-
-class AvariaFieldFactory extends DefaultFieldFactory{
-	
-	private AvariaForm avariaForm;
-	private boolean isNew;
-
-	public AvariaFieldFactory(AvariaForm avariaForm, boolean isNew) {
-		this.avariaForm = avariaForm;
-		this.isNew = isNew;
-	}
-
-	@Override
-	public Field createField(Item item, Object propertyId, Component uiContext) {
-		Field f = super.createField(item, propertyId, uiContext);
+	class AvariaFieldFactory extends DefaultFieldFactory{
 		
-		try {
-			if(propertyId.equals("tipo")) {
-				ComboBox c = new ComboBox("Tipo Avaria");
-				c.addContainerProperty("label", String.class, null);
-				
-				for(TipoAvaria tp: avariaService.buscarTodosTipoAvaria()){
-					Item i = c.addItem(tp);
-					i.getItemProperty("label").setValue(tp.getDescricao());
-				}
-				
-				c.setRequired(true);
-				c.setRequiredError("Tipo de Avaria obrigatório");
-				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-				c.setImmediate(true);
-				c.setNullSelectionAllowed(false);
-				c.setPropertyDataSource(item.getItemProperty(propertyId));
-				c.setItemCaptionPropertyId("label");
-				c.setWidth("250px");
-				
-				return c;
-			}else if(propertyId.equals("local")) {
-				ComboBox c = new ComboBox("Local Avaria");
-				c.addContainerProperty("label", String.class, null);
-				
-				for(LocalAvaria l: avariaService.buscarTodosLocaisAvaria()){
-					Item i = c.addItem(l);
-					i.getItemProperty("label").setValue(l.getDescricao());
-				}
-				
-				c.setRequired(true);
-				c.setRequiredError("Local de Avaria obrigatório");
-				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-				c.setImmediate(true);
-				c.setNullSelectionAllowed(false);
-				c.setPropertyDataSource(item.getItemProperty(propertyId));
-				c.setItemCaptionPropertyId("label");
-				c.setWidth("250px");
-				
-				return c;
-			}else if(propertyId.equals("origem")) {
-				ComboBox c = new ComboBox("Origem Avaria");
-				c.addContainerProperty("label", String.class, null);
-				
-				for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
-					Item i = c.addItem(or);
-					i.getItemProperty("label").setValue(or.getDescricao());
-				}
-				
-				c.setRequired(true);
-				c.setRequiredError("Origem de Avaria obrigatória");
-				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-				c.setImmediate(true);
-				c.setNullSelectionAllowed(false);
-				c.setPropertyDataSource(item.getItemProperty(propertyId));
-				c.setItemCaptionPropertyId("label");
-				c.setWidth("250px");
-				
-				return c;
-			}else if(propertyId.equals("extensao")) {
-				ComboBox c = new ComboBox("Extensão Avaria");
-				c.addContainerProperty("label", String.class, null);
-				
-				for(ExtensaoAvaria ext: avariaService.buscarTodasExtensoesAvaria()){
-					Item i = c.addItem(ext);
-					i.getItemProperty("label").setValue(ext.getDescricao());
-				}
-				
-				c.setRequired(true);
-				c.setRequiredError("Extensão obrigatória");
-				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-				c.setImmediate(true);
-				c.setNullSelectionAllowed(false);
-				c.setPropertyDataSource(item.getItemProperty(propertyId));
-				c.setItemCaptionPropertyId("label");
-				c.setWidth("150px");
-				
-				return c;
-			}else if(propertyId.equals("clima")) {
-				ComboBox c = new ComboBox("Condições Climáticas");
-				c.addContainerProperty("label", String.class, null);
-				
-				for(Clima cl: avariaService.buscarTodosClimas()){
-					Item i = c.addItem(cl);
-					i.getItemProperty("label").setValue(cl.getDescricao());
-				}
-				
-				c.setRequired(true);
-				c.setRequiredError("Condição Climática obrigatória");
-				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-				c.setImmediate(true);
-				c.setNullSelectionAllowed(false);
-				c.setPropertyDataSource(item.getItemProperty(propertyId));
-				c.setItemCaptionPropertyId("label");
-				c.setWidth("150px");
-				
-				return c;
-			}else if(propertyId.equals("observacao")) {
-				TextField tf = new TextField("Observação", "");
-				tf.setNullRepresentation("");
-				tf.setRows(5);
-				tf.setColumns(20);
-				tf.setImmediate(true);
-				return tf;
-			}else if(propertyId.equals("foto")){
-				TextField tf = new TextField("Foto");
-				tf.setNullRepresentation("");
-				tf.setImmediate(true);
-				return tf;
-			}else if(propertyId.equals("veiculo")){
-				TextField tf = new TextField("Chassi");
-				tf.setNullRepresentation("");
-				tf.setImmediate(true);
-				tf.setWidth("200px");
-				return tf;
-			}else if(propertyId.equals("dataLancamento")) {
-				PopupDateField data = new PopupDateField("Data");
-				data.setResolution(DateField.RESOLUTION_DAY);
-				data.setLocale(new Locale("pt", "BR"));
-				return data;
-			}else if(propertyId.equals("hora")) {
-				TextField tf = new TextField("Hora");
-				tf.setNullRepresentation("");
-				tf.setImmediate(true);
-				tf.setWidth("70px");
-				return tf;
-			}
-		}catch(PromoveException pe) {
-			pe.printStackTrace();
-			showErrorMessage(avariaForm, "Não foi possível montar o formulário de Avaria");
+		private AvariaForm avariaForm;
+		private boolean isNew;
+	
+		public AvariaFieldFactory(AvariaForm avariaForm, boolean isNew) {
+			this.avariaForm = avariaForm;
+			this.isNew = isNew;
 		}
-		return null;
-	}
-}
-
-class FormButtonListener implements ClickListener{
-
-	private AvariaForm form;
-
-	public FormButtonListener(AvariaForm form) {
-		this.form = form;
-	}
-
-	@Override
-	public void buttonClick(ClickEvent event) {
-		if(event.getButton() == save){
-			try{
-				validate();
-				if(isValid()){
-					commit();
-					BeanItem<Avaria> item = (BeanItem<Avaria>) getItemDataSource();
-					
-					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
-					Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
-					
-					item.getBean().setUsuario(user);
-					
-					avariaService.salvarAvaria(item.getBean());
-					addNewAvaria();
-					showSuccessMessage(form, "Avaria salva!");
-				}
-			}catch(InvalidValueException ive){
-				setValidationVisible(true);
-			}catch(IllegalArgumentException iae){
-				showErrorMessage(form,iae.getMessage());
-			}catch(PromoveException de){
-				showErrorMessage(form,"Não foi possível salvar Avaria");
-			}
+	
+		@Override
+		public Field createField(Item item, Object propertyId, Component uiContext) {
+			Field f = super.createField(item, propertyId, uiContext);
 			
-		}else if(event.getButton() == novo){
-			addNewAvaria();
-		}else if(event.getButton() == excluir){
 			try {
-				BeanItem<Avaria> item = (BeanItem<Avaria>) getItemDataSource();
-				if(item.getBean().getId() != null) {
-					avariaService.excluirAvaria(item.getBean());
-					showSuccessMessage(form, "Avaria removida");
+				if(propertyId.equals("tipo")) {
+					ComboBox c = new ComboBox("Tipo de Avaria");
+					c.addContainerProperty("label", String.class, null);
+					
+					for(TipoAvaria tp: avariaService.buscarTodosTipoAvaria()){
+						Item i = c.addItem(tp);
+						i.getItemProperty("label").setValue(tp.getDescricao());
+					}
+					
+					c.setRequired(true);
+					c.setRequiredError("Tipo de Avaria obrigatório");
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					c.setWidth("250px");
+					
+					return c;
+				}else if(propertyId.equals("local")) {
+					ComboBox c = new ComboBox("Local da Avaria");
+					c.addContainerProperty("label", String.class, null);
+					
+					for(LocalAvaria l: avariaService.buscarTodosLocaisAvaria()){
+						Item i = c.addItem(l);
+						i.getItemProperty("label").setValue(l.getDescricao());
+					}
+					
+					c.setRequired(true);
+					c.setRequiredError("Local da Avaria obrigatório");
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					c.setWidth("250px");
+					
+					return c;
+				}else if(propertyId.equals("origem")) {
+					ComboBox c = new ComboBox("Origem");
+					c.addContainerProperty("label", String.class, null);
+					
+					for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
+						Item i = c.addItem(or);
+						i.getItemProperty("label").setValue(or.getDescricao());
+					}
+					
+					c.setRequired(true);
+					c.setRequiredError("Origem obrigatória");
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					c.setWidth("250px");
+					
+					return c;
+				}else if(propertyId.equals("extensao")) {
+					ComboBox c = new ComboBox("Extensão da Avaria");
+					c.addContainerProperty("label", String.class, null);
+					
+					for(ExtensaoAvaria ext: avariaService.buscarTodasExtensoesAvaria()){
+						Item i = c.addItem(ext);
+						i.getItemProperty("label").setValue(ext.getDescricao());
+					}
+					
+					c.setRequired(true);
+					c.setRequiredError("Extensão obrigatória");
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					c.setWidth("150px");
+					
+					return c;
+				}else if(propertyId.equals("clima")) {
+					ComboBox c = new ComboBox("Condições Climáticas");
+					c.addContainerProperty("label", String.class, null);
+					
+					for(Clima cl: avariaService.buscarTodosClimas()){
+						Item i = c.addItem(cl);
+						i.getItemProperty("label").setValue(cl.getDescricao());
+					}
+					
+					c.setRequired(true);
+					c.setRequiredError("Condição Climática obrigatória");
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					c.setWidth("150px");
+					
+					return c;
+				}else if(propertyId.equals("observacao")) {
+					TextField tf = new TextField("Observação", "");
+					tf.setNullRepresentation("");
+					tf.setRows(5);
+					tf.setColumns(20);
+					tf.setImmediate(true);
+					return tf;
+				}else if(propertyId.equals("foto")){
+					TextField tf = new TextField("Foto");
+					tf.setNullRepresentation("");
+					tf.setImmediate(true);
+					return tf;
+				}else if(propertyId.equals("veiculo")){
+					TextField tf = new TextField("Chassi");
+					tf.setRequired(true);
+					tf.setNullRepresentation("");
+					tf.setImmediate(true);
+					tf.setWidth("200px");
+					return tf;
+				}else if(propertyId.equals("dataLancamento")) {
+					PopupDateField data = new PopupDateField("Data");
+					data.setResolution(DateField.RESOLUTION_DAY);
+					data.setLocale(new Locale("pt", "BR"));
+					return data;
+				}else if(propertyId.equals("hora")) {
+					TextField tf = new TextField("Hora");
+					tf.setNullRepresentation("");
+					tf.setImmediate(true);
+					tf.setWidth("70px");
+					return tf;
 				}
-				addNewAvaria();
-			}catch(PromoveException de){
-				showErrorMessage(form, "Não foi possível remover Avaria");
+			}catch(PromoveException pe) {
+				pe.printStackTrace();
+				showErrorMessage(avariaForm, "Não foi possível montar o formulário de Vistorias");
 			}
+			return null;
 		}
 	}
+	
+	class FormButtonListener implements ClickListener{
+	
+		private AvariaForm form;
+	
+		public FormButtonListener(AvariaForm form) {
+			this.form = form;
+		}
+	
+		@Override
+		public void buttonClick(ClickEvent event) {
+			if(event.getButton() == save){
+				try{
+					validate();
+					if(isValid()){
+						commit();
+						BeanItem<Avaria> item = (BeanItem<Avaria>) getItemDataSource();
+						
+						WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+						Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
+						
+						item.getBean().setUsuario(user);
+						
+						avariaService.salvarAvaria(item.getBean());
+						addNewAvaria();
+						showSuccessMessage(form, "Vistoria salva!");
+					}
+				}catch(InvalidValueException ive){
+					setValidationVisible(true);
+				}catch(IllegalArgumentException iae){
+					showErrorMessage(form,iae.getMessage());
+				}catch(PromoveException de){
+					showErrorMessage(form,"Não foi possível salvar Vistoria");
+				}
+				
+			}else if(event.getButton() == novo){
+				addNewAvaria();
+			}else if(event.getButton() == excluir){
+				try {
+					BeanItem<Avaria> item = (BeanItem<Avaria>) getItemDataSource();
+					if(item.getBean().getId() != null) {
+						avariaService.excluirAvaria(item.getBean());
+						showSuccessMessage(form, "Vistoria removida");
+					}
+					addNewAvaria();
+				}catch(PromoveException de){
+					showErrorMessage(form, "Não foi possível remover Vistoria");
+				}
+			}
+		}
 		
 	}
 }

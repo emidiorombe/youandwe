@@ -304,13 +304,13 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	}
 
 	@Override
-	public List<Avaria> buscarAvariaPorFiltros(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws PromoveException {
+	public List<Avaria> buscarAvariaPorFiltros(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws PromoveException {
 		List<Avaria> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaHQLQuery(de); 
 			Date fim = DateUtils.montarDataFinalParaHQLQuery(ate); 
 			
-			lista = avariaDAO.getAvariasPorFiltro(av, init, fim, periodo, movimentacao, registradas, oriAte, responsabilidade, fabricante);
+			lista = avariaDAO.getAvariasPorFiltro(av, init, fim, periodo, movimentacao, registradas, vistoriaFinal, oriAte, responsabilidade, fabricante);
 		} catch (DAOException e) {
 			e.printStackTrace();
 			throw new PromoveException(e);
