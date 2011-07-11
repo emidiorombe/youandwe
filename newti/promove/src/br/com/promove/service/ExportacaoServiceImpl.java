@@ -20,7 +20,9 @@ import org.dom4j.Document;
 import com.vaadin.ui.Label;
 
 import br.com.promove.dao.ClimaDAO;
+import br.com.promove.dao.ExtensaoDAO;
 import br.com.promove.dao.LocalAvariaDAO;
+import br.com.promove.dao.NivelAvariaDAO;
 import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.dao.UsuarioDAO;
@@ -47,6 +49,8 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	private OrigemAvariaDAO origemDAO;
 	private TipoAvariaDAO tipoDAO;
 	private ClimaDAO climaDAO;
+	private ExtensaoDAO extensaoDAO;
+	private NivelAvariaDAO nivelDAO;
 	private NumberFormat formatPercentual = new DecimalFormat("#0'%'"); //("#0.00'%'")
 	
 	public ExportacaoServiceImpl() {
@@ -55,19 +59,23 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		origemDAO = new OrigemAvariaDAO();
 		climaDAO = new ClimaDAO();
 		usuarioDAO = new UsuarioDAO();
+		extensaoDAO = new ExtensaoDAO();
+		nivelDAO = new NivelAvariaDAO();
 	}
 
 	@Override
-	public String exportarCadastrosBasicos() throws PromoveException {
+	public String exportarCadastrosBasicos(String novo) throws PromoveException {
 		try {
 			Map<String , List> listas = new HashMap<String, List>();
 			listas.put("usuario", usuarioDAO.getAll());
-			listas.put("tipo", tipoDAO.getAll());
-			listas.put("local", localDAO.getAll());
-			listas.put("origem", origemDAO.getAll());
+			listas.put("tipo", tipoDAO.getAll("descricao"));
+			listas.put("local", localDAO.getAll("descricao"));
+			listas.put("origem", origemDAO.getAll("codigo"));
 			listas.put("clima", climaDAO.getAll());
+			listas.put("extensao", extensaoDAO.getAll());
+			listas.put("nivel", nivelDAO.getAll());
 			
-			return CadastrosBasicosExport.gerarXmlExportacao(listas);
+			return CadastrosBasicosExport.gerarXmlExportacao(listas, novo);
 			
 		}catch(DAOException de){
 			throw new PromoveException();
@@ -93,14 +101,15 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    row_head.createCell(1).setCellValue("MODELO");
 		    row_head.createCell(2).setCellValue("DATA");
 		    row_head.createCell(3).setCellValue("HORA");
-		    row_head.createCell(4).setCellValue("ORIGEM");
-		    row_head.createCell(5).setCellValue("LOCAL");
+		    row_head.createCell(4).setCellValue("LOCAL");
+		    row_head.createCell(5).setCellValue("PEÇA");
 		    row_head.createCell(6).setCellValue("TIPO");
 		    row_head.createCell(7).setCellValue("EXTENSÃO");
-		    row_head.createCell(8).setCellValue("FOTOS");
-		    row_head.createCell(9).setCellValue("CLIMA");
-		    row_head.createCell(10).setCellValue("USUÁRIO");
-		    row_head.createCell(11).setCellValue("OBS");
+		    row_head.createCell(8).setCellValue("NÍVEL");
+		    row_head.createCell(9).setCellValue("FOTOS");
+		    row_head.createCell(10).setCellValue("CLIMA");
+		    row_head.createCell(11).setCellValue("USUÁRIO");
+		    row_head.createCell(12).setCellValue("OBS");
 
 		    
 		    for(int i = 0; i < avarias.size(); i++) {
@@ -113,10 +122,11 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			    row.createCell(5).setCellValue(avarias.get(i).getLocal().getDescricao());
 			    row.createCell(6).setCellValue(avarias.get(i).getTipo().getDescricao());
 			    row.createCell(7).setCellValue(avarias.get(i).getExtensao().getDescricao());
-			    row.createCell(8).setCellValue(avarias.get(i).getFotos().size());
-			    row.createCell(9).setCellValue(avarias.get(i).getClima().getDescricao());
-			    row.createCell(10).setCellValue(avarias.get(i).getUsuario().getNome());
-			    row.createCell(11).setCellValue(avarias.get(i).getObservacao());
+			    row.createCell(8).setCellValue(avarias.get(i).getNivel().getNome());
+			    row.createCell(9).setCellValue(avarias.get(i).getFotos().size());
+			    row.createCell(10).setCellValue(avarias.get(i).getClima().getDescricao());
+			    row.createCell(11).setCellValue(avarias.get(i).getUsuario().getNome());
+			    row.createCell(12).setCellValue(avarias.get(i).getObservacao());
 		    }
 
 		    // Write the output to a file/
@@ -145,14 +155,15 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    row_head.createCell(0).setCellValue("CHASSI");
 		    row_head.createCell(1).setCellValue("DATA");
 		    row_head.createCell(2).setCellValue("HORA");
-		    row_head.createCell(3).setCellValue("ORIGEM");
-		    row_head.createCell(4).setCellValue("LOCAL");
+		    row_head.createCell(3).setCellValue("LOCAL");
+		    row_head.createCell(4).setCellValue("PEÇA");
 		    row_head.createCell(5).setCellValue("TIPO");
 		    row_head.createCell(6).setCellValue("EXTENSÃO");
-		    row_head.createCell(7).setCellValue("CLIMA");
-		    row_head.createCell(8).setCellValue("USUÁRIO");
-		    row_head.createCell(9).setCellValue("OBS");
-		    row_head.createCell(10).setCellValue("MENSAGEM");
+		    row_head.createCell(7).setCellValue("NÍVEL");
+		    row_head.createCell(8).setCellValue("CLIMA");
+		    row_head.createCell(9).setCellValue("USUÁRIO");
+		    row_head.createCell(10).setCellValue("OBS");
+		    row_head.createCell(11).setCellValue("MENSAGEM");
 		    
 		    for(int i = 0; i < lista.size(); i++) {
 			    Row row = sheet.createRow(i+1);
@@ -163,10 +174,11 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			    row.createCell(4).setCellValue(lista.get(i).getLocal().getDescricao());
 			    row.createCell(5).setCellValue(lista.get(i).getTipo().getDescricao());
 			    row.createCell(6).setCellValue(lista.get(i).getExtensao().getDescricao());
-			    row.createCell(7).setCellValue(lista.get(i).getClima().getDescricao());
-			    row.createCell(8).setCellValue(lista.get(i).getUsuario().getNome());
-			    row.createCell(9).setCellValue(lista.get(i).getObservacao());
-			    row.createCell(10).setCellValue(lista.get(i).getMsgErro());
+			    row.createCell(7).setCellValue(lista.get(i).getNivel().getNome());
+			    row.createCell(8).setCellValue(lista.get(i).getClima().getDescricao());
+			    row.createCell(9).setCellValue(lista.get(i).getUsuario().getNome());
+			    row.createCell(10).setCellValue(lista.get(i).getObservacao());
+			    row.createCell(11).setCellValue(lista.get(i).getMsgErro());
 		    }
 
 		    // Write the output to a file/

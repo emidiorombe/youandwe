@@ -15,6 +15,7 @@ import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
+import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
 import br.com.promove.entity.ResponsabilidadeAvaria;
@@ -152,4 +153,7 @@ public interface AvariaService extends Serializable{
 	List<Avaria> buscarAvariaDuplicadaPorFiltros(Veiculo veiculo, Avaria av)throws PromoveException;
 	
 	public Map<String, List<PieData>> buscarResumo(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, String subitem) throws PromoveException;
+	
+	List<NivelAvaria> buscarTodosNiveisAvaria() throws PromoveException;
+
 }

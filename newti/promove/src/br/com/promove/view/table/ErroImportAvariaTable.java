@@ -20,8 +20,8 @@ import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.ErroImportAvariaView;
 
 public class ErroImportAvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"chassiInvalido", "dataLancamento", "hora", "origem", "local", "tipo", "extensao", "clima", "usuario", "observacao", "msgErro"};
-	public static final String[] COL_HEADERS = new String[] {"Chassi", "Data Lanc.", "Hora", "Origem", "Local", "Tipo", "Extensão", "Clima", "Usuário", "Obs", "Mensagem"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"chassiInvalido", "dataLancamento", "hora", "origem", "local", "tipo", "extensao", "nivel", "clima", "usuario", "observacao", "msgErro"};
+	public static final String[] COL_HEADERS = new String[] {"Chassi", "Data Lanc.", "Hora", "Local", "Peça", "Tipo", "Extensão", "Nível", "Clima", "Usuário", "Obs", "Mensagem"};
 	
 	private ErroImportAvariaView view;
 	private CadastroService cadastroService;
@@ -50,6 +50,7 @@ public class ErroImportAvariaTable extends Table{
 		try {
 			setColumnCollapsed("hora", true);
 			setColumnCollapsed("extensao", true);
+			setColumnCollapsed("nivel", true);
 			setColumnCollapsed("clima", true);
 			setColumnCollapsed("observacao", true);
 		} catch (IllegalAccessException e) {

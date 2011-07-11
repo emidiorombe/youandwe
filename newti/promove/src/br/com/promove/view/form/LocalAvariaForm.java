@@ -123,12 +123,12 @@ public class LocalAvariaForm extends BaseForm{
 						avariaService.salvarLocalAvaria(item.getBean());
 						view.getTable().getContainer().addItem(item.getBean());
 						addNewLocalAvaria();
-						showSuccessMessage(view, "Local Avaria salvo!");
+						showSuccessMessage(view, "Peça salva!");
 					}
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
-					showErrorMessage(view,"Não foi possível salvar Local Avaria");
+					showErrorMessage(view,"Não foi possível salvar Peça");
 				}
 				
 			}else if(event.getButton() == novo){
@@ -139,11 +139,11 @@ public class LocalAvariaForm extends BaseForm{
 					if(item.getBean().getId() != null) {
 						avariaService.excluirLocalAvaria(item.getBean());
 						view.getTable().getContainer().removeItem(item.getBean());
-						showSuccessMessage(view, "Local Avaria removido");
+						showSuccessMessage(view, "Peça removida");
 					}
 					addNewLocalAvaria();
 				}catch(PromoveException de){
-					showErrorMessage(view, "Não foi possível remover Local de Avaria");
+					showErrorMessage(view, "Não foi possível remover Peça");
 				}
 			}
 		}

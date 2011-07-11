@@ -19,6 +19,7 @@ import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.Modelo;
+import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Usuario;
@@ -61,8 +62,88 @@ public class ImportacaoAvaria {
 		loadUsuarios();
 
 		Document doc = DocumentHelper.parseText(xml);
+		importTagVistoria(doc);
 		importTagAvaria(doc);
 		importTagMovimento(doc);
+	}
+
+	private void importTagVistoria(Document doc) throws ParseException, PromoveException {
+		List<Element> avarias = doc.selectNodes("//dados_coletados/vistorias");
+		for (Element node_av : avarias) {
+			Avaria av = new Avaria();
+			
+			try {
+				av.setClima(climas.get(new Integer(node_av.element("concli").getText())));
+				av.setOrigem(origens.get(new Integer(node_av.element("origem").getText())));
+				av.setUsuario(usuarios.get(new Integer(node_av.element("usuario").getText())));
+				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
+				av.setHora(node_av.element("hora").getText());
+				
+				av.setTipo(tipos.get(new Integer(node_av.element("tipo").getText())));
+				av.setLocal(locais.get(new Integer(node_av.element("local").getText())));
+				av.setExtensao(extensoes.get(new Integer(node_av.element("gravid").getText())));
+				// TODO fixo
+				if (!node_av.element("tipo").getText().equals("300"))
+					av.setNivel(avariaService.getById(NivelAvaria.class, new Integer(node_av.element("nivel").getText())));
+				av.setObservacao(node_av.element("obs").getText());
+				
+				String msgErro = verificaInconsistencias(av, node_av, "vistorias");
+				
+				String chassi = node_av.element("chassi").getText();
+				List<Veiculo> veiculos = null;
+				
+				if(chassi.contains("000000000")) {
+					chassi = chassi.replace("000000000", "");
+					
+					veiculos = cadastroService.buscarVeiculosPorModeloFZData(chassi, av.getDataLancamento());
+				}else {
+					veiculos = cadastroService.buscarVeiculosPorChassi(chassi);
+				}
+				
+				//Se não existir o veículo, gravar a inconsistência
+				if(veiculos.size() == 0) {
+					msgErro += "Veiculo " + node_av.element("chassi").getText() + " não existe!;";
+					InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, msgErro);
+					
+					Element node_fotos = ((Element)node_av).element("fotos");
+					Iterator it = node_fotos.elementIterator();
+					List<FotoAvaria> fotos = new ArrayList<FotoAvaria>();
+					while (it.hasNext()) {
+						FotoAvaria foto = new FotoAvaria();
+						foto.setInconsisctencia(inc.getId());
+						Element node_arq = (Element) it.next();
+						foto.setNome(node_arq.attributeValue("nome"));
+						avariaService.salvarFotoAvaria(foto, true);
+					}
+					
+				}else {
+					if (!msgErro.isEmpty()) {
+						throw new Exception(msgErro);
+					}
+					
+					av.setVeiculo(veiculos.get(0));
+					
+					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av).size() > 0) {
+						//Ja existe essa avaria
+						continue;
+					}
+	
+					avariaService.salvarAvaria(av, true);
+		
+					Element node_fotos = ((Element)node_av).element("fotos");
+					Iterator it = node_fotos.elementIterator();
+					while (it.hasNext()) {
+						FotoAvaria foto = new FotoAvaria();
+						foto.setAvaria(av);
+						Element node_arq = (Element) it.next();
+						foto.setNome(node_arq.attributeValue("nome"));
+						avariaService.salvarFotoAvaria(foto, true);
+					}
+				}
+			}catch(Exception e) {
+				avariaService.salvarInconsistenciaImportAvaria(av, e.getMessage());
+			}
+		}
 	}
 
 	private void importTagAvaria(Document doc) throws ParseException, PromoveException {
@@ -163,6 +244,7 @@ public class ImportacaoAvaria {
 				av.setExtensao(extensoes.get(new Integer("0")));
 				av.setTipo(tipos.get(new Integer("300")));
 				av.setLocal(locais.get(new Integer("300")));
+				// TODO remover fixos
 				av.setOrigem(origensTipoFilial.get(node_av.element("filial").getText() + "_" + node_av.element("tipo").getText()));
 				av.setUsuario(usuarios.get(new Integer(node_av.element("usuario").getText())));
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
@@ -285,6 +367,9 @@ public class ImportacaoAvaria {
 		if (av.getUsuario() == null)
 			msgErro += "Usuario " + node_av.element("usuario").getText() + " não existe;";
 		
+		//if (tipo == "vistorias" && av.getNivel() == null)
+		//	msgErro += "Nível " + node_av.element("nivel").getText() + " não existe;";
+			
 		return msgErro;
 	}
 

@@ -34,5 +34,6 @@
 		<mapping class="br.com.promove.entity.Transportadora" />
 		<mapping class="br.com.promove.entity.Ctrc" />
 		<mapping class="br.com.promove.entity.InconsistenciaCtrc" />
+		<mapping class="br.com.promove.entity.NivelAvaria" />
 	</session-factory>
 </hibernate-configuration>

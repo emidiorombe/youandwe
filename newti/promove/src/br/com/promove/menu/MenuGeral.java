@@ -79,8 +79,8 @@ public class MenuGeral extends CssLayout{
 		modelo = new NativeButton("Modelo");
 		cor = new NativeButton("Cor");
 		tipo = new NativeButton("Tipos de Avaria");
-		local = new NativeButton("Local de Avaria");
-		origem = new NativeButton("Origem de Avaria");
+		local = new NativeButton("Peça");
+		origem = new NativeButton("Local de Vistoria");
 		extensao = new NativeButton("Extensão de Avaria");
 		clima = new NativeButton("Condição Climática");
 		transp = new NativeButton("Transportadora");

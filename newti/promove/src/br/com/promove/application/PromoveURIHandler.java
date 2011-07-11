@@ -17,7 +17,7 @@ public class PromoveURIHandler implements URIHandler{
 		 if (relativeUri.contains("export")) {
 			 try {
 				 ExportacaoService exportService = ServiceFactory.getService(ExportacaoService.class);
-	             DownloadStream ds = new DownloadStream(new ByteArrayInputStream(exportService.exportarCadastrosBasicos().getBytes()), "application/octet-stream", "cadastro.xml");
+	             DownloadStream ds = new DownloadStream(new ByteArrayInputStream(exportService.exportarCadastrosBasicos("1").getBytes()), "application/octet-stream", "cadastro.xml");
 	             return ds;
 			 }catch(PromoveException pe) {
 	        	   return null;
@@ -25,7 +25,7 @@ public class PromoveURIHandler implements URIHandler{
          }else if (relativeUri.contains("import")) {
         	 try {
 				 ExportacaoService exportService = ServiceFactory.getService(ExportacaoService.class);
-	             DownloadStream ds = new DownloadStream(new ByteArrayInputStream(exportService.exportarCadastrosBasicos().getBytes()), "application/octet-stream", "cadastro.xml");
+	             DownloadStream ds = new DownloadStream(new ByteArrayInputStream(exportService.exportarCadastrosBasicos("1").getBytes()), "application/octet-stream", "cadastro.xml");
 	             return ds;
 			 }catch(PromoveException pe) {
 	        	   return null;

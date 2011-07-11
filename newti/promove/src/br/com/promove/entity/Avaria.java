@@ -64,6 +64,9 @@ public class Avaria implements Serializable{
 	@Transient
 	private String modelo;
 	
+	@OneToOne
+	private NivelAvaria nivel;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -158,6 +161,14 @@ public class Avaria implements Serializable{
 
 	public void setHora(String hora) {
 		this.hora = hora;
+	}
+
+	public void setNivel(NivelAvaria nivel) {
+		this.nivel = nivel;
+	}
+
+	public NivelAvaria getNivel() {
+		return nivel;
 	}
 
 	public String getModelo() {
