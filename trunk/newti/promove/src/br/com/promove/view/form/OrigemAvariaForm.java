@@ -108,13 +108,13 @@ public class OrigemAvariaForm extends BaseForm{
 						avariaService.salvarOrigemAvaria(item.getBean());
 						view.getTable().getContainer().addItem(item.getBean());
 						addNewOrigemAvaria();
-						showSuccessMessage(view, "Origem Avaria salvo");
+						showSuccessMessage(view, "Local de Vistoria salvo");
 					}
 				} catch (InvalidValueException ive) {
 					setValidationVisible(true);
 				} catch (PromoveException de) {
 					showErrorMessage(view,
-							"Não foi possível salvar Origem Avaria");
+							"Não foi possível salvar Local de Vistoria");
 				}
 
 			} else if (event.getButton() == novo) {
@@ -126,12 +126,12 @@ public class OrigemAvariaForm extends BaseForm{
 						avariaService.excluirOrigemAvaria(item.getBean());
 						view.getTable().getContainer()
 								.removeItem(item.getBean());
-						showSuccessMessage(view, "Origem Avaria removido");
+						showSuccessMessage(view, "Local de Vistoria removido");
 					}
 					addNewOrigemAvaria();
 				} catch (PromoveException de) {
 					showErrorMessage(view,
-							"Não foi possível remover Origem de Avaria");
+							"Não foi possível remover Local de Vistoria");
 				}
 			}
 		}

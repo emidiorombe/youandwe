@@ -17,7 +17,7 @@ import br.com.promove.exception.PromoveException;
 public interface ExportacaoService {
 	
 	
-	public String exportarCadastrosBasicos() throws PromoveException;
+	public String exportarCadastrosBasicos(String novo) throws PromoveException;
 
 	public String exportarXMLAvarias(List<Avaria> avarias) throws PromoveException;
 

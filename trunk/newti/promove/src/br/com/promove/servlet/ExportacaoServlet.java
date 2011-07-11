@@ -39,12 +39,16 @@ public class ExportacaoServlet extends HttpServlet{
 		String action = request.getParameter("action");
 		
 		if("cadastro".equals(action)) {
+			String novo = request.getParameter("novo");
+			
+			//String filename = novo.equals("1") ? "cadastros.xml" : "GSPPRE.xml";
+			String filename = "GSPPRE.xml";
 			try {
 				ExportacaoService export = ServiceFactory.getService(ExportacaoService.class);
 				
 				response.setContentType("applicaton/xml");
-				response.setHeader("Content-Disposition", "attachment; filename=GSPPRE.xml");
-				response.getWriter().print(export.exportarCadastrosBasicos());
+				response.setHeader("Content-Disposition", "attachment; filename=" + filename);
+				response.getWriter().print(export.exportarCadastrosBasicos(novo));
 			}catch(PromoveException pe) {
 				response.getWriter().write(pe.getMessage());
 			}

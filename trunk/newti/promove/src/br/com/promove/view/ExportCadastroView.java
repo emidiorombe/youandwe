@@ -16,6 +16,7 @@ import com.vaadin.ui.VerticalLayout;
 public class ExportCadastroView implements Serializable{
 	private VerticalLayout layout = new VerticalLayout();
 	private Button exportar;
+	private Button exportarAntigo;
 	private PromoveApplication app;
 
 	public ExportCadastroView(PromoveApplication app) {
@@ -25,10 +26,12 @@ public class ExportCadastroView implements Serializable{
 
 	private void buildView() {
 		exportar = new Button("Exportar", new ExportCadastroListener(this));
+		exportarAntigo = new Button("Exportar (Antigo)", new ExportCadastroListener(this));
 		Label label = new Label("<h3>Exportar Cadastros Básicos</h3>");
 		label.setContentMode(Label.CONTENT_XHTML);
 		layout.addComponent(label);
 		layout.addComponent(exportar);
+		//layout.addComponent(exportarAntigo);
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
 		
@@ -56,9 +59,14 @@ public class ExportCadastroView implements Serializable{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
+			String novo = "1";
+			if(event.getButton() == exportarAntigo)  novo = "0";
+			// TODO remover
+
 			WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 			String path = ctx.getHttpSession().getServletContext().getContextPath();
-			event.getButton().getWindow().open(new ExternalResource(path + "/export?action=cadastro"));
+			event.getButton().getWindow().open(new ExternalResource(path + "/export?action=cadastro&novo=" + novo));
+			// TODO remover parametro
 			
 		}
 		

@@ -59,6 +59,9 @@ public class InconsistenciaAvaria implements Serializable{
 	
 	private String hora;
 	
+	@OneToOne
+	private NivelAvaria nivel;
+	
 	public InconsistenciaAvaria() {}
 	
 	public InconsistenciaAvaria(Avaria av, String msgErro) {
@@ -72,6 +75,7 @@ public class InconsistenciaAvaria implements Serializable{
 		this.usuario = av.getUsuario();
 		this.observacao = av.getObservacao();
 		this.hora = av.getHora();
+		this.nivel = av.getNivel();
 		this.msgErro = msgErro;
 	}
 
@@ -192,6 +196,14 @@ public class InconsistenciaAvaria implements Serializable{
 
 	public String getHora() {
 		return hora;
+	}
+
+	public void setNivel(NivelAvaria nivel) {
+		this.nivel = nivel;
+	}
+
+	public NivelAvaria getNivel() {
+		return nivel;
 	}
 	
 }

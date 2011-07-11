@@ -8,6 +8,7 @@ import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.LocalAvaria;
+import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Usuario;
@@ -75,7 +76,7 @@ public class AvariaForm extends BaseForm {
 	public void createFormBody(BeanItem<Avaria> avaria){
 		setItemDataSource(avaria);
 		setFormFieldFactory(new AvariaFieldFactory(this, avaria.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"veiculo", "origem", "local", "tipo", "extensao", "clima", "dataLancamento","hora", "foto", "observacao"});
+		setVisibleItemProperties(new Object[]{"veiculo", "origem", "local", "tipo", "extensao", "nivel", "clima", "dataLancamento","hora", "foto", "observacao"});
 		
 	}
 	
@@ -129,7 +130,7 @@ public class AvariaForm extends BaseForm {
 					
 					return c;
 				}else if(propertyId.equals("local")) {
-					ComboBox c = new ComboBox("Local da Avaria");
+					ComboBox c = new ComboBox("Peça Avariada");
 					c.addContainerProperty("label", String.class, null);
 					
 					for(LocalAvaria l: avariaService.buscarTodosLocaisAvaria()){
@@ -138,7 +139,7 @@ public class AvariaForm extends BaseForm {
 					}
 					
 					c.setRequired(true);
-					c.setRequiredError("Local da Avaria obrigatório");
+					c.setRequiredError("Peça obrigatória");
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 					c.setImmediate(true);
 					c.setNullSelectionAllowed(false);
@@ -148,7 +149,7 @@ public class AvariaForm extends BaseForm {
 					
 					return c;
 				}else if(propertyId.equals("origem")) {
-					ComboBox c = new ComboBox("Origem");
+					ComboBox c = new ComboBox("Local da Vistoria");
 					c.addContainerProperty("label", String.class, null);
 					
 					for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
@@ -157,7 +158,7 @@ public class AvariaForm extends BaseForm {
 					}
 					
 					c.setRequired(true);
-					c.setRequiredError("Origem obrigatória");
+					c.setRequiredError("Local obrigatório");
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 					c.setImmediate(true);
 					c.setNullSelectionAllowed(false);
@@ -180,6 +181,23 @@ public class AvariaForm extends BaseForm {
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 					c.setImmediate(true);
 					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					c.setWidth("150px");
+					
+					return c;
+				}else if(propertyId.equals("nivel")) {
+					ComboBox c = new ComboBox("Nível");
+					c.addContainerProperty("label", String.class, null);
+					
+					for(NivelAvaria niv: avariaService.buscarTodosNiveisAvaria()){
+						Item i = c.addItem(niv);
+						i.getItemProperty("label").setValue(niv.getNome());
+					}
+					
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(true);
 					c.setPropertyDataSource(item.getItemProperty(propertyId));
 					c.setItemCaptionPropertyId("label");
 					c.setWidth("150px");

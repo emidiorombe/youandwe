@@ -11,6 +11,7 @@ import br.com.promove.dao.ExtensaoDAO;
 import br.com.promove.dao.FotoAvariaDAO;
 import br.com.promove.dao.InconsistenciaAvariaDAO;
 import br.com.promove.dao.LocalAvariaDAO;
+import br.com.promove.dao.NivelAvariaDAO;
 import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.ResponsabilidadeDAO;
 import br.com.promove.dao.TipoAvariaDAO;
@@ -23,6 +24,7 @@ import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
+import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
 import br.com.promove.entity.ResponsabilidadeAvaria;
@@ -42,6 +44,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	private AvariaDAO avariaDAO;
 	private FotoAvariaDAO fotoDAO;
 	private ResponsabilidadeDAO responsaDAO;
+	private NivelAvariaDAO nivelDAO;
 	private InconsistenciaAvariaDAO inconsistenciaAvariaDAO;
 	private VeiculoDAO veiculoDAO;
 	
@@ -56,6 +59,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		responsaDAO = new ResponsabilidadeDAO();
 		inconsistenciaAvariaDAO = new InconsistenciaAvariaDAO(); 
 		veiculoDAO = new VeiculoDAO();
+		nivelDAO = new NivelAvariaDAO();
 	}
 
 	@Override
@@ -458,6 +462,17 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 			Date fim = DateUtils.montarDataFinalParaSQLQuery(ate); 
 			
 			lista = avariaDAO.buscarResumo(veiculo, init, fim, periodo, oride, oriate, item, subitem);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public List<NivelAvaria> buscarTodosNiveisAvaria() throws PromoveException {
+		List<NivelAvaria> lista = null;
+		try {
+			lista = nivelDAO.getAll();
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

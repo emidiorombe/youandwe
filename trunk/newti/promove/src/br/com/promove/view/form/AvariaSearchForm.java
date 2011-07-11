@@ -80,7 +80,7 @@ public class AvariaSearchForm extends BaseForm{
 		export = new Button("Gerar Arquivo", new AvariaSearchListener());
 		exportXml = new Button("Gerar XML", new AvariaSearchListener());
 		
-		cmbOrigemAte = new ComboBox("Origem Até");
+		cmbOrigemAte = new ComboBox("Local de Vistoria Até");
 		cmbOrigemAte.addContainerProperty("label", String.class, null);
 		
 		try {
@@ -92,7 +92,7 @@ public class AvariaSearchForm extends BaseForm{
 				cmbOrigemAte.setValue(or);
 			}
 		} catch (PromoveException e) {
-			showErrorMessage(this, "Não foi possível buscar as Origens");
+			showErrorMessage(this, "Não foi possível buscar os Locais de Vistoria");
 		}
 
 		cmbOrigemAte.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
@@ -150,7 +150,7 @@ public class AvariaSearchForm extends BaseForm{
 		chkRegistradas.setCaption("Considerar somente primeira avaria");
 		
 		chkVistoriaFinal = new CheckBox();
-		chkVistoriaFinal.setCaption("Considerar somente veículos com vistoria na origem final");
+		chkVistoriaFinal.setCaption("Considerar somente veículos com vistoria no local final");
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -366,7 +366,7 @@ public class AvariaSearchForm extends BaseForm{
 					
 					return c;
 				}else if(propertyId.equals("local")) {
-					ComboBox c = new ComboBox("Local da Avaria");
+					ComboBox c = new ComboBox("Peça Avariada");
 					c.addContainerProperty("label", String.class, null);
 
 					
@@ -391,7 +391,7 @@ public class AvariaSearchForm extends BaseForm{
 					
 					return c;
 				}else if(propertyId.equals("origem")) {
-					ComboBox c = new ComboBox("Origem De");
+					ComboBox c = new ComboBox("Local de Vistoria De");
 					c.addContainerProperty("label", String.class, null);
 
 					//Item i_default = c.addItem(new OrigemAvaria());
