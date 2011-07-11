@@ -179,6 +179,7 @@ public class InconsistenciaAvaria implements Serializable{
 		av.setUsuario(usuario);
 		av.setVeiculo(veiculo);
 		av.setHora(hora);
+		av.setNivel(nivel);
 		return av;
 	}
 	
