@@ -465,7 +465,7 @@ public class AvariaSearchForm extends BaseForm{
 			}catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
 			}catch (Exception e) {
-				showErrorMessage(view, "Não foi possível buscar as vistorias");
+				showErrorMessage(view, "Não foi possível listar as vistorias");
 				e.printStackTrace();
 			}
 		}

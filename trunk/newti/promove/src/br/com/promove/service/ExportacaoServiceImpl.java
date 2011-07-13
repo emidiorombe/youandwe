@@ -122,7 +122,8 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			    row.createCell(5).setCellValue(avarias.get(i).getLocal().getDescricao());
 			    row.createCell(6).setCellValue(avarias.get(i).getTipo().getDescricao());
 			    row.createCell(7).setCellValue(avarias.get(i).getExtensao().getDescricao());
-			    row.createCell(8).setCellValue(avarias.get(i).getNivel().getNome());
+			    if (avarias.get(i).getNivel() != null && avarias.get(i).getNivel().getNome() != null)
+			    	row.createCell(8).setCellValue(avarias.get(i).getNivel().getNome());
 			    row.createCell(9).setCellValue(avarias.get(i).getFotos().size());
 			    row.createCell(10).setCellValue(avarias.get(i).getClima().getDescricao());
 			    row.createCell(11).setCellValue(avarias.get(i).getUsuario().getNome());
@@ -174,7 +175,8 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			    row.createCell(4).setCellValue(lista.get(i).getLocal().getDescricao());
 			    row.createCell(5).setCellValue(lista.get(i).getTipo().getDescricao());
 			    row.createCell(6).setCellValue(lista.get(i).getExtensao().getDescricao());
-			    row.createCell(7).setCellValue(lista.get(i).getNivel().getNome());
+			    if (lista.get(i).getNivel() != null && lista.get(i).getNivel().getNome() != null)
+			    	row.createCell(7).setCellValue(lista.get(i).getNivel().getNome());
 			    row.createCell(8).setCellValue(lista.get(i).getClima().getDescricao());
 			    row.createCell(9).setCellValue(lista.get(i).getUsuario().getNome());
 			    row.createCell(10).setCellValue(lista.get(i).getObservacao());

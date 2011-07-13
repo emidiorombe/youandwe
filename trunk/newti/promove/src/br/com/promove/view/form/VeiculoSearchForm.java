@@ -142,7 +142,7 @@ public class VeiculoSearchForm extends BaseForm{
 			} catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
 			}catch(PromoveException pe) {
-				showErrorMessage(view, "Não foi possível buscar os veículos");
+				showErrorMessage(view, "Não foi possível listar os veículos");
 			} 
 		}
 	}

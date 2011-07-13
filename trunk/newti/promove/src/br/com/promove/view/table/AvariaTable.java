@@ -155,10 +155,10 @@ public class AvariaTable extends Table{
 					
 					public void buttonClick(ClickEvent event) {
 						Window w = new Window("Fotos");
-				        w.setHeight("400px");
-				        w.setWidth("800px");
-				        w.setPositionY(50);
-				        w.setPositionX(200);
+				        w.setHeight("500px");
+				        w.setWidth("535px"); //800
+				        w.setPositionY(25);
+				        w.setPositionX(300);
 				        
 				        WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 						String path = ctx.getHttpSession().getServletContext().getContextPath();
@@ -168,7 +168,7 @@ public class AvariaTable extends Table{
 				        for (FotoAvaria f : av.getFotos()) {
 				        	String req = path+"/export?action=foto&name="+ f.getNome();
 				        	Embedded emb = new Embedded("", new ExternalResource(req));
-				        	emb.setWidth("745px");
+				        	emb.setWidth("480px"); //745
 							w.addComponent(emb);
 						}
 					}
