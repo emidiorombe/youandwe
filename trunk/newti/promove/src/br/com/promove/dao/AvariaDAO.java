@@ -86,8 +86,17 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		}
 		
 		if(de != null && !de.equals("") && ate != null && !ate.equals("")) {
-			if (periodo == 1) hql.append(" and av.dataLancamento between :dtIni and :dtFim");
-			else hql.append(" and veic.dataCadastro between :dtIni and :dtFim");
+			if(vistoriaFinal && oriAte != null && oriAte.getId() != null) {
+				hql.append(" and exists (select av2 from Avaria av2");
+				hql.append(" where av2.veiculo = av.veiculo");
+				if (periodo == 1) hql.append(" and av2.dataLancamento between :dtIni and :dtFim");
+				else hql.append(" and av2.veiculo.dataCadastro between :dtIni and :dtFim");
+				hql.append(" and av2.origem = :orgFinal)");
+				addParamToQuery("orgFinal", oriAte);
+			} else { 
+				if (periodo == 1) hql.append(" and av.dataLancamento between :dtIni and :dtFim");
+				else hql.append(" and av.veiculo.dataCadastro between :dtIni and :dtFim");
+			}
 			addParamToQuery("dtIni", de);
 			addParamToQuery("dtFim", ate);
 		}
@@ -111,13 +120,6 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			hql.append(" where av2.veiculo = av.veiculo");
 			hql.append(" and av2.tipo.id = av.tipo.id and av2.local.id = av.local.id");
 			hql.append(" and av2.origem.codigo < av.origem.codigo))");
-		}
-
-		if(vistoriaFinal && oriAte != null && oriAte.getId() != null) {
-			hql.append(" and exists (select av2 from Avaria av2");
-			hql.append(" where av2.veiculo = av.veiculo");
-			hql.append(" and av2.origem = :orgFinal)");
-			addParamToQuery("orgFinal", oriAte);
 		}
 
 		hql.append(" order by av.origem.codigo");

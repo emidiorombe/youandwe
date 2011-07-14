@@ -23,7 +23,7 @@ public class VeiculoListView extends SplitPanel{
 		form.setView(this);
 		setFirstComponent(form.getFormLayout());
 		setSecondComponent(tables);
-		setSplitPosition(50);
+		setSplitPosition(45);
 		
 	}
 

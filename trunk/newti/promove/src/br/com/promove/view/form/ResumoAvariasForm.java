@@ -88,7 +88,7 @@ public class ResumoAvariasForm extends BaseForm{
 		export = new Button("Gerar Arquivo", new ResumoAvariasListener());
 		grafico = new Button("Gerar Gráfico", new ResumoAvariasListener());
 		
-		cmbOrigemDe = new ComboBox("Origem De");
+		cmbOrigemDe = new ComboBox("Local de Vistoria De");
 		cmbOrigemDe.addContainerProperty("label", String.class, null);
 		
 		try {
@@ -109,7 +109,7 @@ public class ResumoAvariasForm extends BaseForm{
 		cmbOrigemDe.setWidth("250px");
 		cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
 		
-		cmbOrigemAte = new ComboBox("Origem Até");
+		cmbOrigemAte = new ComboBox("Local de Vistoria Até");
 		cmbOrigemAte.addContainerProperty("label", String.class, null);
 		
 		try {
@@ -160,9 +160,9 @@ public class ResumoAvariasForm extends BaseForm{
 		i = cmbItem.addItem("");
 		i.getItemProperty("label").setValue("Selecione...");
 		i = cmbItem.addItem("origemavaria");
-		i.getItemProperty("label").setValue("Origem");
+		i.getItemProperty("label").setValue("Local de Vistoria");
 		i = cmbItem.addItem("localavaria");
-		i.getItemProperty("label").setValue("Local da avaria");
+		i.getItemProperty("label").setValue("Peça Avariada");
 		i = cmbItem.addItem("tipoavaria");
 		i.getItemProperty("label").setValue("Tipo de avaria");
 		i = cmbItem.addItem("modelo");
@@ -182,9 +182,9 @@ public class ResumoAvariasForm extends BaseForm{
 		i = cmbSubitem.addItem("");
 		i.getItemProperty("label").setValue("Selecione...");
 		i = cmbSubitem.addItem("origemavaria");
-		i.getItemProperty("label").setValue("Origem");
+		i.getItemProperty("label").setValue("Local de Vistoria");
 		i = cmbSubitem.addItem("localavaria");
-		i.getItemProperty("label").setValue("Local da avaria");
+		i.getItemProperty("label").setValue("Peça Avariada");
 		i = cmbSubitem.addItem("tipoavaria");
 		i.getItemProperty("label").setValue("Tipo de avaria");
 		i = cmbSubitem.addItem("modelo");
