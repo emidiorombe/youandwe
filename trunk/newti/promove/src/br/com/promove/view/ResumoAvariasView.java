@@ -21,7 +21,7 @@ public class ResumoAvariasView extends SplitPanel {
 		form.setView(this);
 		setFirstComponent(form.getLayout());
 		setSecondComponent(table);
-		setSplitPosition(55);
+		setSplitPosition(60);
 		
 	}
 	
