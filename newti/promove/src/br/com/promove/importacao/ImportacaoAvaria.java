@@ -75,6 +75,9 @@ public class ImportacaoAvaria {
 			try {
 				av.setClima(climas.get(new Integer(node_av.element("concli").getText())));
 				av.setOrigem(origens.get(new Integer(node_av.element("origem").getText())));
+				// TODO temporario
+				if (av.getOrigem() == null)
+					av.setOrigem(origens.get(new Integer(node_av.element("origem").getText() + "0")));
 				av.setUsuario(usuarios.get(new Integer(node_av.element("usuario").getText())));
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				av.setHora(node_av.element("hora").getText());
@@ -165,6 +168,9 @@ public class ImportacaoAvaria {
 				av.setTipo(tipos.get(new Integer(node_av.element("tipo").getText())));
 				av.setLocal(locais.get(new Integer(node_av.element("local").getText())));
 				av.setOrigem(origens.get(new Integer(node_av.element("origem").getText())));
+				// TODO temporario
+				if (av.getOrigem() == null)
+					av.setOrigem(origens.get(new Integer(node_av.element("origem").getText() + "0")));
 				av.setUsuario(usuarios.get(new Integer(node_av.element("usuario").getText())));
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				//av.setHora(node_av.element("hora").getText());
@@ -352,8 +358,11 @@ public class ImportacaoAvaria {
 		if (av.getExtensao() == null)
 			msgErro += "Extensao " + node_av.element("gravid").getText() + " não existe;";
 
-		if (av.getTipo() == null)
+		if (av.getTipo() == null) {
 			msgErro += "Tipo " + node_av.element("tipo").getText() + " não existe;";
+			if (tipo == "vistorias" && av.getNivel() == null && !av.getTipo().getMovimentacao().equals(true))
+				msgErro += "Nível " + node_av.element("nivel").getText() + " não existe;";
+		}
 		
 		if (av.getLocal() == null)
 			msgErro += "Local " + node_av.element("local").getText() + " não existe;";
@@ -367,8 +376,6 @@ public class ImportacaoAvaria {
 		if (av.getUsuario() == null)
 			msgErro += "Usuario " + node_av.element("usuario").getText() + " não existe;";
 		
-		//if (tipo == "vistorias" && av.getNivel() == null)
-		//	msgErro += "Nível " + node_av.element("nivel").getText() + " não existe;";
 			
 		return msgErro;
 	}
