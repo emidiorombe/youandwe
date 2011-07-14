@@ -69,7 +69,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		search = new Button("Buscar", new AuditoriaVistoriasListener());
 		export = new Button("Gerar Arquivo", new AuditoriaVistoriasListener());
 		
-		cmbOrigemDe = new ComboBox("Origem De");
+		cmbOrigemDe = new ComboBox("Local de Vistoria De");
 		cmbOrigemDe.addContainerProperty("label", String.class, null);
 		
 		try {
@@ -90,7 +90,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		cmbOrigemDe.setWidth("250px");
 		cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
 		
-		cmbOrigemAte = new ComboBox("Origem Até");
+		cmbOrigemAte = new ComboBox("Local de Vistoria Até");
 		cmbOrigemAte.addContainerProperty("label", String.class, null);
 		
 		try {
@@ -134,7 +134,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 	public void createFormBody(BeanItem<Veiculo> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new AuditoriaFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"tipo"});
+		setVisibleItemProperties(new Object[]{"tipo", "navio"});
 		
 	}
 	private Component createFooter(){
@@ -172,6 +172,10 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		@Override
 		public Field createField(Item item, Object propertyId, Component uiContext) {
 			Field f = super.createField(item, propertyId, uiContext);
+			
+			if(f instanceof TextField){
+				((TextField)f).setNullRepresentation("");
+			}
 			
 			if(propertyId.equals("tipo")) {
 				ComboBox c = new ComboBox("Tipo de Veículo");

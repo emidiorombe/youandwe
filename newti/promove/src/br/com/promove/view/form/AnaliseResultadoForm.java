@@ -83,7 +83,7 @@ public class AnaliseResultadoForm extends BaseForm{
 		export = new Button("Gerar Arquivo", new AnaliseResultadoListener());
 		grafico = new Button("Gerar Gráfico", new AnaliseResultadoListener());
 		
-		cmbOrigemDe = new ComboBox("Origem De");
+		cmbOrigemDe = new ComboBox("Local de Vistoria De");
 		cmbOrigemDe.addContainerProperty("label", String.class, null);
 		
 		try {
@@ -104,7 +104,7 @@ public class AnaliseResultadoForm extends BaseForm{
 		cmbOrigemDe.setWidth("250px");
 		cmbOrigemDe.setValue(cmbOrigemDe.getItemIds().iterator().next());
 		
-		cmbOrigemAte = new ComboBox("Origem Até");
+		cmbOrigemAte = new ComboBox("Local de Vistoria Até");
 		cmbOrigemAte.addContainerProperty("label", String.class, null);
 		
 		try {

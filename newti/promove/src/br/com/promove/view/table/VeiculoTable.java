@@ -79,7 +79,7 @@ public class VeiculoTable extends Table{
 		
 		if (origens) {
 			addGeneratedColumn("origens", new VeiculoTableColumnGenerator(this));
-			setColumnHeader("origens", "Origens Faltantes");
+			setColumnHeader("origens", "Locais de Vistoria Faltantes");
 		}
 		
 		try {

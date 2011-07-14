@@ -150,7 +150,7 @@ public class AvariaSearchForm extends BaseForm{
 		chkRegistradas.setCaption("Considerar somente primeira avaria");
 		
 		chkVistoriaFinal = new CheckBox();
-		chkVistoriaFinal.setCaption("Considerar somente veículos com vistoria no local final");
+		chkVistoriaFinal.setCaption("Considerar como base as vistorias no local final");
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));

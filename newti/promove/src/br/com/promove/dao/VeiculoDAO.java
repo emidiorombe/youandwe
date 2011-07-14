@@ -148,6 +148,11 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			addParamToQuery("txttipo", veiculo.getTipo());
 		}
 		
+		if(veiculo.getNavio() != null && !veiculo.getNavio().equals("")) {
+			hql.append(" and v.navio = :txtnavio ");
+			addParamToQuery("txtnavio", veiculo.getNavio());
+		}
+		
 		hql.append(" order by v.chassi");
 
 		List<Veiculo> listaVe = executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
@@ -167,6 +172,11 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) { 
 			hql.append(" and v.tipo = :txttipo");
 			addParamToQuery("txttipo", veiculo.getTipo());
+		}
+		
+		if(veiculo.getNavio() != null && !veiculo.getNavio().equals("")) {
+			hql.append(" and v.navio = :txtnavio ");
+			addParamToQuery("txtnavio", veiculo.getNavio());
 		}
 		
 		/*
