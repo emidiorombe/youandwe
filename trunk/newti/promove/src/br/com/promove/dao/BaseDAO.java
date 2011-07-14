@@ -113,7 +113,7 @@ public abstract class BaseDAO<Id extends Serializable, Entity> implements Serial
 	 * @return
 	 * @throws DAOException
 	 */
-	public List executeSQLQuery(String sql) throws DAOException {
+	public static List executeSQLQuery(String sql) throws DAOException {
 		return HibernateCRUD.executeSQLQuery(sql);
 	}
 	

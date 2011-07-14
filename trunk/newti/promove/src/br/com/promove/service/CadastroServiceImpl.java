@@ -232,6 +232,17 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	}
 
 	@Override
+	public List<String> buscarTodosNavios() throws PromoveException {
+		List<String> lista = null;
+		try {
+			lista = VeiculoDAO.buscarTodosNavios();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
 	public void salvarVeiculo(Veiculo bean) throws PromoveException {
 		salvarVeiculo(bean, false);
 	}

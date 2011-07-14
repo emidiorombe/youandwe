@@ -122,7 +122,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			hql.append(" and av2.origem.codigo < av.origem.codigo))");
 		}
 
-		hql.append(" order by av.origem.codigo");
+		hql.append(" order by av.origem.codigo, av.datalancamento");
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 

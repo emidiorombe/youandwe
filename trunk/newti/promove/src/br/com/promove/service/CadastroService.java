@@ -62,6 +62,8 @@ public interface CadastroService {
 
 	public List<TipoUsuario> buscarTodosTiposUsuarios()throws PromoveException;
 
+	public List<String> buscarTodosNavios() throws PromoveException;
+	
 	public void salvarVeiculo(Veiculo bean)throws PromoveException;
 
 	public void excluirVeiculo(Veiculo bean)throws PromoveException;
@@ -81,7 +83,6 @@ public interface CadastroService {
 	public List<InconsistenciaVeiculo> buscarTodasInconsistenciasDeVeiculos() throws PromoveException;
 
 	public void excluirInconsistenciaVeiculo(InconsistenciaVeiculo bean)throws PromoveException;
-
 
 	List<Veiculo> buscarVeiculosPorModeloFZData(String chassi, Date data)throws PromoveException;
 

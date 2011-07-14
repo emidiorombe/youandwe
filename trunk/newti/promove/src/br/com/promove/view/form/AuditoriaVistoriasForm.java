@@ -198,6 +198,32 @@ public class AuditoriaVistoriasForm extends BaseForm{
                     c.setValue(c.getItemIds().iterator().next());
 				
 				return c;
+			}else if(propertyId.equals("navio")) {
+				try {
+					ComboBox c = new ComboBox("Navio");
+					c.addContainerProperty("label", String.class, null);
+				
+					Item item_default = c.addItem(new String());
+					item_default.getItemProperty("label").setValue("Selecione...");
+					for(String s: cadastroService.buscarTodosNavios()) {
+						Item i = c.addItem(s);
+						i.getItemProperty("label").setValue(s);
+					}
+					
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					c.setWidth("250px");
+					
+					if (c.getValue() ==  null && c.size() > 0)
+	                    c.setValue(c.getItemIds().iterator().next());
+					
+					return c;
+				}catch (PromoveException e) {
+					showErrorMessage(form, "Não foi possível buscar os Navios");
+				}
 			}
 			return f;
 		}
@@ -216,7 +242,8 @@ public class AuditoriaVistoriasForm extends BaseForm{
 				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
 				
 				if(de == null || ate == null)
-					throw new IllegalArgumentException("Informe o período");
+					if(item.getBean().getNavio().isEmpty())
+						throw new IllegalArgumentException("Informe um navio ou período");
 				
 				List<Veiculo> veiculos = cadastroService.buscarVeiculosAuditoria(item.getBean(), de, ate, oride, oriate);
 				
