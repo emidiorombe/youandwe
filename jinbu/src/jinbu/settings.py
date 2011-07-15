@@ -1,11 +1,19 @@
 # Django settings for Jinbu project.
+#
 import os
+import socket
 
-DEBUG = True
+PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
+
+if socket.gethostname() == 'your.domain.com':
+    DEBUG = False
+else:
+    DEBUG = True
+ 
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Rafael Nunes', 'rafael@jinbu.com.br'),
+     ('Rafael Nunes', 'rafael@jinbu.com.br'),
 )
 
 MANAGERS = ADMINS
@@ -34,11 +42,8 @@ USE_L10N = True
 BUSTER_VERSION=1
 CDN_URL='http://static.jinbu.com.br/'+ str(BUSTER_VERSION) +'/' 
 CDN_DEV_URL='/static/'
-MEDIA_ROOT='/home/rafael/Aptana Studio 3 Workspace/jinbu/src/jinbu/core/static' 
+MEDIA_ROOT= os.path.join(PROJECT_PATH, 'static')
  
-
-
-
 ADMIN_MEDIA_PREFIX = '/media/'
 
 CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
@@ -57,10 +62,14 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 #    'django.middleware.cache.UpdateCacheMiddleware',
 #    'django.middleware.cache.FetchFromCacheMiddleware',
 )
+
+if DEBUG:
+    MIDDLEWARE_CLASSES += (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',                
+    )
 
 ROOT_URLCONF = 'jinbu.urls'
 
@@ -69,18 +78,34 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    #Django apps
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
+    'django.contrib.admin',
+    
+    #Third Apps
+    
+    #Project Apps
     'core',
-    'debug_toolbar',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
 )
+
+if DEBUG:
+    INSTALLED_APPS += (
+    #DESENV APPS        
+    'debug_toolbar',
+    )
 
 #Debug Tool bar
 INTERNAL_IPS = ('127.0.0.1',)
+DEBUG_TOOLBAR_CONFIG = {
+   'INTERCEPT_REDIRECTS': False,
+}
+
+
+try:
+    from local_settings import *
+except ImportError:
+    pass

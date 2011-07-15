@@ -6,22 +6,23 @@ from core.views import v_general, v_promocao
 
 
 
-# admin.autodiscover()
+admin.autodiscover()
 
 #Geral
 urlpatterns = patterns('',
     ('^$', v_general.index),
     ('^cadastro/usuario/$', v_general.add_user),
     ('^cadastro/empresa/$', v_general.add_empresa),
-
-)
-
-#
-urlpatterns += patterns('',
     ('^cadastro/compra/$', v_promocao.criar_promocao),
     ('^oferta/$', v_promocao.list_oferta),
     ('^compra/list/(\d*)', v_promocao.list_promocao),
-    
+
+
+)
+
+#URLs administrativas
+urlpatterns += patterns('',
+    url(r'^admin/', include(admin.site.urls)),
 )
 
 
