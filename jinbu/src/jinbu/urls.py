@@ -11,11 +11,14 @@ from core.views import v_general, v_promocao
 #Geral
 urlpatterns = patterns('',
     ('^$', v_general.index),
-    ('^cadastro/usuario$', v_general.add_user),
+    ('^cadastro/usuario/$', v_general.add_user),
+    ('^cadastro/empresa/$', v_general.add_empresa),
+
 )
 
+#
 urlpatterns += patterns('',
-    ('^cadastro/compra$', v_promocao.criar_promocao),
+    ('^cadastro/compra/$', v_promocao.criar_promocao),
     ('^oferta/$', v_promocao.list_oferta),
     ('^compra/list/(\d*)', v_promocao.list_promocao),
     

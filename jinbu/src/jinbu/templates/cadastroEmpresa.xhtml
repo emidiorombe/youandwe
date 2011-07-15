@@ -1,0 +1,55 @@
+{% extends "base.xhtml" %}
+
+{% block content%}
+<form action="/cadastro/empresa/" method="POST">
+<div id="Contener">
+  <div id="boxConteudo">
+  <!--Inicio da secao Cadastro Empresa-->
+  
+  <p class="cadastroTitulo">Cadastro Empresa</p>
+  
+  <div class="clearFloat"></div>
+  
+  <div id="cadastroBox">
+  <p class="cadastroForm-txt">Empresa</p>
+  <div id="cadastroBox-Input">
+  <input name="Nome" type="text"  class="codastroInput"/>
+  </div>
+  
+  <div class="clearFloat"></div>
+  
+  <p class="cadastroForm-txt">Site</p>
+  <div id="cadastroBox-Input">
+  <input name="Nome" type="text"  class="codastroInput"/> 
+  </div>
+
+  <div class="clearFloat"></div>
+  
+  <p class="cadastroForm-txt">Responsável</p>
+  <div id="cadastroBox-Input">
+  <input name="Nome" type="text"  class="codastroInput"/>  
+  </div>  
+  
+  <div class="clearFloat"></div>
+  
+  <p class="cadastroForm-txt">E-mail</p>
+  <div id="cadastroBox-Input">
+  <input name="Nome" type="text"  class="codastroInput"/>
+  </div>
+  
+  <div class="clearFloat"></div>
+  
+  <p class="cadastroForm-txt">Telefone</p>
+  <div id="cadastroBox-Input">
+  <input name="Nome" type="text"  class="codastroInput"/>
+  </div>
+  
+  <p class="cadastroForm-txt">&nbsp;</p>
+  <div id="cadastroBox-BtnCadastra">
+  <input name="Cadastra" type="submit" value="Cadastra" />
+  </div>  
+  </div>
+  
+  <div class="clearFloat"></div>
+</form>
+{% endblock%}
