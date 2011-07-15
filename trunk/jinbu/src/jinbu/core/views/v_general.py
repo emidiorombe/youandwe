@@ -12,12 +12,13 @@ def index(request):
     my_var = cache.get("m")
     if my_var is not None:
         cache.set("m", my_var + 1)
-    categorias = Promocao.objects.get_top_categorias()
-    promos = Promocao.objects.get_promocoes_das_categorias(categorias)
-    c_tits = {}
-    if(promos.__len__() > 0):
-        c_tits = {'tit1':promos.keys()[0], 'tit2':promos.keys()[0], 'tit3':promos.keys()[0]}
+    promos = Promocao.objects.get_for_index()
+    c_tits = {'tit1':promos.keys()[0], 'tit2':promos.keys()[1], 'tit3':promos.keys()[2]}
     return render_to_response('index.xhtml', locals())
 
 def add_user(request):
     return render_to_response('cadastroFisico.xhtml', locals())
+
+def add_empresa(request):
+    msg = 'teste'
+    return render_to_response('cadastroEmpresa.xhtml', locals())

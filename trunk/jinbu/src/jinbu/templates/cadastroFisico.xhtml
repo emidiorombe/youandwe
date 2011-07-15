@@ -3,6 +3,8 @@
 {% block content%}
 
 <!-- Inicio do Div do meio Contener -->
+<form method="POST" action="/cadastro/usuario/">
+{% csrf_token %} 
 <div id="Contener">
   <div id="boxConteudo">
     <p class="cadastroTitulo">Cadastre-se</p>
@@ -36,22 +38,10 @@
         <input name="okOferta" type="checkbox" value="" checked class="cadastroCheck" />
         <p class="cadastroTxt-infoCheck">Sim</p>
       </div>
-      <div class="clearFloat"></div>
-      <p class="cadastroForm-txt">Quais ofertas.</p>
-      <div id="cadastroBox-Check">
-        <input name="okOferta" type="checkbox" value="" class="cadastroCheck" />
-        <p class="cadastroTxt-infoCheck">Laser</p>
-        <input name="okOferta" type="checkbox" value="" class="cadastroCheck" />
-        <p class="cadastroTxt-infoCheck">Bares e Restaurantes</p>
-        <input name="okOferta" type="checkbox" value="" class="cadastroCheck" />
-        <p class="cadastroTxt-infoCheck">Serviços</p>
-        <input name="okOferta" type="checkbox" value="" class="cadastroCheck" />
-        <p class="cadastroTxt-infoCheck">Todas</p>
-      </div>
+      
       <div class="clearFloat"></div>
       <p class="cadastroForm-txt">&nbsp;</p>
       <div id="cadastroBox-Check">
-        <input name="okOferta" type="checkbox" value="" checked class="cadastroCheck" />
         <p class="cadastroTxt-infoCheck">Li e aceito os <a href="#" class="link-Termos">Termos</a></p>
       </div>
       <div class="clearFloat"></div>
@@ -64,6 +54,7 @@
   </div>
   <!-- Fim do Div conteudo --> 
 </div>
+</form>
 <!-- Fim do Div do meio Contener --> 
 
 {% endblock%}
