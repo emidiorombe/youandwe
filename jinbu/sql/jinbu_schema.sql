@@ -1,7 +1,7 @@
 -- MySQL Administrator dump 1.4
 --
 -- ------------------------------------------------------
--- Server version	5.1.41-3ubuntu12.10
+-- Server version	5.1.49-1ubuntu8.1
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -104,7 +104,7 @@ CREATE TABLE  `jinbu`.`auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `content_type_id` (`content_type_id`,`codename`),
   KEY `auth_permission_1bb8f392` (`content_type_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `jinbu`.`auth_permission`
@@ -150,7 +150,10 @@ INSERT INTO `jinbu`.`auth_permission` VALUES  (1,'Can add permission',1,'add_per
  (36,'Can delete oferta',12,'delete_oferta'),
  (37,'Can add cupom',13,'add_cupom'),
  (38,'Can change cupom',13,'change_cupom'),
- (39,'Can delete cupom',13,'delete_cupom');
+ (39,'Can delete cupom',13,'delete_cupom'),
+ (40,'Can add log entry',14,'add_logentry'),
+ (41,'Can change log entry',14,'change_logentry'),
+ (42,'Can delete log entry',14,'delete_logentry');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 
@@ -174,7 +177,7 @@ CREATE TABLE  `jinbu`.`auth_user` (
   `date_joined` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `jinbu`.`auth_user`
@@ -182,7 +185,8 @@ CREATE TABLE  `jinbu`.`auth_user` (
 
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
 LOCK TABLES `auth_user` WRITE;
-INSERT INTO `jinbu`.`auth_user` VALUES  (1,'rafael','','','rafael@jinbu.com.br','sha1$5b24a$048c67fb99c3c0a866ed2de3ba1be7f4125dec5b',1,1,1,'2011-03-24 23:50:32','2011-03-24 23:50:32');
+INSERT INTO `jinbu`.`auth_user` VALUES  (1,'rafael','','','rafael@jinbu.com.br','sha1$5b24a$048c67fb99c3c0a866ed2de3ba1be7f4125dec5b',1,1,1,'2011-07-15 09:41:12','2011-03-24 23:50:32'),
+ (2,'jinbuser','Jinbu','User','jinbuser@jinbu.com.br','xkx',0,1,0,'2011-07-15 09:51:51','2011-07-15 09:51:51');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 
@@ -378,7 +382,7 @@ CREATE TABLE  `jinbu`.`core_promocao` (
   PRIMARY KEY (`id`),
   KEY `core_promocao_15b80b28` (`user_criacao_id`),
   KEY `core_promocao_64c3c188` (`categoria_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `jinbu`.`core_promocao`
@@ -386,11 +390,15 @@ CREATE TABLE  `jinbu`.`core_promocao` (
 
 /*!40000 ALTER TABLE `core_promocao` DISABLE KEYS */;
 LOCK TABLES `core_promocao` WRITE;
-INSERT INTO `jinbu`.`core_promocao` VALUES  (5,'t5','0000-00-00','SP',1,'xxx',4,171,1),
- (4,'t4','0000-00-00','SP',1,'xxx',3,25,1),
- (3,'t3','0000-00-00','SP',1,'xxx',1,30,1),
- (2,'t2','0000-00-00','SP',1,'xxx',5,50,1),
- (1,'t1','0000-00-00','SP',1,'xxx',1,5,1);
+INSERT INTO `jinbu`.`core_promocao` VALUES  (5,'Depilação a Laser','2011-07-15','SP',2,'xxx2',4,171,1),
+ (4,'Tequila a vontade','2011-07-15','SP',2,'xxx',3,25,1),
+ (3,'Corrida de Kart','2011-07-15','SP',2,'xxx',1,30,1),
+ (1,'Pular de Paraquedas','2011-07-15','SP',2,'xxx',1,5,1),
+ (6,'Escondidinho de Carne Seca','2011-07-15','São Paulo',2,'xxx2',3,42,1),
+ (7,'Um dia no SPA','2011-07-15','São Paulo',2,'xxx2',4,22,1),
+ (8,'Personal Trainner','2011-07-15','São Paulo',2,'xxx',4,24,1),
+ (9,'Cruzeiro Caribe','2011-07-15','São Paulo',2,'yyy',1,80,1),
+ (10,'Comida Mexicana','2011-07-15','São Paulo',2,'www',3,10,1);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `core_promocao` ENABLE KEYS */;
 
@@ -412,8 +420,50 @@ CREATE TABLE  `jinbu`.`core_usuario` (
 
 /*!40000 ALTER TABLE `core_usuario` DISABLE KEYS */;
 LOCK TABLES `core_usuario` WRITE;
+INSERT INTO `jinbu`.`core_usuario` VALUES  (2,0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `core_usuario` ENABLE KEYS */;
+
+
+--
+-- Definition of table `jinbu`.`django_admin_log`
+--
+
+DROP TABLE IF EXISTS `jinbu`.`django_admin_log`;
+CREATE TABLE  `jinbu`.`django_admin_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `action_time` datetime NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `content_type_id` int(11) DEFAULT NULL,
+  `object_id` longtext,
+  `object_repr` varchar(200) NOT NULL,
+  `action_flag` smallint(5) unsigned NOT NULL,
+  `change_message` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `django_admin_log_403f60f` (`user_id`),
+  KEY `django_admin_log_1bb8f392` (`content_type_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `jinbu`.`django_admin_log`
+--
+
+/*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
+LOCK TABLES `django_admin_log` WRITE;
+INSERT INTO `jinbu`.`django_admin_log` VALUES  (1,'2011-07-15 09:54:24',1,11,'5','Pular de Paraquedas',2,'Modificado texto, data_cadastro e user_criacao.'),
+ (2,'2011-07-15 09:54:45',1,11,'4','Tequila a vontade',2,'Modificado texto, data_cadastro e user_criacao.'),
+ (3,'2011-07-15 09:55:04',1,11,'3','Corrida de Kart',2,'Modificado texto, data_cadastro e user_criacao.'),
+ (4,'2011-07-15 09:55:24',1,11,'2','t2',3,''),
+ (5,'2011-07-15 09:57:42',1,11,'5','Depilação a Laser',2,'Modificado texto.'),
+ (6,'2011-07-15 10:05:22',1,11,'5','Depilação a Laser',2,'Modificado image.'),
+ (7,'2011-07-15 10:06:09',1,11,'1','Pular de Paraquedas',2,'Modificado texto, data_cadastro e user_criacao.'),
+ (8,'2011-07-15 10:08:02',1,11,'6','Escondidinho de Carne Seca',1,''),
+ (9,'2011-07-15 10:08:39',1,11,'7','Um dia no SPA',1,''),
+ (10,'2011-07-15 10:09:47',1,11,'8','Personal Trainner',1,''),
+ (11,'2011-07-15 10:10:54',1,11,'9','Cruzeiro Caribe',1,''),
+ (12,'2011-07-15 10:11:46',1,11,'10','Comida Mexicana',1,'');
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 
 
 --
@@ -428,7 +478,7 @@ CREATE TABLE  `jinbu`.`django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_label` (`app_label`,`model`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `jinbu`.`django_content_type`
@@ -448,7 +498,8 @@ INSERT INTO `jinbu`.`django_content_type` VALUES  (1,'permission','auth','permis
  (10,'categoria','core','categoria'),
  (11,'promocao','core','promocao'),
  (12,'oferta','core','oferta'),
- (13,'cupom','core','cupom');
+ (13,'cupom','core','cupom'),
+ (14,'log entry','admin','logentry');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 
@@ -472,6 +523,7 @@ CREATE TABLE  `jinbu`.`django_session` (
 
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
 LOCK TABLES `django_session` WRITE;
+INSERT INTO `jinbu`.`django_session` VALUES  ('b376e65e4cf89f3a82a318e5835ce82e','MDU5ZTc4MTc0ZGQ1YzEwZTYxZWJjM2RlYTU5YjkyN2QzNTY4N2IzZTqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==\n','2011-07-29 09:41:13');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 
