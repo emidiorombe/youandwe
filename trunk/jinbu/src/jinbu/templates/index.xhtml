@@ -10,72 +10,59 @@
     <!-- Inicio Coluna A -->
     <div id="contHome-Coluna-A">
     <h3 class=" tituloVermelho">{{c_tits.tit1}}</h3>
-      {% for key,value in promos.items%}
+      	{% for promoA in list_p1%}
         <div id="boxPromo-Cont"> 
           <img src="{%CDN%}img/promos/rapel1.jpg" width="230" height="150" alt="Promo" />
-          <p class="txtPromo-Info"><a href="#" class="link-Promo">Cruzeiro de Carnaval para Buenos Aires e Punta - MSC Armonia 9 Noites para 2 pessoas + 3° Passageiro Grátis (De 9.628,98 por 4.303,89)</a></p>
+          <p class="txtPromo-Info">
+          	<a href="#" class="link-Promo">
+          		{{promoA}}
+			</a>
+		  </p>
         </div>
-        
         <!--Div Promocoes-->
         <div class="div-cont-colunas"></div>
         <!--Fim Div Promocoes-->
-      {% endfor %}
+        {% endfor %}
     </div>
     <!-- Fim Coluna A --> 
     
     <!-- Inicio Coluna B -->
     <div id="contHome-Coluna-B">
       <h3 class="tituloVerde"><span class="tituloVerdeSub">{{c_tits.tit2}}</span></h3>
-    <div id="boxPromo-Cont"> 
-    	<img src="/static/img/imgLaser01.jpg" width="230" height="150" alt="Promo" />
-        <p class="txtPromo-Info"><a href="#" class="link-Promo">Cruzeiro de Carnaval para Buenos Aires e Punta - MSC Armonia 9 Noites para 2 pessoas + 3° Passageiro Grátis (De 9.628,98 por 4.303,89)</a></p>
-      </div>
-      
-      <!--Div Promocoes-->
-      <div class="div-cont-colunas"></div>
-      <!--Fim Div Promocoes-->
-      
-      <div id="boxPromo-Cont"> 
-      	<img src="/static/img/imgLaser01.jpg" width="230" height="150" alt="Promo" />
-        <p class="txtPromo-Info"><a href="#" class="link-Promo">Cruzeiro de Carnaval para Buenos Aires e Punta - MSC Armonia 9 Noites para 2 pessoas + 3° Passageiro Grátis (De 9.628,98 por 4.303,89)</a></p>
-      </div>
-      
-      <!--Div Promocoes-->
-      <div class="div-cont-colunas"></div>
-      <!--Fim Div Promocoes-->
-      
-      <div id="boxPromo-Cont"> 
-      	<img src="/static/img/imgLaser01.jpg" width="230" height="150" alt="Promo" />
-        <p class="txtPromo-Info"><a href="#" class="link-Promo">Cruzeiro de Carnaval para Buenos Aires e Punta - MSC Armonia 9 Noites para 2 pessoas + 3° Passageiro Grátis (De 9.628,98 por 4.303,89)</a></p>
-      </div>
-    </div>
+      {% for promoB in list_p2%}
+	    <div id="boxPromo-Cont"> 
+	    	<img src="/static/img/imgLaser01.jpg" width="230" height="150" alt="Promo" />
+	        <p class="txtPromo-Info">
+	        	<a href="#" class="link-Promo">
+	        	   {{ promoB }}	
+				</a></p>
+	      </div>
+	      
+	      <!--Div Promocoes-->
+	      <div class="div-cont-colunas"></div>
+	      <!--Fim Div Promocoes-->
+	  {% endfor %}    
+	    </div>
     <!-- Fim Coluna B --> 
     
     <!-- Inicio Coluna C -->
     <div id="contHome-Coluna-C">
     <h3 class="tituloLaranja">{{c_tits.tit3}}</h3>
+    	{% for promoC in list_p3%}
       <div id="boxPromo-Cont"> <img src="/static/img/imgLaser01.jpg" width="230" height="150" alt="Promo" />
-        <p class="txtPromo-Info"><a href="#" class="link-Promo">Cruzeiro de Carnaval para Buenos Aires e Punta - MSC Armonia 9 Noites para 2 pessoas + 3° Passageiro Grátis (De 9.628,98 por 4.303,89)</a></p>
+        <p class="txtPromo-Info">
+        	<a href="#" class="link-Promo">
+        	{{promoC }}
+        	</a></p>
       </div>
       
       <!--Div Promocoes-->
       <div class="div-cont-colunas"></div>
       <!--Fim Div Promocoes-->
-      
-      <div id="boxPromo-Cont"> <img src="/static/img/imgLaser01.jpg" width="230" height="150" alt="Promo" />
-        <p class="txtPromo-Info"><a href="#" class="link-Promo">Cruzeiro de Carnaval para Buenos Aires e Punta - MSC Armonia 9 Noites para 2 pessoas + 3° Passageiro Grátis (De 9.628,98 por 4.303,89)</a></p>
-      </div>
-      
-      <!--Div Promocoes-->
-      <div class="div-cont-colunas"></div>
-      <!--Fim Div Promocoes-->
-      
-      <div id="boxPromo-Cont"> <img src="/static/img/imgLaser01.jpg" width="230" height="150" alt="Promo" />
-        <p class="txtPromo-Info"><a href="#" class="link-Promo">Cruzeiro de Carnaval para Buenos Aires e Punta - MSC Armonia 9 Noites para 2 pessoas + 3° Passageiro Grátis (De 9.628,98 por 4.303,89)</a></p>
-      </div>
+      {% endfor %} 
     </div>
     <!-- Fim Coluna C --> 
-    
+
     <!-- Inicio Sidebar -->
     <div id="Sidebar">
       <div id="boxNews"> <img src="/static/img/iconNews.png" width="180" height="57" />
