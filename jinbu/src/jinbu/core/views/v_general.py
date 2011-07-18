@@ -20,3 +20,6 @@ def add_user(request):
 def add_empresa(request):
     msg = 'teste'
     return render_to_response('cadastroEmpresa.xhtml', locals())
+
+def nav_empresa(request):
+    return render_to_response('navEmpresa.xhtml', locals())
