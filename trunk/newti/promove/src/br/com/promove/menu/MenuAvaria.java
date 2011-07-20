@@ -102,10 +102,12 @@ public class MenuAvaria  extends CssLayout{
 			import_veiculos.setVisible(false);
 			erro_import_veiculos.setVisible(false);
 			export.setVisible(false);
-			if(user.getTipo().getId() != 5) 
+			if(user.getTipo().getId() != 3 && user.getTipo().getId() != 5) 
 				auditoria.setVisible(false);
-			analise.setVisible(false);
-			resumo.setVisible(false);
+			if(user.getTipo().getId() != 3) {
+				analise.setVisible(false);
+				resumo.setVisible(false);
+			}
 		}
 	}
 	
