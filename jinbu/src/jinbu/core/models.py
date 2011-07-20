@@ -3,10 +3,11 @@ from django.contrib.auth.models import User
 from jinbu.core import managers
 
 class Usuario(User):
-    t = models.IntegerField(default=0)
-    
+    pass
+
 class Empresa(User):
-    x = models.IntegerField(default=0)
+    fone = models.CharField(max_length=30)
+    site = models.CharField(max_length=255)
     
 class Categoria(models.Model):
     nome = models.CharField(max_length=255)
