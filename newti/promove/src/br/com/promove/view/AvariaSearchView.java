@@ -22,7 +22,7 @@ public class AvariaSearchView extends SplitPanel {
 		form.setView(this);
 		setFirstComponent(form.getLayout());
 		setSecondComponent(table);
-		setSplitPosition(50);
+		setSplitPosition(55);
 		
 	}
 	

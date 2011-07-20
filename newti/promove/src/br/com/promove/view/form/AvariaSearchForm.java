@@ -178,15 +178,12 @@ public class AvariaSearchForm extends BaseForm{
 		layout.addComponent(this);
 		HorizontalLayout colunas = new HorizontalLayout();
 
-		//createFormBodyVe(new BeanItem<Veiculo>(new Veiculo()));
-		//createFormBodyAv(new BeanItem<Avaria>(new Avaria()));
-		
 		BeanItem<Avaria> avaria = new BeanItem<Avaria>(new Avaria());
 		BeanItem<Veiculo> veiculo = new BeanItem<Veiculo>(new Veiculo());
 		
 		coluna1.setItemDataSource(veiculo);
 		coluna1.setFormFieldFactory(new VeiculoFieldFactory(this, veiculo.getBean().getId() == null));
-		coluna1.setVisibleItemProperties(new Object[]{"chassi", "tipo", "modelo"});
+		coluna1.setVisibleItemProperties(new Object[]{"chassi", "tipo", "navio", "modelo"});
 		
 		coluna2.setItemDataSource(avaria);
 		coluna2.setFormFieldFactory(new AvariaFieldFactory(this, avaria.getBean().getId() == null));
@@ -201,16 +198,12 @@ public class AvariaSearchForm extends BaseForm{
 		coluna2.addField("chkMovimentacao", chkMovimentacao);
 		coluna2.addField("chkRegistradas", chkRegistradas);
 		coluna2.addField("chkVistoriaFinal", chkVistoriaFinal);
-		//coluna2.addField("cmbModelo", cmbModelo);
-		//coluna2.addField("cmbTipo", cmbTipo);
 		colunas.addComponent(coluna1);
 		colunas.addComponent(coluna2);
-		colunas.setMargin(false, true, false, true);
-		//colunas.setSpacing(true);
-		colunas.setVisible(true);
+		colunas.setSpacing(true);
+		//colunas.setVisible(true);
 		layout.addComponent(colunas);
 		layout.addComponent(createFooter());
-		//layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
 	}
 
@@ -294,6 +287,32 @@ public class AvariaSearchForm extends BaseForm{
 	                    c.setValue(c.getItemIds().iterator().next());
 					
 					return c;
+				}else if(propertyId.equals("navio")) {
+					try {
+						ComboBox c = new ComboBox("Navio");
+						c.addContainerProperty("label", String.class, null);
+					
+						Item item_default = c.addItem(new String());
+						item_default.getItemProperty("label").setValue("Selecione...");
+						for(String s: cadastroService.buscarTodosNavios()) {
+							Item i = c.addItem(s);
+							i.getItemProperty("label").setValue(s);
+						}
+						
+						c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+						c.setImmediate(true);
+						c.setNullSelectionAllowed(false);
+						c.setPropertyDataSource(item.getItemProperty(propertyId));
+						c.setItemCaptionPropertyId("label");
+						c.setWidth("250px");
+						
+						if (c.getValue() ==  null && c.size() > 0)
+		                    c.setValue(c.getItemIds().iterator().next());
+						
+						return c;
+					}catch (PromoveException e) {
+						showErrorMessage(avariaForm, "Não foi possível buscar os Navios");
+					}
 				} else if(propertyId.equals("modelo")) {
 					ComboBox c = new ComboBox("Modelo");
 					c.addContainerProperty("label", String.class, null);
@@ -443,8 +462,9 @@ public class AvariaSearchForm extends BaseForm{
 				avaria.getBean().setVeiculo(veiculo.getBean());
 				
 				if(avaria.getBean().getVeiculo() == null || avaria.getBean().getVeiculo().getChassi() == null || avaria.getBean().getVeiculo().getChassi().isEmpty()) {
-					if(de == null || ate == null)
-						throw new IllegalArgumentException("Informe um chassi ou período");
+					if(avaria.getBean().getVeiculo() == null || avaria.getBean().getVeiculo().getNavio() == null || avaria.getBean().getVeiculo().getNavio().isEmpty())
+						if(de == null || ate == null)
+							throw new IllegalArgumentException("Informe um chassi, navio ou período");
 				}
 				
 				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(avaria.getBean(), de, ate, periodo, movimentacao, registradas, vistoriaFinal, oriAte, responsabilidade, fabricante);

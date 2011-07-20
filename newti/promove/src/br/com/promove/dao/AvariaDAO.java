@@ -1,5 +1,6 @@
 package br.com.promove.dao;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,9 +20,12 @@ import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
+import br.com.promove.utils.DateUtils;
 import br.com.promove.utils.StringUtilities;
 
 public class AvariaDAO extends BaseDAO<Integer, Avaria>{
+	private static SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy");
+	
 	public List<Avaria> getAllCustom() throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select av from Avaria av left JOIN FETCH av.fotos");
@@ -95,12 +99,28 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 				addParamToQuery("orgFinal", oriAte);
 			} else { 
 				if (periodo == 1) hql.append(" and av.dataLancamento between :dtIni and :dtFim");
-				else hql.append(" and av.veiculo.dataCadastro between :dtIni and :dtFim");
+				else hql.append(" and veic.dataCadastro between :dtIni and :dtFim");
 			}
 			addParamToQuery("dtIni", de);
 			addParamToQuery("dtFim", ate);
 		}
 		
+		if(av.getVeiculo().getNavio() != null && !av.getVeiculo().getNavio().equals("")) {
+			hql.append(" and veic.navio = :txtnavio");
+			addParamToQuery("txtnavio", av.getVeiculo().getNavio().substring(0, av.getVeiculo().getNavio().length() - 13));
+			try {
+				Date dataNavio = date_format.parse(av.getVeiculo().getNavio().substring(av.getVeiculo().getNavio().length() - 10, av.getVeiculo().getNavio().length()));
+				
+				hql.append(" and veic.dataCadastro between :dtNavioIni and :dtNavioFim");
+				addParamToQuery("dtNavioIni", DateUtils.montarDataInicialParaHQLQuery(dataNavio));
+				addParamToQuery("dtNavioFim", DateUtils.montarDataFinalParaHQLQuery(dataNavio));
+			} catch (ParseException e) {
+				e.printStackTrace();
+				throw new DAOException("Data do navio inválida");
+			}
+		}
+		
+
 		if(responsabilidade != null && responsabilidade.getId() != null) {
 			hql.append(" and ori.responsabilidade = :txtResponsabilidade");
 			addParamToQuery("txtResponsabilidade", responsabilidade);

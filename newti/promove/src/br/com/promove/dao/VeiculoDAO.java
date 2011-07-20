@@ -127,10 +127,10 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		StringBuilder origens = new StringBuilder();
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("select navio||' - '||data from (");
-		sql.append("select distinct navio, to_char(datacadastro, 'dd/mm/yyyy') as data");
+		sql.append("select navio||' - '||to_char(data, 'dd/mm/yyyy') from (");
+		sql.append("select distinct navio, cast(datacadastro as date) as data");
 		sql.append(" from veiculo where tipo=2 and navio is not null");
-		sql.append(" order by navio, to_char(datacadastro, 'dd/mm/yyyy')) as lista");
+		sql.append(" order by data desc) as lista");
 
 		List lista = executeSQLQuery(sql.toString());
 		
@@ -206,6 +206,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		hql = new StringBuilder();
 		hql.append("select av from Avaria av inner join fetch av.veiculo v");
 		hql.append(" where 1 = 1");
+		
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
 			hql.append(" and v.dataCadastro between :dtIni and :dtFim");
 			addParamToQuery("dtIni", dtInicio);
@@ -259,11 +260,27 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		
 		StringBuilder subsql = new StringBuilder();
 		subsql.append(" select cast(':tipo' as text) as tipo, modelo.descricao as descricao");
-		subsql.append(" from veiculo, modelo");
+		subsql.append(" from veiculo, modelo where 1 = 1");
+	
+		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+			subsql.append(" and veiculo.datacadastro");
+			subsql.append(" between '" + dtInicio + "'");
+			subsql.append(" and '" + dtFim + "'");
+		}
 		
-		subsql.append(" where veiculo.datacadastro");
-		subsql.append(" between '" + dtInicio + "'");
-		subsql.append(" and '" + dtFim + "'");
+		if(veiculo.getNavio() != null && !veiculo.getNavio().equals("")) {
+			subsql.append(" and veiculo.navio = '" + veiculo.getNavio().substring(0, veiculo.getNavio().length() - 13) + "'");
+			try {
+				Date dataNavio = date_format.parse(veiculo.getNavio().substring(veiculo.getNavio().length() - 10, veiculo.getNavio().length()));
+				
+				subsql.append(" and veiculo.dataCadastro between '" + DateUtils.montarDataInicialParaHQLQuery(dataNavio) + "'");
+				subsql.append(" and '" + DateUtils.montarDataFinalParaHQLQuery(dataNavio) + "'");
+			} catch (ParseException e) {
+				e.printStackTrace();
+				throw new DAOException("Data do navio inválida");
+			}
+		}
+		
 		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) 
 			subsql.append(" and veiculo.tipo = " + veiculo.getTipo().toString());
 		
