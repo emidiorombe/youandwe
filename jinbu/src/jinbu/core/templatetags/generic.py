@@ -13,6 +13,14 @@ def BUSTER():
     return settings.BUSTER_VERSION
 
 @register.simple_tag
+def CACHE_CSS():
+    return settings.CACHE_CSS_VERSION
+
+@register.simple_tag
+def CACHE_JS():
+    return settings.CACHE_JS_VERSION 
+
+@register.simple_tag
 def CDN():
     if settings.DEBUG:
         return settings.CDN_DEV_URL

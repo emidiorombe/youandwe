@@ -40,8 +40,11 @@ USE_I18N = True
 USE_L10N = True
 
 BUSTER_VERSION=1
-CDN_URL='http://static.jinbu.com.br/'+ str(BUSTER_VERSION) +'/' 
+CDN_URL='http://static.jinbu.com.br/' 
 CDN_DEV_URL='/static/'
+CACHE_CSS_VERSION=1
+CACHE_JS_VERSION=1
+
 MEDIA_ROOT= os.path.join(PROJECT_PATH, 'static')
  
 ADMIN_MEDIA_PREFIX = '/media/'

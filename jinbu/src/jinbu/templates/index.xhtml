@@ -65,16 +65,21 @@
 
     <!-- Inicio Sidebar -->
     <div id="Sidebar">
+    <form method='POST' name='form_news_mail' id="form_news_mail">
+    	{% csrf_token %}
       <div id="boxNews"> <img src="/static/img/iconNews.png" width="180" height="57" />
         <label>
-          <input name="textNews" type="text" class="textNews" id="textNews" value="E-Mail" />
+          <input name="news_mail" type="text" class="textNews" id="news_mail" />
         </label>
-        <a href="#"><img src="/static/img/btnNewsEnviar.jpg" alt="Enviar" width="80" height="29" /></a> </div>
-      <img src="/static/img/facebook.jpg" alt="Siga-nos Twitter" width="200" height="280" class="margBottomImg" /> <img src="/static/img/imgTwiter.png" alt="Siga-nos Twitter" width="200" height="78" /> </div>
+        <input type="image" src="/static/img/btnNewsEnviar.jpg" alt="Enviar" width="80" height="29" /> 
+       </div>
+    </form>
+    
+      <img src="/static/img/facebook.jpg" alt="Siga-nos Twitter" width="200" height="280" class="margBottomImg" /> 
+      <img src="/static/img/imgTwiter.png" alt="Siga-nos Twitter" width="200" height="78" /> </div>
     <!-- Fim Sidebar -->
     <div class="clearFloat"></div>
   </div>
 </div>
-
 <!-- Fim do Div do meio Contener --> 
 {% endblock%}
