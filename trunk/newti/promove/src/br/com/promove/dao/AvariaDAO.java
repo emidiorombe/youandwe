@@ -72,19 +72,39 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			}
 			
 			if(av.getVeiculo() != null) {
-				if(av.getVeiculo().getChassi() != null && !av.getVeiculo().getChassi().isEmpty() && !av.getVeiculo().getChassi().equals("")) {
-					hql.append(" and veic.chassi like :txtChassi");
-					addParamToQuery("txtChassi", "%"+ av.getVeiculo().getChassi());
-				}
+				if(av.getVeiculo().getId() != null && av.getVeiculo().getId() != 0) {
+					hql.append(" and veic.id = :txtVeic");
+					addParamToQuery("txtVeic", av.getVeiculo().getId());
+				} else {
+					if(av.getVeiculo().getChassi() != null && !av.getVeiculo().getChassi().isEmpty() && !av.getVeiculo().getChassi().equals("")) {
+						hql.append(" and veic.chassi like :txtChassi");
+						addParamToQuery("txtChassi", "%"+ av.getVeiculo().getChassi());
+					}
+					
+					if(av.getVeiculo().getTipo() != null && av.getVeiculo().getTipo() != 0) {
+						hql.append(" and veic.tipo = :txtTipo");
+						addParamToQuery("txtTipo", av.getVeiculo().getTipo());
+					}
 				
-				if(av.getVeiculo().getTipo() != null && av.getVeiculo().getTipo() != 0) {
-					hql.append(" and veic.tipo = :txtTipo");
-					addParamToQuery("txtTipo", av.getVeiculo().getTipo());
-				}
-			
-				if(av.getVeiculo().getModelo() != null && av.getVeiculo().getModelo().getId() != null) {
-					hql.append(" and veic.modelo = :txtModelo");
-					addParamToQuery("txtModelo", av.getVeiculo().getModelo());
+					if(av.getVeiculo().getModelo() != null && av.getVeiculo().getModelo().getId() != null) {
+						hql.append(" and veic.modelo = :txtModelo");
+						addParamToQuery("txtModelo", av.getVeiculo().getModelo());
+					}
+	
+					if(av.getVeiculo().getNavio() != null && !av.getVeiculo().getNavio().equals("")) {
+						hql.append(" and veic.navio = :txtnavio");
+						addParamToQuery("txtnavio", av.getVeiculo().getNavio().substring(0, av.getVeiculo().getNavio().length() - 13));
+						try {
+							Date dataNavio = date_format.parse(av.getVeiculo().getNavio().substring(av.getVeiculo().getNavio().length() - 10, av.getVeiculo().getNavio().length()));
+							
+							hql.append(" and veic.dataCadastro between :dtNavioIni and :dtNavioFim");
+							addParamToQuery("dtNavioIni", DateUtils.montarDataInicialParaHQLQuery(dataNavio));
+							addParamToQuery("dtNavioFim", DateUtils.montarDataFinalParaHQLQuery(dataNavio));
+						} catch (ParseException e) {
+							e.printStackTrace();
+							throw new DAOException("Data do navio inválida");
+						}
+					}
 				}
 			}
 		}
@@ -105,22 +125,6 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			addParamToQuery("dtFim", ate);
 		}
 		
-		if(av.getVeiculo().getNavio() != null && !av.getVeiculo().getNavio().equals("")) {
-			hql.append(" and veic.navio = :txtnavio");
-			addParamToQuery("txtnavio", av.getVeiculo().getNavio().substring(0, av.getVeiculo().getNavio().length() - 13));
-			try {
-				Date dataNavio = date_format.parse(av.getVeiculo().getNavio().substring(av.getVeiculo().getNavio().length() - 10, av.getVeiculo().getNavio().length()));
-				
-				hql.append(" and veic.dataCadastro between :dtNavioIni and :dtNavioFim");
-				addParamToQuery("dtNavioIni", DateUtils.montarDataInicialParaHQLQuery(dataNavio));
-				addParamToQuery("dtNavioFim", DateUtils.montarDataFinalParaHQLQuery(dataNavio));
-			} catch (ParseException e) {
-				e.printStackTrace();
-				throw new DAOException("Data do navio inválida");
-			}
-		}
-		
-
 		if(responsabilidade != null && responsabilidade.getId() != null) {
 			hql.append(" and ori.responsabilidade = :txtResponsabilidade");
 			addParamToQuery("txtResponsabilidade", responsabilidade);
