@@ -17,6 +17,8 @@ urlpatterns = patterns('',
     ('^oferta/$', v_promocao.list_oferta),
     ('^compra/list/(\d*)', v_promocao.list_promocao),
     ('^empresa/$', v_general.nav_empresa),
+    
+    ('^news/add/$', v_general.news_add),
 
 
 )
