@@ -4,7 +4,7 @@ Created on Jan 6, 2011
 @author: Rafael Nunes
 '''
 from django.shortcuts import render_to_response, render
-from jinbu.core.models import Promocao
+from jinbu.core.models import Promocao, AssinanteNews
 from django.views.decorators.csrf import csrf_protect
 from jinbu.core.forms import EmpresaForm
 from django.http import HttpResponse
@@ -39,6 +39,7 @@ def nav_empresa(request):
     return render_to_response('navEmpresa.xhtml', locals())
 
 def news_add(request):
-    mail = request.POST['mail']
-    print mail
+    m = request.POST['mail']
+    assinante = AssinanteNews(mail=m)
+    assinante.save()
     return HttpResponse()
