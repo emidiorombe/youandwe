@@ -40,3 +40,6 @@ class Cupom(models.Model):
     promocao = models.ForeignKey(Promocao)
     oferta = models.ForeignKey(Oferta)
     usuario = models.ForeignKey(Usuario) 
+    
+class AssinanteNews(models.Model):
+    mail = models.EmailField()
