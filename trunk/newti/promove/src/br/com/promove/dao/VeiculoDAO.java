@@ -252,16 +252,28 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		return lista;
 	}
 
-	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oriInicio, OrigemAvaria oriFim) throws DAOException {
+	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oriInicio, OrigemAvaria oriFim, Boolean vistoriaFinal) throws DAOException {
 		//if ((oriFim == null || oriFim.getId() == null) &&
 		//		oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
 		//if ((oriInicio == null || oriInicio.getId() == null) &&
 		//		oriFim != null && oriFim.getId() != null) oriInicio = oriFim;
 		
 		StringBuilder subsql = new StringBuilder();
-		subsql.append(" select cast(':tipo' as text) as tipo, modelo.descricao as descricao");
-		subsql.append(" from veiculo, modelo where 1 = 1");
-	
+		StringBuilder subsqlA = new StringBuilder();
+		StringBuilder subsqlB = new StringBuilder();
+		
+		subsqlA.append(" select cast(':tipo' as text) as tipo, modelo.descricao as descricao");
+		subsqlA.append(" from veiculo, modelo, avaria, origemavaria");
+		subsqlA.append(" where veiculo.modelo_id = modelo.id");
+		subsqlA.append(" and veiculo.id = avaria.veiculo_id");
+		subsqlA.append(" and avaria.origem_id = origemavaria.id");
+		if (oriFim != null && oriFim.getId() != null)
+			subsqlA.append(" and origemavaria.codigo = " + oriFim.getCodigo().toString());
+		
+		subsqlB.append(" select cast(':tipo' as text) as tipo, modelo.descricao as descricao");
+		subsqlB.append(" from veiculo, modelo");
+		subsqlB.append(" where veiculo.modelo_id = modelo.id");
+
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
 			subsql.append(" and veiculo.datacadastro");
 			subsql.append(" between '" + dtInicio + "'");
@@ -284,25 +296,37 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) 
 			subsql.append(" and veiculo.tipo = " + veiculo.getTipo().toString());
 		
-		subsql.append(" and veiculo.modelo_id = modelo.id");
-		
-		subsql.append(" and :existe (select avaria.id from avaria, tipoavaria, origemavaria");
-		subsql.append(" where tipoavaria.movimentacao = false");
+		subsqlA.append(subsql.toString());
+		subsqlB.append(subsql.toString());
+
+		subsqlA.append(" and :existe (select avaria.id from avaria, tipoavaria, origemavaria");
+		subsqlA.append(" where veiculo.id = avaria.veiculo_id");
+		subsqlA.append(" and avaria.tipo_id = tipoavaria.id");
+		subsqlA.append(" and tipoavaria.movimentacao = false");
 		if (oriInicio != null && oriInicio.getId() != null)
-			subsql.append(" and origemavaria.codigo >= " + oriInicio.getCodigo().toString());
+			subsqlA.append(" and origemavaria.codigo >= " + oriInicio.getCodigo().toString());
 		if (oriFim != null && oriFim.getId() != null)
-			subsql.append(" and origemavaria.codigo <= " + oriFim.getCodigo().toString());
-		
-		subsql.append(" and veiculo.id = avaria.veiculo_id");
-		subsql.append(" and avaria.origem_id = origemavaria.id");
-		subsql.append(" and avaria.tipo_id = tipoavaria.id)");
+			subsqlA.append(" and origemavaria.codigo <= " + oriFim.getCodigo().toString());
+		subsqlA.append(" and avaria.origem_id = origemavaria.id)");
+		subsqlA.append(" group by veiculo.id, modelo.descricao");
+
+		subsqlB.append(" and :existe (select avaria.id from avaria, origemavaria");
+		subsqlB.append(" where veiculo.id = avaria.veiculo_id");
+		if (oriFim != null && oriFim.getId() != null)
+			subsqlB.append(" and origemavaria.codigo = " + oriFim.getCodigo().toString());
+		subsqlB.append(" and avaria.origem_id = origemavaria.id)");
+		subsqlB.append(" group by veiculo.id, modelo.descricao");
 
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("select tipo, descricao, cast(count(*) as integer) from ("); 
-		sql.append(subsql.toString().replaceAll(":tipo", "Avariados").replaceAll(":existe", "exists"));
+		sql.append("select tipo, descricao, cast(count(*) as integer) from (");
+		sql.append(subsqlA.toString().replaceAll(":tipo", "Avariados").replaceAll(":existe", "exists"));
 		sql.append(" UNION ALL");
-		sql.append(subsql.toString().replaceAll(":tipo", "Nao avariados").replaceAll(":existe", "not exists"));
+		sql.append(subsqlA.toString().replaceAll(":tipo", "Não avariados").replaceAll(":existe", "not exists"));
+		if(vistoriaFinal) {
+			sql.append(" UNION ALL");
+			sql.append(subsqlB.toString().replaceAll(":tipo", "Em processo").replaceAll(":existe", "not exists"));
+		}
 		sql.append(" ) as subconsulta");
 		sql.append(" group by tipo, descricao");
 		sql.append(" order by tipo, count(*) desc, descricao");

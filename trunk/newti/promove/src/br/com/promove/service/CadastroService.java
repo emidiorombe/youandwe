@@ -96,6 +96,6 @@ public interface CadastroService {
 
 	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException;
 
-	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException;
+	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate, Boolean vistoriaFinal) throws PromoveException;
 
 }

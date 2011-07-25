@@ -426,13 +426,13 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	}
 
 	@Override
-	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException {
+	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate, Boolean vistoriaFinal) throws PromoveException {
 		Map<String, List<PieData>> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaSQLQuery(de); 
 			Date fim = DateUtils.montarDataFinalParaSQLQuery(ate);
 			
-			lista = veiculoDAO.buscarAnaliseResultado(veiculo, init, fim, oride, oriate);
+			lista = veiculoDAO.buscarAnaliseResultado(veiculo, init, fim, oride, oriate, vistoriaFinal);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

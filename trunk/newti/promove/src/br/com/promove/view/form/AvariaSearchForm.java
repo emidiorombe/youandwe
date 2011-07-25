@@ -73,6 +73,8 @@ public class AvariaSearchForm extends BaseForm{
 	private void buildForm() {
 		setWriteThrough(false);
 		setImmediate(true);
+		coluna1.setImmediate(true);
+		coluna2.setImmediate(true);
 		setSizeFull();
 		Item i;
 		

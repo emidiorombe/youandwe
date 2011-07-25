@@ -63,6 +63,7 @@ public class AnaliseResultadoForm extends BaseForm{
 	private ComboBox cmbOrigemAte;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
+	private CheckBox chkVistoriaFinal;
 	private PromoveApplication app;
 	
 	public AnaliseResultadoForm(PromoveApplication app) {
@@ -126,6 +127,9 @@ public class AnaliseResultadoForm extends BaseForm{
 		cmbOrigemAte.setWidth("250px");
 		//cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
 		
+		chkVistoriaFinal = new CheckBox();
+		chkVistoriaFinal.setCaption("Listar Veiculos em Processo");
+		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
 		txtDe.setResolution(DateField.RESOLUTION_DAY);
@@ -140,6 +144,7 @@ public class AnaliseResultadoForm extends BaseForm{
 		addField("cmbOrigemAte", cmbOrigemAte);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
+		addField("chkVistoriaFinal", chkVistoriaFinal);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
@@ -254,13 +259,14 @@ public class AnaliseResultadoForm extends BaseForm{
 				OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
 				OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
 				//Integer periodo = (Integer)cmbPeriodo.getValue();
+				Boolean vistoriaFinal = (Boolean)chkVistoriaFinal.getValue();
 				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
 			
 				if(de == null || ate == null)
 					if(item.getBean().getNavio().isEmpty())
 						throw new IllegalArgumentException("Informe um navio ou período");
 			
-				itens = cadastroService.buscarAnaliseResultado(item.getBean(), de, ate, oride, oriate);
+				itens = cadastroService.buscarAnaliseResultado(item.getBean(), de, ate, oride, oriate, vistoriaFinal);
 				
 				if(event.getButton() == search) {
 					resumos = criaListaResumoesComItens(itens);
