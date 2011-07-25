@@ -109,18 +109,22 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			}
 		}
 		
+		if(de != null && !de.equals("") && ate != null && !ate.equals("") && periodo == 2)
+			hql.append(" and veic.dataCadastro between :dtIni and :dtFim");
+
+		if(vistoriaFinal && oriAte != null && oriAte.getId() != null) {
+			hql.append(" and exists (select av2 from Avaria av2");
+			hql.append(" where av2.veiculo = av.veiculo");
+			if(de != null && !de.equals("") && ate != null && !ate.equals("") && periodo == 1)
+				hql.append(" and av2.dataLancamento between :dtIni and :dtFim");
+			hql.append(" and av2.origem = :orgFinal)");
+			addParamToQuery("orgFinal", oriAte);
+		} else { 
+			if(de != null && !de.equals("") && ate != null && !ate.equals("") && periodo == 1)
+				hql.append(" and av.dataLancamento between :dtIni and :dtFim");
+		}
+		
 		if(de != null && !de.equals("") && ate != null && !ate.equals("")) {
-			if(vistoriaFinal && oriAte != null && oriAte.getId() != null) {
-				hql.append(" and exists (select av2 from Avaria av2");
-				hql.append(" where av2.veiculo = av.veiculo");
-				if (periodo == 1) hql.append(" and av2.dataLancamento between :dtIni and :dtFim");
-				else hql.append(" and av2.veiculo.dataCadastro between :dtIni and :dtFim");
-				hql.append(" and av2.origem = :orgFinal)");
-				addParamToQuery("orgFinal", oriAte);
-			} else { 
-				if (periodo == 1) hql.append(" and av.dataLancamento between :dtIni and :dtFim");
-				else hql.append(" and veic.dataCadastro between :dtIni and :dtFim");
-			}
 			addParamToQuery("dtIni", de);
 			addParamToQuery("dtFim", ate);
 		}
@@ -204,8 +208,8 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			sql.append(", modelo");
 		
 		sql.append(" where " + (periodo == 1 ? "avaria.datalancamento" : "veiculo.datacadastro"));
-		sql.append(" between '" + new SimpleDateFormat("yyyy-MM-dd").format(dtInicio) +"'");
-		sql.append(" and '" + new SimpleDateFormat("yyyy-MM-dd").format(dtFim) +"'");
+		sql.append(" between '" + dtInicio +"'");
+		sql.append(" and '" + dtFim +"'");
 
 		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) 
 			sql.append(" and veiculo.tipo = " + veiculo.getTipo().toString());
