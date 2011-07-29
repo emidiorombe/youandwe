@@ -1,11 +1,15 @@
 package br.com.newti.service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
+import br.com.newti.dao.CTRCDAO;
+import br.com.newti.parser.CTRCParser;
 import br.com.newti.util.DateUtils;
 import br.com.newti.util.SQLCache;
 
@@ -14,13 +18,16 @@ public class CTRCService {
 	
 	@Path("/por-data")
 	@GET
-	public String getPorDataAlteracao(@QueryParam("data")String data) {
+	public String getPorDataAlteracao(@QueryParam("dataIni")String dataIni, @QueryParam("dataFim")String dataFim) {
 		Date d = null;
-		if(data == null || data.isEmpty())
+		if(dataIni == null || dataIni.isEmpty())
 			d = new Date();
 		else
-			d = DateUtils.parseFromString(data, "yyyy-MM-dd");
+			d = DateUtils.parseFromString(dataIni, "yyyy-MM-dd");
 		
-		return SQLCache.getScript("ctrc");
+		//TODO Criar a data fim
+		List<Map<String, Object>> ctrcByData = CTRCDAO.getByDataModificacao(d, d);
+		
+		return CTRCParser.listMapToXML(ctrcByData);
 	}
 }

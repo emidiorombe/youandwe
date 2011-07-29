@@ -8,13 +8,10 @@ import br.com.newti.exception.DAOException;
 
 public class ConnectionManager {
 
-	private static final String STR_DRIVER = "org.gjt.mm.mysql.Driver";
-	private static final String DATABASE = "clientes";
-	private static final String IP = "localhost";
-	private static final String STR_CON = "jdbc:mysql://" + IP + ":3306/"
-			+ DATABASE;
-	private static final String USER = "root";
-	private static final String PASSWORD = "mysql";
+	private static final String STR_DRIVER = "oracle.jdbc.driver.OracleDriver";
+	private static final String STR_CON = "jdbc:oracle:thin:@//127.0.0.1:1521/XE";
+	private static final String USER = "system";
+	private static final String PASSWORD = "oracle";
 	private static final Logger log = Logger.getLogger(ConnectionManager.class);
 
 	public static Connection getConexao() throws DAOException {
@@ -66,4 +63,5 @@ public class ConnectionManager {
 		}
 		ConnectionManager.closeAll(conn, stmt, rs);
 	}
+	
 }

@@ -18,8 +18,9 @@ select (select tgaparam.cgc from tgaparam where rownum=1) as cnpj_transportadora
        nvl(vea027.vrmerc,0) as valor_mercadoria, --Double
        --CAMPO NOVO
        tga015.nome    as nome_motorista, --String
+       vea027.situac as situacao, --String --> Integer (1=Gerado, 2=Emitido, 3=Cancelado)
        --DADOS DO CTRC NAO UTILIZADOS
-       --'CTRC'         as tipo_nome, --Integer
+       --'CTRC'         as tipo_nome, --String
        --(select tgaparam.razao from tgaparam where rownum=1) as nome_emitente, --String
        --tga011.munici  as municipio_emitente, --String
        --tga011.uf      as uf_emitente, --String
@@ -55,7 +56,8 @@ and    vea027.codmot = tga015.codigo (+)
 --and    tga034.numero = vea027.numero
 --and    tga034.serie  = vea027.serie
 --and    tga034.tpodoc = tga037.codigo (+)
-and    vea027.situac <> '3' -- Cancelado
-and    vea027.coddev = 'FA0001' -- CAOA
-and    vea027.codfab = 10 -- CAOA
-and    vea027.dtemis between :dataDe and :dataAte
+--and    vea027.situac <> '3' -- Cancelado (converter os cancelados)
+--and    vea027.coddev = 'FA0001' -- CAOA
+--and    vea027.codfab in (10, 27) -- HYUNDAI/SUBARU
+and    vea027.datalt between ? and ?
+
