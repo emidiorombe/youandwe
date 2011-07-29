@@ -1,6 +1,7 @@
 package br.com.promove.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class VeiculoCtrc implements Serializable{
@@ -21,6 +24,14 @@ public class VeiculoCtrc implements Serializable{
 	private Integer inconsistencia;
 	private String msgErro;
 	private String chassiInvalido;
+	private String modelo;
+	private String numeroNF;
+	private String serieNF;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataNF = new Date();
+	
+	private Double valorMercadoria;
 
 	public Integer getId() {
 		return id;
@@ -60,6 +71,46 @@ public class VeiculoCtrc implements Serializable{
 
 	public String getChassiInvalido() {
 		return chassiInvalido;
+	}
+
+	public void setModelo(String modelo) {
+		this.modelo = modelo;
+	}
+
+	public String getModelo() {
+		return modelo;
+	}
+
+	public void setNumeroNF(String numeroNF) {
+		this.numeroNF = numeroNF;
+	}
+
+	public String getNumeroNF() {
+		return numeroNF;
+	}
+
+	public void setSerieNF(String serieNF) {
+		this.serieNF = serieNF;
+	}
+
+	public String getSerieNF() {
+		return serieNF;
+	}
+
+	public void setDataNF(Date dataNF) {
+		this.dataNF = dataNF;
+	}
+
+	public Date getDataNF() {
+		return dataNF;
+	}
+
+	public void setValorMercadoria(Double valorMercadoria) {
+		this.valorMercadoria = valorMercadoria;
+	}
+
+	public Double getValorMercadoria() {
+		return valorMercadoria;
 	}
 	
 	
