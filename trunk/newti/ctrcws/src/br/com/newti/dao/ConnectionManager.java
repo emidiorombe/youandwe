@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import br.com.newti.exception.DAOException;
 
 public class ConnectionManager {
-
+	//TODO buscar parametros no web.xml
 	private static final String STR_DRIVER = "oracle.jdbc.driver.OracleDriver";
 	private static final String STR_CON = "jdbc:oracle:thin:@//127.0.0.1:1521/XE";
 	private static final String USER = "system";
