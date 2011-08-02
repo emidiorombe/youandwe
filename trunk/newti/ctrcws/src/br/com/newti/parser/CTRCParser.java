@@ -10,9 +10,9 @@ import org.dom4j.Element;
 public class CTRCParser {
 	public static String listMapToXML(List<Map<String, Object>> ctrcByData) {
 		Document xml = DocumentHelper.createDocument();
-		Element root = xml.addElement("retorno");
+		Element root = xml.addElement("RETORNO");
 		for(Map<String, Object> ctrc : ctrcByData) {
-			Element ctrc_tag = root.addElement("ctrc");
+			Element ctrc_tag = root.addElement("CTRC");
 			for(Map.Entry<String, Object> entry : ctrc.entrySet()) {
 				try {
 					ctrc_tag.addElement(entry.getKey()).addText(elvis(entry.getValue()));
