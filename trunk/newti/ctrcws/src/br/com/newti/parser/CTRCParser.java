@@ -14,10 +14,20 @@ public class CTRCParser {
 		for(Map<String, Object> ctrc : ctrcByData) {
 			Element ctrc_tag = root.addElement("ctrc");
 			for(Map.Entry<String, Object> entry : ctrc.entrySet()) {
-				ctrc_tag.addElement(entry.getKey()).addText(entry.getValue().toString());
+				try {
+					ctrc_tag.addElement(entry.getKey()).addText(elvis(entry.getValue()));
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
 		return xml.asXML();
+	}
+	
+	public static String elvis(Object obj) {
+		if(obj == null)
+			return "";
+		return obj.toString();
 	}
 }

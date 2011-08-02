@@ -27,9 +27,10 @@ public class CTRCDAO {
 			
 			while(rs.next()) {
 				Map<String, Object> ctrc = new HashMap<String, Object>();
-				ctrc.put("CAMPOX", rs.getObject("CAMPOX"));
-				
-				//TODO outros campos
+				int size = rs.getMetaData().getColumnCount();
+				for(int i = 1; i < size; i++) {
+					ctrc.put(rs.getMetaData().getColumnName(i), rs.getObject(i));
+				}
 				retorno.add(ctrc);
 			}
 		} catch (DAOException e) {
