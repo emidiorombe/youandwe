@@ -15,11 +15,12 @@ public class ConnectionManager {
 	private static final Logger log = Logger.getLogger(ConnectionManager.class);
 
 	public static Connection getConexao() throws DAOException {
+		//TODO Implementar Pool de Conexões
+		
 		Connection conn = null;
 		try {
 			Class.forName(STR_DRIVER);
 			conn = DriverManager.getConnection(STR_CON, USER, PASSWORD);
-			System.out.println("[ConnectionManager]: Obtendo conexao");
 			return conn;
 		} catch (ClassNotFoundException e) {
 			String errorMsg = "Driver nao encontrado";
