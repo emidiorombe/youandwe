@@ -9,6 +9,7 @@ import com.vaadin.ui.TextField;
 
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.Cor;
+import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Filial;
 import br.com.promove.entity.InconsistenciaVeiculo;
@@ -98,4 +99,5 @@ public interface CadastroService {
 
 	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate, Boolean vistoriaFinal) throws PromoveException;
 
+	public List<Veiculo> buscarVeiculosPorCtrc(Ctrc ctrc) throws PromoveException;
 }

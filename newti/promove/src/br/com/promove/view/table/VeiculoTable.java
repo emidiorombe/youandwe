@@ -6,18 +6,12 @@ import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
-import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
-import br.com.promove.exception.PromoveException;
-import br.com.promove.menu.MenuAvaria;
-import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
-import br.com.promove.view.AuditoriaVistoriasTables;
-import br.com.promove.view.AuditoriaVistoriasView;
 import br.com.promove.view.VeiculoAvariaTables;
-import br.com.promove.view.VeiculoListView;
 import br.com.promove.view.form.VeiculoForm;
 
 import com.vaadin.data.Property;
@@ -34,7 +28,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.BaseTheme;
 
-public class VeiculoTable extends Table{
+public class VeiculoTable extends Table {
 	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "chassi", "modelo", "cor", "dataCadastro", "tipo", "navio"};
 	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Modelo", "Cor", "Data", "Tipo", "Navio"};
 	
@@ -43,20 +37,16 @@ public class VeiculoTable extends Table{
 	private PromoveApplication app;
 	private VeiculoAvariaTables view;
 	private Boolean origens;
-	private MenuAvaria menuAvaria;
-	private AvariaService avariaService;
 	
-	public VeiculoTable(PromoveApplication app, MenuAvaria menuAvaria, Boolean origens) {
+	public VeiculoTable(PromoveApplication app, Boolean origens) {
 		this.origens = origens;
 		this.app = app;
-		this.menuAvaria = menuAvaria;
 		cadastroService = ServiceFactory.getService(CadastroService.class);
-		avariaService = ServiceFactory.getService(AvariaService.class);
 		buildTable();
 	}
 	
-	public VeiculoTable(PromoveApplication app, MenuAvaria menuAvaria) {
-		this(app, menuAvaria, false);
+	public VeiculoTable(PromoveApplication app) {
+		this(app, false);
 	}
 
 	private void buildTable() {
@@ -99,9 +89,17 @@ public class VeiculoTable extends Table{
 		container.populate(veiculos);
 	}
 	
+	public void filterTable(Ctrc ctrc) {
+		try {
+			filterTable(cadastroService.buscarVeiculosPorCtrc(ctrc));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 	public void setView(VeiculoAvariaTables view) {
 		this.view = view;
-		
 	}
 	
 	public VeiculoAvariaTables getView() {
@@ -162,20 +160,6 @@ public class VeiculoTable extends Table{
 					return new Label(v.getId().toString());
 				}
 			}else if(columnId.toString().equals("origens")) {
-				/*
-				String origens = "";
-				try {
-					Avaria av = new Avaria();
-					av.setVeiculo(v);
-					List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(av, null, null, 1, false, false);
-					for (Avaria avaria : avarias) {
-						//origens.replaceAll(avaria.getOrigem().getDescricao() + "; ", "");
-						origens += avaria.getOrigem().getDescricao() + "; ";
-					}
-				} catch (PromoveException e) {
-					e.printStackTrace();
-					origens = "";
-				}*/
 				return new Label(v.getOrigensfaltantes());
 			}else {
 				return null;

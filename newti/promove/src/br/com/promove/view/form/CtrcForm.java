@@ -65,8 +65,8 @@ public class CtrcForm extends BaseForm{
 	public void createFormBody(BeanItem<Ctrc> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new CtrcFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "taxaRct", "taxaRr", "taxaRcf", "taxaFluvial", "valorMercadoria"});
-		
+		setVisibleItemProperties(new Object[]{"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "motorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "taxaRct", "valorMercadoria", "cancelado"});
+		//"taxaRr", "taxaRcf", "taxaFluvial" 
 	}
 	
 	private Component createFooter(){
@@ -150,7 +150,7 @@ public class CtrcForm extends BaseForm{
 				} else if(propertyId.equals("ufOrigem") || propertyId.equals("ufDestino")) {					
 					f.setCaption(f.getCaption().replaceAll("Uf", "UF"));
 					f.setWidth("100px");
-				} else if(propertyId.equals("municipioOrigem") || propertyId.equals("municipioDestino")) {					
+				} else if(propertyId.equals("motorista") || propertyId.equals("municipioOrigem") || propertyId.equals("municipioDestino")) {					
 					f.setWidth("300px");
 				}
 			}

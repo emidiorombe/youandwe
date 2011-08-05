@@ -299,6 +299,9 @@ public class AnaliseResultadoForm extends BaseForm{
 			        e.setMimeType("application/x-shockwave-flash");
 			        e.setParameter("allowFullScreen", "true");
 			        e.setParameter("FlashVars", "report="+xmlEncoded);
+			        e.setParameter("labelPosition", "callout");
+			        e.setParameter("field", "label");
+			        e.setParameter("nameField", "label");
 			        e.setWidth("600px");
 			        e.setHeight("400px");
 			        Label lbl = new Label("<h2>Análise de Resultado</h2>");

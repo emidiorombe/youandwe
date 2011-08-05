@@ -2,30 +2,16 @@ package br.com.promove.menu;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Usuario;
-import br.com.promove.view.AvariaSearchView;
+import br.com.promove.view.CtrcVeiculoTables;
 import br.com.promove.view.CtrcView;
-import br.com.promove.view.ErroImportAvariaView;
 import br.com.promove.view.ErroImportCtrcView;
-import br.com.promove.view.ErroImportVeiculoView;
-import br.com.promove.view.ImportAvariaView;
 import br.com.promove.view.ImportCtrcView;
-import br.com.promove.view.ImportVeiculoView;
-import br.com.promove.view.VeiculoListView;
-import br.com.promove.view.form.AvariaForm;
-import br.com.promove.view.form.AvariaSearchForm;
 import br.com.promove.view.form.CtrcForm;
 import br.com.promove.view.form.CtrcSearchForm;
-import br.com.promove.view.form.ErroImportAvariaForm;
 import br.com.promove.view.form.ErroImportCtrcForm;
-import br.com.promove.view.form.ErroImportVeiculoForm;
-import br.com.promove.view.form.VeiculoForm;
-import br.com.promove.view.form.VeiculoSearchForm;
-import br.com.promove.view.table.AvariaTable;
 import br.com.promove.view.table.CtrcTable;
-import br.com.promove.view.table.ErroImportAvariaTable;
 import br.com.promove.view.table.ErroImportCtrcTable;
-import br.com.promove.view.table.ErroImportVeiculoTable;
-import br.com.promove.view.table.VeiculoTable;
+import br.com.promove.view.table.VeiculoCtrcTable;
 
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
@@ -36,7 +22,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeButton;
 
-public class MenuAverbacao  extends CssLayout{
+public class MenuAverbacao extends CssLayout {
 	private Button add_ctrc;
 	private Button list_ctrc;
 	private Button import_ctrc;
@@ -93,8 +79,10 @@ public class MenuAverbacao  extends CssLayout{
 			app.setMainView(form.getFormLayout());
 		}else if(event.getButton() == list_ctrc){
 			CtrcSearchForm form = new CtrcSearchForm(app);
-			CtrcTable table = new CtrcTable(app);
-			app.setMainView(new CtrcView(table, form));
+			CtrcTable tableCtrc = new CtrcTable(app);
+			VeiculoCtrcTable tableVeiculo = new VeiculoCtrcTable(app);
+			CtrcVeiculoTables tables = new CtrcVeiculoTables(tableCtrc, tableVeiculo);
+			app.setMainView(new CtrcView(tables, form));
 		}else if(event.getButton() == import_ctrc) {
 			ImportCtrcView view = new ImportCtrcView(app);
 			app.setMainView(view.getLayout());
