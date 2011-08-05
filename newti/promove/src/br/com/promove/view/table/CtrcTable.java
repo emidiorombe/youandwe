@@ -142,7 +142,7 @@ public class CtrcTable extends Table{
 			for (Ctrc c : ctrcs) {
 				addItem(c);
 				//premio += c.getValorMercadoria() * c.getTaxas() * .01;
-				valorMercadoria += c.getValorMercadoria();
+				if(c.getValorMercadoria() != null) valorMercadoria += c.getValorMercadoria();
 			}
 			setColumnFooter("valorMercadoria", formatMoeda.format(valorMercadoria));
 			/*
@@ -185,17 +185,20 @@ public class CtrcTable extends Table{
 				return new Label(formatMoeda.format(c.getValorMercadoria() * c.getTaxas() * .01));
 			*/
 			}else if(columnId.toString().equals("taxaRct") || columnId.toString().equals("taxaRcf") || columnId.toString().equals("taxaRr") || columnId.toString().equals("taxaFluvial")) {
+				double valor = 0.0;
 				if(columnId.toString().equals("taxaRct")) {
-					return new Label(formatPercentual.format(c.getTaxaRct()));
+					valor = c.getTaxaRct() == null ? 0.0 : c.getTaxaRct();
 				} else if(columnId.toString().equals("taxaRr")) { 
-					return new Label(formatPercentual.format(c.getTaxaRr()));
+					valor = c.getTaxaRr() == null ? 0.0 : c.getTaxaRr();
 				} else if(columnId.toString().equals("taxaRcf")) {
-					return new Label(formatPercentual.format(c.getTaxaRcf()));
+					valor = c.getTaxaRcf() == null ? 0.0 : c.getTaxaRcf();
 				} else {
-					return new Label(formatPercentual.format(c.getTaxaFluvial()));
+					valor = c.getTaxaFluvial() == null ? 0.0 : c.getTaxaFluvial();
 				}
+				return new Label(formatPercentual.format(valor));
 			}else if(columnId.toString().equals("valorMercadoria")) {
-				return new Label(formatPercentual.format(c.getValorMercadoria()));
+				double valor = c.getValorMercadoria() == null ? 0.0 : c.getValorMercadoria();
+				return new Label(formatMoeda.format(valor));
 			}else if(columnId.toString().equals("id")) {
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 				Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
