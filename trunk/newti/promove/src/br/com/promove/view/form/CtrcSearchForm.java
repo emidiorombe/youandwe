@@ -43,7 +43,7 @@ public class CtrcSearchForm extends BaseForm{
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
 	//private TextField txtNumero;
-	private TextField txtDesconto;
+	//private TextField txtDesconto;
 	private Button search;
 	private Button export;
 	private PromoveApplication app;
@@ -73,16 +73,16 @@ public class CtrcSearchForm extends BaseForm{
 		txtAte.setLocale(new Locale("pt", "BR"));
 		txtAte.setResolution(DateField.RESOLUTION_DAY);
 
-		txtDesconto = new TextField("% Desconto");
-		txtDesconto.addValidator(new DoubleValidator("Desconto deve ser numérico"));
-		txtDesconto.setWidth("100px");
+		//txtDesconto = new TextField("% Desconto");
+		//txtDesconto.addValidator(new DoubleValidator("Desconto deve ser numérico"));
+		//txtDesconto.setWidth("100px");
 		
 		createFormBody(new BeanItem<Ctrc>(new Ctrc()));
 		layout.addComponent(this);
 		//addField("txtNumero", txtNumero);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
-		addField("txtDesconto", txtDesconto);
+		//addField("txtDesconto", txtDesconto);
 		
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
@@ -125,53 +125,35 @@ public class CtrcSearchForm extends BaseForm{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			if(event.getButton() == search) {
-				try {
-					commit();
-					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null;
-					Double desconto = txtDesconto.getValue() != null ? Double.parseDouble((String)txtDesconto.getValue()) : 0;
-					BeanItem<Ctrc> item = (BeanItem<Ctrc>)getItemDataSource();
-					
-					//if (!(txtNumero.toString() == null) && !(txtNumero.toString().isEmpty()))
-					//	item.getBean().setNumero(Integer.parseInt(txtNumero.toString()));
-					if(item.getBean().getNumero() == null || item.getBean().getNumero().equals(null)) {
-						if(de == null || ate == null)
-							throw new IllegalArgumentException("Informe um numero ou período para busca.");
-					}
-					
-					List<Ctrc> list = ctrcService.buscarCtrcPorFiltro(item.getBean(), de, ate);
-					view.getTable().filterTable(list, desconto);
-				}catch(IllegalArgumentException ie) {
-					showErrorMessage(view, ie.getMessage());
-				}catch(PromoveException pe) {
-					showErrorMessage(view, "Não foi possível buscar os CTRCs");
-				}catch(Exception e) {
-					e.printStackTrace();
-					showErrorMessage(view, e.getMessage() + " Não foi possível buscar os CTRCs");
-				} 
-			}else if(event.getButton() == export) {
-				try {
-					commit();
-					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
-					String desconto = txtDesconto.getValue() != null ? (String)txtDesconto.getValue() : "";
-					BeanItem<Ctrc> item = (BeanItem<Ctrc>)getItemDataSource();
-					
-					if (item.getBean().getNumero() == null) {
-						if(de == null || ate == null)
-							throw new IllegalArgumentException("Informe um numero ou período para gerar arquivo.");
-					}
-					
-					List<Ctrc> list = ctrcService.buscarCtrcPorFiltro(item.getBean(), de, ate);
+			try {
+				commit();
+				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null;
+				Double desconto = 0.0; //txtDesconto.getValue() != null ? Double.parseDouble((String)txtDesconto.getValue()) : 0;
+				BeanItem<Ctrc> item = (BeanItem<Ctrc>)getItemDataSource();
+				
+				//if (!(txtNumero.toString() == null) && !(txtNumero.toString().isEmpty()))
+				//	item.getBean().setNumero(Integer.parseInt(txtNumero.toString()));
+				if(item.getBean().getNumero() == null || item.getBean().getNumero().toString().isEmpty()) {
+					if(de == null || ate == null)
+						throw new IllegalArgumentException("Informe um numero ou período para busca.");
+				}
+				List<Ctrc> list = ctrcService.buscarCtrcPorFiltro(item.getBean(), de, ate);
+				
+				if(event.getButton() == search) {
+					view.getTables().getTableCtrc().filterTable(list, desconto);
+				} else if(event.getButton() == export) {
 					String file = exportacaoService.exportarXLSCtrcs(list);
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=ctrcs.xls&file=" + file + "&desconto=" + desconto));
-				}catch(PromoveException pe) {
-					showErrorMessage(view, "Não foi possível gerar arquivo.");
 				}
+			} catch(IllegalArgumentException ie) {
+				showErrorMessage(view, ie.getMessage());
+			} catch(Exception e) {
+				e.printStackTrace();
+				showErrorMessage(view, "Não foi possível buscar os CTRCs");
 			}
 		}
 		

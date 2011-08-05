@@ -21,6 +21,7 @@ public class VeiculoCtrc implements Serializable{
 	
 	@ManyToOne(targetEntity=Avaria.class)
 	private Ctrc ctrc;
+	private Veiculo veiculo;
 	private Integer inconsistencia;
 	private String msgErro;
 	private String chassiInvalido;
@@ -49,6 +50,14 @@ public class VeiculoCtrc implements Serializable{
 		return ctrc;
 	}
 
+	public void setVeiculo(Veiculo veiculo) {
+		this.veiculo = veiculo;
+	}
+
+	public Veiculo getVeiculo() {
+		return veiculo;
+	}
+	
 	public void setInconsistencia(Integer inconsistencia) {
 		this.inconsistencia = inconsistencia;
 	}
@@ -112,7 +121,5 @@ public class VeiculoCtrc implements Serializable{
 	public Double getValorMercadoria() {
 		return valorMercadoria;
 	}
-	
-	
-	
+
 }

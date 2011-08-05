@@ -17,6 +17,7 @@ import br.com.promove.dao.UsuarioDAO;
 import br.com.promove.dao.VeiculoDAO;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
+import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Filial;
 import br.com.promove.entity.InconsistenciaVeiculo;
@@ -433,6 +434,17 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 			Date fim = DateUtils.montarDataFinalParaSQLQuery(ate);
 			
 			lista = veiculoDAO.buscarAnaliseResultado(veiculo, init, fim, oride, oriate, vistoriaFinal);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public List<Veiculo> buscarVeiculosPorCtrc(Ctrc ctrc) throws PromoveException {
+		List<Veiculo> lista = null;
+		try {
+			lista = veiculoDAO.getByCtrc(ctrc);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

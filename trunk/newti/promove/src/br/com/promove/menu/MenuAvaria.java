@@ -130,7 +130,7 @@ public class MenuAvaria  extends CssLayout{
 			app.setMainView(form.getFormLayout());
 		}else if(event.getButton() == list_veiculo) {
 			VeiculoSearchForm form = new VeiculoSearchForm(app);
-			VeiculoTable tableVeiculo = new VeiculoTable(app, this);
+			VeiculoTable tableVeiculo = new VeiculoTable(app);
 			AvariaVeiculoTable tableAvaria = new AvariaVeiculoTable(app);
 			VeiculoAvariaTables tables = new VeiculoAvariaTables(tableVeiculo, tableAvaria);
 			app.setMainView(new VeiculoListView(tables, form));
@@ -153,7 +153,7 @@ public class MenuAvaria  extends CssLayout{
 			app.setMainView(view.getLayout());
 		}else if(event.getButton() == auditoria) {
 			AuditoriaVistoriasForm form = new AuditoriaVistoriasForm(app);
-			VeiculoTable tableVeiculo = new VeiculoTable(app, this, true);
+			VeiculoTable tableVeiculo = new VeiculoTable(app, true);
 			AvariaVeiculoTable tableAvaria = new AvariaVeiculoTable(app);
 			AuditoriaVistoriasTables tables = new AuditoriaVistoriasTables(tableVeiculo, tableAvaria);
 			app.setMainView(new AuditoriaVistoriasView(tables, form));

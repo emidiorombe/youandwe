@@ -16,6 +16,7 @@ import org.hibernate.exception.SQLGrammarException;
 
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
+import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
 import br.com.promove.entity.Veiculo;
@@ -348,4 +349,13 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		lista.add(new PieData(obj[1].toString(), obj[2].toString()));
 		itens.put(obj[0].toString(), lista);
 	}
+
+	public List<Veiculo> getByCtrc(Ctrc ctrc) throws DAOException {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select v.veiculo from VeiculoCtrc v where ");
+		hql.append(" v.ctrc = :txtctrc ");
+		addParamToQuery("txtctrc", ctrc);
+		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
+	}
+
 }
