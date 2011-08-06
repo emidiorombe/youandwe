@@ -41,7 +41,7 @@ public class ExportacaoServlet extends HttpServlet{
 		if("cadastro".equals(action)) {
 			String novo = request.getParameter("novo");
 			
-			//String filename = novo.equals("1") ? "cadastros.xml" : "GSPPRE.xml";
+			//String filename = novo.equals("1") ? "cadastros.xml" : "GSPPRE.xml"; 
 			String filename = "GSPPRE.xml";
 			try {
 				ExportacaoService export = ServiceFactory.getService(ExportacaoService.class);
