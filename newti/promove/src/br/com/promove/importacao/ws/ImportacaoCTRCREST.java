@@ -16,28 +16,16 @@ import br.com.promove.entity.Ctrc;
 public class ImportacaoCTRCREST {
 	
 	public void importarGabardo(String url) throws IOException {
-		String xml = makeRequest(url);
+		
 		try {
-			List<Ctrc> ctrcs = parseXml(xml);
+			List<Ctrc> ctrcs = parseXml(null);
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block 
 			e.printStackTrace();
 		}
 	}
 
-	private String makeRequest(String url) throws IOException {
-		GetMethod get = new GetMethod(url);
-		HttpClient client = new HttpClient();
-		
-		client.executeMethod(get);
-		
-		String response = get.getResponseBodyAsString();
-		
-		get.releaseConnection();
-		
-		return response; 
-		
-	}
+	
 	
 	private List<Ctrc> parseXml(String xml) throws DocumentException {
 		Document doc = DocumentHelper.parseText(xml);

@@ -1,5 +1,6 @@
 package br.com.promove.importacao;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,6 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -20,11 +23,11 @@ import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
 
 public class ImportacaoCtrc {
-	private String xmlContent;
 	private CtrcService ctrcService;
 	private static SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy");
-	private static SimpleDateFormat date_format_hora = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+	private static SimpleDateFormat date_format_hora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 	private HashMap<String, Transportadora> transportadoras;
+	private String xmlContent;
 
 	public ImportacaoCtrc() {
 		ctrcService = ServiceFactory.getService(CtrcService.class);
@@ -33,26 +36,58 @@ public class ImportacaoCtrc {
 	public ImportacaoCtrc(String xmlContent) {
 		this.xmlContent = xmlContent;
 	}
+	
+	private String makeRequest(String url) throws IOException {
+		GetMethod get = new GetMethod(url);
+		HttpClient client = new HttpClient();
+		
+		client.executeMethod(get);
+		
+		String response = get.getResponseBodyAsString();
+		
+		get.releaseConnection();
+		
+		return response; 
+		
+	}
 
 	public void importar(String xml) throws DocumentException, ParseException, PromoveException {
 		loadTransportadoras();
-
+		
 		Document doc = DocumentHelper.parseText(xml);
 		importTagCtrc(doc);
 	}
+	
+	
+	public void importarGabardo(String url) throws DocumentException, ParseException, PromoveException {
+		loadTransportadoras();
+		String xml;
+		try {
+			xml = makeRequest(url);
+			Document doc = DocumentHelper.parseText(xml);
+			importTagCtrc(doc);
+		} catch (IOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
 
 	private void importTagCtrc(Document doc) throws ParseException, PromoveException {
-		List<Element> ctrcs = doc.selectNodes("//IncluiCTRC/ctrc");
+		List<Element> ctrcs = doc.selectNodes("//retorno/ctrc");
 		for (Element node_ct : ctrcs) {
 			Ctrc ct = new Ctrc();
 			
 			try {
 				ct.setTransp(transportadoras.get(node_ct.element("cnpj_transportadora").getText()));
+				
+				if (ct.getTransp() == null)
+					throw new Exception("Transportadora " + node_ct.element("cnpj_transportadora").getText() + " não existe;");
+				
 				ct.setFilial(new Integer(node_ct.element("filial").getText()));
 				ct.setNumero(new Integer(node_ct.element("ctrc_numero").getText()));
 				ct.setTipo(new Integer(node_ct.element("tipo").getText()));
 				ct.setSerie(node_ct.element("ctrc_serie").getText());
-				ct.setDataEmissao(date_format.parse(node_ct.element("ctrc_data").getText()));
+				ct.setDataEmissao(date_format_hora.parse(node_ct.element("ctrc_data").getText()));
 				ct.setPlacaFrota(node_ct.element("placa_frota").getText());
 				ct.setPlacaCarreta(node_ct.element("placa_carreta").getText());
 				ct.setUfOrigem(node_ct.element("uf_origem").getText());
@@ -76,12 +111,8 @@ public class ImportacaoCtrc {
 				ct.setTaxaFluvial(new Double(taxaFluvial));
 				ct.setValorMercadoria(new Double(valorMercadoria));
 				
-				if (ct.getTransp() == null)
-					throw new Exception("Transportadora " + node_ct.element("cnpj_transportadora").getText() + " não existe;");
-				
 				if (ctrcService.buscarCtrcDuplicadoPorFiltros(ct).size() > 0) {
-					//Ja existe esse ctrc
-					continue;
+					continue; //Ja existe esse ctrc
 				}
 
 				ctrcService.salvarCtrc(ct, true);
