@@ -20,7 +20,7 @@ public class ImportacaoCTRCREST {
 		try {
 			List<Ctrc> ctrcs = parseXml(xml);
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generated catch block 
 			e.printStackTrace();
 		}
 	}
