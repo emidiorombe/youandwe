@@ -19,9 +19,12 @@ public class VeiculoCtrc implements Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_veiculo_ctrc")
 	private Integer id;
 	
-	@ManyToOne(targetEntity=Avaria.class)
+	@ManyToOne(targetEntity=Ctrc.class)
 	private Ctrc ctrc;
+	
+	@ManyToOne(targetEntity=Veiculo.class)
 	private Veiculo veiculo;
+	
 	private Integer inconsistencia;
 	private String msgErro;
 	private String chassiInvalido;
