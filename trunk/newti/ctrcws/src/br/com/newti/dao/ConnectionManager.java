@@ -1,34 +1,25 @@
 package br.com.newti.dao;
 
+import java.beans.PropertyVetoException;
 import java.sql.*;
-
+import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.mchange.v2.c3p0.DataSources;
 import br.com.newti.exception.DAOException;
 
 public class ConnectionManager {
-	//TODO buscar parametros no web.xml
-	private static final String STR_DRIVER = "oracle.jdbc.driver.OracleDriver";
-	private static final String STR_CON = "jdbc:oracle:thin:@//127.0.0.1:1521/XE";
-	private static final String USER = "system";
-	private static final String PASSWORD = "oracle";
 	private static final Logger log = Logger.getLogger(ConnectionManager.class);
+	private static DataSource pooled;
 
 	public static Connection getConexao() throws DAOException {
-		//TODO Implementar Pool de Conexões
-		
-		Connection conn = null;
 		try {
-			Class.forName(STR_DRIVER);
-			conn = DriverManager.getConnection(STR_CON, USER, PASSWORD);
-			return conn;
-		} catch (ClassNotFoundException e) {
-			String errorMsg = "Driver nao encontrado";
-			throw new DAOException(errorMsg, e);
+			return pooled.getConnection();
 		} catch (SQLException e) {
-			String errorMsg = "Erro ao obter a conexao";
-			throw new DAOException(errorMsg, e);
+			throw new DAOException();
 		}
+		
 	}
 
 	public static void closeAll(Connection conn) {
@@ -63,6 +54,33 @@ public class ConnectionManager {
 			log.error("Nao foi possivel fechar o ResultSet no banco");
 		}
 		ConnectionManager.closeAll(conn, stmt, rs);
+	}
+	
+	public static void initialize(String driver, String url, String user, String pass ) throws DAOException {
+		try {
+			Class.forName(driver);
+			ComboPooledDataSource cpds = new ComboPooledDataSource();
+			cpds.setDriverClass(driver);          
+			cpds.setJdbcUrl(url);
+			cpds.setUser(user);                                  
+			cpds.setPassword(pass);      
+			
+			//configs
+			cpds.setMinPoolSize(5);                                     
+			cpds.setAcquireIncrement(5);
+			cpds.setMaxPoolSize(20);
+			
+			pooled = DataSources.pooledDataSource(cpds);
+		} catch (ClassNotFoundException e) {
+			String errorMsg = "Driver nao encontrado";
+			throw new DAOException(errorMsg, e);
+		} catch (SQLException e) {
+			String errorMsg = "Erro ao obter a conexao";
+			throw new DAOException(errorMsg, e);
+		} catch (PropertyVetoException e) {
+			String errorMsg = "Erro ao obter a conexao";
+			throw new DAOException(errorMsg, e);
+		}
 	}
 	
 }
