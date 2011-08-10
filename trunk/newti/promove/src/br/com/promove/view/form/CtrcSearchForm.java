@@ -42,7 +42,8 @@ public class CtrcSearchForm extends BaseForm{
 	private CtrcView view;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
-	//private TextField txtNumero;
+	private TextField txtChassi;
+	private TextField txtNumero;
 	//private TextField txtDesconto;
 	private Button search;
 	private Button export;
@@ -63,7 +64,10 @@ public class CtrcSearchForm extends BaseForm{
 		search = new Button("Buscar", new CtrcSearchListener());
 		export = new Button("Gerar Arquivo", new CtrcSearchListener());
 		
-		//txtNumero = new TextField("Numero");
+		txtChassi = new TextField("Chassi");
+		txtChassi.setWidth("200px");
+		
+		txtNumero = new TextField("Número");
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -79,7 +83,8 @@ public class CtrcSearchForm extends BaseForm{
 		
 		createFormBody(new BeanItem<Ctrc>(new Ctrc()));
 		layout.addComponent(this);
-		//addField("txtNumero", txtNumero);
+		addField("txtChassi", txtChassi);
+		addField("txtNumero", txtNumero);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
 		//addField("txtDesconto", txtDesconto);
@@ -93,7 +98,7 @@ public class CtrcSearchForm extends BaseForm{
 	public void createFormBody(BeanItem<Ctrc> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new CtrcFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"numero", "transp"});
+		setVisibleItemProperties(new Object[]{"transp"});
 	}
 	
 	private Component createFooter(){
@@ -132,16 +137,19 @@ public class CtrcSearchForm extends BaseForm{
 				Double desconto = 0.0; //txtDesconto.getValue() != null ? Double.parseDouble((String)txtDesconto.getValue()) : 0;
 				BeanItem<Ctrc> item = (BeanItem<Ctrc>)getItemDataSource();
 				
-				//if (!(txtNumero.toString() == null) && !(txtNumero.toString().isEmpty()))
-				//	item.getBean().setNumero(Integer.parseInt(txtNumero.toString()));
-				if(item.getBean().getNumero() == null || item.getBean().getNumero().toString().isEmpty()) {
-					if(de == null || ate == null)
-						throw new IllegalArgumentException("Informe um numero ou período para busca.");
-				}
-				List<Ctrc> list = ctrcService.buscarCtrcPorFiltro(item.getBean(), de, ate);
+				if(txtNumero.toString() == null || txtNumero.toString().isEmpty())
+					if (txtChassi.toString() == null || txtChassi.toString().isEmpty())
+						if(de == null || ate == null)
+							throw new IllegalArgumentException("Informe um chassi, numero ou período para busca.");
+				
+				if (!(txtNumero.toString() == null) && !(txtNumero.toString().isEmpty()))
+					item.getBean().setNumero(Integer.parseInt(txtNumero.toString()));
+				
+				List<Ctrc> list = ctrcService.buscarCtrcPorFiltro(item.getBean(), de, ate, txtChassi.toString());
 				
 				if(event.getButton() == search) {
 					view.getTables().getTableCtrc().filterTable(list, desconto);
+					view.getTables().getTableVeiculo().removeAllItems();
 				} else if(event.getButton() == export) {
 					String file = exportacaoService.exportarXLSCtrcs(list);
 					
