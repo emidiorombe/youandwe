@@ -133,11 +133,11 @@ public class CtrcTable extends Table{
 			//Double premio = 0.0;
 			Double valorMercadoria = 0.0;
 			removeAllItems();
-			try {
-				finalize();
-			} catch (Throwable e) {
-				e.printStackTrace();
-			}
+			//try {
+			//	finalize();
+			//} catch (Throwable e) {
+			//	e.printStackTrace();
+			//}
 			
 			for (Ctrc c : ctrcs) {
 				addItem(c);

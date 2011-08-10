@@ -102,13 +102,13 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	}
 
 	@Override
-	public List<Ctrc> buscarCtrcPorFiltro(Ctrc ctrc, Date dtInicio, Date dtFim) throws PromoveException {
+	public List<Ctrc> buscarCtrcPorFiltro(Ctrc ctrc, Date dtInicio, Date dtFim, String chassi) throws PromoveException {
 		List<Ctrc> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaHQLQuery(dtInicio); 
 			Date fim = DateUtils.montarDataFinalParaHQLQuery(dtFim); 
 			
-			lista = ctrcDAO.getCtrcPorFiltro(ctrc, init, fim);
+			lista = ctrcDAO.getCtrcPorFiltro(ctrc, init, fim, chassi);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
