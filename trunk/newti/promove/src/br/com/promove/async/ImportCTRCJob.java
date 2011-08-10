@@ -1,5 +1,7 @@
 package br.com.promove.async;
 
+import java.util.Calendar;
+
 import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -9,6 +11,7 @@ import org.quartz.JobExecutionException;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.ImportacaoService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.DateUtils;
 
 
 public class ImportCTRCJob implements Job{
@@ -22,7 +25,14 @@ public class ImportCTRCJob implements Job{
 			JobDataMap data = ctx.getJobDetail().getJobDataMap();
 			String url = data.getString("url");
 		
-			imp.importarGabardo(url + "?dataIni=2005-01-01&dataFim=2011-12-31");
+			Calendar now = Calendar.getInstance();
+			
+			Calendar ontem = Calendar.getInstance();
+			ontem.add(Calendar.DATE, -1);
+			
+			
+			String query = "?dataIni=" + DateUtils.getStringFromDate(ontem.getTime(), null)+ "&dataFim=" + DateUtils.getStringFromDate(now.getTime(), null);
+			imp.importarGabardo(url + query);
 			log.error("Importação de CTRC realizada com sucesso.");
 		} catch (PromoveException e) {
 			log.error("Erro na importação de CTRC " + e.getMessage());

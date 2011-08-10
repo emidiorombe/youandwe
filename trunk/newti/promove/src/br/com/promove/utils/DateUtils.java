@@ -1,5 +1,6 @@
 package br.com.promove.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -63,6 +64,15 @@ public class DateUtils {
 		cal.set(Calendar.MILLISECOND, 999);
 		
 		return cal.getTime();
+	}
+	
+	public static String getStringFromDate(Date data, String pattern) {
+		if(pattern == null || pattern.isEmpty())
+			pattern = "yyyy-MM-dd";
+		
+		SimpleDateFormat fmt = new SimpleDateFormat(pattern);
+		return fmt.format(data);
+		
 	}
 
 }
