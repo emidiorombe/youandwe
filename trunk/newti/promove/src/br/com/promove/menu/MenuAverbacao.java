@@ -75,7 +75,7 @@ public class MenuAverbacao extends CssLayout {
 	public void loadMainView(ClickEvent event) {
 		addAndRemoveStyle(event.getButton(), add_ctrc, list_ctrc, import_ctrc, erro_import_ctrc);
 		if(event.getButton() == add_ctrc) {
-			CtrcForm form = new CtrcForm();
+			CtrcForm form = new CtrcForm(app);
 			app.setMainView(form.getFormLayout());
 		}else if(event.getButton() == list_ctrc){
 			CtrcSearchForm form = new CtrcSearchForm(app);

@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
-import br.com.promove.entity.Avaria;
-import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.service.CadastroService;
@@ -65,7 +63,6 @@ public class VeiculoTable extends Table {
 		addGeneratedColumn("cor", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("dataCadastro", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("tipo", new VeiculoTableColumnGenerator(this));
-		//addGeneratedColumn("avarias", new VeiculoTableColumnGenerator(this));
 		
 		if (origens) {
 			addGeneratedColumn("origens", new VeiculoTableColumnGenerator(this));
@@ -89,15 +86,6 @@ public class VeiculoTable extends Table {
 		container.populate(veiculos);
 	}
 	
-	public void filterTable(Ctrc ctrc) {
-		try {
-			filterTable(cadastroService.buscarVeiculosPorCtrc(ctrc));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-
 	public void setView(VeiculoAvariaTables view) {
 		this.view = view;
 	}
@@ -138,12 +126,14 @@ public class VeiculoTable extends Table {
 					return new Label(v.getCor().getDescricao());
 			}else if(columnId.equals("tipo")) {
 				return v.getTipo() == 1 ? new Label("Nacional") : new Label("Importado");
+			/*
 			}else if(columnId.toString().equals("avarias")) {
 				Button b = new Button("Ver");
 				b.setStyleName(BaseTheme.BUTTON_LINK);
 				b.addListener(new LinkListener(table));
 				b.setDebugId("av&"+v.getChassi());
 				return b;
+			*/
 			}else if(columnId.toString().equals("dataCadastro")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataCadastro()));
 			}else if(columnId.toString().equals("id")) {
@@ -187,15 +177,7 @@ public class VeiculoTable extends Table {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			String debug = event.getButton().getDebugId();
-			if(debug.startsWith("av")) {
-				//AvariaSearchForm form = new AvariaSearchForm(app);
-				//AvariaTable table  = new AvariaTable(app);
-				//app.setMainView(new AvariaSearchView(table, form));
-				//table.filterTable(debug.substring(debug.indexOf("&") + 1));
-				Veiculo veiculo = new Veiculo();
-				veiculo.setChassi(debug.substring(debug.indexOf("&") + 1));
-				view.getTableAvaria().filterTable(veiculo);
-			}else if(event.getButton().getDebugId().startsWith("ch")) {
+			if(event.getButton().getDebugId().startsWith("ch")) {
 				try {
 					VeiculoForm form = new VeiculoForm();
 					Veiculo veic = cadastroService.getById(Veiculo.class, new Integer(event.getButton().getCaption()));
@@ -204,6 +186,16 @@ public class VeiculoTable extends Table {
 				}catch(Exception e) {
 					e.printStackTrace();
 				}
+			/*
+			}else if(debug.startsWith("av")) {
+				//AvariaSearchForm form = new AvariaSearchForm(app);
+				//AvariaTable table  = new AvariaTable(app);
+				//app.setMainView(new AvariaSearchView(table, form));
+				//table.filterTable(debug.substring(debug.indexOf("&") + 1));
+				Veiculo veiculo = new Veiculo();
+				veiculo.setChassi(debug.substring(debug.indexOf("&") + 1));
+				view.getTableAvaria().filterTable(veiculo);
+			*/
 			}
 		}
 

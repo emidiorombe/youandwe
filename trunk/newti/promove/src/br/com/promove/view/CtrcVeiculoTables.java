@@ -2,11 +2,8 @@ package br.com.promove.view;
 
 import com.vaadin.ui.SplitPanel;
 
-import br.com.promove.view.form.VeiculoSearchForm;
-import br.com.promove.view.table.AvariaVeiculoTable;
 import br.com.promove.view.table.CtrcTable;
 import br.com.promove.view.table.VeiculoCtrcTable;
-import br.com.promove.view.table.VeiculoTable;
 
 public class CtrcVeiculoTables extends SplitPanel {
 	private CtrcTable tableCtrc;

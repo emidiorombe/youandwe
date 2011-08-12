@@ -7,23 +7,19 @@ import java.util.List;
 import br.com.promove.dao.CtrcDAO;
 import br.com.promove.dao.InconsistenciaCtrcDAO;
 import br.com.promove.dao.TransportadoraDAO;
-//import br.com.promove.dao.InconsistenciaCtrcDAO;
-import br.com.promove.entity.Avaria;
-import br.com.promove.entity.Cor;
+import br.com.promove.dao.VeiculoCtrcDAO;
 import br.com.promove.entity.Ctrc;
-import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.entity.Transportadora;
-import br.com.promove.entity.Veiculo;
-//import br.com.promove.entity.InconsistenciaCtrc;
+import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.utils.DateUtils;
-import br.com.promove.utils.StringUtilities;
 
 public class CtrcServiceImpl implements CtrcService, Serializable {
 	private TransportadoraDAO transpDAO;
 	private CtrcDAO ctrcDAO;
+	private VeiculoCtrcDAO veiculoCtrcDAO;
 	private InconsistenciaCtrcDAO inconsistenciaCtrcDAO;
 	
 	CtrcServiceImpl() {
@@ -185,6 +181,46 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	public <T> T getById(Class<T> clazz, Integer id) throws PromoveException {
 		try {
 			return ctrcDAO.getGenericObject(clazz, id);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+	}
+
+	@Override
+	public List<VeiculoCtrc> buscarVeiculosPorCtrc(Ctrc ctrc) throws PromoveException {
+		List<VeiculoCtrc> lista = null;
+		try {
+			lista = veiculoCtrcDAO.getByCtrc(ctrc);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public void salvarVeiculoCtrc(VeiculoCtrc bean) throws PromoveException {
+		salvarVeiculoCtrc(bean, false);
+	}
+
+	@Override
+	public void salvarVeiculoCtrc(VeiculoCtrc veic, boolean isFlush) throws PromoveException {
+		try {
+			if(veic.getId() == null && veiculoCtrcDAO.getVeiculosCtrcDuplicadosPorFiltros(veic).size() > 0)
+				throw new IllegalArgumentException("Veículo do CTRC já cadastrado!");
+			
+			veiculoCtrcDAO.save(veic);
+			if(isFlush)
+				veiculoCtrcDAO.flushSession();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public void excluirVeiculoCtrc(VeiculoCtrc bean) throws PromoveException {
+		try {
+			veiculoCtrcDAO.delete(bean);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

@@ -9,14 +9,12 @@ import java.util.List;
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.Usuario;
-import br.com.promove.entity.Veiculo;
 import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.CtrcVeiculoTables;
 import br.com.promove.view.form.CtrcForm;
 
 import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
@@ -31,15 +29,14 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.BaseTheme;
 
 public class CtrcTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "motorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "taxaRct", "taxaRr", "taxaRcf", "taxaFluvial", "cancelado"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Filial", "Numero", "Tipo", "Série", "Transportadora", "Data Emis.", "Frota", "Carreta", "Motorista", "UF", "Mun. Origem", "UF", "Mun. Destino", "Valor Mercadoria", "RCT", "RR", "RCF", "Fluvial", "Cancelado"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "motorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "cancelado"};
+	public static final String[] COL_HEADERS = new String[] {"ID", "Filial", "Numero", "Tipo", "Série", "Transportadora", "Data Emis.", "Frota", "Carreta", "Motorista", "UF", "Mun. Origem", "UF", "Mun. Destino", "Valor Merc.", "Cancelado"};
 	
 	private CtrcService ctrcService;
 	private CtrcTableContainer container;
 	private PromoveApplication app;
 	private CtrcVeiculoTables view;
 	private NumberFormat formatMoeda = new DecimalFormat("'R$' #0.00");
-	private NumberFormat formatPercentual = new DecimalFormat("#0.00'%'");
 	
 	public CtrcTable(PromoveApplication app) {
 		this.app = app;
@@ -60,20 +57,20 @@ public class CtrcTable extends Table{
 		addGeneratedColumn("id", new CtrcTableColumnGenerator(this));
 		addGeneratedColumn("transp", new CtrcTableColumnGenerator(this));
 		addGeneratedColumn("dataEmissao", new CtrcTableColumnGenerator(this));
-		addGeneratedColumn("taxaRct", new CtrcTableColumnGenerator(this));
-		addGeneratedColumn("taxaRr", new CtrcTableColumnGenerator(this));
-		addGeneratedColumn("taxaRcf", new CtrcTableColumnGenerator(this));
-		addGeneratedColumn("taxaFluvial", new CtrcTableColumnGenerator(this));
 		addGeneratedColumn("valorMercadoria", new CtrcTableColumnGenerator(this));
+		//addGeneratedColumn("taxaRct", new CtrcTableColumnGenerator(this));
+		//addGeneratedColumn("taxaRr", new CtrcTableColumnGenerator(this));
+		//addGeneratedColumn("taxaRcf", new CtrcTableColumnGenerator(this));
+		//addGeneratedColumn("taxaFluvial", new CtrcTableColumnGenerator(this));
 		//addGeneratedColumn("premio", new CtrcTableColumnGenerator(this));
 
 		setColumnHeaders(COL_HEADERS);
 
-		setColumnAlignment("taxaRct", ALIGN_RIGHT);
-		setColumnAlignment("taxaRr", ALIGN_RIGHT);
-		setColumnAlignment("taxaRcf", ALIGN_RIGHT);
-		setColumnAlignment("taxaFluvial", ALIGN_RIGHT);
 		setColumnAlignment("valorMercadoria", ALIGN_RIGHT);
+		//setColumnAlignment("taxaRct", ALIGN_RIGHT);
+		//setColumnAlignment("taxaRr", ALIGN_RIGHT);
+		//setColumnAlignment("taxaRcf", ALIGN_RIGHT);
+		//setColumnAlignment("taxaFluvial", ALIGN_RIGHT);
 		//setColumnAlignment("premio", ALIGN_RIGHT);
 
 		try {
@@ -87,10 +84,10 @@ public class CtrcTable extends Table{
 			//setColumnCollapsed("municipioOrigem", true);
 			setColumnCollapsed("ufDestino", true);
 			//setColumnCollapsed("municipioDestino", true);
-			setColumnCollapsed("taxaRct", true);
-			setColumnCollapsed("taxaRr", true);
-			setColumnCollapsed("taxaRcf", true);
-			setColumnCollapsed("taxaFluvial", true);
+			//setColumnCollapsed("taxaRct", true);
+			//setColumnCollapsed("taxaRr", true);
+			//setColumnCollapsed("taxaRcf", true);
+			//setColumnCollapsed("taxaFluvial", true);
 			setColumnCollapsed("cancelado", true);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
@@ -180,10 +177,10 @@ public class CtrcTable extends Table{
 				return new Label(c.getTransp().getDescricao());
 			}else if(columnId.toString().equals("dataEmissao")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(c.getDataEmissao()));
+			}else if(columnId.toString().equals("valorMercadoria")) {
+				double valor = c.getValorMercadoria() == null ? 0.0 : c.getValorMercadoria();
+				return new Label(formatMoeda.format(valor));
 			/*
-			}else if(columnId.toString().equals("premio")) {
-				return new Label(formatMoeda.format(c.getValorMercadoria() * c.getTaxas() * .01));
-			*/
 			}else if(columnId.toString().equals("taxaRct") || columnId.toString().equals("taxaRcf") || columnId.toString().equals("taxaRr") || columnId.toString().equals("taxaFluvial")) {
 				double valor = 0.0;
 				if(columnId.toString().equals("taxaRct")) {
@@ -196,9 +193,9 @@ public class CtrcTable extends Table{
 					valor = c.getTaxaFluvial() == null ? 0.0 : c.getTaxaFluvial();
 				}
 				return new Label(formatPercentual.format(valor));
-			}else if(columnId.toString().equals("valorMercadoria")) {
-				double valor = c.getValorMercadoria() == null ? 0.0 : c.getValorMercadoria();
-				return new Label(formatMoeda.format(valor));
+			}else if(columnId.toString().equals("premio")) {
+				return new Label(formatMoeda.format(c.getValorMercadoria() * c.getTaxas() * .01));
+			*/
 			}else if(columnId.toString().equals("id")) {
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 				Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
@@ -207,7 +204,6 @@ public class CtrcTable extends Table{
 					Button b = new Button(c.getId().toString());	
 					b.setStyleName(BaseTheme.BUTTON_LINK);
 					b.addListener(new LinkListener(table));
-					b.setDebugId("id"+c.getId());
 					return b;
 				}else {
 					return new Label(c.getId().toString());
@@ -237,16 +233,13 @@ public class CtrcTable extends Table{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			String debug = event.getButton().getDebugId();
-			if(event.getButton().getDebugId().startsWith("id")) {
-				try {
-					CtrcForm form = new CtrcForm();
-					Ctrc ctrc = ctrcService.getById(Ctrc.class, new Integer(event.getButton().getCaption()));
-					app.setMainView(form.getFormLayout());
-					form.createFormBody(new BeanItem<Ctrc>(ctrc));
-				}catch(Exception e) {
-					e.printStackTrace();
-				}
+			try {
+				CtrcForm form = new CtrcForm(app);
+				Ctrc ctrc = ctrcService.getById(Ctrc.class, new Integer(event.getButton().getCaption()));
+				app.setMainView(form.getFormLayout());
+				form.createFormBody(new BeanItem<Ctrc>(ctrc));
+			}catch(Exception e) {
+				e.printStackTrace();
 			}
 		}
 

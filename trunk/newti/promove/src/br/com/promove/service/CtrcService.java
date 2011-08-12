@@ -4,13 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import org.dom4j.Node;
-
 import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.InconsistenciaCtrc;
-import br.com.promove.entity.Modelo;
 import br.com.promove.entity.Transportadora;
-import br.com.promove.entity.Veiculo;
+import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.exception.PromoveException;
 
 /**
@@ -64,5 +61,13 @@ public interface CtrcService extends Serializable{
 	void cleanUpSession()throws PromoveException;
 	
 	<T>T getById(Class<T> clazz, Integer id) throws PromoveException;
+
+	public List<VeiculoCtrc> buscarVeiculosPorCtrc(Ctrc ctrc) throws PromoveException;
+
+	void salvarVeiculoCtrc(VeiculoCtrc bean) throws PromoveException;
+
+	void salvarVeiculoCtrc(VeiculoCtrc ctrc, boolean isFlush) throws PromoveException;
+	
+	void excluirVeiculoCtrc(VeiculoCtrc bean)throws PromoveException;
 
 }
