@@ -440,15 +440,4 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		return lista;
 	}
 
-	@Override
-	public List<Veiculo> buscarVeiculosPorCtrc(Ctrc ctrc) throws PromoveException {
-		List<Veiculo> lista = null;
-		try {
-			lista = veiculoDAO.getByCtrc(ctrc);
-		} catch (DAOException e) {
-			throw new PromoveException(e);
-		}
-		return lista;
-	}
-
 }

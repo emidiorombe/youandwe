@@ -2,7 +2,6 @@ package br.com.promove.view.form;
 
 import java.util.Locale;
 
-import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Transportadora;
 import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.VeiculoCtrc;
@@ -30,19 +29,16 @@ import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
-public class CtrcForm extends BaseForm{
+public class VeiculoCtrcForm extends BaseForm{
 	private VerticalLayout form_layout = new VerticalLayout();
 	private Button save;
 	private Button novo;
 	private Button remove;
-	private Button veiculo;
-	private PromoveApplication app;
 	
 	private CtrcService ctrcService;
 	
-	public CtrcForm(PromoveApplication app) {
+	public VeiculoCtrcForm() {
 		ctrcService = ServiceFactory.getService(CtrcService.class);
-		this.app = app;
 		buildForm();
 	}
 	
@@ -51,12 +47,11 @@ public class CtrcForm extends BaseForm{
 		setImmediate(true);
 		setSizeFull();
 		
-		save = new Button("Salvar", new CtrcFormListener(this));
-		remove = new Button("Excluir", new CtrcFormListener(this));
-		novo = new Button("Novo", new CtrcFormListener(this));
-		veiculo = new Button("Incluir Veículo", new CtrcFormListener(this));
+		save = new Button("Salvar", new VeiculoCtrcFormListener(this));
+		remove = new Button("Excluir", new VeiculoCtrcFormListener(this));
+		novo = new Button("Novo", new VeiculoCtrcFormListener(this));
 		
-		createFormBody(new BeanItem<Ctrc>(new Ctrc()));
+		createFormBody(new BeanItem<VeiculoCtrc>(new VeiculoCtrc()));
 		form_layout.addComponent(this);
 		form_layout.addComponent(createFooter());
 		//form_layout.setSpacing(true);
@@ -64,10 +59,10 @@ public class CtrcForm extends BaseForm{
 		
 	}
 
-	public void createFormBody(BeanItem<Ctrc> item) {
+	public void createFormBody(BeanItem<VeiculoCtrc> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new CtrcFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "motorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "cancelado"});
+		setVisibleItemProperties(new Object[]{"filial", "numero", "tipo", "serie", "transp", "veiculo", "numeroNF", "serieNF", "dataNF", "valorMercadoria"});
 	}
 	
 	private Component createFooter(){
@@ -76,7 +71,6 @@ public class CtrcForm extends BaseForm{
 		footer.addComponent(save);
 		footer.addComponent(remove);
 		footer.addComponent(novo);
-		//footer.addComponent(veiculo);
 		footer.setVisible(true);
 		
 		return footer;
@@ -86,14 +80,14 @@ public class CtrcForm extends BaseForm{
 		return form_layout;
 	}
 	
-	public void addNewCtrc() {
-		createFormBody(new BeanItem<Ctrc>(new Ctrc()));
+	public void addNewVeiculoCtrc() {
+		createFormBody(new BeanItem<VeiculoCtrc>(new VeiculoCtrc()));
 	}
 	
 	class CtrcFieldFactory extends DefaultFieldFactory{
 		private boolean newLocal;
-		private CtrcForm form;
-		public CtrcFieldFactory(CtrcForm form, boolean b) {
+		private VeiculoCtrcForm form;
+		public CtrcFieldFactory(VeiculoCtrcForm form, boolean b) {
 			this.form = form;
 			newLocal = b;
 		}
@@ -109,13 +103,11 @@ public class CtrcForm extends BaseForm{
 			}
 			
 			if(propertyId.equals("filial") || propertyId.equals("numero") || propertyId.equals("tipo")) {
-				if(!newLocal)
-					f.setReadOnly(true);
+				f.setReadOnly(true);
 				f.addValidator(new IntegerValidator(propertyId.toString() + " deve ser numérico"));
 				f.setWidth("100px");
 			} else if(propertyId.equals("serie")) {
-				if(!newLocal)
-					f.setReadOnly(true);
+				f.setReadOnly(true);
 				f.setWidth("100px");
 			} else if(propertyId.equals("transp")) {
 				try {
@@ -134,33 +126,27 @@ public class CtrcForm extends BaseForm{
 					c.setNullSelectionAllowed(false);
 					c.setPropertyDataSource(item.getItemProperty(propertyId));
 					c.setItemCaptionPropertyId("label");
-					if(!newLocal)
-						c.setReadOnly(true);
+					c.setReadOnly(true);
 					
 					return c;
 				}catch (PromoveException e) {
 					showErrorMessage(form, "Não foi possível buscar as Transportadoras");
 				}
-			} else if(propertyId.equals("dataEmissao")) {
+			} else if(propertyId.equals("veiculo")) {
+				if(!newLocal)
+					f.setReadOnly(true);
+				f.setWidth("200px");
+			} else if(propertyId.equals("dataNF")) {
 				PopupDateField data = new PopupDateField("Data");
 				data.setResolution(DateField.RESOLUTION_DAY);
 				data.setLocale(new Locale("pt", "BR"));
 				return data;
+			} else if(propertyId.equals("numeroNF")) {
+				f.addValidator(new IntegerValidator(propertyId.toString() + " deve ser numérico"));
 			} else {
 				f.setRequired(false);
-				if(propertyId.equals("ufOrigem") || propertyId.equals("ufDestino")) {					
-					f.setCaption(f.getCaption().replaceAll("Uf", "UF"));
-					f.setWidth("100px");
-				} else if(propertyId.equals("motorista") || propertyId.equals("municipioOrigem") || propertyId.equals("municipioDestino")) {					
-					f.setWidth("300px");
-				} else if(propertyId.equals("valorMercadoria")) {					
+				if(propertyId.equals("valorMercadoria")) {					
 					f.addValidator(new DoubleValidator(propertyId.toString() + " deve ser numérico"));
-				/*
-				} else if(propertyId.equals("taxaRct") || propertyId.equals("taxaRcf") || propertyId.equals("taxaRr") || propertyId.equals("taxaFluvial")) {
-					f.addValidator(new DoubleValidator(propertyId.toString() + " deve ser numérico"));
-					f.setCaption(f.getCaption().replaceAll("Rct", "RCT").replaceAll("Rr", "RR").replaceAll("Rcf", "RCF"));
-					f.setWidth("100px");
-				*/
 				}
 			}
 			return f;
@@ -168,51 +154,47 @@ public class CtrcForm extends BaseForm{
 		
 	}
 	
-	class CtrcFormListener implements ClickListener {
-		private CtrcForm form;
-		public CtrcFormListener(CtrcForm form) {
+	class VeiculoCtrcFormListener implements ClickListener{
+		private VeiculoCtrcForm form;
+		public VeiculoCtrcFormListener(VeiculoCtrcForm form) {
 			 this.form = form;
 		}
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			BeanItem<Ctrc> item = (BeanItem<Ctrc>) getItemDataSource();
 			if(event.getButton() == save){
 				try{
 					validate();
 					if(isValid()){
 						commit();
-						ctrcService.salvarCtrc(item.getBean());
-						addNewCtrc();
-						showSuccessMessage(form, "CTRC salvo!");
+						BeanItem<VeiculoCtrc> item = (BeanItem<VeiculoCtrc>) getItemDataSource();
+						ctrcService.salvarVeiculoCtrc(item.getBean());
+						addNewVeiculoCtrc();
+						showSuccessMessage(form, "Veículo do CTRC salvo!");
 					}
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
-					showErrorMessage(form,"Não foi possível salvar CTRC");
+					showErrorMessage(form,"Não foi possível salvar Veículo do CTRC");
 				}catch(IllegalArgumentException iae){
 					showErrorMessage(form, iae.getMessage());
 				}
 				
 			}else if(event.getButton() == novo){
-				addNewCtrc();
+				addNewVeiculoCtrc();
 			}else if(event.getButton() == remove){
 				try {
+					BeanItem<VeiculoCtrc> item = (BeanItem<VeiculoCtrc>) getItemDataSource();
 					if(item.getBean().getId() != null) {
-						ctrcService.excluirCtrc(item.getBean());
-						showSuccessMessage(form, "CTRC removido");
+						ctrcService.excluirVeiculoCtrc(item.getBean());
+						showSuccessMessage(form, "Veículo do CTRC removido");
 					}
-					addNewCtrc();
+					addNewVeiculoCtrc();
 				}catch(PromoveException de){
-					showErrorMessage(form, "Não foi possível remover CTRC");
+					showErrorMessage(form, "Não foi possível remover Veículo do CTRC");
 				}
-			}else if(event.getButton() == veiculo){
-				VeiculoCtrcForm form = new VeiculoCtrcForm();
-				VeiculoCtrc veic = new VeiculoCtrc();
-				veic.setCtrc(item.getBean());
-				app.setMainView(form.getFormLayout());
-				form.createFormBody(new BeanItem<VeiculoCtrc>(veic));
 			}
 		}
+
 	}
 }

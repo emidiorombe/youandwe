@@ -350,12 +350,4 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		itens.put(obj[0].toString(), lista);
 	}
 
-	public List<Veiculo> getByCtrc(Ctrc ctrc) throws DAOException {
-		StringBuilder hql = new StringBuilder();
-		hql.append("select v.veiculo from VeiculoCtrc v where ");
-		hql.append(" v.ctrc = :txtctrc ");
-		addParamToQuery("txtctrc", ctrc);
-		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
-	}
-
 }
