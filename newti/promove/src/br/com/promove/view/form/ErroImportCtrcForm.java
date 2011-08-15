@@ -1,30 +1,25 @@
 package br.com.promove.view.form;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
-import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.entity.Transportadora;
+import br.com.promove.entity.Veiculo;
+import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.exception.PromoveException;
+import br.com.promove.service.CadastroService;
 import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.utils.StringUtilities;
 import br.com.promove.view.ErroImportCtrcView;
-import br.com.promove.view.form.CtrcSearchForm.CtrcSearchListener;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.terminal.ExternalResource;
-import com.vaadin.terminal.gwt.server.WebApplicationContext;
-import com.vaadin.ui.AbstractSelect.NewItemHandler;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.AbstractSelect.Filtering;
+import com.vaadin.ui.AbstractSelect.NewItemHandler;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
@@ -40,6 +35,7 @@ public class ErroImportCtrcForm extends BaseForm {
 	private ErroImportCtrcView view;
 	private VerticalLayout layout = new VerticalLayout();
 	private CtrcService ctrcService;
+	private CadastroService cadastroService;
 	private PromoveApplication app;
 	
 	private Button save;
@@ -50,6 +46,7 @@ public class ErroImportCtrcForm extends BaseForm {
 	public ErroImportCtrcForm(PromoveApplication app) {
 		this.app = app;
 		ctrcService = ServiceFactory.getService(CtrcService.class);
+		cadastroService = ServiceFactory.getService(CadastroService.class);
 		buildForm();
 	}
 	
@@ -60,26 +57,26 @@ public class ErroImportCtrcForm extends BaseForm {
 		setSizeFull();
 
 		save = new Button("Salvar", new ErroCtrcFormListener());
-		remove = new Button("Excluir", new ErroCtrcFormListener());
+		remove = new Button("Excluir CTRC", new ErroCtrcFormListener());
 		saveAll = new Button("Revalidar Todos", new ErroCtrcFormListener());
 		export = new Button("Exportar Lista", new ErroCtrcFormListener());
 
-		createFormBody(new BeanItem<InconsistenciaCtrc>(new InconsistenciaCtrc()));
+		createFormBody(new BeanItem<VeiculoCtrc>(new VeiculoCtrc()));
 		layout.addComponent(this);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
 	}
 	
-	public void createFormBody(BeanItem<InconsistenciaCtrc> tpa) {
+	public void createFormBody(BeanItem<VeiculoCtrc> tpa) {
 		setItemDataSource(tpa);
 		setFormFieldFactory(new ErroCtrcFieldFactory()); 
-		setVisibleItemProperties(new Object[] {"transp"});
+		setVisibleItemProperties(new Object[] {"chassiInvalido"});
 
 	}
 
 	public void addNewTipoCtrc() {
-		createFormBody(new BeanItem<InconsistenciaCtrc>(new InconsistenciaCtrc()));
+		createFormBody(new BeanItem<VeiculoCtrc>(new VeiculoCtrc()));
 	}
 
 	private Component createFooter() {
@@ -104,17 +101,29 @@ public class ErroImportCtrcForm extends BaseForm {
 					validate();
 					if(isValid()){
 						commit();
-						BeanItem<InconsistenciaCtrc> item = (BeanItem<InconsistenciaCtrc>) getItemDataSource();
-						item.getBean().getCtrc().setTransp((Transportadora)item.getItemProperty("transp").getValue());
-						ctrcService.salvarCtrc(item.getBean().getCtrc());
-						ctrcService.excluirInconsistenciaCtrc(item.getBean());
-						view.getTable().reloadTable();
+						BeanItem<VeiculoCtrc> item = (BeanItem<VeiculoCtrc>) getItemDataSource();
+						if (item.getBean().getId() == null || item.getBean().getChassiInvalido() == null)
+							throw new IllegalArgumentException("Selecione um veículo!");
+						String chassi = item.getBean().getChassiInvalido().substring(0, 17);
+						List<Veiculo> v = cadastroService.buscarVeiculosPorChassi(chassi);
+						if (v.size() == 0) {
+							throw new IllegalArgumentException("Veículo com chassi " + chassi + " não encontrado");
+						} else
+							item.getBean().setVeiculo(v.get(0));
+
+						if (ctrcService.salvarVeiculoCtrcDeInconsistencia(item.getBean())) {
+							view.getTables().getTableCtrc().reloadTable();
+							view.getTables().getTableVeiculo().removeAllItems();
+						} else {
+							view.getTables().getTableVeiculo().reloadTable(item.getBean().getInconsistencia());							
+						}
 						showSuccessMessage(view, "Inconsistência salva!");
 					}
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(IllegalArgumentException ie) {
-					view.getTable().reloadTable();
+					view.getTables().getTableCtrc().reloadTable();
+					view.getTables().getTableVeiculo().removeAllItems();
 					showErrorMessage(view, ie.getMessage());
 				}catch(PromoveException de){
 					showErrorMessage(view, "Não foi possível salvar Inconsistência");
@@ -124,7 +133,8 @@ public class ErroImportCtrcForm extends BaseForm {
 				try{
 					BeanItem<InconsistenciaCtrc> item = (BeanItem<InconsistenciaCtrc>) getItemDataSource();
 					ctrcService.excluirInconsistenciaCtrc(item.getBean());
-					view.getTable().reloadTable();
+					view.getTables().getTableCtrc().reloadTable();
+					view.getTables().getTableVeiculo().removeAllItems();
 					showSuccessMessage(view, "Inconsistência excluida!");
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
@@ -152,7 +162,8 @@ public class ErroImportCtrcForm extends BaseForm {
 						}
 					}
 					showSuccessMessage(view, "Inconsistências salvas!");
-					view.getTable().reloadTable();
+					view.getTables().getTableCtrc().reloadTable();
+					view.getTables().getTableVeiculo().removeAllItems();
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
@@ -172,43 +183,47 @@ public class ErroImportCtrcForm extends BaseForm {
 				((TextField)f).setNullRepresentation("");
 			}
 			
-			if(propertyId.equals("transp")) {
+			if (propertyId.equals("chassiInvalido")) {
+				String chassi = null;
+				BeanItem<VeiculoCtrc> bitem = (BeanItem<VeiculoCtrc>) item;
+				if (bitem.getBean() != null && bitem.getBean().getVeiculo() == null &&
+						bitem.getBean().getChassiInvalido() != null)
+					 chassi = bitem.getBean().getChassiInvalido();
+				final ComboBox c = new ComboBox("Veículos");
 				try {
-					ComboBox c = new ComboBox("Transportadora");
 					c.addContainerProperty("label", String.class, null);
-				
-					for(Transportadora t: ctrcService.buscarTodasTransportadoras()) {
-						Item i = c.addItem(t);
-						i.getItemProperty("label").setValue(t.getDescricao());
-					}
-					
 					c.setRequired(true);
-					c.setRequiredError("Transportadora obrigatória");
-					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setRequiredError("Veículo obrigatório");
 					c.setImmediate(true);
 					c.setNullSelectionAllowed(false);
-					c.setPropertyDataSource(item.getItemProperty(propertyId));
 					c.setItemCaptionPropertyId("label");
-					
-					if (c.size() > 0) {
-						Transportadora t2 = ((BeanItem<InconsistenciaCtrc>) getItemDataSource()).getBean().getTransp();
-						if(t2 != null) {
-							Iterator<Transportadora> it = c.getItemIds().iterator(); 
-							while(it.hasNext()) {
-								Transportadora t1 = it.next();
-								if(t2.getId().equals(t1.getId())) {
-									c.setValue(t1);
-								}
-							}
+					c.setNewItemsAllowed(true);
+					Item i2 = c.addItem(new Veiculo(chassi));
+					i2.getItemProperty("label").setValue(chassi);
+					if(chassi != null)
+						for(Veiculo v : cadastroService.buscarVeiculosPorFZ(chassi)) {
+							Item i = c.addItem(v);
+							i.getItemProperty("label").setValue(v.getChassi() + " - " + new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataCadastro())) + " - " + v.getModelo().getDescricao());
 						}
 					
-					}
-					
-					return c;
-				}catch (PromoveException e) {
-					showErrorMessage(view, "Não foi possível buscar as transportadoras");
+					c.setNewItemHandler(new NewItemHandler() {
+						
+						@Override
+						public void addNewItem(String newV) {
+							Item i = c.addItem(new Veiculo(newV));
+							i.getItemProperty("label").setValue(newV);
+				            c.setValue(new Veiculo(newV));
+							
+						}
+					});
+				}catch(Exception e) {
+					e.printStackTrace();
+					showErrorMessage(view,"Não foi possível buscar Veículos pelo FZ");
 				}
-			}
+				
+				return c;
+			}			
+			
 			return f;
 		}
 	}

@@ -4,6 +4,7 @@ import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Usuario;
 import br.com.promove.view.CtrcVeiculoTables;
 import br.com.promove.view.CtrcView;
+import br.com.promove.view.ErroImportCtrcVeiculoTables;
 import br.com.promove.view.ErroImportCtrcView;
 import br.com.promove.view.ImportCtrcView;
 import br.com.promove.view.form.CtrcForm;
@@ -11,6 +12,7 @@ import br.com.promove.view.form.CtrcSearchForm;
 import br.com.promove.view.form.ErroImportCtrcForm;
 import br.com.promove.view.table.CtrcTable;
 import br.com.promove.view.table.ErroImportCtrcTable;
+import br.com.promove.view.table.ErroImportVeiculoCtrcTable;
 import br.com.promove.view.table.VeiculoCtrcTable;
 
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
@@ -87,9 +89,11 @@ public class MenuAverbacao extends CssLayout {
 			ImportCtrcView view = new ImportCtrcView(app);
 			app.setMainView(view.getLayout());
 		}else if(event.getButton() == erro_import_ctrc) {
-			ErroImportCtrcTable table = new ErroImportCtrcTable();
+			ErroImportCtrcTable tableCtrc = new ErroImportCtrcTable();
+			ErroImportVeiculoCtrcTable tableVeic = new ErroImportVeiculoCtrcTable(app);
+			ErroImportCtrcVeiculoTables tables = new ErroImportCtrcVeiculoTables(tableCtrc, tableVeic);
 			ErroImportCtrcForm form = new ErroImportCtrcForm(app);
-			app.setMainView(new ErroImportCtrcView(table, form));
+			app.setMainView(new ErroImportCtrcView(tables, form));
 		}
 	}
 	

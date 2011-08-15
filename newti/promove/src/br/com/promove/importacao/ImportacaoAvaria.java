@@ -18,7 +18,6 @@ import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.FotoAvaria;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
-import br.com.promove.entity.Modelo;
 import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;

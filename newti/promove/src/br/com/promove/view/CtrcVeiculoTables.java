@@ -21,7 +21,6 @@ public class CtrcVeiculoTables extends SplitPanel {
 		setFirstComponent(tableCtrc);
 		setSecondComponent(tableVeiculo);
 		setSplitPosition(50);
-		
 	}
 	
 	public void setTableCtrc(CtrcTable tableCtrc) {

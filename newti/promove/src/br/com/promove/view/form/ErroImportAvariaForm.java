@@ -1,12 +1,9 @@
 package br.com.promove.view.form;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
-import br.com.promove.entity.Avaria;
-import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
@@ -15,9 +12,7 @@ import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
-import br.com.promove.utils.StringUtilities;
 import br.com.promove.view.ErroImportAvariaView;
-import br.com.promove.view.form.AvariaSearchForm.AvariaSearchListener;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
@@ -26,7 +21,6 @@ import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.AbstractSelect.NewItemHandler;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
@@ -35,7 +29,6 @@ import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class ErroImportAvariaForm extends BaseForm {
@@ -117,11 +110,11 @@ public class ErroImportAvariaForm extends BaseForm {
 					if(isValid()){
 						commit();
 						BeanItem<InconsistenciaAvaria> item = (BeanItem<InconsistenciaAvaria>) getItemDataSource();
-						if(item.getBean().getId() == null)
+						if (item.getBean().getId() == null || item.getBean().getChassiInvalido() == null)
 							throw new IllegalArgumentException("Selecione um registro!");
-						String chassi = item.getBean().getChassiInvalido() != null ? item.getBean().getChassiInvalido().substring(0, 17) : StringUtilities.getChassiFromErrorMessage(item.getBean().getMsgErro());
+						String chassi = item.getBean().getChassiInvalido().substring(0, 17);
 						List<Veiculo> v = cadastroService.buscarVeiculosPorChassi(chassi);
-						if( v.size() == 0) {
+						if (v.size() == 0) {
 							throw new IllegalArgumentException("Veículo com chassi " + chassi + " não encontrado");
 						}else
 							item.getBean().setVeiculo(v.get(0));
@@ -192,14 +185,11 @@ public class ErroImportAvariaForm extends BaseForm {
 			Field f = super.createField(item, propertyId, uiContext);
 			
 			if (propertyId.equals("chassiInvalido")) {
-				 String chassi = null;
-				 BeanItem<InconsistenciaAvaria> bitem = (BeanItem<InconsistenciaAvaria>) item;
-				 if(bitem.getBean() != null) {
-					 if(bitem.getBean().getChassiInvalido() != null) {
-						 chassi = bitem.getBean().getChassiInvalido();
-					 }else if(bitem.getBean().getMsgErro() != null)
-						 chassi = StringUtilities.getChassiFromErrorMessage(bitem.getBean().getMsgErro());
-				 }
+				String chassi = null;
+				BeanItem<InconsistenciaAvaria> bitem = (BeanItem<InconsistenciaAvaria>) item;
+				if (bitem.getBean() != null && bitem.getBean().getVeiculo() == null && 
+						bitem.getBean().getChassiInvalido() != null)
+					chassi = bitem.getBean().getChassiInvalido();
 				final ComboBox c = new ComboBox("Veículos");
 				try {
 					c.addContainerProperty("label", String.class, null);

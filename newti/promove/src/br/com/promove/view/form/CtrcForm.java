@@ -145,6 +145,7 @@ public class CtrcForm extends BaseForm{
 				PopupDateField data = new PopupDateField("Data");
 				data.setResolution(DateField.RESOLUTION_DAY);
 				data.setLocale(new Locale("pt", "BR"));
+				data.setRequired(true);
 				return data;
 			} else {
 				f.setRequired(false);

@@ -18,7 +18,6 @@ import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.dao.VeiculoDAO;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Clima;
-import br.com.promove.entity.Cor;
 import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.FotoAvaria;
@@ -360,7 +359,8 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		try {
 			InconsistenciaAvaria inc = new InconsistenciaAvaria(avaria, msgErro);
 			inc.setChassiInvalido(StringUtilities.getChassiFromErrorMessage(msgErro));
-			inconsistenciaAvariaDAO.save(inc);
+			if(avaria.getVeiculo() != null) inc.setChassiInvalido(avaria.getVeiculo().getChassi());
+ 			inconsistenciaAvariaDAO.save(inc);
 			return inc;
 		} catch (DAOException e) {
 			throw new PromoveException(e);

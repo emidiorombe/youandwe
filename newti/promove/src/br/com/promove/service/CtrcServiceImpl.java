@@ -25,6 +25,7 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	CtrcServiceImpl() {
 		transpDAO = new TransportadoraDAO();
 		ctrcDAO = new CtrcDAO();
+		veiculoCtrcDAO = new VeiculoCtrcDAO();
 		inconsistenciaCtrcDAO = new InconsistenciaCtrcDAO(); 
 	}
 
@@ -226,4 +227,67 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 		}
 	}
 
+	@Override
+	public List<Ctrc> buscarInconsistenciaCtrcDuplicadoPorFiltros(Ctrc ct) throws PromoveException {
+		List<Ctrc> lista = null;
+		try {
+			lista = inconsistenciaCtrcDAO.getInconsistenciasCtrcDuplicadosPorFiltros(ct);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public List<VeiculoCtrc> buscarVeiculoCtrcDuplicadoPorFiltros(VeiculoCtrc veic) throws PromoveException {
+		List<VeiculoCtrc> lista = null;
+		try {
+			lista = veiculoCtrcDAO.getVeiculosCtrcDuplicadosPorFiltros(veic);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public boolean salvarVeiculoCtrcDeInconsistencia(VeiculoCtrc veic) throws PromoveException {
+		boolean ok = false;
+		try {
+			int veicInvalidos = 0;
+			salvarVeiculoCtrc(veic);
+			InconsistenciaCtrc inc = inconsistenciaCtrcDAO.getByPrimaryKey(veic.getInconsistencia());
+			Ctrc ctrc = inc.getCtrc();
+			List<VeiculoCtrc> veiculos = veiculoCtrcDAO.getByInconsistencia(veic.getInconsistencia());
+			
+			for (VeiculoCtrc veiculo : veiculos) {
+				if (veiculo.getVeiculo() == null) veicInvalidos++;
+			}
+
+			if (veicInvalidos == 0) {
+				ok = true;
+				ctrcDAO.save(ctrc);
+				for (VeiculoCtrc veiculo : veiculos) {
+					veiculo.setInconsistencia(null);
+					veiculo.setCtrc(ctrc);
+					salvarVeiculoCtrc(veiculo);
+				}
+				this.excluirInconsistenciaCtrc(inc);
+			}
+			
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+		return ok;
+	}
+
+	public List<VeiculoCtrc> buscarVeiculosPorInconsistencias(Integer idInc) throws PromoveException {
+		List<VeiculoCtrc> lista = null;
+		try {
+			lista = veiculoCtrcDAO.getByInconsistencia(idInc);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
 }

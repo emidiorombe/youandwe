@@ -2,27 +2,26 @@ package br.com.promove.view;
 
 
 import br.com.promove.view.form.ErroImportCtrcForm;
-import br.com.promove.view.table.ErroImportCtrcTable;
 
 import com.vaadin.ui.SplitPanel;
 
 public class ErroImportCtrcView extends SplitPanel{
 
 	private ErroImportCtrcForm form;
-	private ErroImportCtrcTable table;
+	private ErroImportCtrcVeiculoTables tables;
 
-	public ErroImportCtrcView(ErroImportCtrcTable table, ErroImportCtrcForm form) {
-		this.table = table;
+	public ErroImportCtrcView(ErroImportCtrcVeiculoTables tables, ErroImportCtrcForm form) {
+		this.tables = tables;
 		this.form = form;
 		buildListView();
 	}
 	
 	private void buildListView() {
-		table.setView(this);
+		tables.setView(this);
 		form.setView(this);
-		setFirstComponent(table);
+		setFirstComponent(tables);
 		setSecondComponent(form.getFormLayout());
-		setSplitPosition(40);
+		setSplitPosition(80);
 		
 	}
 
@@ -34,12 +33,12 @@ public class ErroImportCtrcView extends SplitPanel{
 		this.form = form;
 	}
 
-	public ErroImportCtrcTable getTable() {
-		return table;
+	public ErroImportCtrcVeiculoTables getTables() {
+		return tables;
 	}
 
-	public void setTable(ErroImportCtrcTable table) {
-		this.table = table;
+	public void setTables(ErroImportCtrcVeiculoTables tables) {
+		this.tables = tables;
 	}
 	
 	

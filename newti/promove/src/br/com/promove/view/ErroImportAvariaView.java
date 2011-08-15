@@ -22,7 +22,7 @@ public class ErroImportAvariaView extends SplitPanel{
 		form.setView(this);
 		setFirstComponent(table);
 		setSecondComponent(form.getFormLayout());
-		setSplitPosition(40);
+		setSplitPosition(80);
 		
 	}
 

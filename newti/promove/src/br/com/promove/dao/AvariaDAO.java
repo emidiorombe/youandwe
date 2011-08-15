@@ -8,16 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.exception.SQLGrammarException;
-
 import br.com.promove.entity.Avaria;
-import br.com.promove.entity.Cor;
-import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
 import br.com.promove.entity.ResponsabilidadeAvaria;
-import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 import br.com.promove.utils.DateUtils;
