@@ -68,6 +68,7 @@ public class CtrcSearchForm extends BaseForm{
 		txtChassi.setWidth("200px");
 		
 		txtNumero = new TextField("Número");
+		txtNumero.setWidth("100px");
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));

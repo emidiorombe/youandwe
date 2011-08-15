@@ -245,6 +245,7 @@ public class AvariaForm extends BaseForm {
 					PopupDateField data = new PopupDateField("Data");
 					data.setResolution(DateField.RESOLUTION_DAY);
 					data.setLocale(new Locale("pt", "BR"));
+					data.setRequired(true);
 					return data;
 				}else if(propertyId.equals("hora")) {
 					TextField tf = new TextField("Hora");

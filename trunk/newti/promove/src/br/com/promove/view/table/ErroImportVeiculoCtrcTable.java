@@ -13,6 +13,7 @@ import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.CtrcVeiculoTables;
+import br.com.promove.view.ErroImportCtrcVeiculoTables;
 import br.com.promove.view.form.VeiculoCtrcForm;
 
 import com.vaadin.data.Property;
@@ -29,17 +30,17 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
-public class VeiculoCtrcTable extends Table {
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "modelo", "cor", "dataCadastro", "tipo", "navio", "numeroNF", "serieNF", "dataNF", "valorMercadoria"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Modelo", "Cor", "Data", "Tipo", "Navio", "NF", "Série", "Data NF", "Valor Merc."};
+public class ErroImportVeiculoCtrcTable extends Table {
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "chassiInvalido", "modelo", "tipo", "navio", "numeroNF", "serieNF", "dataNF", "valorMercadoria", "msgErro"};
+	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Modelo", "Tipo", "Navio", "NF", "Série", "Data NF", "Valor Merc.", "Mensagem"};
 	
 	private CtrcService ctrcService;
 	private VeiculoCtrcTableContainer container;
 	private PromoveApplication app;
-	private CtrcVeiculoTables view;
+	private ErroImportCtrcVeiculoTables view;
 	private NumberFormat formatMoeda = new DecimalFormat("'R$' #0.00");
 	
-	public VeiculoCtrcTable(PromoveApplication app) {
+	public ErroImportVeiculoCtrcTable(PromoveApplication app) {
 		this.app = app;
 		ctrcService = ServiceFactory.getService(CtrcService.class);
 		buildTable();
@@ -47,7 +48,7 @@ public class VeiculoCtrcTable extends Table {
 	
 	private void buildTable() {
 		setSizeFull();
-		setColumnCollapsingAllowed(true);	
+		setColumnCollapsingAllowed(true);
 		setSelectable(true);
 		setImmediate(true);
 		setNullSelectionAllowed(false);
@@ -55,8 +56,6 @@ public class VeiculoCtrcTable extends Table {
 		addListener(new RowSelectedListener());
 		
 		addGeneratedColumn("id", new VeiculoCtrcTableColumnGenerator(this));
-		addGeneratedColumn("modelo", new VeiculoCtrcTableColumnGenerator(this));
-		addGeneratedColumn("cor", new VeiculoCtrcTableColumnGenerator(this));
 		addGeneratedColumn("dataCadastro", new VeiculoCtrcTableColumnGenerator(this));
 		addGeneratedColumn("tipo", new VeiculoCtrcTableColumnGenerator(this));
 		addGeneratedColumn("navio", new VeiculoCtrcTableColumnGenerator(this));
@@ -69,7 +68,9 @@ public class VeiculoCtrcTable extends Table {
 		setColumnAlignment("valorMercadoria", ALIGN_RIGHT);
 		
 		try {
-			setColumnCollapsed("cor", true);
+			//setColumnCollapsed("dataNF", true);
+			setColumnCollapsed("numeroNF", true);
+			setColumnCollapsed("serieNF", true);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -81,24 +82,29 @@ public class VeiculoCtrcTable extends Table {
 		return container;
 	}
 	
+	public void reloadTable(Integer idInc) {
+		container.removeAllItems();
+		filterTable(idInc);
+	}
+	
 	public void filterTable(List<VeiculoCtrc> veiculos) {
 		container.populate(veiculos);
 	}
 	
-	public void filterTable(Ctrc ctrc) {
+	public void filterTable(int idInc) {
 		try {
-			filterTable(ctrcService.buscarVeiculosPorCtrc(ctrc));
+			filterTable(ctrcService.buscarVeiculosPorInconsistencias(idInc));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 	}
 
-	public void setView(CtrcVeiculoTables view) {
+	public void setView(ErroImportCtrcVeiculoTables view) {
 		this.view = view;
 	}
 	
-	public CtrcVeiculoTables getView() {
+	public ErroImportCtrcVeiculoTables getView() {
 		return view;
 	}
 	
@@ -118,20 +124,16 @@ public class VeiculoCtrcTable extends Table {
 	
 	class VeiculoCtrcTableColumnGenerator implements Table.ColumnGenerator {
 
-		private VeiculoCtrcTable table;
+		private ErroImportVeiculoCtrcTable table;
 
-		public VeiculoCtrcTableColumnGenerator(VeiculoCtrcTable table) {
+		public VeiculoCtrcTableColumnGenerator(ErroImportVeiculoCtrcTable table) {
 			this.table = table;
 		}
 
 		@Override
 		public Component generateCell(Table source, Object itemId, Object columnId) {
 			VeiculoCtrc v = (VeiculoCtrc)itemId;
-			if(columnId.toString().equals("modelo")) {
-				return new Label(v.getVeiculo().getModelo().getDescricao());
-			}else if(columnId.toString().equals("cor")) {
-					return new Label(v.getVeiculo().getCor().getDescricao());
-			}else if(columnId.equals("tipo")) {
+			if(columnId.equals("tipo")) {
 				return v.getVeiculo().getTipo() == 1 ? new Label("Nacional") : new Label("Importado");
 			}else if(columnId.toString().equals("dataCadastro")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getVeiculo().getDataCadastro()));
@@ -165,14 +167,16 @@ public class VeiculoCtrcTable extends Table {
 		public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 			Property property = event.getProperty();
 			BeanItem<VeiculoCtrc> item = (BeanItem<VeiculoCtrc>) getItem(getValue());
+            view.getView().getForm().createFormBody(item);
+			
 		}
 	}
 	
 	class LinkListener implements ClickListener {
 
-		private VeiculoCtrcTable table;
+		private ErroImportVeiculoCtrcTable table;
 
-		public LinkListener(VeiculoCtrcTable table) {
+		public LinkListener(ErroImportVeiculoCtrcTable table) {
 			this.table = table;
 		}
 

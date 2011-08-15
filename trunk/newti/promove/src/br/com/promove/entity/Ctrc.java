@@ -218,4 +218,9 @@ public class Ctrc implements Serializable{
 		return cancelado;
 	}
 
+	@Override
+	public String toString() {
+		return (filial + " - " + numero + " - " + tipo + " - " + serie + " - " + transp);
+	}
+
 }

@@ -62,7 +62,7 @@ public class VeiculoCtrcForm extends BaseForm{
 	public void createFormBody(BeanItem<VeiculoCtrc> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new CtrcFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"filial", "numero", "tipo", "serie", "transp", "veiculo", "numeroNF", "serieNF", "dataNF", "valorMercadoria"});
+		setVisibleItemProperties(new Object[]{"ctrc", "veiculo", "numeroNF", "serieNF", "dataNF", "valorMercadoria"});
 	}
 	
 	private Component createFooter(){
@@ -102,36 +102,9 @@ public class VeiculoCtrcForm extends BaseForm{
 				f.setRequiredError("Preenchimento do campo '" + StringUtilities.capitalize(propertyId.toString()) + "' é obrigatório.");
 			}
 			
-			if(propertyId.equals("filial") || propertyId.equals("numero") || propertyId.equals("tipo")) {
+			if(propertyId.equals("ctrc")) {
 				f.setReadOnly(true);
-				f.addValidator(new IntegerValidator(propertyId.toString() + " deve ser numérico"));
-				f.setWidth("100px");
-			} else if(propertyId.equals("serie")) {
-				f.setReadOnly(true);
-				f.setWidth("100px");
-			} else if(propertyId.equals("transp")) {
-				try {
-					ComboBox c = new ComboBox("Transportadora");
-					c.addContainerProperty("label", String.class, null);
-				
-					for(Transportadora t: ctrcService.buscarTodasTransportadoras()) {
-						Item i = c.addItem(t);
-						i.getItemProperty("label").setValue(t.getDescricao());
-					}
-					
-					c.setRequired(true);
-					c.setRequiredError("Transportadora obrigatória");
-					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-					c.setImmediate(true);
-					c.setNullSelectionAllowed(false);
-					c.setPropertyDataSource(item.getItemProperty(propertyId));
-					c.setItemCaptionPropertyId("label");
-					c.setReadOnly(true);
-					
-					return c;
-				}catch (PromoveException e) {
-					showErrorMessage(form, "Não foi possível buscar as Transportadoras");
-				}
+				f.setWidth("300px");
 			} else if(propertyId.equals("veiculo")) {
 				if(!newLocal)
 					f.setReadOnly(true);

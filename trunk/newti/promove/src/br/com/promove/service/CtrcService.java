@@ -70,4 +70,11 @@ public interface CtrcService extends Serializable{
 	
 	void excluirVeiculoCtrc(VeiculoCtrc bean)throws PromoveException;
 
+	List<Ctrc> buscarInconsistenciaCtrcDuplicadoPorFiltros(Ctrc ctrc) throws PromoveException;
+
+	List<VeiculoCtrc> buscarVeiculoCtrcDuplicadoPorFiltros(VeiculoCtrc veic) throws PromoveException;
+
+	boolean salvarVeiculoCtrcDeInconsistencia(VeiculoCtrc veic) throws PromoveException;
+
+	List<VeiculoCtrc> buscarVeiculosPorInconsistencias(Integer idInc) throws PromoveException;
 }

@@ -5,23 +5,26 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
+import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.view.ErroImportCtrcVeiculoTables;
 import br.com.promove.view.ErroImportCtrcView;
 
 public class ErroImportCtrcTable extends Table{
 	public static final Object[] NATURAL_COL_ORDER = new Object[] {"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "taxaRct", "taxaRr", "taxaRcf", "taxaFluvial", "valorMercadoria", "msgErro"};
 	public static final String[] COL_HEADERS = new String[] {"Filial", "Numero", "Tipo", "Série", "Transportadora", "Data", "Frota", "Carreta", "UF", "Origem", "UF", "Destino", "RCT", "RR", "RCF", "Fluvial", "Valor Mercadoria", "Mensagem"};
 	
-	private ErroImportCtrcView view;
+	private ErroImportCtrcVeiculoTables view;
 	private CtrcService ctrcService;
 	private ErroImportCtrcContainer container;
 	
@@ -58,7 +61,7 @@ public class ErroImportCtrcTable extends Table{
 		}
 	}
 
-	public void setView(ErroImportCtrcView view) {
+	public void setView(ErroImportCtrcVeiculoTables view) {
 		this.view = view;
 		
 	}
@@ -99,11 +102,9 @@ public class ErroImportCtrcTable extends Table{
 		@Override
 		public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 			Property property = event.getProperty();
-			BeanItem<InconsistenciaCtrc> item =  (BeanItem<InconsistenciaCtrc>) getItem(getValue());
-            view.getForm().createFormBody(item);
-			
+			BeanItem<InconsistenciaCtrc> item = (BeanItem<InconsistenciaCtrc>) getItem(getValue());
+			view.getTableVeiculo().filterTable(item.getBean().getId());
 		}
-		
 	}
 	
 	class ErroImportVeiculoColumnGenerator implements Table.ColumnGenerator{

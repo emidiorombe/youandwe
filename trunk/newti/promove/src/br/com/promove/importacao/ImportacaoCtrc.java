@@ -18,12 +18,16 @@ import org.dom4j.Element;
 import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.Transportadora;
 import br.com.promove.entity.InconsistenciaCtrc;
+import br.com.promove.entity.Veiculo;
+import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.exception.PromoveException;
+import br.com.promove.service.CadastroService;
 import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
 
 public class ImportacaoCtrc {
 	private CtrcService ctrcService;
+	private CadastroService cadastroService;
 	private static SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy");
 	private static SimpleDateFormat date_format_hora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 	private HashMap<String, Transportadora> transportadoras;
@@ -31,6 +35,7 @@ public class ImportacaoCtrc {
 
 	public ImportacaoCtrc() {
 		ctrcService = ServiceFactory.getService(CtrcService.class);
+		cadastroService = ServiceFactory.getService(CadastroService.class);
 	}
 
 	public ImportacaoCtrc(String xmlContent) {
@@ -58,7 +63,6 @@ public class ImportacaoCtrc {
 		importTagCtrc(doc);
 	}
 	
-	
 	public void importarGabardo(String url) throws DocumentException, ParseException, PromoveException {
 		loadTransportadoras();
 		String xml;
@@ -69,24 +73,27 @@ public class ImportacaoCtrc {
 		} catch (IOException e) {
 			throw new PromoveException(e);
 		}
-		
 	}
 
 	private void importTagCtrc(Document doc) throws ParseException, PromoveException {
 		List<Element> ctrcs = doc.selectNodes("//retorno/ctrc");
-		for (Element node_ct : ctrcs) {
+		for(Element node_ct : ctrcs) {
 			Ctrc ct = new Ctrc();
+			List<VeiculoCtrc> veiculos = new ArrayList<VeiculoCtrc>();
 			
 			try {
+				int veicInvalidos = 0;
+				
 				ct.setTransp(transportadoras.get(node_ct.element("cnpj_transportadora").getText()));
 				
-				if (ct.getTransp() == null)
+				if(ct.getTransp() == null)
 					throw new Exception("Transportadora " + node_ct.element("cnpj_transportadora").getText() + " não existe;");
 				
 				ct.setFilial(new Integer(node_ct.element("filial").getText()));
 				ct.setNumero(new Integer(node_ct.element("ctrc_numero").getText()));
 				ct.setTipo(new Integer(node_ct.element("tipo").getText()));
 				ct.setSerie(node_ct.element("ctrc_serie").getText());
+				
 				ct.setDataEmissao(date_format_hora.parse(node_ct.element("ctrc_data").getText()));
 				ct.setPlacaFrota(node_ct.element("placa_frota").getText());
 				ct.setPlacaCarreta(node_ct.element("placa_carreta").getText());
@@ -94,31 +101,54 @@ public class ImportacaoCtrc {
 				ct.setMunicipioOrigem(node_ct.element("municipio_origem").getText());
 				ct.setUfDestino(node_ct.element("uf_destino").getText());
 				ct.setMunicipioDestino(node_ct.element("municipio_destino").getText());
+				ct.setMotorista(node_ct.element("nome_motorista").getText());
+				ct.setCancelado(node_ct.element("situacao").getText() == "3" ? true : false);
 				
-				String taxaRct = node_ct.element("taxa_rct").getText();
-				String taxaRr = node_ct.element("taxa_rr").getText();
-				String taxaRcf = node_ct.element("taxa_rcf").getText();
-				String taxaFluvial = node_ct.element("taxa_fluvial").getText();
-				String valorMercadoria = node_ct.element("valor_mercadoria").getText();
-				if (taxaRct.equals("")) taxaRct = "0";
-				if (taxaRr.equals("")) taxaRr = "0";
-				if (taxaRcf.equals("")) taxaRcf = "0";
-				if (taxaFluvial.equals("")) taxaFluvial = "0";
-				if (valorMercadoria.equals("")) valorMercadoria = "0";
-				ct.setTaxaRct(new Double(taxaRct));
-				ct.setTaxaRr(new Double(taxaRr));
-				ct.setTaxaRcf(new Double(taxaRcf));
-				ct.setTaxaFluvial(new Double(taxaFluvial));
-				ct.setValorMercadoria(new Double(valorMercadoria));
+				ct.setTaxaRct(new Double(trataNumero(node_ct.element("taxa_rct").getText())));
+				ct.setTaxaRr(new Double(trataNumero(node_ct.element("taxa_rr").getText())));
+				ct.setTaxaRcf(new Double(trataNumero(node_ct.element("taxa_rcf").getText())));
+				ct.setTaxaFluvial(new Double(trataNumero(node_ct.element("taxa_fluvial").getText())));
+				ct.setValorMercadoria(new Double(trataNumero(node_ct.element("valor_mercadoria").getText())));
 				
-				if (ctrcService.buscarCtrcDuplicadoPorFiltros(ct).size() > 0) {
-					continue; //Ja existe esse ctrc
+				if(ctrcService.buscarCtrcDuplicadoPorFiltros(ct).size() == 0 && ctrcService.buscarCtrcDuplicadoPorFiltros(ct).size() == 0) {
+					Element node_veics = node_ct.element("veiculos");
+					Iterator it = node_veics.elementIterator();
+					while(it.hasNext()) {
+						VeiculoCtrc veic = new VeiculoCtrc();
+						veic.setNumeroNF(node_veics.element("veiculo_numero_nf").getText());
+						veic.setSerieNF(node_veics.element("veiculo_serie_nf").getText());
+						veic.setDataNF(date_format.parse(node_veics.element("veiculo_data_nf").getText()));
+						veic.setValorMercadoria(new Double(trataNumero(node_veics.element("veiculo_valor_nf").getText())));
+						veiculos.add(veic);
+						
+						String chassi = node_veics.element("veiculo_chassi").getText();
+						List<Veiculo> veicsEncontrados = cadastroService.buscarVeiculosPorChassi(chassi);
+						if(veicsEncontrados.size() > 0) {
+							veic.setVeiculo(veicsEncontrados.get(0));
+						} else {
+							veic.setChassiInvalido(chassi);
+							veic.setModelo(node_veics.element("veiculo_modelo").getText());
+							veic.setMsgErro("Veiculo " + chassi + " não existe!;");
+							veicInvalidos++;
+						}
+					}
 				}
-
-				ctrcService.salvarCtrc(ct, true);
-		
+				
+				if(veicInvalidos > 0) {
+					throw new Exception("Contém veiculos inexistentes;");
+				} else {
+					ctrcService.salvarCtrc(ct, true);
+					for(VeiculoCtrc veic: veiculos) {
+						veic.setCtrc(ct);
+						ctrcService.salvarVeiculoCtrc(veic, true);
+					}
+				}
 			} catch(Exception e) {
-				ctrcService.salvarInconsistenciaImportCtrc(ct, e.getMessage());
+				InconsistenciaCtrc inc = ctrcService.salvarInconsistenciaImportCtrc(ct, e.getMessage());
+				for(VeiculoCtrc veic: veiculos) {
+					veic.setInconsistencia(inc.getId());
+					ctrcService.salvarVeiculoCtrc(veic, true);
+				}
 			}
 		}
 	}
@@ -131,4 +161,9 @@ public class ImportacaoCtrc {
 		}
 	}
 	
+	public static String trataNumero(String str) {
+		if(str == null || str.isEmpty())
+			return "0";
+		return str;
+	}
 }
