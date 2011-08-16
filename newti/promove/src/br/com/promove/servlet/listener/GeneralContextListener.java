@@ -52,6 +52,7 @@ public class GeneralContextListener implements ServletContextListener{
 		}
 		
 		//Inicializa o 'Scheduler' para importação de CTRC
+		/*
 		try {
 			SchedulerFactory sf = new StdSchedulerFactory();
 	        Scheduler sched = sf.getScheduler();
@@ -65,11 +66,11 @@ public class GeneralContextListener implements ServletContextListener{
 			CronTrigger trigger  = newTrigger().withIdentity("trigger_ctrc", "gdefault").withSchedule(cronSchedule(cron_scheduler)).build();
 			sched.scheduleJob(ctrcJob, trigger);
 			sched.start();
-			log.error(">>>>>>>>>>> Importacao de CTRC Agendada");
+			log.warn(">>>>>>>>>>> Importacao de CTRC Agendada");
 		}catch(Exception e) {
 			log.error("::::Não foi possivel agendar a importação de CTRC");
 		}
-		
+		*/
 	}
 
 }

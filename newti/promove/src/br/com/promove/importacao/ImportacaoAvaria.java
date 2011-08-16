@@ -85,7 +85,8 @@ public class ImportacaoAvaria {
 				// TODO fixo
 				if (!node_av.element("tipo").getText().equals("300"))
 					av.setNivel(avariaService.getById(NivelAvaria.class, new Integer(node_av.element("nivel").getText())));
-				av.setObservacao(node_av.element("obs").getText());
+				if (!node_av.element("obs").getText().trim().replaceAll("\r", "").isEmpty())
+					av.setObservacao(node_av.element("obs").getText());
 
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				av.setHora(node_av.element("hora").getText());
