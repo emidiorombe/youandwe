@@ -7,12 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
-import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
-import br.com.promove.view.CtrcVeiculoTables;
 import br.com.promove.view.ErroImportCtrcVeiculoTables;
 import br.com.promove.view.form.VeiculoCtrcForm;
 
@@ -68,8 +66,6 @@ public class ErroImportVeiculoCtrcTable extends Table {
 		setColumnAlignment("valorMercadoria", ALIGN_RIGHT);
 		
 		try {
-			//setColumnCollapsed("dataNF", true);
-			setColumnCollapsed("numeroNF", true);
 			setColumnCollapsed("serieNF", true);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
@@ -93,7 +89,7 @@ public class ErroImportVeiculoCtrcTable extends Table {
 	
 	public void filterTable(int idInc) {
 		try {
-			filterTable(ctrcService.buscarVeiculosPorInconsistencias(idInc));
+			filterTable(ctrcService.buscarVeiculosPorInconsistencia(idInc));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -134,11 +130,23 @@ public class ErroImportVeiculoCtrcTable extends Table {
 		public Component generateCell(Table source, Object itemId, Object columnId) {
 			VeiculoCtrc v = (VeiculoCtrc)itemId;
 			if(columnId.equals("tipo")) {
-				return v.getVeiculo().getTipo() == 1 ? new Label("Nacional") : new Label("Importado");
+				if (v.getVeiculo() != null) {
+					return v.getVeiculo().getTipo() == 1 ? new Label("Nacional") : new Label("Importado");
+				} else {
+					return null;
+				}
 			}else if(columnId.toString().equals("dataCadastro")) {
-				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getVeiculo().getDataCadastro()));
+				if (v.getVeiculo() != null) {
+					return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getVeiculo().getDataCadastro()));
+				} else {
+					return null;
+				}
 			}else if(columnId.toString().equals("navio")) {
+				if (v.getVeiculo() != null) {
 					return new Label(v.getVeiculo().getNavio());
+				} else {
+					return null;
+				}
 			}else if(columnId.toString().equals("dataNF")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataNF()));
 			}else if(columnId.toString().equals("valorMercadoria")) {

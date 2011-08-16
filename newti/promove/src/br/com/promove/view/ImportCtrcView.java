@@ -1,40 +1,22 @@
 package br.com.promove.view;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import br.com.promove.application.PromoveApplication;
-import br.com.promove.exception.PromoveException;
 import br.com.promove.service.ImportacaoService;
 import br.com.promove.service.ServiceFactory;
-import br.com.promove.utils.Config;
 import br.com.promove.view.form.BaseForm;
 
-import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.PopupDateField;
-import com.vaadin.ui.ProgressIndicator;
-import com.vaadin.ui.Upload;
-import com.vaadin.ui.Upload.FailedEvent;
-import com.vaadin.ui.Upload.FailedListener;
-import com.vaadin.ui.Upload.ProgressListener;
-import com.vaadin.ui.Upload.Receiver;
-import com.vaadin.ui.Upload.StartedEvent;
-import com.vaadin.ui.Upload.StartedListener;
-import com.vaadin.ui.Upload.SucceededEvent;
-import com.vaadin.ui.Upload.SucceededListener;
 import com.vaadin.ui.VerticalLayout;
 
 public class ImportCtrcView extends BaseForm implements Serializable{
@@ -97,7 +79,6 @@ public class ImportCtrcView extends BaseForm implements Serializable{
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 				String url = ctx.getHttpSession().getServletContext().getInitParameter("ctrc_ws_url");
 				importService.importarGabardo(url + "?dataIni=" + new SimpleDateFormat("yyyy-MM-dd").format(de) + "&dataFim=" + new SimpleDateFormat("yyyy-MM-dd").format(ate));
-				//importService.importarGabardo(url + "?dataIni=2001-01-01&dataFim=2012-01-01");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

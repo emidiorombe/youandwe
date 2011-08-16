@@ -36,8 +36,8 @@ public class CtrcDAO extends BaseDAO<Integer, Ctrc>{
 		if(chassi != null && !chassi.isEmpty()) {
 			hql.append(" and exists (select v from VeiculoCtrc v");
 			hql.append(" where v.ctrc = ct");
-			hql.append(" and v.veiculo.chassi = :txtChassi)");
-			addParamToQuery("txtChassi", chassi);
+			hql.append(" and v.veiculo.chassi like :txtChassi)");
+			addParamToQuery("txtChassi", "%" + chassi);
 		}
 
 		hql.append(" and ct.cancelado = false");

@@ -19,26 +19,30 @@ public class VeiculoCtrcDAO extends BaseDAO<Integer, VeiculoCtrc> {
 
 	public List<VeiculoCtrc> getVeiculosCtrcDuplicadosPorFiltros(VeiculoCtrc veic) throws DAOException {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select v from VeiculoCtrc v left join fetch v.ctrc ct");
-		hql.append(" where ct.filial = :txtFilial");
-		hql.append(" and ct.numero = :txtNumero");
-		hql.append(" and ct.tipo = :txtTipo");
-		hql.append(" and ct.serie = :txtSerie");
-		hql.append(" and ct.transp = :txtTransp");
-		hql.append(" and v.veiculo.chassi = :txtChassi");
-		addParamToQuery("txtFilial", veic.getCtrc().getFilial());
-		addParamToQuery("txtNumero", veic.getCtrc().getNumero());
-		addParamToQuery("txtTipo", veic.getCtrc().getTipo());
-		addParamToQuery("txtSerie", veic.getCtrc().getSerie());
-		addParamToQuery("txtTransp", veic.getCtrc().getTransp());
-		addParamToQuery("txtChassi", veic.getVeiculo().getChassi());
+		hql.append("select v from VeiculoCtrc v");
+		if (veic.getCtrc() != null) {
+			hql.append(" where v.ctrc = :txtCtrc");
+			addParamToQuery("txtCtrc", veic.getCtrc());
+		} else {
+			hql.append(" where v.inconsistencia = :txtInconsistencia");
+			addParamToQuery("txtInconsistencia", veic.getInconsistencia());
+		}
+		if (veic.getVeiculo() != null) {
+			hql.append(" and v.veiculo.chassi = :txtChassi");
+			addParamToQuery("txtChassi", veic.getVeiculo().getChassi());
+		} else {
+			hql.append(" and v.chassiInvalido = :txtChassiInvalido");
+			addParamToQuery("txtChassiInvalido", veic.getChassiInvalido());
+		}
+		
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
 	public List<VeiculoCtrc> getByInconsistencia(Integer idInc) throws DAOException {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select veic from VeiculoCtrc veic where veic.inconsisctencia = :txtinc");
-		addParamToQuery("txtinc", idInc);
+		hql.append("select v from VeiculoCtrc v");
+		hql.append(" where v.inconsistencia = :txtInconsistencia");
+		addParamToQuery("txtInconsistencia", idInc);
 		return executeQuery(hql.toString(), paramsToQuery, 0, 100);
 	}
 }

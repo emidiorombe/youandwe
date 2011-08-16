@@ -78,8 +78,6 @@ public class ImportacaoAvaria {
 				if (av.getOrigem() == null)
 					av.setOrigem(origens.get(new Integer(node_av.element("origem").getText() + "0")));
 				av.setUsuario(usuarios.get(new Integer(node_av.element("usuario").getText())));
-				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
-				av.setHora(node_av.element("hora").getText());
 				
 				av.setTipo(tipos.get(new Integer(node_av.element("tipo").getText())));
 				av.setLocal(locais.get(new Integer(node_av.element("local").getText())));
@@ -88,7 +86,10 @@ public class ImportacaoAvaria {
 				if (!node_av.element("tipo").getText().equals("300"))
 					av.setNivel(avariaService.getById(NivelAvaria.class, new Integer(node_av.element("nivel").getText())));
 				av.setObservacao(node_av.element("obs").getText());
-				
+
+				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
+				av.setHora(node_av.element("hora").getText());
+
 				String msgErro = verificaInconsistencias(av, node_av, "vistorias");
 				
 				String chassi = node_av.element("chassi").getText();

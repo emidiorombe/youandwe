@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -94,7 +93,6 @@ public class ImportacaoCtrc {
 				ct.setTipo(new Integer(node_ct.element("tipo").getText()));
 				ct.setSerie(node_ct.element("ctrc_serie").getText());
 				
-				ct.setDataEmissao(date_format_hora.parse(node_ct.element("ctrc_data").getText()));
 				ct.setPlacaFrota(node_ct.element("placa_frota").getText());
 				ct.setPlacaCarreta(node_ct.element("placa_carreta").getText());
 				ct.setUfOrigem(node_ct.element("uf_origem").getText());
@@ -109,33 +107,40 @@ public class ImportacaoCtrc {
 				ct.setTaxaRcf(new Double(trataNumero(node_ct.element("taxa_rcf").getText())));
 				ct.setTaxaFluvial(new Double(trataNumero(node_ct.element("taxa_fluvial").getText())));
 				ct.setValorMercadoria(new Double(trataNumero(node_ct.element("valor_mercadoria").getText())));
-				
+
+				ct.setDataEmissao(date_format_hora.parse(node_ct.element("ctrc_data").getText()));
+
 				if(ctrcService.buscarCtrcDuplicadoPorFiltros(ct).size() == 0 && ctrcService.buscarCtrcDuplicadoPorFiltros(ct).size() == 0) {
-					Element node_veics = node_ct.element("veiculos");
-					Iterator it = node_veics.elementIterator();
-					while(it.hasNext()) {
+					List<Element> node_veics = node_ct.elements("veiculo");
+					for(Element node_veic : node_veics) {
 						VeiculoCtrc veic = new VeiculoCtrc();
-						veic.setNumeroNF(node_veics.element("veiculo_numero_nf").getText());
-						veic.setSerieNF(node_veics.element("veiculo_serie_nf").getText());
-						veic.setDataNF(date_format.parse(node_veics.element("veiculo_data_nf").getText()));
-						veic.setValorMercadoria(new Double(trataNumero(node_veics.element("veiculo_valor_nf").getText())));
-						veiculos.add(veic);
-						
-						String chassi = node_veics.element("veiculo_chassi").getText();
-						List<Veiculo> veicsEncontrados = cadastroService.buscarVeiculosPorChassi(chassi);
-						if(veicsEncontrados.size() > 0) {
-							veic.setVeiculo(veicsEncontrados.get(0));
-						} else {
+						try {
+							String chassi = node_veic.element("veiculo_chassi").getText();
 							veic.setChassiInvalido(chassi);
-							veic.setModelo(node_veics.element("veiculo_modelo").getText());
-							veic.setMsgErro("Veiculo " + chassi + " não existe!;");
+							veic.setModelo(node_veic.element("veiculo_modelo").getText());
+							
+							veic.setNumeroNF(node_veic.element("veiculo_numero_nf").getText());
+							veic.setSerieNF(node_veic.element("veiculo_serie_nf").getText());
+							veic.setDataNF(date_format_hora.parse(node_veic.element("veiculo_data_nf").getText()));
+							veic.setValorMercadoria(new Double(trataNumero(node_veic.element("veiculo_valor_nf").getText())));
+							
+							List<Veiculo> veicsEncontrados = cadastroService.buscarVeiculosPorChassi(chassi);
+							if(veicsEncontrados.size() > 0) {
+								veic.setVeiculo(veicsEncontrados.get(0));
+								veic.setModelo(veicsEncontrados.get(0).getModelo().getDescricao());
+							} else {
+								throw new Exception("Veiculo " + chassi + " não existe!;");
+							}
+						} catch(Exception e) {
+							veic.setMsgErro(e.getMessage());
 							veicInvalidos++;
 						}
+						veiculos.add(veic);
 					}
 				}
 				
 				if(veicInvalidos > 0) {
-					throw new Exception("Contém veiculos inexistentes;");
+					throw new Exception("");
 				} else {
 					ctrcService.salvarCtrc(ct, true);
 					for(VeiculoCtrc veic: veiculos) {
