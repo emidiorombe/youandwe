@@ -8,14 +8,26 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 public class CTRCParser {
-	public static String listMapToXML(List<Map<String, Object>> ctrcByData) {
+	public static String listMapToXML(Map<Integer, Map<String, Object>> ctrcByData) {
+		//Integer id = 0;
 		Document xml = DocumentHelper.createDocument();
 		Element root = xml.addElement("retorno");
-		for(Map<String, Object> ctrc : ctrcByData) {
+		//Element ctrc_tag = null;
+		
+		for(Map.Entry<Integer, Map<String, Object>> ctrc : ctrcByData.entrySet()) {
 			Element ctrc_tag = root.addElement("ctrc");
-			for(Map.Entry<String, Object> entry : ctrc.entrySet()) {
+			for(Map.Entry<String, Object> entry : ctrc.getValue().entrySet()) {
 				try {
-					ctrc_tag.addElement(entry.getKey().toLowerCase()).addText(elvis(entry.getValue()));
+					if (entry.getValue() instanceof List<?>) {
+						for(Map<String, Object> item : (List<Map<String, Object>>)entry.getValue()) {
+							Element item_tag = ctrc_tag.addElement(entry.getKey());
+							for(Map.Entry<String, Object> entryItem : item.entrySet()) {
+								item_tag.addElement(entryItem.getKey()).addText(elvis(entryItem.getValue()));
+							}
+						}
+					} else {
+						ctrc_tag.addElement(entry.getKey()).addText(elvis(entry.getValue()));
+					}
 				}catch(Exception e) {
 					e.printStackTrace();
 				}

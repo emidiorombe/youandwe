@@ -1,4 +1,5 @@
-select (select tgaparam.cgc from tgaparam where rownum=1) as cnpj_transportadora, 
+select vea027.recnum as id,
+       (select tgaparam.cgc from tgaparam where rownum=1) as cnpj_transportadora, 
        vea027.codfil  as filial, 
        vea027.numero  as ctrc_numero, 
        decode(vea027.ctrcte,'S',57,8) as tipo, 
@@ -33,3 +34,4 @@ select (select tgaparam.cgc from tgaparam where rownum=1) as cnpj_transportadora
  and    vea027.codcar = tga016.codigo 
  and    vea027.codmot = tga015.codigo 
  and    vea027.datalt between ? and ?
+ order by id

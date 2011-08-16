@@ -15,8 +15,8 @@ import br.com.newti.util.SQLCache;
 
 public class CTRCDAO {
 
-	public static List<Map<String, Object>> getByDataModificacao(Date dataInicial, Date dataFinal) {
-		List<Map<String, Object>> retorno = new ArrayList<Map<String, Object>>();
+	public static Map<Integer, Map<String, Object>> getByDataModificacao(Date dataInicial, Date dataFinal) {
+		Map<Integer, Map<String, Object>> retorno = new HashMap<Integer, Map<String, Object>>();
 		try {
 			Connection con = ConnectionManager.getConexao();
 			PreparedStatement pstmt = con.prepareStatement(SQLCache.getScript("ctrc"));
@@ -26,12 +26,34 @@ public class CTRCDAO {
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				Map<String, Object> ctrc = new HashMap<String, Object>();
 				int size = rs.getMetaData().getColumnCount();
-				for(int i = 1; i < size; i++) {
-					ctrc.put(rs.getMetaData().getColumnName(i), rs.getObject(i));
+				Integer id = new Integer(rs.getObject(1).toString());
+				Map<String, Object> veic = new HashMap<String, Object>();
+				
+				Map<String, Object> ctrc = retorno.get(id);
+				if (ctrc == null) {
+					ctrc = new HashMap<String, Object>();
 				}
-				retorno.add(ctrc);
+				
+				for(int i = 1; i <= size; i++) {
+					String chave = rs.getMetaData().getColumnName(i).toLowerCase();
+					
+					if (chave.startsWith("veiculo")) {
+						veic.put(chave, rs.getObject(i));						
+					} else if (!ctrc.containsKey(chave)) {
+						ctrc.put(chave, rs.getObject(i));						
+					}
+				}
+
+				List<Map<String, Object>> veics = (List<Map<String, Object>>)ctrc.get("veiculo");
+				if (veics == null) {
+					veics = new ArrayList<Map<String, Object>>();
+				}
+				
+				veics.add(veic);
+				ctrc.put("veiculo", veics);
+				
+				retorno.put(id, ctrc);
 			}
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
@@ -40,6 +62,8 @@ public class CTRCDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return retorno;
 	}
+
 }
