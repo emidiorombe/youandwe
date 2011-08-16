@@ -27,11 +27,10 @@ public class ImportCTRCJob implements Job{
 		
 			Calendar now = Calendar.getInstance();
 			
-			Calendar ontem = Calendar.getInstance();
-			ontem.add(Calendar.DATE, -1);
+			//Calendar ontem = Calendar.getInstance();
+			//ontem.add(Calendar.DATE, -1);
 			
-			
-			String query = "?dataIni=" + DateUtils.getStringFromDate(ontem.getTime(), null)+ "&dataFim=" + DateUtils.getStringFromDate(now.getTime(), null);
+			String query = "?dataIni=" + DateUtils.getStringFromDate(now.getTime(), null)+ "&dataFim=" + DateUtils.getStringFromDate(now.getTime(), null);
 			imp.importarGabardo(url + query);
 			log.error("Importação de CTRC realizada com sucesso.");
 		} catch (PromoveException e) {

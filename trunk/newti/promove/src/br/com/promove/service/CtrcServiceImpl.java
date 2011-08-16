@@ -8,25 +8,30 @@ import br.com.promove.dao.CtrcDAO;
 import br.com.promove.dao.InconsistenciaCtrcDAO;
 import br.com.promove.dao.TransportadoraDAO;
 import br.com.promove.dao.VeiculoCtrcDAO;
+import br.com.promove.dao.VeiculoDAO;
 import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.entity.Transportadora;
+import br.com.promove.entity.Veiculo;
 import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.utils.DateUtils;
+import br.com.promove.utils.StringUtilities;
 
 public class CtrcServiceImpl implements CtrcService, Serializable {
 	private TransportadoraDAO transpDAO;
 	private CtrcDAO ctrcDAO;
-	private VeiculoCtrcDAO veiculoCtrcDAO;
 	private InconsistenciaCtrcDAO inconsistenciaCtrcDAO;
+	private VeiculoCtrcDAO veiculoCtrcDAO;
+	private VeiculoDAO veiculoDAO;
 	
 	CtrcServiceImpl() {
 		transpDAO = new TransportadoraDAO();
 		ctrcDAO = new CtrcDAO();
-		veiculoCtrcDAO = new VeiculoCtrcDAO();
 		inconsistenciaCtrcDAO = new InconsistenciaCtrcDAO(); 
+		veiculoCtrcDAO = new VeiculoCtrcDAO();
+		veiculoDAO = new VeiculoDAO();
 	}
 
 	@Override
@@ -157,6 +162,16 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	}
 
 	@Override
+	public void excluirInconsistenciaCtrc(VeiculoCtrc veic) throws PromoveException {
+		try {
+			inconsistenciaCtrcDAO.delete(inconsistenciaCtrcDAO.getByPrimaryKey(veic.getInconsistencia()));
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
 	public List<Transportadora> buscaTransportadoraPorCnpj(String cnpj)
 			throws PromoveException {
 		List<Transportadora> lista = null;
@@ -253,27 +268,9 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	public boolean salvarVeiculoCtrcDeInconsistencia(VeiculoCtrc veic) throws PromoveException {
 		boolean ok = false;
 		try {
-			int veicInvalidos = 0;
 			salvarVeiculoCtrc(veic);
 			InconsistenciaCtrc inc = inconsistenciaCtrcDAO.getByPrimaryKey(veic.getInconsistencia());
-			Ctrc ctrc = inc.getCtrc();
-			List<VeiculoCtrc> veiculos = veiculoCtrcDAO.getByInconsistencia(veic.getInconsistencia());
-			
-			for (VeiculoCtrc veiculo : veiculos) {
-				if (veiculo.getVeiculo() == null) veicInvalidos++;
-			}
-
-			if (veicInvalidos == 0) {
-				ok = true;
-				ctrcDAO.save(ctrc);
-				for (VeiculoCtrc veiculo : veiculos) {
-					veiculo.setInconsistencia(null);
-					veiculo.setCtrc(ctrc);
-					salvarVeiculoCtrc(veiculo);
-				}
-				this.excluirInconsistenciaCtrc(inc);
-			}
-			
+			ok = revalidarInconsistencia(inc, false);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -281,7 +278,55 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 		return ok;
 	}
 
-	public List<VeiculoCtrc> buscarVeiculosPorInconsistencias(Integer idInc) throws PromoveException {
+	@Override
+	public boolean revalidarInconsistencia(InconsistenciaCtrc inc, boolean salvarVeics) throws PromoveException {
+		boolean ok = false;
+		try {
+			int veicInvalidos = 0;
+			Ctrc ctrc = inc.getCtrc();
+			List<VeiculoCtrc> veics = veiculoCtrcDAO.getByInconsistencia(inc.getId());
+			
+			for (VeiculoCtrc veic : veics) {
+				if (salvarVeics && veic.getVeiculo() == null) {
+					List<Veiculo> veicsEncontrados = veiculoDAO.getByChassi(veic.getChassiInvalido());
+					if(veicsEncontrados.size() > 0) {
+						veic.setVeiculo(veicsEncontrados.get(0));
+						veic.setModelo(veicsEncontrados.get(0).getModelo().getDescricao());
+						veic.setMsgErro("");
+						salvarVeiculoCtrc(veic);
+					}
+				}
+				if (veic.getMsgErro() != null && !veic.getMsgErro().isEmpty()) veicInvalidos++;
+			}
+	
+			if(StringUtilities.getTranspFromErrorMessage(inc.getMsgErro()) != null) {
+				List<Transportadora> transportadoras = buscaTransportadoraPorCnpj(StringUtilities.getTranspFromErrorMessage(inc.getMsgErro()));
+				if((transportadoras.size() > 0)) {
+					inc.setTransp(transportadoras.get(0));
+					inc.setMsgErro("");
+					inconsistenciaCtrcDAO.save(inc);
+				}
+			}
+			
+			if (veicInvalidos == 0 && (inc.getMsgErro() == null || inc.getMsgErro().isEmpty())) {
+				ok = true;
+				ctrcDAO.save(ctrc);
+				for (VeiculoCtrc veic : veics) {
+					veic.setInconsistencia(null);
+					veic.setCtrc(ctrc);
+					salvarVeiculoCtrc(veic);
+				}
+				excluirInconsistenciaCtrc(inc);
+			}
+
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+		return ok;
+	}
+
+	public List<VeiculoCtrc> buscarVeiculosPorInconsistencia(Integer idInc) throws PromoveException {
 		List<VeiculoCtrc> lista = null;
 		try {
 			lista = veiculoCtrcDAO.getByInconsistencia(idInc);

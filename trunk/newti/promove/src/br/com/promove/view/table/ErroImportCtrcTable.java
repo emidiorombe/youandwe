@@ -1,32 +1,33 @@
 package br.com.promove.view.table;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
-import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.ErroImportCtrcVeiculoTables;
-import br.com.promove.view.ErroImportCtrcView;
+import br.com.promove.view.table.ErroImportVeiculoCtrcTable.VeiculoCtrcTableColumnGenerator;
 
-public class ErroImportCtrcTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "taxaRct", "taxaRr", "taxaRcf", "taxaFluvial", "valorMercadoria", "msgErro"};
-	public static final String[] COL_HEADERS = new String[] {"Filial", "Numero", "Tipo", "Série", "Transportadora", "Data", "Frota", "Carreta", "UF", "Origem", "UF", "Destino", "RCT", "RR", "RCF", "Fluvial", "Valor Mercadoria", "Mensagem"};
+public class ErroImportCtrcTable extends Table {
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "msgErro"};
+	public static final String[] COL_HEADERS = new String[] {"Filial", "Numero", "Tipo", "Série", "Transportadora", "Data", "Frota", "Carreta", "UF", "Origem", "UF", "Destino", "Valor Merc.", "Mensagem"};
 	
 	private ErroImportCtrcVeiculoTables view;
 	private CtrcService ctrcService;
 	private ErroImportCtrcContainer container;
+	private NumberFormat formatMoeda = new DecimalFormat("'R$' #0.00");
 	
 	public ErroImportCtrcTable() {
 		ctrcService = ServiceFactory.getService(CtrcService.class);
@@ -40,11 +41,15 @@ public class ErroImportCtrcTable extends Table{
 		setImmediate(true);
 		setNullSelectionAllowed(false);
 		setContainerDataSource(getContainer());
-		setVisibleColumns(NATURAL_COL_ORDER);
-		setColumnHeaders(COL_HEADERS);
 		addListener(new RowSelectedListener());
 		
-		addGeneratedColumn("dataEmissao", new ErroImportVeiculoColumnGenerator());
+		addGeneratedColumn("dataEmissao", new ErroImportCtrcColumnGenerator());
+		addGeneratedColumn("valorMercadoria", new ErroImportCtrcColumnGenerator());
+
+		setVisibleColumns(NATURAL_COL_ORDER);
+		setColumnHeaders(COL_HEADERS);
+
+		setColumnAlignment("valorMercadoria", ALIGN_RIGHT);
 		
 		try {
 			setColumnCollapsed("placaFrota", true);
@@ -53,9 +58,6 @@ public class ErroImportCtrcTable extends Table{
 			setColumnCollapsed("municipioOrigem", true);
 			setColumnCollapsed("ufDestino", true);
 			setColumnCollapsed("municipioDestino", true);
-			setColumnCollapsed("taxaRr", true);
-			setColumnCollapsed("taxaRcf", true);
-			setColumnCollapsed("taxaFluvial", true);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -104,16 +106,20 @@ public class ErroImportCtrcTable extends Table{
 			Property property = event.getProperty();
 			BeanItem<InconsistenciaCtrc> item = (BeanItem<InconsistenciaCtrc>) getItem(getValue());
 			view.getTableVeiculo().filterTable(item.getBean().getId());
+            view.getView().getForm().createFormBody();
 		}
 	}
 	
-	class ErroImportVeiculoColumnGenerator implements Table.ColumnGenerator{
+	class ErroImportCtrcColumnGenerator implements Table.ColumnGenerator{
 
 		@Override
 		public Component generateCell(Table source, Object itemId, Object columnId) {
 			InconsistenciaCtrc inc = (InconsistenciaCtrc) itemId;
 			if(columnId.equals("dataEmissao")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(inc.getDataEmissao())); 
+			}else if(columnId.toString().equals("valorMercadoria")) {
+				double valor = inc.getValorMercadoria() == null ? 0.0 : inc.getValorMercadoria();
+				return new Label(formatMoeda.format(valor));
 			}
 			return null;
 		}

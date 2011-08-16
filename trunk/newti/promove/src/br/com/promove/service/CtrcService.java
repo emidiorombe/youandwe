@@ -56,6 +56,8 @@ public interface CtrcService extends Serializable{
 
 	void excluirInconsistenciaCtrc(InconsistenciaCtrc inc) throws PromoveException;
 
+	void excluirInconsistenciaCtrc(VeiculoCtrc veic) throws PromoveException;
+
 	List<Transportadora> buscaTransportadoraPorCnpj(String cnpj) throws PromoveException;
 
 	void cleanUpSession()throws PromoveException;
@@ -76,5 +78,7 @@ public interface CtrcService extends Serializable{
 
 	boolean salvarVeiculoCtrcDeInconsistencia(VeiculoCtrc veic) throws PromoveException;
 
-	List<VeiculoCtrc> buscarVeiculosPorInconsistencias(Integer idInc) throws PromoveException;
+	boolean revalidarInconsistencia(InconsistenciaCtrc inc, boolean salvarVeics) throws PromoveException;
+	
+	List<VeiculoCtrc> buscarVeiculosPorInconsistencia(Integer idInc) throws PromoveException;
 }

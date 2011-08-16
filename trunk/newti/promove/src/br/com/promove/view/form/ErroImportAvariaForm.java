@@ -129,7 +129,6 @@ public class ErroImportAvariaForm extends BaseForm {
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(IllegalArgumentException ie) {
-					view.getTable().reloadTable();
 					showErrorMessage(view, ie.getMessage());
 				}catch(PromoveException de){
 					showErrorMessage(view, "Não foi possível salvar Inconsistência");
@@ -199,14 +198,14 @@ public class ErroImportAvariaForm extends BaseForm {
 					c.setNullSelectionAllowed(false);
 					c.setItemCaptionPropertyId("label");
 					c.setNewItemsAllowed(true);
-					Item i2 = c.addItem(new Veiculo(chassi));
-					i2.getItemProperty("label").setValue(chassi);
-					if(chassi != null)
+					if(chassi != null) {
+						Item i2 = c.addItem(new Veiculo(chassi));
+						i2.getItemProperty("label").setValue(chassi);
 						for(Veiculo v : cadastroService.buscarVeiculosPorFZ(chassi)) {
 							Item i = c.addItem(v);
 							i.getItemProperty("label").setValue(v.getChassi() + " - " + new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataCadastro())) + " - " + v.getModelo().getDescricao());
 						}
-					
+					}
 					c.setNewItemHandler(new NewItemHandler() {
 						
 						@Override

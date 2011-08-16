@@ -68,6 +68,10 @@ public class ErroImportCtrcForm extends BaseForm {
 		layout.setMargin(false, true, false, true);
 	}
 	
+	public void createFormBody() {
+		createFormBody(new BeanItem<VeiculoCtrc>(new VeiculoCtrc()));
+	}
+
 	public void createFormBody(BeanItem<VeiculoCtrc> tpa) {
 		setItemDataSource(tpa);
 		setFormFieldFactory(new ErroCtrcFieldFactory()); 
@@ -108,9 +112,12 @@ public class ErroImportCtrcForm extends BaseForm {
 						List<Veiculo> v = cadastroService.buscarVeiculosPorChassi(chassi);
 						if (v.size() == 0) {
 							throw new IllegalArgumentException("Veículo com chassi " + chassi + " não encontrado");
-						} else
-							item.getBean().setVeiculo(v.get(0));
-
+						}
+						
+						item.getBean().setVeiculo(v.get(0));
+						item.getBean().setModelo(v.get(0).getModelo().getDescricao());
+						item.getBean().setMsgErro("");
+						
 						if (ctrcService.salvarVeiculoCtrcDeInconsistencia(item.getBean())) {
 							view.getTables().getTableCtrc().reloadTable();
 							view.getTables().getTableVeiculo().removeAllItems();
@@ -122,8 +129,6 @@ public class ErroImportCtrcForm extends BaseForm {
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(IllegalArgumentException ie) {
-					view.getTables().getTableCtrc().reloadTable();
-					view.getTables().getTableVeiculo().removeAllItems();
 					showErrorMessage(view, ie.getMessage());
 				}catch(PromoveException de){
 					showErrorMessage(view, "Não foi possível salvar Inconsistência");
@@ -131,10 +136,12 @@ public class ErroImportCtrcForm extends BaseForm {
 				
 			}else if(event.getButton() == remove){
 				try{
-					BeanItem<InconsistenciaCtrc> item = (BeanItem<InconsistenciaCtrc>) getItemDataSource();
+					BeanItem<VeiculoCtrc> item = (BeanItem<VeiculoCtrc>) getItemDataSource();
+					
 					ctrcService.excluirInconsistenciaCtrc(item.getBean());
 					view.getTables().getTableCtrc().reloadTable();
 					view.getTables().getTableVeiculo().removeAllItems();
+					
 					showSuccessMessage(view, "Inconsistência excluida!");
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
@@ -146,17 +153,7 @@ public class ErroImportCtrcForm extends BaseForm {
 					List<InconsistenciaCtrc> buscarTodasInconsistenciasDeCtrcs = ctrcService.buscarTodasInconsistenciasCtrc();
 					for (InconsistenciaCtrc inc : buscarTodasInconsistenciasDeCtrcs) {
 						if(ctrcService.buscarCtrcDuplicadoPorFiltros(inc.getCtrc()).size() == 0) {
-							if(StringUtilities.getTranspFromErrorMessage(inc.getMsgErro()) != null) {
-								List<Transportadora> transportadoras = ctrcService.buscaTransportadoraPorCnpj(StringUtilities.getTranspFromErrorMessage(inc.getMsgErro()));
-								if((transportadoras.size() == 0)) {
-									continue;
-								}else {
-									inc.setTransp(transportadoras.get(0));
-								}
-							}
-							
-							ctrcService.salvarCtrc(inc.getCtrc());
-							ctrcService.excluirInconsistenciaCtrc(inc);
+							ctrcService.revalidarInconsistencia(inc, true);
 						} else {
 							ctrcService.excluirInconsistenciaCtrc(inc);
 						}
@@ -198,14 +195,14 @@ public class ErroImportCtrcForm extends BaseForm {
 					c.setNullSelectionAllowed(false);
 					c.setItemCaptionPropertyId("label");
 					c.setNewItemsAllowed(true);
-					Item i2 = c.addItem(new Veiculo(chassi));
-					i2.getItemProperty("label").setValue(chassi);
-					if(chassi != null)
+					if(chassi != null) {
+						Item i2 = c.addItem(new Veiculo(chassi));
+						i2.getItemProperty("label").setValue(chassi);
 						for(Veiculo v : cadastroService.buscarVeiculosPorFZ(chassi)) {
 							Item i = c.addItem(v);
 							i.getItemProperty("label").setValue(v.getChassi() + " - " + new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataCadastro())) + " - " + v.getModelo().getDescricao());
 						}
-					
+					}
 					c.setNewItemHandler(new NewItemHandler() {
 						
 						@Override

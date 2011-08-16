@@ -84,8 +84,8 @@ public class CtrcSearchForm extends BaseForm{
 		
 		createFormBody(new BeanItem<Ctrc>(new Ctrc()));
 		layout.addComponent(this);
-		addField("txtChassi", txtChassi);
 		addField("txtNumero", txtNumero);
+		addField("txtChassi", txtChassi);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
 		//addField("txtDesconto", txtDesconto);
