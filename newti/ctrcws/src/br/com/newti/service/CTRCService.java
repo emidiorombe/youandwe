@@ -26,7 +26,7 @@ public class CTRCService {
 		d1 = DateUtils.parseFromString(dataIni, "yyyy-MM-dd");
 		d2 = DateUtils.parseFromString(dataFim, "yyyy-MM-dd");
 
-		List<Map<String, Object>> ctrcByData = CTRCDAO.getByDataModificacao(d1, d2);
+		Map<Integer, Map<String, Object>> ctrcByData = CTRCDAO.getByDataModificacao(d1, d2);
 		
 		return CTRCParser.listMapToXML(ctrcByData);
 	}
