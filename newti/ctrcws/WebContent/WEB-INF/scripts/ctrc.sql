@@ -33,5 +33,6 @@ select vea027.recnum as id,
  and    vea027.codcav = tga017.codigo 
  and    vea027.codcar = tga016.codigo 
  and    vea027.codmot = tga015.codigo 
+ and    vea027.coddev = 'FA0001' 
  and    vea027.datalt between ? and ?
  order by id

@@ -23,17 +23,17 @@
 	
 	<context-param>
 		<param-name>db_url</param-name>
-		<param-value>jdbc:oracle:thin:@//127.0.0.1:1521/XE</param-value>
+		<param-value>jdbc:oracle:thin:@//192.168.0.7:1521/ORACL10</param-value>
 	</context-param>
 	
 	<context-param>
 		<param-name>db_user</param-name>
-		<param-value>system</param-value>
+		<param-value>gabardo</param-value>
 	</context-param>
 	
 	<context-param>
 		<param-name>db_pass</param-name>
-		<param-value>oracle</param-value>
+		<param-value>gabardo</param-value>
 	</context-param>
 
 	<listener>
