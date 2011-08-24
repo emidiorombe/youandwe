@@ -115,7 +115,7 @@ public class ImportacaoCtrc {
 					for(Element node_veic : node_veics) {
 						VeiculoCtrc veic = new VeiculoCtrc();
 						try {
-							String chassi = node_veic.element("veiculo_chassi").getText();
+							String chassi = node_veic.element("veiculo_chassi").getText().substring(0, 17);
 							veic.setChassiInvalido(chassi);
 							veic.setModelo(node_veic.element("veiculo_modelo").getText());
 							
