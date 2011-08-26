@@ -14,6 +14,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 import br.com.promove.entity.InconsistenciaCtrc;
+import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
@@ -77,6 +78,7 @@ public class ErroImportCtrcTable extends Table {
 	public void reloadTable() {
 		container.removeAllItems();
 		container.populate();
+		view.getView().getForm().setInconsistencia(new InconsistenciaCtrc());
 	}
 	
 	class ErroImportCtrcContainer extends BeanItemContainer<InconsistenciaCtrc>  implements Serializable{
@@ -106,7 +108,8 @@ public class ErroImportCtrcTable extends Table {
 			Property property = event.getProperty();
 			BeanItem<InconsistenciaCtrc> item = (BeanItem<InconsistenciaCtrc>) getItem(getValue());
 			view.getTableVeiculo().filterTable(item.getBean().getId());
-            view.getView().getForm().createFormBody();
+            view.getView().getForm().createFormBody(new BeanItem<VeiculoCtrc>(new VeiculoCtrc()));
+            view.getView().getForm().setInconsistencia(item.getBean());
 		}
 	}
 	

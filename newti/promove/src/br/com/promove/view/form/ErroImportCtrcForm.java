@@ -5,14 +5,12 @@ import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.InconsistenciaCtrc;
-import br.com.promove.entity.Transportadora;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
-import br.com.promove.utils.StringUtilities;
 import br.com.promove.view.ErroImportCtrcView;
 
 import com.vaadin.data.Item;
@@ -28,7 +26,6 @@ import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class ErroImportCtrcForm extends BaseForm {
@@ -37,6 +34,7 @@ public class ErroImportCtrcForm extends BaseForm {
 	private CtrcService ctrcService;
 	private CadastroService cadastroService;
 	private PromoveApplication app;
+	private InconsistenciaCtrc inconsistencia;
 	
 	private Button save;
 	private Button saveAll;
@@ -45,11 +43,11 @@ public class ErroImportCtrcForm extends BaseForm {
 	
 	public ErroImportCtrcForm(PromoveApplication app) {
 		this.app = app;
+		this.inconsistencia = new InconsistenciaCtrc();
 		ctrcService = ServiceFactory.getService(CtrcService.class);
 		cadastroService = ServiceFactory.getService(CadastroService.class);
 		buildForm();
 	}
-	
 	
 	private void buildForm() {
 		setWriteThrough(false);
@@ -68,19 +66,10 @@ public class ErroImportCtrcForm extends BaseForm {
 		layout.setMargin(false, true, false, true);
 	}
 	
-	public void createFormBody() {
-		createFormBody(new BeanItem<VeiculoCtrc>(new VeiculoCtrc()));
-	}
-
 	public void createFormBody(BeanItem<VeiculoCtrc> tpa) {
 		setItemDataSource(tpa);
 		setFormFieldFactory(new ErroCtrcFieldFactory()); 
 		setVisibleItemProperties(new Object[] {"chassiInvalido"});
-
-	}
-
-	public void addNewTipoCtrc() {
-		createFormBody(new BeanItem<VeiculoCtrc>(new VeiculoCtrc()));
 	}
 
 	private Component createFooter() {
@@ -121,6 +110,7 @@ public class ErroImportCtrcForm extends BaseForm {
 						if (ctrcService.salvarVeiculoCtrcDeInconsistencia(item.getBean())) {
 							view.getTables().getTableCtrc().reloadTable();
 							view.getTables().getTableVeiculo().removeAllItems();
+							createFormBody(new BeanItem<VeiculoCtrc>(new VeiculoCtrc()));
 						} else {
 							view.getTables().getTableVeiculo().reloadTable(item.getBean().getInconsistencia());							
 						}
@@ -136,17 +126,22 @@ public class ErroImportCtrcForm extends BaseForm {
 				
 			}else if(event.getButton() == remove){
 				try{
-					BeanItem<VeiculoCtrc> item = (BeanItem<VeiculoCtrc>) getItemDataSource();
+					if (inconsistencia.getId() == null) {
+						throw new IllegalArgumentException("Selecione um CTRC");
+					}
 					
-					ctrcService.excluirInconsistenciaCtrc(item.getBean());
+					ctrcService.excluirInconsistenciaCtrc(inconsistencia);
 					view.getTables().getTableCtrc().reloadTable();
 					view.getTables().getTableVeiculo().removeAllItems();
+					createFormBody(new BeanItem<VeiculoCtrc>(new VeiculoCtrc()));
 					
 					showSuccessMessage(view, "Inconsistência excluida!");
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
-					showErrorMessage(view,"Não foi possível excluir Inconsistência");
+					showErrorMessage(view, "Não foi possível excluir Inconsistência");
+				}catch(Exception e){
+					showErrorMessage(view, e.getMessage());
 				}
 			}else if(event.getButton() == saveAll) {
 				try {
@@ -176,10 +171,8 @@ public class ErroImportCtrcForm extends BaseForm {
 		@Override
 		public Field createField(Item item, Object propertyId, Component uiContext) {
 			Field f = super.createField(item, propertyId, uiContext);
-			if(f instanceof TextField){
-				((TextField)f).setNullRepresentation("");
-			}
 			
+			System.out.println(propertyId); /////
 			if (propertyId.equals("chassiInvalido")) {
 				String chassi = null;
 				BeanItem<VeiculoCtrc> bitem = (BeanItem<VeiculoCtrc>) item;
@@ -187,6 +180,7 @@ public class ErroImportCtrcForm extends BaseForm {
 						bitem.getBean().getChassiInvalido() != null)
 					 chassi = bitem.getBean().getChassiInvalido();
 				final ComboBox c = new ComboBox("Veículos");
+				System.out.println("   chassi " + (chassi == null ? "" : chassi)); /////
 				try {
 					c.addContainerProperty("label", String.class, null);
 					c.setRequired(true);
@@ -204,7 +198,6 @@ public class ErroImportCtrcForm extends BaseForm {
 						}
 					}
 					c.setNewItemHandler(new NewItemHandler() {
-						
 						@Override
 						public void addNewItem(String newV) {
 							Item i = c.addItem(new Veiculo(newV));
@@ -217,10 +210,8 @@ public class ErroImportCtrcForm extends BaseForm {
 					e.printStackTrace();
 					showErrorMessage(view,"Não foi possível buscar Veículos pelo FZ");
 				}
-				
 				return c;
 			}			
-			
 			return f;
 		}
 	}
@@ -231,6 +222,16 @@ public class ErroImportCtrcForm extends BaseForm {
 
 	public Component getFormLayout() {
 		return layout;
+	}
+
+
+	public void setInconsistencia(InconsistenciaCtrc inconsistencia) {
+		this.inconsistencia = inconsistencia;
+	}
+
+
+	public InconsistenciaCtrc getInconsistencia() {
+		return inconsistencia;
 	}
 
 }

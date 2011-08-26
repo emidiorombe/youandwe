@@ -52,6 +52,7 @@ public class GeneralContextListener implements ServletContextListener{
 		}
 		
 		//Inicializa o 'Scheduler' para importação de CTRC
+		/*
 		try {
 			SchedulerFactory sf = new StdSchedulerFactory();
 	        Scheduler sched = sf.getScheduler();
@@ -69,6 +70,7 @@ public class GeneralContextListener implements ServletContextListener{
 		}catch(Exception e) {
 			log.error("::::Não foi possivel agendar a importação de CTRC");
 		}
+		*/
 	}
 
 }

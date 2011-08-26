@@ -10,14 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.dom4j.Document;
-
-import com.vaadin.ui.Label;
 
 import br.com.promove.dao.ClimaDAO;
 import br.com.promove.dao.ExtensaoDAO;
@@ -26,17 +22,18 @@ import br.com.promove.dao.NivelAvariaDAO;
 import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.dao.UsuarioDAO;
+import br.com.promove.dao.VeiculoCtrcDAO;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Resumo;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.entity.Ctrc;
+import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.exportacao.AvariasExport;
 import br.com.promove.exportacao.CadastrosBasicosExport;
 import br.com.promove.utils.Config;
-import br.com.promove.utils.FileUtils;
 
 /**
  * 
@@ -51,7 +48,9 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	private ClimaDAO climaDAO;
 	private ExtensaoDAO extensaoDAO;
 	private NivelAvariaDAO nivelDAO;
-	private NumberFormat formatPercentual = new DecimalFormat("#0'%'"); //("#0.00'%'")
+	private static NumberFormat percentual_format = new DecimalFormat("#0'%'"); //("#0.00'%'")
+	private static NumberFormat moeda_format = new DecimalFormat("'R$' #0.00");
+	private static SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy");
 	
 	public ExportacaoServiceImpl() {
 		tipoDAO = new TipoAvariaDAO();
@@ -250,39 +249,42 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    
 		    //Cabeçalho
 		    Row row_head = sheet.createRow(0);
-		    row_head.createCell(0).setCellValue("ID");
-		    row_head.createCell(1).setCellValue("FILIAL");
-		    row_head.createCell(2).setCellValue("NUMERO");
-		    row_head.createCell(3).setCellValue("TIPO");
-		    row_head.createCell(4).setCellValue("SERIE");
-		    row_head.createCell(5).setCellValue("TRANSPORTADORA");
-		    row_head.createCell(6).setCellValue("EMISSAO");
-		    row_head.createCell(7).setCellValue("UF ORIGEM");
-		    row_head.createCell(8).setCellValue("MUNICIPIO ORIGEM");
-		    row_head.createCell(9).setCellValue("UF DESTINO");
-		    row_head.createCell(10).setCellValue("MUNICIPIO DESTINO");
-		    row_head.createCell(11).setCellValue("TAXA RCT");
-		    row_head.createCell(12).setCellValue("TAXA RCF");
-		    row_head.createCell(13).setCellValue("TAXA RR");
-		    row_head.createCell(14).setCellValue("TAXA FLUVIAL");
+		    row_head.createCell(0).setCellValue("FILIAL");
+		    row_head.createCell(1).setCellValue("NUMERO");
+		    row_head.createCell(2).setCellValue("SERIE");
+		    row_head.createCell(3).setCellValue("DATA");
+		    row_head.createCell(4).setCellValue("UF");
+		    row_head.createCell(5).setCellValue("MUNICIPIO ORIGEM");
+		    row_head.createCell(6).setCellValue("UF");
+		    row_head.createCell(7).setCellValue("MUNICIPIO DESTINO");
+		    row_head.createCell(8).setCellValue("CHASSI");
+		    row_head.createCell(9).setCellValue("MODELO");
+		    row_head.createCell(10).setCellValue("VALOR");
+		    row_head.createCell(11).setCellValue("NAVIO");
 		    
-		    for(int i = 0; i < ctrcs.size(); i++) {
-			    Row row = sheet.createRow(i+1);
-			    row.createCell(0).setCellValue(ctrcs.get(i).getId());
-			    row.createCell(1).setCellValue(ctrcs.get(i).getFilial());
-			    row.createCell(2).setCellValue(ctrcs.get(i).getNumero());
-			    row.createCell(3).setCellValue(ctrcs.get(i).getTipo());
-			    row.createCell(4).setCellValue(ctrcs.get(i).getSerie());
-			    row.createCell(5).setCellValue(ctrcs.get(i).getTransp().getDescricao());
-			    row.createCell(6).setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(ctrcs.get(i).getDataEmissao()));
-			    row.createCell(7).setCellValue(ctrcs.get(i).getUfOrigem());
-			    row.createCell(8).setCellValue(ctrcs.get(i).getMunicipioOrigem());
-			    row.createCell(9).setCellValue(ctrcs.get(i).getUfDestino());
-			    row.createCell(10).setCellValue(ctrcs.get(i).getMunicipioDestino());
-			    row.createCell(11).setCellValue(ctrcs.get(i).getTaxaRct());
-			    row.createCell(12).setCellValue(ctrcs.get(i).getTaxaRcf());
-			    row.createCell(13).setCellValue(ctrcs.get(i).getTaxaRr());
-			    row.createCell(14).setCellValue(ctrcs.get(i).getTaxaFluvial());
+		    int i = 0;
+		    VeiculoCtrcDAO veiculoCtrcDAO = new VeiculoCtrcDAO();
+		    for(Ctrc ctrc : ctrcs) {
+		    	for (VeiculoCtrc veic : veiculoCtrcDAO.getByCtrc(ctrc)) {
+				    String navio = veic.getVeiculo().getNavio();
+				    if (navio != null && !navio.isEmpty()) {
+				    	navio += " - " + date_format.format(veic.getVeiculo().getDataCadastro());
+				    }
+				    		
+				    Row row = sheet.createRow(++i);
+				    row.createCell(0).setCellValue(ctrc.getFilial());
+				    row.createCell(1).setCellValue(ctrc.getNumero());
+				    row.createCell(2).setCellValue(ctrc.getSerie());
+				    row.createCell(3).setCellValue(date_format.format(ctrcs.get(i).getDataEmissao()));
+				    row.createCell(4).setCellValue(ctrc.getUfOrigem());
+				    row.createCell(5).setCellValue(ctrc.getMunicipioOrigem());
+				    row.createCell(6).setCellValue(ctrc.getUfDestino());
+				    row.createCell(7).setCellValue(ctrc.getMunicipioDestino());
+				    row.createCell(8).setCellValue(veic.getVeiculo().getChassi());
+				    row.createCell(9).setCellValue(veic.getVeiculo().getModelo().getDescricao());
+				    row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
+				    row.createCell(11).setCellValue(navio);
+		    	}
 		    }
 
 		    // Write the output to a file/
@@ -322,11 +324,11 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			    row.createCell(0).setCellValue(resumos.get(i).getItem());
 			    if (resumos.get(i).getQuantidadeItem() != null) {
 			    	row.createCell(1).setCellValue(resumos.get(i).getQuantidadeItem());
-				    row.createCell(2).setCellValue(formatPercentual.format(resumos.get(i).getPercentualItem()));
+				    row.createCell(2).setCellValue(percentual_format.format(resumos.get(i).getPercentualItem()));
 			    }
 			    row.createCell(3).setCellValue(resumos.get(i).getSubitem());
 			    row.createCell(4).setCellValue(resumos.get(i).getQuantidadeSubitem());
-			    row.createCell(5).setCellValue(formatPercentual.format(resumos.get(i).getPercentualSubitem()));
+			    row.createCell(5).setCellValue(percentual_format.format(resumos.get(i).getPercentualSubitem()));
 			    if (vl != null) itemTotal += vl;
 		    }
 		    Row row_footer = sheet.createRow(i+1);

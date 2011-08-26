@@ -92,6 +92,12 @@ public class ImportacaoCtrc {
 				ct.setNumero(new Integer(node_ct.element("ctrc_numero").getText()));
 				ct.setTipo(new Integer(node_ct.element("tipo").getText()));
 				ct.setSerie(node_ct.element("ctrc_serie").getText());
+
+				List<Ctrc> ctrc = ctrcService.buscarCtrcDuplicadoPorFiltros(ct);
+
+				if(ctrc.size() > 0) {
+					ct = ctrc.get(0);
+				}
 				
 				ct.setPlacaFrota(node_ct.element("placa_frota").getText());
 				ct.setPlacaCarreta(node_ct.element("placa_carreta").getText());
@@ -110,44 +116,56 @@ public class ImportacaoCtrc {
 
 				ct.setDataEmissao(date_format_hora.parse(node_ct.element("ctrc_data").getText()));
 
-				if(ctrcService.buscarCtrcDuplicadoPorFiltros(ct).size() == 0 && ctrcService.buscarCtrcDuplicadoPorFiltros(ct).size() == 0) {
-					List<Element> node_veics = node_ct.elements("veiculo");
-					for(Element node_veic : node_veics) {
-						VeiculoCtrc veic = new VeiculoCtrc();
-						try {
-							String chassi = node_veic.element("veiculo_chassi").getText().substring(0, 17);
-							veic.setChassiInvalido(chassi);
-							veic.setModelo(node_veic.element("veiculo_modelo").getText());
-							
-							veic.setNumeroNF(node_veic.element("veiculo_numero_nf").getText());
-							veic.setSerieNF(node_veic.element("veiculo_serie_nf").getText());
-							veic.setDataNF(date_format_hora.parse(node_veic.element("veiculo_data_nf").getText()));
-							veic.setValorMercadoria(new Double(trataNumero(node_veic.element("veiculo_valor_nf").getText())));
-							
-							List<Veiculo> veicsEncontrados = cadastroService.buscarVeiculosPorChassi(chassi);
-							if(veicsEncontrados.size() > 0) {
-								veic.setVeiculo(veicsEncontrados.get(0));
-								veic.setModelo(veicsEncontrados.get(0).getModelo().getDescricao());
-							} else {
-								throw new Exception("Veiculo " + chassi + " não existe!;");
+				List<InconsistenciaCtrc> inconsistenciaCtrc = ctrcService.buscarInconsistenciaCtrcDuplicadoPorFiltros(ct);
+
+				if(inconsistenciaCtrc.size() > 0) {
+					InconsistenciaCtrc inc = inconsistenciaCtrc.get(0); 
+					inc.setCtrc(ct);
+					ctrcService.salvarInconsistenciaCtrc(inc, true);
+				} else {
+					if(ctrc.size() == 0) {
+						List<Element> node_veics = node_ct.elements("veiculo");
+						for(Element node_veic : node_veics) {
+							VeiculoCtrc veic = new VeiculoCtrc();
+							try {
+								String chassi = node_veic.element("veiculo_chassi").getText();
+								if (chassi != null && !chassi.isEmpty()) {
+									chassi = chassi.substring(0, 17);
+								
+									veic.setChassiInvalido(chassi);
+									veic.setModelo(node_veic.element("veiculo_modelo").getText());
+									
+									veic.setNumeroNF(node_veic.element("veiculo_numero_nf").getText());
+									veic.setSerieNF(node_veic.element("veiculo_serie_nf").getText());
+									veic.setDataNF(date_format_hora.parse(node_veic.element("veiculo_data_nf").getText()));
+									veic.setValorMercadoria(new Double(trataNumero(node_veic.element("veiculo_valor_nf").getText())));
+									
+									List<Veiculo> veicsEncontrados = cadastroService.buscarVeiculosPorChassi(chassi);
+									if(veicsEncontrados.size() > 0) {
+										veic.setVeiculo(veicsEncontrados.get(0));
+										veic.setModelo(veicsEncontrados.get(0).getModelo().getDescricao());
+									} else {
+										throw new Exception("Veiculo " + chassi + " não existe!;");
+									}
+								}
+							} catch(Exception e) {
+								veic.setMsgErro(e.getMessage());
+								veicInvalidos++;
 							}
-						} catch(Exception e) {
-							veic.setMsgErro(e.getMessage());
-							veicInvalidos++;
+							veiculos.add(veic);
 						}
-						veiculos.add(veic);
+					}
+					if(veicInvalidos > 0) {
+						throw new Exception("");
+					} else {
+						ctrcService.salvarCtrc(ct, true);
+						for(VeiculoCtrc veic: veiculos) {
+							veic.setCtrc(ct);
+							ctrcService.salvarVeiculoCtrc(veic, true);
+						}
 					}
 				}
 				
-				if(veicInvalidos > 0) {
-					throw new Exception("");
-				} else {
-					ctrcService.salvarCtrc(ct, true);
-					for(VeiculoCtrc veic: veiculos) {
-						veic.setCtrc(ct);
-						ctrcService.salvarVeiculoCtrc(veic, true);
-					}
-				}
 			} catch(Exception e) {
 				InconsistenciaCtrc inc = ctrcService.salvarInconsistenciaImportCtrc(ct, e.getMessage());
 				for(VeiculoCtrc veic: veiculos) {

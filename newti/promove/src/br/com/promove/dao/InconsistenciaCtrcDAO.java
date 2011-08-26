@@ -7,7 +7,7 @@ import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.exception.DAOException;
 
 public class InconsistenciaCtrcDAO extends BaseDAO<Integer, InconsistenciaCtrc>{
-	public List<Ctrc> getInconsistenciasCtrcDuplicadosPorFiltros(Ctrc ctrc) throws DAOException {
+	public List<InconsistenciaCtrc> getInconsistenciasCtrcDuplicadosPorFiltros(Ctrc ctrc) throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select ct from InconsistenciaCtrc ct");
 		hql.append(" where ct.filial = :txtFilial");

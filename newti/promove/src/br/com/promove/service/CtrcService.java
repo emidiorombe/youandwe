@@ -50,6 +50,10 @@ public interface CtrcService extends Serializable{
 
 	List<Ctrc> buscarCtrcDuplicadoPorFiltros(Ctrc ctrc) throws PromoveException;
 
+	void salvarInconsistenciaCtrc(InconsistenciaCtrc inc) throws PromoveException;
+	
+	void salvarInconsistenciaCtrc(InconsistenciaCtrc inc, boolean isFlush) throws PromoveException;
+	
 	InconsistenciaCtrc salvarInconsistenciaImportCtrc(Ctrc ctrc, String msgErro) throws PromoveException;
 
 	List<InconsistenciaCtrc> buscarTodasInconsistenciasCtrc() throws PromoveException;
@@ -68,11 +72,11 @@ public interface CtrcService extends Serializable{
 
 	void salvarVeiculoCtrc(VeiculoCtrc bean) throws PromoveException;
 
-	void salvarVeiculoCtrc(VeiculoCtrc ctrc, boolean isFlush) throws PromoveException;
+	void salvarVeiculoCtrc(VeiculoCtrc veic, boolean isFlush) throws PromoveException;
 	
 	void excluirVeiculoCtrc(VeiculoCtrc bean)throws PromoveException;
 
-	List<Ctrc> buscarInconsistenciaCtrcDuplicadoPorFiltros(Ctrc ctrc) throws PromoveException;
+	List<InconsistenciaCtrc> buscarInconsistenciaCtrcDuplicadoPorFiltros(Ctrc ctrc) throws PromoveException;
 
 	List<VeiculoCtrc> buscarVeiculoCtrcDuplicadoPorFiltros(VeiculoCtrc veic) throws PromoveException;
 
