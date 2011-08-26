@@ -53,7 +53,6 @@ public class ErroImportAvariaForm extends BaseForm {
 		buildForm();
 	}
 	
-	
 	private void buildForm() {
 		setWriteThrough(false);
 		setImmediate(true);
@@ -69,19 +68,17 @@ public class ErroImportAvariaForm extends BaseForm {
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
-		
 	}
 	
 	public void createFormBody(BeanItem<InconsistenciaAvaria> tpa) {
 		setItemDataSource(tpa);
 		setFormFieldFactory(new ErroVeiculoFieldFactory()); 
 		setVisibleItemProperties(new Object[] {"chassiInvalido"});
-
 	}
 
-	public void addNewTipoAvaria() {
-		createFormBody(new BeanItem<InconsistenciaAvaria>(new InconsistenciaAvaria()));
-	}
+	//public void addNewTipoAvaria() {
+	//	createFormBody(new BeanItem<InconsistenciaAvaria>(new InconsistenciaAvaria()));
+	//}
 
 	private Component createFooter() {
 		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
@@ -98,7 +95,6 @@ public class ErroImportAvariaForm extends BaseForm {
 
 		return footer;
 	}
-
 	
 	class ErroAvariaFormListener implements ClickListener {
 
@@ -220,18 +216,14 @@ public class ErroImportAvariaForm extends BaseForm {
 					e.printStackTrace();
 					showErrorMessage(view,"Não foi possível buscar Veículos pelo FZ");
 				}
-				
 				return c;
 			}			
-			
 			return f;
 		}
 	}
 
-
 	public void setView(ErroImportAvariaView view) {
 		this.view = view;
-		
 	}
 
 	public Component getFormLayout() {

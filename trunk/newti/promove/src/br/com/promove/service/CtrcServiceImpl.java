@@ -129,6 +129,27 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	}
 
 	@Override
+	public void salvarInconsistenciaCtrc(InconsistenciaCtrc inc) throws PromoveException {
+		salvarInconsistenciaCtrc(inc, false);
+	}
+
+	@Override
+	public void salvarInconsistenciaCtrc(InconsistenciaCtrc inc, boolean isFlush) throws PromoveException {
+		try {
+			if(inc.getId() == null && inconsistenciaCtrcDAO.getInconsistenciasCtrcDuplicadosPorFiltros(inc.getCtrc()).size() > 0)
+				throw new IllegalArgumentException("Inconsistência CTRC já cadastrada!");
+			
+			inconsistenciaCtrcDAO.save(inc);
+			if(isFlush)
+				inconsistenciaCtrcDAO.flushSession();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+	
+
+	@Override
 	public InconsistenciaCtrc salvarInconsistenciaImportCtrc(Ctrc ctrc, String msgErro)throws PromoveException {
 		try {
 			InconsistenciaCtrc inc = new InconsistenciaCtrc(ctrc, msgErro);
@@ -243,8 +264,8 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	}
 
 	@Override
-	public List<Ctrc> buscarInconsistenciaCtrcDuplicadoPorFiltros(Ctrc ct) throws PromoveException {
-		List<Ctrc> lista = null;
+	public List<InconsistenciaCtrc> buscarInconsistenciaCtrcDuplicadoPorFiltros(Ctrc ct) throws PromoveException {
+		List<InconsistenciaCtrc> lista = null;
 		try {
 			lista = inconsistenciaCtrcDAO.getInconsistenciasCtrcDuplicadosPorFiltros(ct);
 		} catch (DAOException e) {

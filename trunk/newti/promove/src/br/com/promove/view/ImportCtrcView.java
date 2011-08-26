@@ -53,8 +53,9 @@ public class ImportCtrcView extends BaseForm implements Serializable{
 		
 		layout.addComponent(label);
 		layout.addComponent(this);
+		setImmediate(true);
 		
-        import_from_server = new Button("Importar", new ImportFromServerListener());
+        import_from_server = new Button("Importar", new ImportFromServerListener(this));
         layout.addComponent(import_from_server);
 
 	}
@@ -70,15 +71,26 @@ public class ImportCtrcView extends BaseForm implements Serializable{
 	
 	class ImportFromServerListener implements ClickListener{
 
+		private ImportCtrcView view;
+
+		public ImportFromServerListener(ImportCtrcView view) {
+			this.view = view;
+		}
+
 		@Override
 		public void buttonClick(ClickEvent event) {
 			try {
 				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null;
 				
+				if(de == null || ate == null)
+					throw new IllegalArgumentException("Informe um período para busca");
+				
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 				String url = ctx.getHttpSession().getServletContext().getInitParameter("ctrc_ws_url");
 				importService.importarGabardo(url + "?dataIni=" + new SimpleDateFormat("yyyy-MM-dd").format(de) + "&dataFim=" + new SimpleDateFormat("yyyy-MM-dd").format(ate));
+			} catch (IllegalArgumentException ie) {
+				showErrorMessage(view, ie.getMessage());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

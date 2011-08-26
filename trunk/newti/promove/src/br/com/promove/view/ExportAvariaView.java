@@ -5,10 +5,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import br.com.promove.application.PromoveApplication;
-import br.com.promove.entity.Avaria;
 import br.com.promove.view.form.BaseForm;
 
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;

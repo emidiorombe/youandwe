@@ -52,6 +52,8 @@ public class InconsistenciaCtrc implements Serializable{
 	private Double taxaFluvial;
 	private String msgErro;
 	private Double valorMercadoria;
+	private String motorista;
+	private Boolean cancelado = false;
 	
 	public InconsistenciaCtrc() {}
 	
@@ -73,6 +75,8 @@ public class InconsistenciaCtrc implements Serializable{
 		this.taxaRcf= ct.getTaxaRcf();
 		this.taxaFluvial = ct.getTaxaFluvial();
 		this.valorMercadoria = ct.getValorMercadoria();
+		this.motorista = ct.getMotorista();
+		this.cancelado = ct.getCancelado();
 		this.msgErro = msgErro;
 	}
 
@@ -228,6 +232,44 @@ public class InconsistenciaCtrc implements Serializable{
 		return valorMercadoria;
 	}
 
+	public void setMotorista(String motorista) {
+		this.motorista = motorista;
+	}
+
+	public String getMotorista() {
+		return motorista;
+	}
+
+	public void setCancelado(Boolean cancelado) {
+		this.cancelado = cancelado;
+	}
+
+	public Boolean getCancelado() {
+		return cancelado;
+	}
+
+	public void setCtrc(Ctrc ct) {
+		this.filial = ct.getFilial();
+		this.numero = ct.getNumero();
+		this.tipo = ct.getTipo();
+		this.serie = ct.getSerie();
+		this.transp = ct.getTransp();
+		this.dataEmissao = ct.getDataEmissao();
+		this.placaFrota = ct.getPlacaFrota();
+		this.placaCarreta = ct.getPlacaCarreta();
+		this.ufOrigem = ct.getUfOrigem();
+		this.municipioOrigem = ct.getMunicipioOrigem();
+		this.ufDestino = ct.getUfDestino();
+		this.municipioDestino = ct.getMunicipioDestino();
+		this.taxaRct = ct.getTaxaRct();
+		this.taxaRr = ct.getTaxaRr();
+		this.taxaRcf= ct.getTaxaRcf();
+		this.taxaFluvial = ct.getTaxaFluvial();
+		this.valorMercadoria = ct.getValorMercadoria();
+		this.motorista = ct.getMotorista();
+		this.cancelado = ct.getCancelado();
+	}
+
 	public Ctrc getCtrc() {
 		Ctrc ct = new Ctrc();
 		ct.setFilial(filial);
@@ -247,6 +289,8 @@ public class InconsistenciaCtrc implements Serializable{
 		ct.setTaxaRcf(taxaRcf);
 		ct.setTaxaFluvial(taxaFluvial);
 		ct.setValorMercadoria(valorMercadoria);
+		ct.setMotorista(motorista);
+		ct.setCancelado(cancelado);
 		
 		return ct;
 	}
