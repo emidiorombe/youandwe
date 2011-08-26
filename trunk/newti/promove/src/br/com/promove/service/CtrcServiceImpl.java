@@ -347,10 +347,22 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 		return ok;
 	}
 
+	@Override
 	public List<VeiculoCtrc> buscarVeiculosPorInconsistencia(Integer idInc) throws PromoveException {
 		List<VeiculoCtrc> lista = null;
 		try {
 			lista = veiculoCtrcDAO.getByInconsistencia(idInc);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public List<VeiculoCtrc> buscarTodasInconsistenciasCtrcVeiculo() throws PromoveException {
+		List<VeiculoCtrc> lista = null;
+		try {
+			lista = veiculoCtrcDAO.getTodasInconsistencias();
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

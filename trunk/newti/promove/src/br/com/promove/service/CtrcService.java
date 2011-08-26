@@ -85,4 +85,6 @@ public interface CtrcService extends Serializable{
 	boolean revalidarInconsistencia(InconsistenciaCtrc inc, boolean salvarVeics) throws PromoveException;
 	
 	List<VeiculoCtrc> buscarVeiculosPorInconsistencia(Integer idInc) throws PromoveException;
+
+	List<VeiculoCtrc> buscarTodasInconsistenciasCtrcVeiculo() throws PromoveException;
 }

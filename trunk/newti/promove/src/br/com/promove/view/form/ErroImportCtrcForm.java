@@ -10,12 +10,15 @@ import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.CtrcService;
+import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.ErroImportCtrcView;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.terminal.ExternalResource;
+import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.AbstractSelect.NewItemHandler;
 import com.vaadin.ui.Button.ClickEvent;
@@ -33,6 +36,7 @@ public class ErroImportCtrcForm extends BaseForm {
 	private VerticalLayout layout = new VerticalLayout();
 	private CtrcService ctrcService;
 	private CadastroService cadastroService;
+	private ExportacaoService exportacaoService;
 	private PromoveApplication app;
 	private InconsistenciaCtrc inconsistencia;
 	
@@ -46,6 +50,7 @@ public class ErroImportCtrcForm extends BaseForm {
 		this.inconsistencia = new InconsistenciaCtrc();
 		ctrcService = ServiceFactory.getService(CtrcService.class);
 		cadastroService = ServiceFactory.getService(CadastroService.class);
+		exportacaoService = ServiceFactory.getService(ExportacaoService.class);
 		buildForm();
 	}
 	
@@ -78,7 +83,7 @@ public class ErroImportCtrcForm extends BaseForm {
 		footer.addComponent(save);
 		footer.addComponent(remove);
 		footer.addComponent(saveAll);
-		//footer.addComponent(export);
+		footer.addComponent(export);
 		footer.setVisible(true);
 
 		return footer;
@@ -162,6 +167,18 @@ public class ErroImportCtrcForm extends BaseForm {
 					de.printStackTrace();
 					showErrorMessage(view, "Não foi possível salvar Inconsistências");
 				}
+			}else if(event.getButton() == export) {
+				try {
+					List<VeiculoCtrc> lista = ctrcService.buscarTodasInconsistenciasCtrcVeiculo();
+					String file = exportacaoService.exportarXLSInconsistenciaCtrcVeiculo(lista);
+					
+					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+					String path = ctx.getHttpSession().getServletContext().getContextPath();
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=incctrc.xls&file=" + file));
+				} catch (Exception e) {
+					e.printStackTrace();
+					showErrorMessage(view, "Não foi possível gerar arquivo.");
+				}
 			}
 		}
 	}
@@ -172,7 +189,6 @@ public class ErroImportCtrcForm extends BaseForm {
 		public Field createField(Item item, Object propertyId, Component uiContext) {
 			Field f = super.createField(item, propertyId, uiContext);
 			
-			System.out.println(propertyId); /////
 			if (propertyId.equals("chassiInvalido")) {
 				String chassi = null;
 				BeanItem<VeiculoCtrc> bitem = (BeanItem<VeiculoCtrc>) item;
@@ -180,7 +196,6 @@ public class ErroImportCtrcForm extends BaseForm {
 						bitem.getBean().getChassiInvalido() != null)
 					 chassi = bitem.getBean().getChassiInvalido();
 				final ComboBox c = new ComboBox("Veículos");
-				System.out.println("   chassi " + (chassi == null ? "" : chassi)); /////
 				try {
 					c.addContainerProperty("label", String.class, null);
 					c.setRequired(true);

@@ -7,6 +7,7 @@ import br.com.promove.entity.Resumo;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.entity.Ctrc;
+import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.exception.PromoveException;
 
 /**
@@ -30,5 +31,7 @@ public interface ExportacaoService {
 	public String exportarXLSInconsistenciaAvarias(List<InconsistenciaAvaria> lista) throws PromoveException;
 
 	public String exportarXLSResumo(List<Resumo> resumos, String item, String subitem) throws PromoveException;
+
+	public String exportarXLSInconsistenciaCtrcVeiculo(List<VeiculoCtrc> lista) throws PromoveException;
 
 }

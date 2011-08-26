@@ -106,7 +106,7 @@ public class ImportacaoCtrc {
 				ct.setUfDestino(node_ct.element("uf_destino").getText());
 				ct.setMunicipioDestino(node_ct.element("municipio_destino").getText());
 				ct.setMotorista(node_ct.element("nome_motorista").getText());
-				ct.setCancelado(node_ct.element("situacao").getText() == "3" ? true : false);
+				ct.setCancelado(node_ct.element("situacao").getText().equals("3") ? true : false);
 				
 				ct.setTaxaRct(new Double(trataNumero(node_ct.element("taxa_rct").getText())));
 				ct.setTaxaRr(new Double(trataNumero(node_ct.element("taxa_rr").getText())));
@@ -130,7 +130,9 @@ public class ImportacaoCtrc {
 							try {
 								String chassi = node_veic.element("veiculo_chassi").getText();
 								if (chassi != null && !chassi.isEmpty()) {
-									chassi = chassi.substring(0, 17);
+									if (chassi.length() > 17) {
+										chassi = chassi.substring(0, 17);
+									}
 								
 									veic.setChassiInvalido(chassi);
 									veic.setModelo(node_veic.element("veiculo_modelo").getText());
@@ -152,7 +154,9 @@ public class ImportacaoCtrc {
 								veic.setMsgErro(e.getMessage());
 								veicInvalidos++;
 							}
-							veiculos.add(veic);
+							if (veic.getChassiInvalido() != null && !veic.getChassiInvalido().isEmpty()) {
+								veiculos.add(veic);
+							}
 						}
 					}
 					if(veicInvalidos > 0) {
