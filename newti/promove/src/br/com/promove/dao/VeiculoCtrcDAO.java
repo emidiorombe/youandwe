@@ -45,4 +45,12 @@ public class VeiculoCtrcDAO extends BaseDAO<Integer, VeiculoCtrc> {
 		addParamToQuery("txtInconsistencia", idInc);
 		return executeQuery(hql.toString(), paramsToQuery, 0, 100);
 	}
+
+	public List<VeiculoCtrc> getTodasInconsistencias() throws DAOException {
+		StringBuilder hql = new StringBuilder();
+		hql.append("select v from VeiculoCtrc v");
+		hql.append(" where v.inconsistencia > 0");
+		hql.append(" and v.msgErro is not null");
+		return executeQuery(hql.toString(), paramsToQuery, 0, 100);
+	}
 }

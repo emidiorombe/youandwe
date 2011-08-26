@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import br.com.promove.dao.ClimaDAO;
 import br.com.promove.dao.ExtensaoDAO;
+import br.com.promove.dao.InconsistenciaCtrcDAO;
 import br.com.promove.dao.LocalAvariaDAO;
 import br.com.promove.dao.NivelAvariaDAO;
 import br.com.promove.dao.OrigemAvariaDAO;
@@ -48,8 +49,10 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	private ClimaDAO climaDAO;
 	private ExtensaoDAO extensaoDAO;
 	private NivelAvariaDAO nivelDAO;
-	private static NumberFormat percentual_format = new DecimalFormat("#0'%'"); //("#0.00'%'")
-	private static NumberFormat moeda_format = new DecimalFormat("'R$' #0.00");
+	private InconsistenciaCtrcDAO inconsistenciaCtrcDAO;
+	private static NumberFormat percentual_format = new DecimalFormat("#0'%'");
+	private static NumberFormat percentual2_format = new DecimalFormat("#0.00'%'");
+	private static NumberFormat moeda_format = new DecimalFormat("#0.00");
 	private static SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy");
 	
 	public ExportacaoServiceImpl() {
@@ -60,6 +63,7 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		usuarioDAO = new UsuarioDAO();
 		extensaoDAO = new ExtensaoDAO();
 		nivelDAO = new NivelAvariaDAO();
+		inconsistenciaCtrcDAO = new InconsistenciaCtrcDAO();
 	}
 
 	@Override
@@ -148,7 +152,7 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		try {
 			Workbook wb = new HSSFWorkbook();
 		    CreationHelper createHelper = wb.getCreationHelper();
-		    Sheet sheet = wb.createSheet("inconsistencias");
+		    Sheet sheet = wb.createSheet("inconsistenciasAvaria");
 		    
 		    //Cabeçalho
 		    Row row_head = sheet.createRow(0);
@@ -246,6 +250,11 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			Workbook wb = new HSSFWorkbook();
 		    CreationHelper createHelper = wb.getCreationHelper();
 		    Sheet sheet = wb.createSheet("ctrcs");
+			Double valorMercadoria = 0.0;
+			Double taxaRCTRC = 0.03;
+			Double taxaTranspNacional = 0.08;
+			Double valorRCTRC = 0.0;
+			Double valorTranspNacional = 0.0;
 		    
 		    //Cabeçalho
 		    Row row_head = sheet.createRow(0);
@@ -266,26 +275,49 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    VeiculoCtrcDAO veiculoCtrcDAO = new VeiculoCtrcDAO();
 		    for(Ctrc ctrc : ctrcs) {
 		    	for (VeiculoCtrc veic : veiculoCtrcDAO.getByCtrc(ctrc)) {
-				    String navio = veic.getVeiculo().getNavio();
-				    if (navio != null && !navio.isEmpty()) {
-				    	navio += " - " + date_format.format(veic.getVeiculo().getDataCadastro());
-				    }
-				    		
 				    Row row = sheet.createRow(++i);
 				    row.createCell(0).setCellValue(ctrc.getFilial());
 				    row.createCell(1).setCellValue(ctrc.getNumero());
 				    row.createCell(2).setCellValue(ctrc.getSerie());
-				    row.createCell(3).setCellValue(date_format.format(ctrcs.get(i).getDataEmissao()));
+				    row.createCell(3).setCellValue(date_format.format(ctrc.getDataEmissao()));
 				    row.createCell(4).setCellValue(ctrc.getUfOrigem());
 				    row.createCell(5).setCellValue(ctrc.getMunicipioOrigem());
 				    row.createCell(6).setCellValue(ctrc.getUfDestino());
 				    row.createCell(7).setCellValue(ctrc.getMunicipioDestino());
-				    row.createCell(8).setCellValue(veic.getVeiculo().getChassi());
-				    row.createCell(9).setCellValue(veic.getVeiculo().getModelo().getDescricao());
-				    row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
-				    row.createCell(11).setCellValue(navio);
+				    
+				    if (veic.getVeiculo() != null) {
+					    String navio = "";
+					    
+					    if (veic.getVeiculo().getNavio() != null &&	!veic.getVeiculo().getNavio().isEmpty()) {
+					    	navio = veic.getVeiculo().getNavio() + " - " + date_format.format(veic.getVeiculo().getDataCadastro());
+					    }
+					    		
+					    row.createCell(8).setCellValue(veic.getVeiculo().getChassi());
+					    row.createCell(9).setCellValue(veic.getVeiculo().getModelo().getDescricao());
+					    row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
+					    row.createCell(11).setCellValue(navio);
+						if(veic.getValorMercadoria() != null) valorMercadoria += veic.getValorMercadoria();
+				    }
 		    	}
 		    }
+		    
+		    //Total
+		    Row row_total = sheet.createRow(++i);
+		    row_total.createCell(8).setCellValue("TOTAL");
+		    row_total.createCell(10).setCellValue(moeda_format.format(valorMercadoria));
+
+		    valorRCTRC = valorMercadoria * (taxaRCTRC / 100.0);
+		    row_total = sheet.createRow(++i);
+		    row_total.createCell(8).setCellValue("RCTR-C");
+		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaRCTRC));
+		    row_total.createCell(10).setCellValue(moeda_format.format(valorRCTRC));
+
+		    valorTranspNacional = valorMercadoria * (taxaTranspNacional / 100.0);
+		    row_total = sheet.createRow(++i);
+		    row_total.createCell(8).setCellValue("Transporte Nacional");
+		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaTranspNacional));
+		    row_total.createCell(10).setCellValue(moeda_format.format(valorTranspNacional));
+
 
 		    // Write the output to a file/
 		    String fileName = Config.getConfig("tmp_dir") + "ctrcs_" + System.currentTimeMillis()+".xls";
@@ -348,4 +380,59 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		}
 	}
 
+	@Override
+	public String exportarXLSInconsistenciaCtrcVeiculo(List<VeiculoCtrc> lista) throws PromoveException {
+		try {
+			Workbook wb = new HSSFWorkbook();
+		    CreationHelper createHelper = wb.getCreationHelper();
+		    Sheet sheet = wb.createSheet("inconsistenciasCTRC");
+		    
+		    //Cabeçalho
+		    Row row_head = sheet.createRow(0);
+		    row_head.createCell(0).setCellValue("FILIAL");
+		    row_head.createCell(1).setCellValue("NUMERO");
+		    row_head.createCell(2).setCellValue("SERIE");
+		    row_head.createCell(3).setCellValue("DATA");
+		    row_head.createCell(4).setCellValue("UF");
+		    row_head.createCell(5).setCellValue("MUNICIPIO ORIGEM");
+		    row_head.createCell(6).setCellValue("UF");
+		    row_head.createCell(7).setCellValue("MUNICIPIO DESTINO");
+		    row_head.createCell(8).setCellValue("CHASSI");
+		    row_head.createCell(9).setCellValue("MODELO");
+		    row_head.createCell(10).setCellValue("VALOR");
+		    row_head.createCell(11).setCellValue("MENSAGEM");
+		    
+		    int i = 0;
+		    VeiculoCtrcDAO veiculoCtrcDAO = new VeiculoCtrcDAO();
+		    for(VeiculoCtrc veic : lista) {
+		    	Ctrc ctrc = inconsistenciaCtrcDAO.getByPrimaryKey(veic.getInconsistencia()).getCtrc();
+		    	
+				Row row = sheet.createRow(++i);
+				row.createCell(0).setCellValue(ctrc.getFilial());
+			    row.createCell(1).setCellValue(ctrc.getNumero());
+			    row.createCell(2).setCellValue(ctrc.getSerie());
+			    row.createCell(3).setCellValue(date_format.format(ctrc.getDataEmissao()));
+			    row.createCell(4).setCellValue(ctrc.getUfOrigem());
+			    row.createCell(5).setCellValue(ctrc.getMunicipioOrigem());
+			    row.createCell(6).setCellValue(ctrc.getUfDestino());
+			    row.createCell(7).setCellValue(ctrc.getMunicipioDestino());
+				    
+			    row.createCell(8).setCellValue(veic.getChassiInvalido());
+			    row.createCell(9).setCellValue(veic.getModelo());
+			    row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
+			    row.createCell(11).setCellValue(veic.getMsgErro());
+		    }
+		    
+		    // Write the output to a file/
+		    String fileName = Config.getConfig("tmp_dir") + "incctrcs_" + System.currentTimeMillis()+".xls";
+		    FileOutputStream fileOut = new FileOutputStream(fileName);
+		    wb.write(fileOut);
+		    fileOut.close();
+		    
+		    return fileName;
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new PromoveException();
+		}
+	}
 }

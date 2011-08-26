@@ -19,11 +19,10 @@ import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.ErroImportCtrcVeiculoTables;
-import br.com.promove.view.table.ErroImportVeiculoCtrcTable.VeiculoCtrcTableColumnGenerator;
 
 public class ErroImportCtrcTable extends Table {
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "msgErro"};
-	public static final String[] COL_HEADERS = new String[] {"Filial", "Numero", "Tipo", "Série", "Transportadora", "Data", "Frota", "Carreta", "UF", "Origem", "UF", "Destino", "Valor Merc.", "Mensagem"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "motorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "cancelado", "msgErro"};
+	public static final String[] COL_HEADERS = new String[] {"Filial", "Numero", "Tipo", "Série", "Transportadora", "Data", "Frota", "Carreta", "Motorista", "UF", "Origem", "UF", "Destino", "Valor Merc.", "Cancelado", "Mensagem"};
 	
 	private ErroImportCtrcVeiculoTables view;
 	private CtrcService ctrcService;
@@ -55,10 +54,12 @@ public class ErroImportCtrcTable extends Table {
 		try {
 			setColumnCollapsed("placaFrota", true);
 			setColumnCollapsed("placaCarreta", true);
+			setColumnCollapsed("motorista", true);
 			setColumnCollapsed("ufOrigem", true);
 			setColumnCollapsed("municipioOrigem", true);
 			setColumnCollapsed("ufDestino", true);
 			setColumnCollapsed("municipioDestino", true);
+			setColumnCollapsed("cancelado", true);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
