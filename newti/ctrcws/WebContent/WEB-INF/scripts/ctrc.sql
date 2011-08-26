@@ -18,21 +18,20 @@ select vea027.recnum as id,
        nvl(vea027.vrmerc,0) as valor_mercadoria, 
        tga015.nome    as nome_motorista, 
        vea027.situac as situacao,  
-       vea023.chassi    as veiculo_chassi, 
+       substr(vea023.chassi,1,17) as veiculo_chassi, 
        vea004.descri    as veiculo_modelo, 
        vea023.nrnfis    as veiculo_numero_nf, 
        vea023.senfis    as veiculo_serie_nf, 
        vea023.dtnfis    as veiculo_data_nf, 
        nvl(vea023.vrnfis,0) as veiculo_valor_nf 
- from   vea027, vea023, vea004, tga011, tga017, tga016, tga015
- where  vea027.codfil = vea023.filemb 
- and    vea027.numero = vea023.nrconh 
- and    vea027.serie  = vea023.serie  
- and    vea023.codmod = vea004.codigo 
- and    vea027.codfil = tga011.codigo 
- and    vea027.codcav = tga017.codigo 
- and    vea027.codcar = tga016.codigo 
- and    vea027.codmot = tga015.codigo 
- and    vea027.coddev = 'FA0001' 
- and    vea027.datalt between ? and ?
+ from vea027
+ left outer join vea023 on vea027.codfil = vea023.filemb
+ and  vea027.numero = vea023.nrconh
+ and  vea027.serie  = vea023.serie 
+ left outer join vea004 on vea023.codmod = vea004.codigo
+ left outer join tga011 on vea027.codfil = tga011.codigo
+ left outer join tga015 on vea027.codmot = tga015.codigo
+ left outer join tga016 on vea027.codcar = tga016.codigo
+ left outer join tga017 on vea027.codcav = tga017.codigo 
+ where vea027.datalt between ? and ?
  order by id
