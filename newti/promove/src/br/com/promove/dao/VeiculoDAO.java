@@ -1,7 +1,5 @@
 package br.com.promove.dao;
 
-import java.sql.Array;
-import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,12 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Session;
-import org.hibernate.exception.SQLGrammarException;
-
 import br.com.promove.entity.Avaria;
-import br.com.promove.entity.Cor;
-import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
 import br.com.promove.entity.Veiculo;
