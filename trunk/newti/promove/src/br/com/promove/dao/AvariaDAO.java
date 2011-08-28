@@ -24,7 +24,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 	public List<Avaria> getAllCustom() throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select av from Avaria av left JOIN FETCH av.fotos");
-		return executeQuery(hql.toString(), 0, 100);
+		return executeQuery(hql.toString(), 0, Integer.MAX_VALUE);
 	}
 
 	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws DAOException {
