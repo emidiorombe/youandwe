@@ -1,31 +1,27 @@
 package br.com.promove.view.form;
 
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import br.com.promove.application.PromoveApplication;
-import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Resumo;
-import br.com.promove.entity.FotoAvaria;
-import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
-import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.exportacao.GraficoExport;
-import br.com.promove.menu.PromoveToolbar.RelatorioSWF;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.OrdemResumoComparator;
 import br.com.promove.view.AnaliseResultadoView;
-import br.com.promove.view.form.VeiculoSearchForm.VeiculoFieldFactory;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
@@ -45,7 +41,6 @@ import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupDateField;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.AbstractSelect.Filtering;
@@ -63,6 +58,8 @@ public class AnaliseResultadoForm extends BaseForm{
 	private ComboBox cmbOrigemAte;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
+	private ComboBox cmbPeriodo;
+	private ComboBox cmbItem;
 	private CheckBox chkVistoriaFinal;
 	private PromoveApplication app;
 	
@@ -138,12 +135,45 @@ public class AnaliseResultadoForm extends BaseForm{
 		txtAte.setLocale(new Locale("pt", "BR"));
 		txtAte.setResolution(DateField.RESOLUTION_DAY);
 		
+		cmbPeriodo = new ComboBox("Período por");
+		cmbPeriodo.addContainerProperty("label", String.class, null);
+		
+		i = cmbPeriodo.addItem(1);
+		i.getItemProperty("label").setValue("Data da vistoria");
+		i = cmbPeriodo.addItem(2);
+		i.getItemProperty("label").setValue("Data de registro do veículo");
+		
+		cmbPeriodo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+		cmbPeriodo.setImmediate(true);
+		cmbPeriodo.setNullSelectionAllowed(false);
+		cmbPeriodo.setItemCaptionPropertyId("label");
+		cmbPeriodo.setWidth("200px");
+		cmbPeriodo.setValue(cmbPeriodo.getItemIds().iterator().next());
+
+		cmbItem = new ComboBox("Resumo por");
+		cmbItem.addContainerProperty("label", String.class, null);
+		
+		i = cmbItem.addItem("");
+		i.getItemProperty("label").setValue("Selecione...");
+		i = cmbItem.addItem("modelo");
+		i.getItemProperty("label").setValue("Modelo");
+		i = cmbItem.addItem("fabricante");
+		i.getItemProperty("label").setValue("Fabricante");
+		
+		cmbItem.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+		cmbItem.setImmediate(true);
+		cmbItem.setNullSelectionAllowed(false);
+		cmbItem.setItemCaptionPropertyId("label");
+		cmbItem.setValue(cmbItem.getItemIds().iterator().next());
+
 		createFormBody(new BeanItem<Veiculo>(new Veiculo()));
 		layout.addComponent(this);
 		addField("cmbOrigemDe", cmbOrigemDe);
 		addField("cmbOrigemAte", cmbOrigemAte);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
+		addField("cmbPeriodo", cmbPeriodo);
+		addField("cmbItem", cmbItem);
 		addField("chkVistoriaFinal", chkVistoriaFinal);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
@@ -258,28 +288,33 @@ public class AnaliseResultadoForm extends BaseForm{
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 				OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
 				OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
-				//Integer periodo = (Integer)cmbPeriodo.getValue();
+				Integer periodo = (Integer)cmbPeriodo.getValue();
+				String item = (String)cmbItem.getValue();
 				Boolean vistoriaFinal = (Boolean)chkVistoriaFinal.getValue();
-				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
+				
+				String itemLabel = (String)cmbItem.getItemCaption(item);
+				
+				BeanItem<Veiculo> veic = (BeanItem<Veiculo>)getItemDataSource();
 			
 				if(de == null || ate == null)
-					if(item.getBean().getNavio().isEmpty())
+					if(veic.getBean().getNavio().isEmpty())
 						throw new IllegalArgumentException("Informe um navio ou período");
 			
-				itens = cadastroService.buscarAnaliseResultado(item.getBean(), de, ate, oride, oriate, vistoriaFinal);
+				itens = cadastroService.buscarAnaliseResultado(veic.getBean(), de, ate, periodo, oride, oriate, item, vistoriaFinal);
 				
 				if(event.getButton() == search) {
 					resumos = criaListaResumoesComItens(itens);
 					view.getTable().filterTable(resumos);
 				}else if(event.getButton() == export) {
 					resumos = criaListaResumoesComItens(itens);
-					String file = exportacaoService.exportarXLSResumo(resumos, "VEÍCULOS", "MODELO");
+					String file = exportacaoService.exportarXLSResumo(resumos, itemLabel.toUpperCase(), "VEÍCULOS");
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
 					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=analise_resultado.xls&file=" + file));
 				}else if(event.getButton() == grafico) {
-					String xml = GraficoExport.gerarXmlExportacao(itens);
+					List<Map<String, List<PieData>>> itens_ordenados = ordenarItensMap(itens);
+					String xml = GraficoExport.gerarXmlExportacaoFromList(itens_ordenados);
 					String xmlEncoded = URLEncoder.encode(xml, "UTF-8");
 					Window w = new Window("Gráfico");
 			        w.setHeight("520px");
@@ -318,10 +353,36 @@ public class AnaliseResultadoForm extends BaseForm{
 			}
 		}
 
+		private List<Map<String, List<PieData>>> ordenarItensMap(Map<String, List<PieData>> itens) {
+			List<Map<String, List<PieData>>> data = new ArrayList<Map<String,List<PieData>>>();
+			Map<Integer, Map<String, List<PieData>>> ordered = new TreeMap<Integer, Map<String, List<PieData>>>(new OrdemResumoComparator());
+			for(Map.Entry<String, List<PieData>> entry : itens.entrySet()) {
+				List<PieData> tmp_pd = new ArrayList<PieData>();
+				String itemName = entry.getKey();
+				Integer itemTotal = 0;
+				for(PieData pd : entry.getValue()) {
+					int vl = new Integer(pd.getValue());
+					tmp_pd.add(new PieData(pd.getLabel(), Integer.toString(vl)));
+					itemTotal += vl;
+				}
+				
+				Map<String, List<PieData>> tmp_map = new HashMap<String, List<PieData>>();
+				tmp_map.put(itemName, tmp_pd);
+				ordered.put(itemTotal, tmp_map);
+			}
+			
+			for(Map.Entry<Integer, Map<String, List<PieData>>> entry : ordered.entrySet()) {
+				data.add(entry.getValue());
+			}
+			
+			return data;
+		}
+
 		private List<Resumo> criaListaResumoesComItens(Map<String, List<PieData>> itens) {
 			List<Resumo> resumos = new ArrayList<Resumo>();
+			Map<Integer, List<Resumo>> ordered = new TreeMap<Integer, List<Resumo>>(new OrdemResumoComparator());
 			Integer itemTotalGeral = 0;
-
+			
 			for(Map.Entry<String, List<PieData>> entry : itens.entrySet()) {
 				for(PieData pd : entry.getValue()) {
 					int vl = new Integer(pd.getValue());
@@ -330,7 +391,8 @@ public class AnaliseResultadoForm extends BaseForm{
 			}
 	        view.getTable().setColumnFooter("quantidadeItem", itemTotalGeral.toString());
 	        
-	        for(Map.Entry<String, List<PieData>> entry : itens.entrySet()) {
+			for(Map.Entry<String, List<PieData>> entry : itens.entrySet()) {
+				List<Resumo> tmp_resumos = new ArrayList<Resumo>();
 				String itemName = entry.getKey();
 				Integer itemTotal = 0;
 				for(PieData pd : entry.getValue()) {
@@ -342,11 +404,16 @@ public class AnaliseResultadoForm extends BaseForm{
 					double percentual = ((double)vl / (double)itemTotal) * 100;
 					if (pd == entry.getValue().get(0)) {
 						double percentualTotal = ((double)itemTotal / (double)itemTotalGeral) * 100;
-						resumos.add(new Resumo(itemName, itemTotal, percentualTotal, pd.getLabel(), vl, percentual));
+						tmp_resumos.add(new Resumo(itemName, itemTotal, percentualTotal, pd.getLabel(), vl, percentual));
 					}else {
-						resumos.add(new Resumo(null, null, null, pd.getLabel(), vl, percentual));
+						tmp_resumos.add(new Resumo(null, null, null, pd.getLabel(), vl, percentual));
 					}
 				}
+				ordered.put(itemTotal, tmp_resumos);
+			}
+			
+			for(List<Resumo> lresumo: ordered.values()) {
+				resumos.addAll(lresumo);
 			}
 			return resumos;
 		}
