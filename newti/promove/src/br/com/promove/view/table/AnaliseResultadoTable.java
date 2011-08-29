@@ -20,7 +20,7 @@ import com.vaadin.ui.Table;
 
 public class AnaliseResultadoTable extends Table{
 	public static final Object[] NATURAL_COL_ORDER = new Object[] {"item", "quantidadeItem", "percentualItem", "subitem", "quantidadeSubitem", "percentualSubitem"};
-	public static final String[] COL_HEADERS = new String[] {"Veículos", "Quantidade", "Percentual", "Modelo", "Quantidade", "Percentual"};
+	public static final String[] COL_HEADERS = new String[] {"Item", "Quantidade", "Percentual", "Veículos", "Quantidade", "Percentual"};
 
 	private AnaliseResultadoView view;
 	private CadastroService cadastroService;

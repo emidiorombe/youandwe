@@ -246,29 +246,47 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		return lista;
 	}
 
-	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oriInicio, OrigemAvaria oriFim, Boolean vistoriaFinal) throws DAOException {
+	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, String item, Boolean vistoriaFinal) throws DAOException {
 		//if ((oriFim == null || oriFim.getId() == null) &&
 		//		oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
 		//if ((oriInicio == null || oriInicio.getId() == null) &&
 		//		oriFim != null && oriFim.getId() != null) oriInicio = oriFim;
 		
+		String nomeItem = (item.isEmpty() ? "cast('' as text)" : item + (item.equals("fabricante") ? ".nome" : ".descricao"));
+		String idItem = (item.isEmpty() ? "" : (item.equals("fabricante") ? "modelo." : (item.equals("modelo") ? "veiculo." : "avaria.")) + item.replaceAll("avaria", "") + "_id");
+		
 		StringBuilder subsql = new StringBuilder();
 		StringBuilder subsqlA = new StringBuilder();
 		StringBuilder subsqlB = new StringBuilder();
 		
-		subsqlA.append(" select cast(':tipo' as text) as tipo, modelo.descricao as descricao");
+		subsqlA.append(" select " + nomeItem + " as item, cast(':tipo' as text) as tipo");
 		subsqlA.append(" from veiculo, modelo, avaria, origemavaria");
+		if (item.equals("fabricante")) subsqlA.append(", fabricante");
 		subsqlA.append(" where veiculo.modelo_id = modelo.id");
+		if (item.equals("fabricante")) subsqlA.append(" and fabricante.id = modelo.fabricante_id");
 		subsqlA.append(" and veiculo.id = avaria.veiculo_id");
 		subsqlA.append(" and avaria.origem_id = origemavaria.id");
+		if(periodo == 1 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+			subsqlA.append(" and avaria.datalancamento");
+			subsqlA.append(" between '" + dtInicio + "'");
+			subsqlA.append(" and '" + dtFim + "'");
+			
+			subsqlB.append(subsqlA.toString());
+			
+			if (oriInicio != null && oriInicio.getId() != null)
+				subsqlB.append(" and origemavaria.codigo >= " + oriInicio.getCodigo().toString());
+			if (oriFim != null && oriFim.getId() != null)
+				subsqlB.append(" and origemavaria.codigo <= " + oriFim.getCodigo().toString());
+		} else {
+			subsqlB.append(" select " + nomeItem + " as item, cast(':tipo' as text) as tipo");
+			subsqlB.append(" from veiculo, modelo");
+			subsqlB.append(" where veiculo.modelo_id = modelo.id");
+		}
+		
 		if (oriFim != null && oriFim.getId() != null)
 			subsqlA.append(" and origemavaria.codigo = " + oriFim.getCodigo().toString());
-		
-		subsqlB.append(" select cast(':tipo' as text) as tipo, modelo.descricao as descricao");
-		subsqlB.append(" from veiculo, modelo");
-		subsqlB.append(" where veiculo.modelo_id = modelo.id");
 
-		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+		if(periodo == 2 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
 			subsql.append(" and veiculo.datacadastro");
 			subsql.append(" between '" + dtInicio + "'");
 			subsql.append(" and '" + dtFim + "'");
@@ -297,23 +315,33 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		subsqlA.append(" where veiculo.id = avaria.veiculo_id");
 		subsqlA.append(" and avaria.tipo_id = tipoavaria.id");
 		subsqlA.append(" and tipoavaria.movimentacao = false");
+		if(periodo == 1 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+			subsqlA.append(" and avaria.datalancamento");
+			subsqlA.append(" between '" + dtInicio + "'");
+			subsqlA.append(" and '" + dtFim + "'");
+		}
 		if (oriInicio != null && oriInicio.getId() != null)
 			subsqlA.append(" and origemavaria.codigo >= " + oriInicio.getCodigo().toString());
 		if (oriFim != null && oriFim.getId() != null)
 			subsqlA.append(" and origemavaria.codigo <= " + oriFim.getCodigo().toString());
 		subsqlA.append(" and avaria.origem_id = origemavaria.id)");
-		subsqlA.append(" group by veiculo.id, modelo.descricao");
+		subsqlA.append(" group by veiculo.id, " + nomeItem);
 
 		subsqlB.append(" and :existe (select avaria.id from avaria, origemavaria");
 		subsqlB.append(" where veiculo.id = avaria.veiculo_id");
+		if(periodo == 1 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+			subsqlB.append(" and avaria.datalancamento");
+			subsqlB.append(" between '" + dtInicio + "'");
+			subsqlB.append(" and '" + dtFim + "'");
+		}
 		if (oriFim != null && oriFim.getId() != null)
 			subsqlB.append(" and origemavaria.codigo = " + oriFim.getCodigo().toString());
 		subsqlB.append(" and avaria.origem_id = origemavaria.id)");
-		subsqlB.append(" group by veiculo.id, modelo.descricao");
+		subsqlB.append(" group by veiculo.id, " + nomeItem);
 
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("select tipo, descricao, cast(count(*) as integer) from (");
+		sql.append("select item, tipo, cast(count(*) as integer) from (");
 		sql.append(subsqlA.toString().replaceAll(":tipo", "Avariados").replaceAll(":existe", "exists"));
 		sql.append(" UNION ALL");
 		sql.append(subsqlA.toString().replaceAll(":tipo", "Não avariados").replaceAll(":existe", "not exists"));
@@ -321,9 +349,9 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			sql.append(" UNION ALL");
 			sql.append(subsqlB.toString().replaceAll(":tipo", "Em processo").replaceAll(":existe", "not exists"));
 		}
-		sql.append(" ) as subconsulta");
-		sql.append(" group by tipo, descricao");
-		sql.append(" order by tipo, count(*) desc, descricao");
+		sql.append(") as subconsulta");
+		sql.append(" group by tipo, item");
+		sql.append(" order by tipo");
 
 		List lista = executeSQLQuery(sql.toString());
 		Map<String, List<PieData>> itens = new HashMap<String, List<PieData>>();
