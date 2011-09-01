@@ -54,6 +54,9 @@ public class Ctrc implements Serializable{
 	private String motorista;
 	private Boolean cancelado = false;
 	
+	@OneToMany(mappedBy="ctrc", targetEntity=VeiculoCtrc.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<VeiculoCtrc> veiculos;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -216,6 +219,14 @@ public class Ctrc implements Serializable{
 
 	public Boolean getCancelado() {
 		return cancelado;
+	}
+
+	public void setVeiculos(List<VeiculoCtrc> veiculos) {
+		this.veiculos = veiculos;
+	}
+
+	public List<VeiculoCtrc> getVeiculos() {
+		return veiculos;
 	}
 
 	@Override

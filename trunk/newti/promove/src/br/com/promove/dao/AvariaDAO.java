@@ -188,7 +188,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		//if ((oriInicio == null || oriInicio.getId() == null) &&
 		//		oriFim != null && oriFim.getId() != null) oriInicio = oriFim;
 		
-		String nomeItem = (item.isEmpty() ? "cast('' as text)" : item + (item.equals("fabricante") ? ".nome" : ".descricao"));
+		String nomeItem = (item.isEmpty() ? "cast('Total' as text)" : item + (item.equals("fabricante") ? ".nome" : ".descricao"));
 		String nomeSubitem = (subitem.isEmpty() ? "cast('' as text)" : subitem + (subitem.equals("fabricante") ? ".nome" : ".descricao"));
 		String idItem = (item.isEmpty() ? "" : (item.equals("fabricante") ? "modelo." : (item.equals("modelo") ? "veiculo." : "avaria.")) + item.replaceAll("avaria", "") + "_id");
 		String idSubitem = (subitem.isEmpty() ? "" : (subitem.equals("fabricante") ? "modelo." : (subitem.equals("modelo") ? "veiculo." : "avaria.")) + subitem.replaceAll("avaria", "") + "_id");

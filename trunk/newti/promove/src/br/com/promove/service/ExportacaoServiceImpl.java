@@ -25,6 +25,7 @@ import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.dao.UsuarioDAO;
 import br.com.promove.dao.VeiculoCtrcDAO;
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.entity.Resumo;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.Veiculo;
@@ -270,11 +271,11 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    row_head.createCell(9).setCellValue("MODELO");
 		    row_head.createCell(10).setCellValue("VALOR");
 		    row_head.createCell(11).setCellValue("NAVIO");
+		    row_head.createCell(12).setCellValue("DATA");
 		    
 		    int i = 0;
-		    VeiculoCtrcDAO veiculoCtrcDAO = new VeiculoCtrcDAO();
 		    for(Ctrc ctrc : ctrcs) {
-		    	for (VeiculoCtrc veic : veiculoCtrcDAO.getByCtrc(ctrc)) {
+		    	for (VeiculoCtrc veic : ctrc.getVeiculos()) {
 				    Row row = sheet.createRow(++i);
 				    row.createCell(0).setCellValue(ctrc.getFilial());
 				    row.createCell(1).setCellValue(ctrc.getNumero());
@@ -286,16 +287,17 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 				    row.createCell(7).setCellValue(ctrc.getMunicipioDestino());
 				    
 				    if (veic.getVeiculo() != null) {
-					    String navio = "";
+					    String dataNavio = "";
 					    
 					    if (veic.getVeiculo().getNavio() != null &&	!veic.getVeiculo().getNavio().isEmpty()) {
-					    	navio = veic.getVeiculo().getNavio() + " - " + date_format.format(veic.getVeiculo().getDataCadastro());
+					    	dataNavio = date_format.format(veic.getVeiculo().getDataCadastro());
 					    }
 					    		
 					    row.createCell(8).setCellValue(veic.getVeiculo().getChassi());
 					    row.createCell(9).setCellValue(veic.getVeiculo().getModelo().getDescricao());
 					    row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
-					    row.createCell(11).setCellValue(navio);
+					    row.createCell(11).setCellValue(veic.getVeiculo().getNavio());
+					    row.createCell(12).setCellValue(dataNavio);
 						if(veic.getValorMercadoria() != null) valorMercadoria += veic.getValorMercadoria();
 				    }
 		    	}
@@ -405,7 +407,8 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    int i = 0;
 		    VeiculoCtrcDAO veiculoCtrcDAO = new VeiculoCtrcDAO();
 		    for(VeiculoCtrc veic : lista) {
-		    	Ctrc ctrc = inconsistenciaCtrcDAO.getByPrimaryKey(veic.getInconsistencia()).getCtrc();
+		    	InconsistenciaCtrc inconsistenciaCtrc = inconsistenciaCtrcDAO.getByPrimaryKey(veic.getInconsistencia());
+		    	Ctrc ctrc = inconsistenciaCtrc.getCtrc();
 		    	
 				Row row = sheet.createRow(++i);
 				row.createCell(0).setCellValue(ctrc.getFilial());

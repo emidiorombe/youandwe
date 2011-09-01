@@ -146,12 +146,12 @@ public class CtrcSearchForm extends BaseForm{
 				if (!(txtNumero.toString() == null) && !(txtNumero.toString().isEmpty()))
 					item.getBean().setNumero(Integer.parseInt(txtNumero.toString()));
 				
-				List<Ctrc> list = ctrcService.buscarCtrcPorFiltro(item.getBean(), de, ate, txtChassi.toString());
-				
 				if(event.getButton() == search) {
+					List<Ctrc> list = ctrcService.buscarCtrcPorFiltro(item.getBean(), de, ate, txtChassi.toString(), false);
 					view.getTables().getTableCtrc().filterTable(list, desconto);
 					view.getTables().getTableVeiculo().removeAllItems();
 				} else if(event.getButton() == export) {
+					List<Ctrc> list = ctrcService.buscarCtrcPorFiltro(item.getBean(), de, ate, txtChassi.toString(), true);
 					String file = exportacaoService.exportarXLSCtrcs(list);
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();

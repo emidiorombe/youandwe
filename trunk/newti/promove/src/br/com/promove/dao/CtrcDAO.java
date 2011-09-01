@@ -13,9 +13,10 @@ public class CtrcDAO extends BaseDAO<Integer, Ctrc>{
 		return executeQuery(hql.toString(), 0, 100);
 	}
 
-	public List<Ctrc> getCtrcPorFiltro(Ctrc ctrc, Date de, Date ate, String chassi) throws DAOException {
+	public List<Ctrc> getCtrcPorFiltro(Ctrc ctrc, Date de, Date ate, String chassi, Boolean veics) throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select ct from Ctrc ct");
+		if (veics) hql.append(" left JOIN FETCH ct.veiculos");
 		hql.append(" where 1=1");
 		if (ctrc.getNumero() != null && ctrc.getNumero() != 0) {
 			hql.append(" and ct.numero = :txtNumero");

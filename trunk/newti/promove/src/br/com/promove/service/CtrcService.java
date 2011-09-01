@@ -46,7 +46,7 @@ public interface CtrcService extends Serializable{
 
 	List<Ctrc> buscarTodosCtrcs() throws PromoveException;
 
-	public List<Ctrc> buscarCtrcPorFiltro(Ctrc ctrc, Date dtInicio, Date dtFim, String chassi) throws PromoveException;
+	public List<Ctrc> buscarCtrcPorFiltro(Ctrc ctrc, Date dtInicio, Date dtFim, String chassi, Boolean veics) throws PromoveException;
 
 	List<Ctrc> buscarCtrcDuplicadoPorFiltros(Ctrc ctrc) throws PromoveException;
 
