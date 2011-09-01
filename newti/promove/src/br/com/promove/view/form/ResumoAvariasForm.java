@@ -331,9 +331,9 @@ public class ResumoAvariasForm extends BaseForm{
 					
 					Window w = new Window("Gráfico");
 			        w.setHeight("520px");
-			        w.setWidth("650px");
+			        w.setWidth("950px");
 			        w.setPositionY(25);
-			        w.setPositionX(300);
+			        w.setPositionX(150);
 			        
 			        WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
@@ -346,7 +346,7 @@ public class ResumoAvariasForm extends BaseForm{
 			        e.setType(Embedded.TYPE_OBJECT);
 			        e.setMimeType("application/x-shockwave-flash");
 			        e.setParameter("allowFullScreen", "true");
-			        e.setWidth("600px");
+			        e.setWidth("900px");
 			        e.setHeight("400px");
 			        e.setParameter("FlashVars", "report="+xmlEncoded);
 			        String titulo = "<h2>Resumo de Avarias";
@@ -423,6 +423,7 @@ public class ResumoAvariasForm extends BaseForm{
 						tmp_resumos.add(new Resumo(null, null, null, pd.getLabel(), vl, percentual));
 					}
 				}
+				tmp_resumos.add(new Resumo(null, null, null, ".", null, null));
 				ordered.put(itemTotal, tmp_resumos);
 			}
 			

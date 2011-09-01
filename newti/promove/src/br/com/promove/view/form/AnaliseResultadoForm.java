@@ -159,6 +159,8 @@ public class AnaliseResultadoForm extends BaseForm{
 		i.getItemProperty("label").setValue("Modelo");
 		i = cmbItem.addItem("fabricante");
 		i.getItemProperty("label").setValue("Fabricante");
+		i = cmbItem.addItem("origemavaria");
+		i.getItemProperty("label").setValue("Local de Vistoria");
 		
 		cmbItem.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		cmbItem.setImmediate(true);
@@ -318,9 +320,9 @@ public class AnaliseResultadoForm extends BaseForm{
 					String xmlEncoded = URLEncoder.encode(xml, "UTF-8");
 					Window w = new Window("Gráfico");
 			        w.setHeight("520px");
-			        w.setWidth("650px");
+			        w.setWidth("950px");
 			        w.setPositionY(25);
-			        w.setPositionX(300);
+			        w.setPositionX(150);
 			        
 			        WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					//String path = ctx.getHttpSession().getServletContext().getContextPath();
@@ -333,13 +335,16 @@ public class AnaliseResultadoForm extends BaseForm{
 			        e.setType(Embedded.TYPE_OBJECT);
 			        e.setMimeType("application/x-shockwave-flash");
 			        e.setParameter("allowFullScreen", "true");
-			        e.setParameter("FlashVars", "report="+xmlEncoded);
-			        e.setParameter("labelPosition", "callout");
-			        e.setParameter("field", "label");
-			        e.setParameter("nameField", "label");
-			        e.setWidth("600px");
+			        //e.setParameter("labelPosition", "callout");
+			        //e.setParameter("field", "label");
+			        //e.setParameter("nameField", "label");
+			        e.setWidth("900px");
 			        e.setHeight("400px");
-			        Label lbl = new Label("<h2>Análise de Resultado</h2>");
+			        e.setParameter("FlashVars", "report="+xmlEncoded);
+			        String titulo = "<h2>Análise de Resultado";
+			        if (!item.isEmpty()) titulo += " por " + itemLabel;
+			        titulo += "</h2>";
+			        Label lbl = new Label(titulo);
 			        lbl.setContentMode(Label.CONTENT_XHTML);
 			        w.addComponent(lbl);
 			        w.addComponent(e);
@@ -409,6 +414,7 @@ public class AnaliseResultadoForm extends BaseForm{
 						tmp_resumos.add(new Resumo(null, null, null, pd.getLabel(), vl, percentual));
 					}
 				}
+				tmp_resumos.add(new Resumo(null, null, null, ".", null, null));
 				ordered.put(itemTotal, tmp_resumos);
 			}
 			

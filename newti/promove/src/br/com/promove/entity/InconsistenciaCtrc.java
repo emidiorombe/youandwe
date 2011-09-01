@@ -272,27 +272,25 @@ public class InconsistenciaCtrc implements Serializable{
 
 	public Ctrc getCtrc() {
 		Ctrc ct = new Ctrc();
-		ct.setFilial(filial);
-		ct.setNumero(numero);
-		ct.setTipo(tipo);
-		ct.setSerie(serie);
-		ct.setTransp(transp);
-		ct.setDataEmissao(dataEmissao);
-		ct.setPlacaFrota(placaFrota);
-		ct.setPlacaCarreta(placaCarreta);
-		ct.setUfOrigem(ufOrigem);
-		ct.setMunicipioOrigem(municipioOrigem);
-		ct.setUfDestino(ufDestino);
-		ct.setMunicipioDestino(municipioDestino);
-		ct.setTaxaRct(taxaRct);
-		ct.setTaxaRr(taxaRr);
-		ct.setTaxaRcf(taxaRcf);
-		ct.setTaxaFluvial(taxaFluvial);
-		ct.setValorMercadoria(valorMercadoria);
-		ct.setMotorista(motorista);
-		ct.setCancelado(cancelado);
-		
+		ct.setFilial(this.getFilial());
+		ct.setNumero(this.getNumero());
+		ct.setTipo(this.getTipo());
+		ct.setSerie(this.getSerie());
+		ct.setTransp(this.getTransp());
+		ct.setDataEmissao(this.getDataEmissao());
+		ct.setPlacaFrota(this.getPlacaFrota());
+		ct.setPlacaCarreta(this.getPlacaCarreta());
+		ct.setUfOrigem(this.getUfOrigem());
+		ct.setMunicipioOrigem(this.getMunicipioOrigem());
+		ct.setUfDestino(this.getUfDestino());
+		ct.setMunicipioDestino(this.getMunicipioDestino());
+		ct.setTaxaRct(this.getTaxaRct());
+		ct.setTaxaRr(this.getTaxaRr());
+		ct.setTaxaRcf(this.getTaxaRcf());
+		ct.setTaxaFluvial(this.getTaxaFluvial());
+		ct.setValorMercadoria(this.getValorMercadoria());
+		ct.setMotorista(this.getMotorista());
+		ct.setCancelado(this.getCancelado());
 		return ct;
 	}
-
 }

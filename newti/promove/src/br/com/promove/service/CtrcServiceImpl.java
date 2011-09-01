@@ -86,6 +86,10 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	@Override
 	public void excluirCtrc(Ctrc bean) throws PromoveException {
 		try {
+			for (VeiculoCtrc veic : this.buscarVeiculosPorCtrc(bean)) {
+				veiculoCtrcDAO.delete(veic);
+			}
+
 			ctrcDAO.delete(bean);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
@@ -104,13 +108,13 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	}
 
 	@Override
-	public List<Ctrc> buscarCtrcPorFiltro(Ctrc ctrc, Date dtInicio, Date dtFim, String chassi) throws PromoveException {
+	public List<Ctrc> buscarCtrcPorFiltro(Ctrc ctrc, Date dtInicio, Date dtFim, String chassi, Boolean veics) throws PromoveException {
 		List<Ctrc> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaHQLQuery(dtInicio); 
 			Date fim = DateUtils.montarDataFinalParaHQLQuery(dtFim); 
 			
-			lista = ctrcDAO.getCtrcPorFiltro(ctrc, init, fim, chassi);
+			lista = ctrcDAO.getCtrcPorFiltro(ctrc, init, fim, chassi, veics);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -175,6 +179,10 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	@Override
 	public void excluirInconsistenciaCtrc(InconsistenciaCtrc inc) throws PromoveException {
 		try {
+			for (VeiculoCtrc veic : veiculoCtrcDAO.getByInconsistencia(inc.getId())) {
+				veiculoCtrcDAO.delete(veic);
+			}
+
 			inconsistenciaCtrcDAO.delete(inc);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
@@ -337,7 +345,7 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 					veic.setCtrc(ctrc);
 					salvarVeiculoCtrc(veic);
 				}
-				excluirInconsistenciaCtrc(inc);
+				inconsistenciaCtrcDAO.delete(inc);
 			}
 
 		} catch (DAOException e) {
