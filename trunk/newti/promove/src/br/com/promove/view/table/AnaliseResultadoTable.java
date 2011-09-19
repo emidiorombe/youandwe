@@ -25,7 +25,7 @@ public class AnaliseResultadoTable extends Table{
 	private AnaliseResultadoView view;
 	private CadastroService cadastroService;
 	private ResumoContainer container;
-	private NumberFormat formatPercentual = new DecimalFormat("#0'%'"); //("#0.00'%'")
+	private NumberFormat formatPercentual = new DecimalFormat("#0.0'%'"); //("#0.00'%'")
 	
 	public AnaliseResultadoTable() {
 		cadastroService = ServiceFactory.getService(CadastroService.class);
