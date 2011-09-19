@@ -30,7 +30,7 @@ public class ResumoAvariasTable extends Table{
 	private ResumoAvariasView view;
 	private CadastroService cadastroService;
 	private ResumoContainer container;
-	private NumberFormat formatPercentual = new DecimalFormat("#0'%'"); //("#0.00'%'")
+	private NumberFormat formatPercentual = new DecimalFormat("#0.0'%'"); //("#0.00'%'")
 	
 	public ResumoAvariasTable() {
 		cadastroService = ServiceFactory.getService(CadastroService.class);

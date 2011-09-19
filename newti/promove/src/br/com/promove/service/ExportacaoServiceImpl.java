@@ -51,7 +51,7 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	private ExtensaoDAO extensaoDAO;
 	private NivelAvariaDAO nivelDAO;
 	private InconsistenciaCtrcDAO inconsistenciaCtrcDAO;
-	private static NumberFormat percentual_format = new DecimalFormat("#0'%'");
+	private static NumberFormat percentual_format = new DecimalFormat("#0.0'%'");
 	private static NumberFormat percentual2_format = new DecimalFormat("#0.00'%'");
 	private static NumberFormat moeda_format = new DecimalFormat("#0.00");
 	private static SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy");

@@ -40,9 +40,19 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		hql.append(" left JOIN FETCH ori.responsabilidade resp left JOIN FETCH usu.filial usufil left JOIN FETCH ori.filial orifil");
 		hql.append(" where 1=1");
 		if(av != null) {
+			if(av.getNivel() != null && av.getNivel().getId() != null) {
+				hql.append(" and av.nivel = :niv");
+				addParamToQuery("niv", av.getNivel());
+			}
+			
 			if(av.getTipo() != null && av.getTipo().getId() != null) {
 				hql.append(" and av.tipo = :tp");
 				addParamToQuery("tp", av.getTipo());
+			}
+			
+			if(av.getLocal() != null && av.getLocal().getId() != null) {
+				hql.append(" and av.local = :loc");
+				addParamToQuery("loc", av.getLocal());
 			}
 			
 			//if(av.getOrigem() != null && av.getOrigem().getId() != null) {
@@ -61,11 +71,6 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 				addParamToQuery("org2", oriAte.getCodigo());
 			}
 	
-			if(av.getLocal() != null && av.getLocal().getId() != null) {
-				hql.append(" and av.local = :loc");
-				addParamToQuery("loc", av.getLocal());
-			}
-			
 			if(av.getVeiculo() != null) {
 				if(av.getVeiculo().getId() != null && av.getVeiculo().getId() != 0) {
 					hql.append(" and veic.id = :txtVeic");
@@ -202,9 +207,34 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 				(!subitem.isEmpty() && subitem.equals("fabricante") && !item.isEmpty() && !item.equals("modelo")))
 			sql.append(", modelo");
 		
-		sql.append(" where " + (periodo == 1 ? "avaria.datalancamento" : "veiculo.datacadastro"));
-		sql.append(" between '" + dtInicio +"'");
-		sql.append(" and '" + dtFim +"'");
+		sql.append(" where tipoavaria.movimentacao = false");
+		sql.append(" and avaria.origem_id = origemavaria.id");
+		sql.append(" and avaria.tipo_id = tipoavaria.id");
+		sql.append(" and avaria.veiculo_id = veiculo.id");
+		if (!item.isEmpty() && !item.equals("origemavaria") && !item.equals("tipoavaria")) sql.append(" and " + idItem + " = " + item + ".id");
+		if (!subitem.isEmpty() && !subitem.equals("origemavaria") && !subitem.equals("tipoavaria")) sql.append(" and " + idSubitem + " = " + subitem + ".id");
+		if ((!item.isEmpty() && item.equals("fabricante") && !subitem.isEmpty() && !subitem.equals("modelo")) ||
+				(!subitem.isEmpty() && subitem.equals("fabricante") && !item.isEmpty() && !item.equals("modelo")))
+			sql.append(" and veiculo.modelo_id = modelo.id");
+		
+		if(periodo == 2 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+			sql.append(" and " + (periodo == 1 ? "avaria.datalancamento" : "veiculo.datacadastro"));
+			sql.append(" between '" + dtInicio +"'");
+			sql.append(" and '" + dtFim +"'");
+		}
+
+		if(veiculo.getNavio() != null && !veiculo.getNavio().equals("")) {
+			sql.append(" and veiculo.navio = '" + veiculo.getNavio().substring(0, veiculo.getNavio().length() - 13) + "'");
+			try {
+				Date dataNavio = date_format.parse(veiculo.getNavio().substring(veiculo.getNavio().length() - 10, veiculo.getNavio().length()));
+				
+				sql.append(" and veiculo.dataCadastro between '" + DateUtils.montarDataInicialParaHQLQuery(dataNavio) + "'");
+				sql.append(" and '" + DateUtils.montarDataFinalParaHQLQuery(dataNavio) + "'");
+			} catch (ParseException e) {
+				e.printStackTrace();
+				throw new DAOException("Data do navio inválida");
+			}
+		}
 
 		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) 
 			sql.append(" and veiculo.tipo = " + veiculo.getTipo().toString());
@@ -219,16 +249,6 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		sql.append(" and av2.veiculo_id = avaria.veiculo_id");
 		sql.append(" and av2.tipo_id = avaria.tipo_id and av2.local_id = avaria.local_id");
 		sql.append(" and ori2.codigo < origemavaria.codigo)");
-		
-		sql.append(" and tipoavaria.movimentacao = false");
-		sql.append(" and avaria.origem_id = origemavaria.id");
-		sql.append(" and avaria.tipo_id = tipoavaria.id");
-		sql.append(" and avaria.veiculo_id = veiculo.id");
-		if (!item.isEmpty() && !item.equals("origemavaria") && !item.equals("tipoavaria")) sql.append(" and " + idItem + " = " + item + ".id");
-		if (!subitem.isEmpty() && !subitem.equals("origemavaria") && !subitem.equals("tipoavaria")) sql.append(" and " + idSubitem + " = " + subitem + ".id");
-		if ((!item.isEmpty() && item.equals("fabricante") && !subitem.isEmpty() && !subitem.equals("modelo")) ||
-				(!subitem.isEmpty() && subitem.equals("fabricante") && !item.isEmpty() && !item.equals("modelo")))
-			sql.append(" and veiculo.modelo_id = modelo.id");
 		
 		if (!item.isEmpty() || !subitem.isEmpty()) {
 			sql.append(" group by");

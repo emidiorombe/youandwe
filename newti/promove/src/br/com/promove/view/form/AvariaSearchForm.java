@@ -10,6 +10,7 @@ import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.Modelo;
+import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.TipoAvaria;
@@ -189,7 +190,7 @@ public class AvariaSearchForm extends BaseForm{
 		
 		coluna2.setItemDataSource(avaria);
 		coluna2.setFormFieldFactory(new AvariaFieldFactory(this, avaria.getBean().getId() == null));
-		coluna2.setVisibleItemProperties(new Object[]{"local", "tipo", "origem"});
+		coluna2.setVisibleItemProperties(new Object[]{"nivel", "local", "tipo", "origem"});
 		
 		coluna1.addField("cmbFabricante", cmbFabricante);
 		coluna1.addField("txtDe", txtDe);
@@ -361,7 +362,32 @@ public class AvariaSearchForm extends BaseForm{
 			Field f = super.createField(item, propertyId, uiContext);
 			
 			try {
-				if(propertyId.equals("tipo")) {
+				if(propertyId.equals("nivel")) {
+					ComboBox c = new ComboBox("Nível");
+					c.addContainerProperty("label", String.class, null);
+					
+					Item i_default = c.addItem(new NivelAvaria());
+					i_default.getItemProperty("label").setValue("Selecione...");
+					
+					
+					for(NivelAvaria niv: avariaService.buscarTodosNiveisAvaria()){
+						Item i = c.addItem(niv);
+						i.getItemProperty("label").setValue(niv.getNome());
+					}
+					
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					//c.setWidth("200px");
+					
+					if (c.getValue() ==  null && c.size() > 0)
+	                    c.setValue(c.getItemIds().iterator().next());
+					
+					
+					return c;
+				}else if(propertyId.equals("tipo")) {
 					ComboBox c = new ComboBox("Tipo de Avaria");
 					c.addContainerProperty("label", String.class, null);
 					
