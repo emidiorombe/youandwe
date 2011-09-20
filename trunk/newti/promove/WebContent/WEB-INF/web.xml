@@ -33,7 +33,7 @@
 	
 	<context-param>
 		<param-name>ctrc_job</param-name>
-		<param-value>0 0 0 ? * *</param-value>
+		<param-value>0 0 4 ? * *</param-value>
 	</context-param>
 	<listener>
 		<listener-class>br.com.promove.servlet.listener.GeneralContextListener</listener-class>
