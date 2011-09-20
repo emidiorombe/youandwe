@@ -68,19 +68,21 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 
 	@Override
 	public void importAvariasDoDiretorio(String config, String dest) throws PromoveException {
-		try {
-			Map<String, Document> xmls = FileUtils.readXMlsFromDisk(config);
-			for (Map.Entry<String, Document> doc : xmls.entrySet()) {
+		Map<String, Document> xmls;
+		
+		xmls = FileUtils.readXMlsFromDisk(config);
+		
+		for (Map.Entry<String, Document> doc : xmls.entrySet()) {
+			try {
 				importAvaria(doc.getValue().asXML());
 				FileUtils.moverXML(dest+doc.getKey(), doc.getValue());
 				FileUtils.removeXML(config+doc.getKey());
+			} catch (Exception e) {
+				throw new PromoveException("Erro no arquivo " + doc.getKey());
 			}
-			
-			//FileUtils.removeXMLs(config);
-			
-		} catch (Exception e) {
-			throw new PromoveException(e);
 		}
+		
+		//FileUtils.removeXMLs(config);
 		
 	}
 

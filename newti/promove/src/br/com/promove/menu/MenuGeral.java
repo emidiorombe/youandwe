@@ -73,7 +73,7 @@ public class MenuGeral extends CssLayout{
 		Label title = new Label("Gerenciar Cadastros");
 		title.addStyleName("section");
 		
-		usuario = new NativeButton("Usuario");
+		usuario = new NativeButton("Usuário");
 		filial = new NativeButton("Filial");
 		fabricante = new NativeButton("Fabricante");
 		modelo = new NativeButton("Modelo");

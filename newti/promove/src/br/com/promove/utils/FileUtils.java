@@ -12,14 +12,20 @@ import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
+import br.com.promove.exception.PromoveException;
+
 public class FileUtils {
-	public static Map<String, Document> readXMlsFromDisk(String str_dir) throws DocumentException {
+	public static Map<String, Document> readXMlsFromDisk(String str_dir) throws PromoveException {
 		Map<String, Document> docs = new HashMap<String, Document>();
 		
 		File dir = new File(str_dir);
 		File[] files = dir.listFiles(new FileUtils().new FilterXml());
 		for (File file : files) {
-			docs.put(file.getName(), new SAXReader().read(file));
+			try {
+				docs.put(file.getName(), new SAXReader().read(file));
+			} catch (DocumentException de) {
+				throw new PromoveException("Erro no arquivo " + file.getName());
+			}
 		}
 		
 		return docs;
