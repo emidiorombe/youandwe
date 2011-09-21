@@ -1,5 +1,6 @@
 package br.com.promove.async;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
@@ -24,15 +25,16 @@ public class ImportCTRCJob implements Job{
 		try {
 			JobDataMap data = ctx.getJobDetail().getJobDataMap();
 			String url = data.getString("url");
-		
+			System.out.println(url);
+			
 			Calendar now = Calendar.getInstance();
 			
 			Calendar ontem = Calendar.getInstance();
 			ontem.add(Calendar.DATE, -1);
 			
-			String query = "?dataIni=" + DateUtils.getStringFromDate(ontem.getTime(), null)+ "&dataFim=" + DateUtils.getStringFromDate(now.getTime(), null);
+			String query = "?dataIni=" + DateUtils.getStringFromDate(ontem.getTime(), null) + "&dataFim=" + DateUtils.getStringFromDate(now.getTime(), null);
 			imp.importarGabardo(url + query);
-			log.error("Importação de CTRC realizada com sucesso.");
+			log.warn("Importação de CTRC realizada com sucesso.");
 		} catch (PromoveException e) {
 			log.error("Erro na importação de CTRC " + e.getMessage());
 			e.printStackTrace();
