@@ -17,15 +17,22 @@ import br.com.promove.exception.PromoveException;
 public class FileUtils {
 	public static Map<String, Document> readXMlsFromDisk(String str_dir) throws PromoveException {
 		Map<String, Document> docs = new HashMap<String, Document>();
+		String erros = "";
 		
 		File dir = new File(str_dir);
 		File[] files = dir.listFiles(new FileUtils().new FilterXml());
 		for (File file : files) {
+			Document doc = null;
 			try {
-				docs.put(file.getName(), new SAXReader().read(file));
+				SAXReader reader = new SAXReader();
+				doc = reader.read(file);
+				docs.put(file.getName(), doc);
 			} catch (DocumentException de) {
-				throw new PromoveException("Erro no arquivo " + file.getName());
+				erros += file.getName() + "; ";
 			}
+		}
+		if (!erros.isEmpty()) {
+			throw new PromoveException("Erro nos arquivos: " + erros);
 		}
 		
 		return docs;

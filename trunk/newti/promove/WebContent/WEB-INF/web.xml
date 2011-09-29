@@ -35,6 +35,21 @@
 		<param-name>ctrc_job</param-name>
 		<param-value>0 0 0 ? * *</param-value>
 	</context-param>
+	
+	<context-param>
+		<param-name>resteasy.scan</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>resteasy.servlet.mapping.prefix</param-name>
+		<param-value>/ws</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+	</listener>
+	
 	<listener>
 		<listener-class>br.com.promove.servlet.listener.GeneralContextListener</listener-class>
 	</listener>
@@ -47,6 +62,7 @@
 			<param-value>br.com.promove.application.PromoveApplication</param-value>
 		</init-param>
 	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>Promove</servlet-name>
 		<url-pattern>/*</url-pattern>
@@ -56,20 +72,32 @@
 		<servlet-name>export</servlet-name>
 		<servlet-class>br.com.promove.servlet.ExportacaoServlet</servlet-class>
 	</servlet>
-	<servlet>
-		<servlet-name>import</servlet-name>
-		<servlet-class>br.com.promove.servlet.ImportacaoServlet</servlet-class>
-	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>export</servlet-name>
 		<url-pattern>/export</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>import</servlet-name>
+		<servlet-class>br.com.promove.servlet.ImportacaoServlet</servlet-class>
+	</servlet>
 	
 	<servlet-mapping>
 		<servlet-name>import</servlet-name>
 		<url-pattern>/import</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>Resteasy</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Resteasy</servlet-name>
+		<url-pattern>/ws/*</url-pattern>
+	</servlet-mapping>
+
 	<filter>
 		<filter-name>transaction</filter-name>
 		<filter-class>br.com.promove.servlet.filter.TransactionFilter</filter-class>
