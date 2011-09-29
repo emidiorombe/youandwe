@@ -34,7 +34,7 @@ public class AvariasExport {
 			el_avaria.addElement("gravid").addText(avaria.getExtensao().getCodigo().toString());
 			el_avaria.addElement("usuario").addText(avaria.getUsuario().getCodigo().toString());
 			el_avaria.addElement("data").addText(new SimpleDateFormat("dd/MM/yyyy").format(avaria.getDataLancamento()));
-			Element el_fotos = el_avaria.addElement("fotos");
+			//Element el_fotos = el_avaria.addElement("fotos");
 			if (avaria.getObservacao() == null) {
 				Element el_obs = el_avaria.addElement("obs");
 			} else {

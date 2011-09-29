@@ -1,5 +1,6 @@
 package br.com.promove.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -73,6 +74,14 @@ public class DateUtils {
 		SimpleDateFormat fmt = new SimpleDateFormat(pattern);
 		return fmt.format(data);
 		
+	}
+
+	public static Date parseFromString(String data, String padrao) {
+		try {
+			return new SimpleDateFormat(padrao).parse(data);
+		} catch (ParseException e) {
+			throw new IllegalArgumentException();
+		}
 	}
 
 }
