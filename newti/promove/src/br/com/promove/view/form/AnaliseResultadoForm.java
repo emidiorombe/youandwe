@@ -406,9 +406,9 @@ public class AnaliseResultadoForm extends BaseForm{
 				}
 				for(PieData pd : entry.getValue()) {
 					int vl = new Integer(pd.getValue());
-					double percentual = ((double)vl / (double)itemTotal) * 100;
+					double percentual = itemTotal > 0 ? ((double)vl / (double)itemTotal) * 100 : 0;
 					if (pd == entry.getValue().get(0)) {
-						double percentualTotal = ((double)itemTotal / (double)itemTotalGeral) * 100;
+						double percentualTotal = itemTotalGeral > 0 ? ((double)itemTotal / (double)itemTotalGeral) * 100 : 0;
 						tmp_resumos.add(new Resumo(itemName, itemTotal, percentualTotal, pd.getLabel(), vl, percentual));
 					}else {
 						tmp_resumos.add(new Resumo(null, null, null, pd.getLabel(), vl, percentual));
