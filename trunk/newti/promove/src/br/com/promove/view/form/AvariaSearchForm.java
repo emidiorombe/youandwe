@@ -175,7 +175,7 @@ public class AvariaSearchForm extends BaseForm{
 		cmbPeriodo.setImmediate(true);
 		cmbPeriodo.setNullSelectionAllowed(false);
 		cmbPeriodo.setItemCaptionPropertyId("label");
-		cmbPeriodo.setWidth("200px");
+		cmbPeriodo.setWidth("250px");
 		cmbPeriodo.setValue(cmbPeriodo.getItemIds().iterator().next());
 
 		layout.addComponent(this);

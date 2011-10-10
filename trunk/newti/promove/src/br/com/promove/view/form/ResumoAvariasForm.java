@@ -1,7 +1,6 @@
 package br.com.promove.view.form;
 
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,15 +10,11 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import br.com.promove.application.PromoveApplication;
-import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Resumo;
-import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
-import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
-import br.com.promove.exportacao.AvariasExport;
 import br.com.promove.exportacao.GraficoExport;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
@@ -27,7 +22,6 @@ import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.utils.OrdemResumoComparator;
 import br.com.promove.view.ResumoAvariasView;
-import br.com.promove.view.form.VeiculoSearchForm.VeiculoFieldFactory;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
@@ -37,7 +31,6 @@ import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
@@ -47,7 +40,6 @@ import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupDateField;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.AbstractSelect.Filtering;
@@ -442,9 +434,9 @@ public class ResumoAvariasForm extends BaseForm{
 				}
 				for(PieData pd : entry.getValue()) {
 					int vl = new Integer(pd.getValue());
-					double percentual = ((double)vl / (double)itemTotal) * 100;
+					double percentual = itemTotal > 0 ? ((double)vl / (double)itemTotal) * 100 : 0;
 					if (pd == entry.getValue().get(0)) {
-						double percentualTotal = ((double)itemTotal / (double)itemTotalGeral) * 100;
+						double percentualTotal = itemTotalGeral > 0 ? ((double)itemTotal / (double)itemTotalGeral) * 100 : 0;
 						tmp_resumos.add(new Resumo(itemName, itemTotal, percentualTotal, pd.getLabel(), vl, percentual));
 					}else {
 						tmp_resumos.add(new Resumo(null, null, null, pd.getLabel(), vl, percentual));
