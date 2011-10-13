@@ -39,13 +39,16 @@ public class InconsistenciaVeiculo implements Serializable{
 	
 	private String msgErro;
 	
-	private TipoVeiculo tipo;
-
 	private String corInvalida;
 
 	private String modeloInvalido;
 	
 	private String navio;
+	
+	@OneToOne
+	private TipoVeiculo tipo;
+
+	private Double valorMercadoria;
 	
 	@Transient
 	private Veiculo veiculo;
@@ -173,6 +176,14 @@ public class InconsistenciaVeiculo implements Serializable{
 		return navio;
 	}
 
+	public void setValorMercadoria(Double valorMercadoria) {
+		this.valorMercadoria = valorMercadoria;
+	}
+
+	public Double getValorMercadoria() {
+		return valorMercadoria;
+	}
+
 	public Veiculo getVeiculo() {
 		if(this.veiculo == null) {
 			Veiculo v = new Veiculo();
@@ -185,6 +196,7 @@ public class InconsistenciaVeiculo implements Serializable{
 			v.setDataCadastro(dataCadastro);
 			v.setTipo(tipo);
 			v.setNavio(navio);
+			v.setValorMercadoria(valorMercadoria);
 			this.veiculo = v;
 		}
 		return veiculo;

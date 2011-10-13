@@ -155,6 +155,7 @@ public class ErroImportCtrcForm extends BaseForm {
 						veiculo.setChassi(chassi);
 						veiculo.setCor(cadastroService.getById(Cor.class, new Integer(97)));
 						veiculo.setTipo(cadastroService.getById(TipoVeiculo.class, new Integer(9)));
+						veiculo.setValorMercadoria(item.getBean().getValorMercadoria());
 
 						for(Modelo m : cadastroService.buscarTodosModelos()) {
 							if (m.getDescricao().equals(item.getBean().getModelo())) {

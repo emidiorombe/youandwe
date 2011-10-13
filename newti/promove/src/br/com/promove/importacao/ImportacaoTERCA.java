@@ -43,6 +43,10 @@ public class ImportacaoTERCA {
 					v.setModelo(modelos.get(campos[1]));
 				}
 				
+				if(campos[3] != null && !campos[3].trim().equals("")) {
+					v.setValorMercadoria(new Double(campos[3]));
+				}
+				
 				cadastroService.salvarVeiculo(v, true);
 				
 			}catch(IllegalArgumentException ie) {
