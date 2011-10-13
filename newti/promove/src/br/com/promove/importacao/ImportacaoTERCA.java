@@ -23,7 +23,7 @@ public class ImportacaoTERCA {
 	public void importar(List<String> csv) throws PromoveException{
 		loadModelos();
 		for (String linha : csv) {
-			String[] campos = linha.replaceAll("\r", "; ").split(";");
+			String[] campos = linha.replaceAll("\r", ";;").split(";");
 			Veiculo v = new Veiculo();
 			try {
 				if(campos[0].length() < 17)
@@ -33,6 +33,10 @@ public class ImportacaoTERCA {
 				v.setTipo(cadastroService.getById(TipoVeiculo.class, 1));
 				
 				if(campos[2] != null && !campos[2].trim().equals("")) {
+					if(campos[3] != null && !campos[3].trim().equals("")) {
+						v.setValorMercadoria(new Double(campos[3]));
+					}
+					
 					v.setNavio(campos[2]);
 					v.setTipo(cadastroService.getById(TipoVeiculo.class, 2));
 				}
@@ -41,10 +45,6 @@ public class ImportacaoTERCA {
 					throw new Exception("Modelo " + campos[1] + " não existe;");
 				}else {
 					v.setModelo(modelos.get(campos[1]));
-				}
-				
-				if(campos[3] != null && !campos[3].trim().equals("")) {
-					v.setValorMercadoria(new Double(campos[3]));
 				}
 				
 				cadastroService.salvarVeiculo(v, true);
