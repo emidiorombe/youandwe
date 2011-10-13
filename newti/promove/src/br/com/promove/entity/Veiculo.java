@@ -17,11 +17,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 @Entity
-public class Veiculo implements Serializable{
+public class Veiculo implements Serializable {
 	@Id
 	@SequenceGenerator(name="seq_veiculo", sequenceName="seq_veiculo")
 	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_veiculo")
@@ -46,8 +43,10 @@ public class Veiculo implements Serializable{
 	private Date dataCadastro = new Date();
 	
 	private String chassiOriginal;
-	private Integer tipo;
 	private String navio;
+	
+	@OneToOne
+	private TipoVeiculo tipo;
 	
 	@Transient
 	private String origensfaltantes;
@@ -122,11 +121,11 @@ public class Veiculo implements Serializable{
 		this.chassiOriginal = chassiOriginal;
 	}
 
-	public void setTipo(Integer tipo) {
+	public void setTipo(TipoVeiculo tipo) {
 		this.tipo = tipo;
 	}
 
-	public Integer getTipo() {
+	public TipoVeiculo getTipo() {
 		return tipo;
 	}
 

@@ -47,9 +47,15 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			addParamToQuery("txtcor", veiculo.getCor());
 		}
 		
-		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) {
-			hql.append(" and v.tipo = :txttipo");
-			addParamToQuery("txttipo", veiculo.getTipo());
+			
+		if(veiculo.getTipo() != null && veiculo.getTipo().getId() != null) {
+			if (veiculo.getTipo().getId() != 10) {
+				// exceto emplacados
+				hql.append(" and v.tipo.id <> 9");
+			} else {
+				hql.append(" and v.tipo = :txttipo");
+				addParamToQuery("txttipo", veiculo.getTipo());
+			}
 		}
 		
 		if(veiculo.getNavio() != null && !veiculo.getNavio().equals("")) {
@@ -123,7 +129,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		StringBuilder sql = new StringBuilder();
 		sql.append("select navio||' - '||to_char(data, 'dd/mm/yyyy') from (");
 		sql.append("select distinct navio, cast(datacadastro as date) as data");
-		sql.append(" from veiculo where tipo=2 and navio is not null");
+		sql.append(" from veiculo where tipo_id = 2 and navio is not null");
 		sql.append(" order by data desc) as lista");
 
 		List lista = executeSQLQuery(sql.toString());
@@ -159,7 +165,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 
 		hql = new StringBuilder();
 		hql.append("select v from Veiculo v");
-		hql.append(" where not exists (select av2 from Avaria av2");
+		hql.append(" where v.tipo.id <> 9");
+		hql.append(" and not exists (select av2 from Avaria av2");
 		hql.append(" where av2.veiculo = v)");
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
 			hql.append(" and v.dataCadastro between :dtIni and :dtFim");
@@ -167,7 +174,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			addParamToQuery("dtFim", dtFim);
 		}
 		
-		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) {
+		if(veiculo.getTipo() != null && veiculo.getTipo().getId() != null) {
 			hql.append(" and v.tipo = :txttipo");
 			addParamToQuery("txttipo", veiculo.getTipo());
 		}
@@ -199,7 +206,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		
 		hql = new StringBuilder();
 		hql.append("select av from Avaria av inner join fetch av.veiculo v");
-		hql.append(" where 1 = 1");
+		hql.append(" where v.tipo.id <> 9");
 		
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
 			hql.append(" and v.dataCadastro between :dtIni and :dtFim");
@@ -207,7 +214,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			addParamToQuery("dtFim", dtFim);
 		}
 		
-		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) {
+		if(veiculo.getTipo() != null && veiculo.getTipo().getId() != null) {
 			hql.append(" and v.tipo = :txttipo");
 			addParamToQuery("txttipo", veiculo.getTipo());
 		}
@@ -263,7 +270,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		subsqlA.append(" from veiculo, modelo, avaria, origemavaria");
 		if (item.equals("origemavaria")) subsqlA.append(", tipoavaria");
 		if (item.equals("fabricante")) subsqlA.append(", fabricante");
-		subsqlA.append(" where veiculo.modelo_id = modelo.id");
+		subsqlA.append(" where veiculo.tipo_id <> 9");
+		subsqlA.append(" and veiculo.modelo_id = modelo.id");
 		if (item.equals("fabricante")) subsqlA.append(" and fabricante.id = modelo.fabricante_id");
 		subsqlA.append(" and veiculo.id = avaria.veiculo_id");
 		subsqlA.append(" and avaria.origem_id = origemavaria.id");
@@ -285,7 +293,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		} else {
 			subsqlB.append(" select " + nomeItem + " as item, cast(':tipo' as text) as tipo");
 			subsqlB.append(" from veiculo, modelo");
-			subsqlB.append(" where veiculo.modelo_id = modelo.id");
+			subsqlB.append(" where veiculo.tipo_id <> 9");
+			subsqlB.append(" and veiculo.modelo_id = modelo.id");
 		}
 		
 		if (item.equals("origemavaria")) {
@@ -317,8 +326,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			}
 		}
 		
-		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) 
-			subsql.append(" and veiculo.tipo = " + veiculo.getTipo().toString());
+		if(veiculo.getTipo() != null && veiculo.getTipo().getId() != null) 
+			subsql.append(" and veiculo.tipo_id = " + veiculo.getTipo().getId());
 		
 		subsqlA.append(subsql.toString());
 		subsqlB.append(subsql.toString());

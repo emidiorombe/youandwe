@@ -36,5 +36,7 @@
 		<mapping class="br.com.promove.entity.InconsistenciaCtrc" />
 		<mapping class="br.com.promove.entity.VeiculoCtrc" />
 		<mapping class="br.com.promove.entity.NivelAvaria" />
+		<mapping class="br.com.promove.entity.TipoVeiculo" />
+		<mapping class="br.com.promove.entity.Parametro" />
 	</session-factory>
 </hibernate-configuration>

@@ -125,7 +125,7 @@ public class VeiculoTable extends Table {
 			}else if(columnId.toString().equals("cor")) {
 					return new Label(v.getCor().getDescricao());
 			}else if(columnId.equals("tipo")) {
-				return v.getTipo() == 1 ? new Label("Nacional") : new Label("Importado");
+				return new Label(v.getTipo().getNome());
 			/*
 			}else if(columnId.toString().equals("avarias")) {
 				Button b = new Button("Ver");

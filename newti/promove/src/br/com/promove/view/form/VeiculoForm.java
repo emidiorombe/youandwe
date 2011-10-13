@@ -1,11 +1,8 @@
 package br.com.promove.view.form;
 
-import java.util.Iterator;
-
 import br.com.promove.entity.Cor;
-import br.com.promove.entity.Filial;
 import br.com.promove.entity.Modelo;
-import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.TipoVeiculo;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
@@ -157,13 +154,18 @@ public class VeiculoForm extends BaseForm{
 					showErrorMessage(form, "Não foi possível buscar as Cores");
 				}
 			}else if(propertyId.equals("tipo")) {
-				ComboBox c = new ComboBox("Tipo");
+				ComboBox c = new ComboBox("Tipo de Veículo");
 				c.addContainerProperty("label", String.class, null);
-			
-				Item i = c.addItem(1);
-				i.getItemProperty("label").setValue("Nacional");
-				i = c.addItem(2);
-				i.getItemProperty("label").setValue("Importado");
+				
+				try {
+					for(TipoVeiculo tv: cadastroService.buscarTodosTiposVeiculos()){
+						Item i = c.addItem(tv);
+						i.getItemProperty("label").setValue(tv.getNome());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
 				c.setRequired(true);
 				c.setRequiredError("Tipo obrigatório");
 				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);

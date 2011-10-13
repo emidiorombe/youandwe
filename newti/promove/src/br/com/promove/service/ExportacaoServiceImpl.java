@@ -15,6 +15,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import com.vaadin.ui.Label;
+
 import br.com.promove.dao.ClimaDAO;
 import br.com.promove.dao.ExtensaoDAO;
 import br.com.promove.dao.InconsistenciaCtrcDAO;
@@ -225,7 +227,7 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			    row.createCell(1).setCellValue(veiculos.get(i).getModelo().getDescricao());
 			    row.createCell(2).setCellValue(veiculos.get(i).getCor().getDescricao());
 			    row.createCell(3).setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(veiculos.get(i).getDataCadastro()));
-			    row.createCell(4).setCellValue(veiculos.get(i).getTipo() == 1 ? "Nacional" : "Importado");
+			    row.createCell(4).setCellValue(veiculos.get(i).getTipo().getNome());
 			    row.createCell(5).setCellValue(veiculos.get(i).getNavio());
 			    if (veiculos.size() > 0 && veiculos.get(i).getOrigensfaltantes() != null)
 			    	row.createCell(6).setCellValue(veiculos.get(i).getOrigensfaltantes());

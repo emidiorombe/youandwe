@@ -5,26 +5,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.vaadin.ui.TextField;
-
 import br.com.promove.dao.CorDAO;
 import br.com.promove.dao.FabricanteDAO;
 import br.com.promove.dao.FilialDAO;
 import br.com.promove.dao.InconsistenciaVeiculoDAO;
 import br.com.promove.dao.ModeloDAO;
+import br.com.promove.dao.ParametroDAO;
 import br.com.promove.dao.TipoUsuarioDAO;
+import br.com.promove.dao.TipoVeiculoDAO;
 import br.com.promove.dao.UsuarioDAO;
 import br.com.promove.dao.VeiculoDAO;
-import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Cor;
-import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Filial;
 import br.com.promove.entity.InconsistenciaVeiculo;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.Parametro;
 import br.com.promove.entity.PieData;
 import br.com.promove.entity.TipoUsuario;
+import br.com.promove.entity.TipoVeiculo;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
@@ -39,7 +39,9 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	private FabricanteDAO fabricanteDAO;
 	private FilialDAO filialDAO;
 	private UsuarioDAO usuarioDAO;
+	private ParametroDAO parametroDAO;
 	private TipoUsuarioDAO tipoUsuarioDAO;
+	private TipoVeiculoDAO tipoVeiculoDAO;
 	private VeiculoDAO veiculoDAO;
 	private InconsistenciaVeiculoDAO inconsistenciaVeiculoDAO;
 	
@@ -49,7 +51,9 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		fabricanteDAO = new FabricanteDAO();
 		filialDAO = new FilialDAO();
 		usuarioDAO = new UsuarioDAO();
+		parametroDAO = new ParametroDAO();
 		tipoUsuarioDAO = new TipoUsuarioDAO();
+		tipoVeiculoDAO = new TipoVeiculoDAO();
 		veiculoDAO = new VeiculoDAO();
 		inconsistenciaVeiculoDAO = new InconsistenciaVeiculoDAO();
 		
@@ -222,6 +226,38 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	}
 
 	@Override
+	public void salvarParametro(Parametro bean) throws PromoveException {
+		try {
+			parametroDAO.save(bean);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public void excluirParametro(Parametro bean) throws PromoveException {
+		try {
+			parametroDAO.delete(bean);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public List<Parametro> buscarTodosParametros() throws PromoveException {
+		List<Parametro> lista = null;
+		try {
+			lista = parametroDAO.getAll("chave");
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+
+	}
+
+	@Override
 	public List<TipoUsuario> buscarTodosTiposUsuarios() throws PromoveException {
 		List<TipoUsuario> lista = null;
 		try {
@@ -237,6 +273,17 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 		List<String> lista = null;
 		try {
 			lista = VeiculoDAO.buscarTodosNavios();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	@Override
+	public List<TipoVeiculo> buscarTodosTiposVeiculos() throws PromoveException {
+		List<TipoVeiculo> lista = null;
+		try {
+			lista = tipoVeiculoDAO.getAll();
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

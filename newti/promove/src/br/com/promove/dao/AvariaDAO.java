@@ -38,7 +38,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		hql.append(" left JOIN FETCH av.tipo tp left JOIN FETCH av.origem ori left JOIN FETCH av.extensao ext left JOIN FETCH av.local loc left JOIN FETCH av.clima cli");
 		hql.append(" left JOIN FETCH av.usuario usu left JOIN FETCH usu.tipo tpu left JOIN FETCH veic.modelo mod left JOIN FETCH veic.cor cor left JOIN FETCH mod.fabricante fab");
 		hql.append(" left JOIN FETCH ori.responsabilidade resp left JOIN FETCH usu.filial usufil left JOIN FETCH ori.filial orifil");
-		hql.append(" where 1=1");
+		hql.append(" where veic.tipo.id <> 9");
 		if(av != null) {
 			if(av.getNivel() != null && av.getNivel().getId() != null) {
 				hql.append(" and av.nivel = :niv");
@@ -81,7 +81,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 						addParamToQuery("txtChassi", "%"+ av.getVeiculo().getChassi());
 					}
 					
-					if(av.getVeiculo().getTipo() != null && av.getVeiculo().getTipo() != 0) {
+					if(av.getVeiculo().getTipo() != null && av.getVeiculo().getTipo().getId() != null) {
 						hql.append(" and veic.tipo = :txtTipo");
 						addParamToQuery("txtTipo", av.getVeiculo().getTipo());
 					}
@@ -208,6 +208,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			sql.append(", modelo");
 		
 		sql.append(" where tipoavaria.movimentacao = false");
+		sql.append(" and veiculo.tipo_id <> 9");
 		sql.append(" and avaria.origem_id = origemavaria.id");
 		sql.append(" and avaria.tipo_id = tipoavaria.id");
 		sql.append(" and avaria.veiculo_id = veiculo.id");
@@ -236,8 +237,8 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			}
 		}
 
-		if(veiculo.getTipo() != null && veiculo.getTipo() != 0) 
-			sql.append(" and veiculo.tipo = " + veiculo.getTipo().toString());
+		if(veiculo.getTipo() != null && veiculo.getTipo().getId() != null) 
+			sql.append(" and veiculo.tipo_id = " + veiculo.getTipo().getId());
 
 		if (oriInicio != null && oriInicio.getId() != null)
 			sql.append(" and origemavaria.codigo >= " + oriInicio.getCodigo().toString());

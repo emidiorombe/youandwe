@@ -131,7 +131,7 @@ public class ErroImportVeiculoCtrcTable extends Table {
 			VeiculoCtrc v = (VeiculoCtrc)itemId;
 			if(columnId.equals("tipo")) {
 				if (v.getVeiculo() != null) {
-					return v.getVeiculo().getTipo() == 1 ? new Label("Nacional") : new Label("Importado");
+					return new Label(v.getVeiculo().getTipo().getNome());
 				} else {
 					return null;
 				}

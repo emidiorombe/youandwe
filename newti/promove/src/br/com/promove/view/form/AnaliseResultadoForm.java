@@ -13,6 +13,7 @@ import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Resumo;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
+import br.com.promove.entity.TipoVeiculo;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.exportacao.GraficoExport;
@@ -229,12 +230,19 @@ public class AnaliseResultadoForm extends BaseForm{
 				ComboBox c = new ComboBox("Tipo de Veículo");
 				c.addContainerProperty("label", String.class, null);
 				
-				Item i = c.addItem(new Integer(0));
-				i.getItemProperty("label").setValue("Selecione...");
-				i = c.addItem(1);
-				i.getItemProperty("label").setValue("Nacional");
-				i = c.addItem(2);
-				i.getItemProperty("label").setValue("Importado");
+				Item i_default = c.addItem(new TipoVeiculo());
+				i_default.getItemProperty("label").setValue("Selecione...");
+				
+				try {
+					for(TipoVeiculo tv: cadastroService.buscarTodosTiposVeiculos()){
+						if (tv.getId() != 9) {
+							Item i = c.addItem(tv);
+							i.getItemProperty("label").setValue(tv.getNome());
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				
 				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 				c.setImmediate(true);
