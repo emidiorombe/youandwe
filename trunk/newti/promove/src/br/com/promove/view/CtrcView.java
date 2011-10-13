@@ -21,7 +21,7 @@ public class CtrcView extends SplitPanel {
 		form.setView(this);
 		setFirstComponent(form.getFormLayout());
 		setSecondComponent(tables);
-		setSplitPosition(40);
+		setSplitPosition(45);
 		
 	}
 
