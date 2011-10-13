@@ -41,7 +41,10 @@ public class CtrcDAO extends BaseDAO<Integer, Ctrc>{
 			addParamToQuery("txtChassi", "%" + chassi);
 		}
 
-		hql.append(" and ct.cancelado = false");
+		if(ctrc.getCancelado() == null || ctrc.getCancelado() == false) {
+			hql.append(" and ct.cancelado = false");
+		}
+		
 		hql.append(" order by ct.dataEmissao, ct.numero");
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}

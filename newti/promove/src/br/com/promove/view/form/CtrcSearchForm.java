@@ -25,6 +25,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
@@ -44,6 +45,7 @@ public class CtrcSearchForm extends BaseForm{
 	private PopupDateField txtAte;
 	private TextField txtChassi;
 	private TextField txtNumero;
+	private CheckBox chkCancelado;
 	//private TextField txtDesconto;
 	private Button search;
 	private Button export;
@@ -78,6 +80,9 @@ public class CtrcSearchForm extends BaseForm{
 		txtAte.setLocale(new Locale("pt", "BR"));
 		txtAte.setResolution(DateField.RESOLUTION_DAY);
 
+		chkCancelado = new CheckBox();
+		chkCancelado.setCaption("Considerar cancelados");
+		
 		//txtDesconto = new TextField("% Desconto");
 		//txtDesconto.addValidator(new DoubleValidator("Desconto deve ser numérico"));
 		//txtDesconto.setWidth("100px");
@@ -88,6 +93,7 @@ public class CtrcSearchForm extends BaseForm{
 		addField("txtChassi", txtChassi);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
+		addField("chkCancelado", chkCancelado);
 		//addField("txtDesconto", txtDesconto);
 		
 		layout.addComponent(createFooter());
@@ -136,6 +142,7 @@ public class CtrcSearchForm extends BaseForm{
 				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null;
 				Double desconto = 0.0; //txtDesconto.getValue() != null ? Double.parseDouble((String)txtDesconto.getValue()) : 0;
+				Boolean cancelado = (Boolean)chkCancelado.getValue();
 				BeanItem<Ctrc> item = (BeanItem<Ctrc>)getItemDataSource();
 				
 				if(txtNumero.toString() == null || txtNumero.toString().isEmpty())
@@ -145,6 +152,8 @@ public class CtrcSearchForm extends BaseForm{
 				
 				if (!(txtNumero.toString() == null) && !(txtNumero.toString().isEmpty()))
 					item.getBean().setNumero(Integer.parseInt(txtNumero.toString()));
+				
+				item.getBean().setCancelado(cancelado);
 				
 				if(event.getButton() == search) {
 					List<Ctrc> list = ctrcService.buscarCtrcPorFiltro(item.getBean(), de, ate, txtChassi.toString(), false);
