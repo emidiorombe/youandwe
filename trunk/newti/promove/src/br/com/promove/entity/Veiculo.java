@@ -48,6 +48,8 @@ public class Veiculo implements Serializable {
 	@OneToOne
 	private TipoVeiculo tipo;
 	
+	private Double valorMercadoria;
+	
 	@Transient
 	private String origensfaltantes;
 	
@@ -145,6 +147,14 @@ public class Veiculo implements Serializable {
 		return origensfaltantes;
 	}
 	
+	public void setValorMercadoria(Double valorMercadoria) {
+		this.valorMercadoria = valorMercadoria;
+	}
+
+	public Double getValorMercadoria() {
+		return valorMercadoria;
+	}
+
 	public List<Avaria> getAvarias() {
 		return avarias;
 	}
