@@ -39,7 +39,7 @@ public class InconsistenciaVeiculo implements Serializable{
 	
 	private String msgErro;
 	
-	private Integer tipo;
+	private TipoVeiculo tipo;
 
 	private String corInvalida;
 
@@ -141,11 +141,11 @@ public class InconsistenciaVeiculo implements Serializable{
 		this.msgErro = msgErro;
 	}
 
-	public Integer getTipo() {
+	public TipoVeiculo getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(Integer tipo) {
+	public void setTipo(TipoVeiculo tipo) {
 		this.tipo = tipo;
 	}
 

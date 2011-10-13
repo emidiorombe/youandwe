@@ -2,7 +2,6 @@ package br.com.promove.exportacao;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Map;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;

@@ -14,6 +14,7 @@ import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.TipoAvaria;
+import br.com.promove.entity.TipoVeiculo;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
@@ -273,12 +274,15 @@ public class AvariaSearchForm extends BaseForm{
 					ComboBox c = new ComboBox("Tipo de Veículo");
 					c.addContainerProperty("label", String.class, null);
 					
-					Item i = c.addItem(new Integer(0));
-					i.getItemProperty("label").setValue("Selecione...");
-					i = c.addItem(1);
-					i.getItemProperty("label").setValue("Nacional");
-					i = c.addItem(2);
-					i.getItemProperty("label").setValue("Importado");
+					Item i_default = c.addItem(new TipoVeiculo());
+					i_default.getItemProperty("label").setValue("Selecione...");
+					
+					for(TipoVeiculo tv: cadastroService.buscarTodosTiposVeiculos()){
+						if (tv.getId() != 9) {
+							Item i = c.addItem(tv);
+							i.getItemProperty("label").setValue(tv.getNome());
+						}
+					}
 					
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 					c.setImmediate(true);
@@ -322,7 +326,6 @@ public class AvariaSearchForm extends BaseForm{
 					
 					Item i_default = c.addItem(new Modelo());
 					i_default.getItemProperty("label").setValue("Selecione...");
-					
 					
 					for(Modelo m: cadastroService.buscarTodosModelos()){
 						Item i = c.addItem(m);

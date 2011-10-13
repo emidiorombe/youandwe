@@ -5,18 +5,15 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.promove.application.PromoveApplication;
-import br.com.promove.entity.Avaria;
-import br.com.promove.entity.Cor;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Modelo;
+import br.com.promove.entity.TipoVeiculo;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
-import br.com.promove.view.VeiculoAvariaTables;
 import br.com.promove.view.VeiculoListView;
-import br.com.promove.view.form.AvariaSearchForm.AvariaSearchListener;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
@@ -143,6 +140,7 @@ public class VeiculoSearchForm extends BaseForm{
 			} catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
 			}catch(PromoveException pe) {
+				pe.printStackTrace();
 				showErrorMessage(view, "Não foi possível listar os veículos");
 			} 
 		}
@@ -220,15 +218,27 @@ public class VeiculoSearchForm extends BaseForm{
 					showErrorMessage(form, "Não foi possível buscar os Fabricantes");
 				}
 			}else if(propertyId.equals("tipo")) {
-				ComboBox c = new ComboBox("Tipo");
+				ComboBox c = new ComboBox("Tipo de Veículo");
 				c.addContainerProperty("label", String.class, null);
 				
-				Item i = c.addItem(new Integer(0));
-				i.getItemProperty("label").setValue("Selecione...");
-				i = c.addItem(1);
-				i.getItemProperty("label").setValue("Nacional");
-				i = c.addItem(2);
-				i.getItemProperty("label").setValue("Importado");
+				Item i_default = c.addItem(new TipoVeiculo());
+				i_default.getItemProperty("label").setValue("Selecione...");
+				
+				try {
+					for(TipoVeiculo tv: cadastroService.buscarTodosTiposVeiculos()){
+						Item i = c.addItem(tv);
+						i.getItemProperty("label").setValue(tv.getNome());
+						if (tv.getId() == 9) {
+							//Emplacado
+							TipoVeiculo tipo = new TipoVeiculo();
+							tipo.setId(10);
+							i = c.addItem(tipo);
+							i.getItemProperty("label").setValue("Novos");
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				
 				c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 				c.setImmediate(true);

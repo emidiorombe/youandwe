@@ -11,6 +11,7 @@ import br.com.promove.view.FilialView;
 import br.com.promove.view.LocalAvariaView;
 import br.com.promove.view.ModeloView;
 import br.com.promove.view.OrigemAvariaView;
+import br.com.promove.view.ParametroView;
 import br.com.promove.view.TipoAvariaView;
 import br.com.promove.view.TransportadoraView;
 import br.com.promove.view.UsuarioView;
@@ -22,6 +23,7 @@ import br.com.promove.view.form.FilialForm;
 import br.com.promove.view.form.LocalAvariaForm;
 import br.com.promove.view.form.ModeloForm;
 import br.com.promove.view.form.OrigemAvariaForm;
+import br.com.promove.view.form.ParametroForm;
 import br.com.promove.view.form.TipoAvariaForm;
 import br.com.promove.view.form.TransportadoraForm;
 import br.com.promove.view.form.UsuarioForm;
@@ -33,6 +35,7 @@ import br.com.promove.view.table.FilialTable;
 import br.com.promove.view.table.LocalAvariaTable;
 import br.com.promove.view.table.ModeloTable;
 import br.com.promove.view.table.OrigemAvariaTable;
+import br.com.promove.view.table.ParametroTable;
 import br.com.promove.view.table.TipoAvariaTable;
 import br.com.promove.view.table.TransportadoraTable;
 import br.com.promove.view.table.UsuarioTable;
@@ -48,8 +51,9 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class MenuGeral extends CssLayout{
 	private PromoveApplication app;
-	private Button usuario;
+	private Button parametro;
 	private Button filial;
+	private Button usuario;
 	private Button fabricante;
 	private Button modelo;
 	private Button cor;
@@ -73,8 +77,9 @@ public class MenuGeral extends CssLayout{
 		Label title = new Label("Gerenciar Cadastros");
 		title.addStyleName("section");
 		
-		usuario = new NativeButton("Usuário");
+		parametro = new NativeButton("Parâmetro");
 		filial = new NativeButton("Filial");
+		usuario = new NativeButton("Usuário");
 		fabricante = new NativeButton("Fabricante");
 		modelo = new NativeButton("Modelo");
 		cor = new NativeButton("Cor");
@@ -87,8 +92,8 @@ public class MenuGeral extends CssLayout{
 		export = new NativeButton("Exportar Cadastros Básicos");
 		
 		
-		addListeners(usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, export);
-		addComponents(title, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, export);
+		addListeners(parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, export);
+		addComponents(title, parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, export);
 		setPermissionVisible();
 		
 	}
@@ -97,9 +102,10 @@ public class MenuGeral extends CssLayout{
 		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
 		if(user.getTipo().getId() != 1) {
+			parametro.setVisible(false);
+			filial.setVisible(false);
 			usuario.setVisible(false);
 			fabricante.setVisible(false);
-			filial.setVisible(false);
 			transp.setVisible(false);
 		}
 		
@@ -131,52 +137,56 @@ public class MenuGeral extends CssLayout{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			addAndRemoveStyle(event.getButton(), usuario, filial, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp);
-			if(event.getButton() == usuario) {
-				UsuarioTable table = new UsuarioTable();
-				UsuarioForm form = new UsuarioForm();
-				app.setMainView(new UsuarioView(table, form));
-			}else if(event.getButton() == filial) {
+			addAndRemoveStyle(event.getButton(), parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp);
+			if(event.getButton() == parametro) {
+				ParametroTable table = new ParametroTable();
+				ParametroForm form= new ParametroForm();
+				app.setMainView(new ParametroView(table, form));
+			} else if(event.getButton() == filial) {
 				FilialTable table = new FilialTable();
 				FilialForm form= new FilialForm();
 				app.setMainView(new FilialView(table, form));
-			}else if(event.getButton() == fabricante) {
+			} else if(event.getButton() == usuario) {
+				UsuarioTable table = new UsuarioTable();
+				UsuarioForm form = new UsuarioForm();
+				app.setMainView(new UsuarioView(table, form));
+			} else if(event.getButton() == fabricante) {
 				FabricanteTable table = new FabricanteTable();
 				FabricanteForm form = new FabricanteForm();
 				app.setMainView(new FabricanteView(table,form));
-			}else if(event.getButton() == modelo) {
+			} else if(event.getButton() == modelo) {
 				ModeloTable table = new ModeloTable();
 				ModeloForm form = new ModeloForm();
 				app.setMainView(new ModeloView(table, form));
-			}else if(event.getButton() == cor) {
+			} else if(event.getButton() == cor) {
 				CorTable table = new CorTable();
 				CorForm form = new CorForm();
 				app.setMainView(new CorView(table, form));
-			}else if(event.getButton() == tipo){
+			} else if(event.getButton() == tipo){
 				TipoAvariaTable table = new TipoAvariaTable();
 				TipoAvariaForm form = new TipoAvariaForm();
 				app.setMainView(new TipoAvariaView(table, form));
-			}else if(event.getButton() == local){
+			} else if(event.getButton() == local){
 				LocalAvariaTable table = new LocalAvariaTable();
 				LocalAvariaForm form = new LocalAvariaForm();
 				app.setMainView(new LocalAvariaView(table, form));
-			}else if(event.getButton() == origem){
+			} else if(event.getButton() == origem){
 				OrigemAvariaTable table = new OrigemAvariaTable();
 				OrigemAvariaForm form = new OrigemAvariaForm();
 				app.setMainView(new OrigemAvariaView(table, form));
-			}else if(event.getButton() == extensao){
+			} else if(event.getButton() == extensao){
 				ExtensaoAvariaTable table = new ExtensaoAvariaTable();
 				ExtensaoAvariaForm form = new ExtensaoAvariaForm();
 				app.setMainView(new ExtensaoAvariaView(table, form));
-			}else if(event.getButton() == clima){
+			} else if(event.getButton() == clima){
 				ClimaTable table = new ClimaTable();
 				ClimaForm form = new ClimaForm();
 				app.setMainView(new ClimaAvariaView(table, form));
-			}else if(event.getButton() == transp){
+			} else if(event.getButton() == transp){
 				TransportadoraTable table = new TransportadoraTable();
 				TransportadoraForm form = new TransportadoraForm();
 				app.setMainView(new TransportadoraView(table, form));
-			}else if(event.getButton() == export){
+			} else if(event.getButton() == export){
 				app.setMainView(new ExportCadastroView(app).getLayout());
 			}
 			

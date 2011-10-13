@@ -1,10 +1,15 @@
 package br.com.promove.view.form;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
+import br.com.promove.entity.Cor;
 import br.com.promove.entity.InconsistenciaCtrc;
+import br.com.promove.entity.InconsistenciaVeiculo;
+import br.com.promove.entity.Modelo;
+import br.com.promove.entity.TipoVeiculo;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.entity.VeiculoCtrc;
 import br.com.promove.exception.PromoveException;
@@ -41,6 +46,7 @@ public class ErroImportCtrcForm extends BaseForm {
 	private InconsistenciaCtrc inconsistencia;
 	
 	private Button save;
+	private Button usado;
 	private Button saveAll;
 	private Button remove;
 	private Button export;
@@ -60,6 +66,7 @@ public class ErroImportCtrcForm extends BaseForm {
 		setSizeFull();
 
 		save = new Button("Salvar", new ErroCtrcFormListener());
+		usado = new Button("Cadastrar como Usado", new ErroCtrcFormListener());
 		remove = new Button("Excluir CTRC", new ErroCtrcFormListener());
 		saveAll = new Button("Revalidar Todos", new ErroCtrcFormListener());
 		export = new Button("Exportar Lista", new ErroCtrcFormListener());
@@ -81,6 +88,7 @@ public class ErroImportCtrcForm extends BaseForm {
 		HorizontalLayout footer = new HorizontalLayout();
 		footer.setSpacing(true);
 		footer.addComponent(save);
+		footer.addComponent(usado);
 		footer.addComponent(remove);
 		footer.addComponent(saveAll);
 		footer.addComponent(export);
@@ -110,6 +118,57 @@ public class ErroImportCtrcForm extends BaseForm {
 						
 						item.getBean().setVeiculo(v.get(0));
 						item.getBean().setModelo(v.get(0).getModelo().getDescricao());
+						item.getBean().setMsgErro("");
+						
+						if (ctrcService.salvarVeiculoCtrcDeInconsistencia(item.getBean())) {
+							view.getTables().getTableCtrc().reloadTable();
+							view.getTables().getTableVeiculo().removeAllItems();
+							createFormBody(new BeanItem<VeiculoCtrc>(new VeiculoCtrc()));
+						} else {
+							view.getTables().getTableVeiculo().reloadTable(item.getBean().getInconsistencia());							
+						}
+						showSuccessMessage(view, "Inconsistência salva!");
+					}
+				}catch(InvalidValueException ive){
+					setValidationVisible(true);
+				}catch(IllegalArgumentException ie) {
+					showErrorMessage(view, ie.getMessage());
+				}catch(PromoveException de){
+					showErrorMessage(view, "Não foi possível salvar Inconsistência");
+				}
+				
+			} else if(event.getButton() == usado){
+				try{
+					validate();
+					if(isValid()){
+						commit();
+						BeanItem<VeiculoCtrc> item = (BeanItem<VeiculoCtrc>) getItemDataSource();
+						if (item.getBean().getId() == null || item.getBean().getChassiInvalido() == null)
+							throw new IllegalArgumentException("Selecione um veículo!");
+						String chassi = item.getBean().getChassiInvalido().substring(0, 17);
+						List<Veiculo> v = cadastroService.buscarVeiculosPorChassi(chassi);
+						if (v.size() > 0) {
+							throw new IllegalArgumentException("Veículo com chassi " + chassi + " já cadastrado");
+						}
+						
+						Veiculo veiculo = new Veiculo();
+						veiculo.setChassi(chassi);
+						veiculo.setCor(cadastroService.getById(Cor.class, new Integer(97)));
+						veiculo.setTipo(cadastroService.getById(TipoVeiculo.class, new Integer(9)));
+
+						for(Modelo m : cadastroService.buscarTodosModelos()) {
+							if (m.getDescricao().equals(item.getBean().getModelo())) {
+								veiculo.setModelo(m);
+							}
+						}
+						
+						if (veiculo.getModelo() == null) {
+							throw new IllegalArgumentException("Modelo " + item.getBean().getModelo() + " não cadastrado");
+						}
+							
+						cadastroService.salvarVeiculo(veiculo);
+						
+						item.getBean().setVeiculo(veiculo);
 						item.getBean().setMsgErro("");
 						
 						if (ctrcService.salvarVeiculoCtrcDeInconsistencia(item.getBean())) {
@@ -195,11 +254,11 @@ public class ErroImportCtrcForm extends BaseForm {
 				if (bitem.getBean() != null && bitem.getBean().getVeiculo() == null &&
 						bitem.getBean().getChassiInvalido() != null)
 					 chassi = bitem.getBean().getChassiInvalido();
-				final ComboBox c = new ComboBox("Veículos");
+				final ComboBox c = new ComboBox("Chassi");
 				try {
 					c.addContainerProperty("label", String.class, null);
 					c.setRequired(true);
-					c.setRequiredError("Veículo obrigatório");
+					c.setRequiredError("Chassi obrigatório");
 					c.setImmediate(true);
 					c.setNullSelectionAllowed(false);
 					c.setItemCaptionPropertyId("label");

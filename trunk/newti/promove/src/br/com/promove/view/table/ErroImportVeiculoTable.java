@@ -100,7 +100,7 @@ public class ErroImportVeiculoTable extends Table {
 		public Component generateCell(Table source, Object itemId, Object columnId) {
 			InconsistenciaVeiculo inc = (InconsistenciaVeiculo) itemId;
 			if(columnId.equals("tipo")) {
-				return inc.getTipo() == 1 ? new Label("Nacional") : new Label("Importado");
+				return new Label(inc.getTipo().getNome());
 			}
 			return null;
 		}

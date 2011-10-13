@@ -131,7 +131,7 @@ public class ErroImportVeiculoForm extends BaseForm{
 					List<InconsistenciaVeiculo> buscarTodasInconsistenciasDeVeiculos = cadastroService.buscarTodasInconsistenciasDeVeiculos();
 					for (InconsistenciaVeiculo inc : buscarTodasInconsistenciasDeVeiculos) {
 						if(cadastroService.buscarVeiculosPorChassi(inc.getChassi()).size() == 0) {
-							if(inc.getTipo() == 1) {
+							if(inc.getTipo().getId() == 1) {
 								
 								if(inc.getCorInvalida() != null) {
 									List<Cor> cores = cadastroService.buscaCorPorCodigoExterno(inc.getCorInvalida());
@@ -151,7 +151,7 @@ public class ErroImportVeiculoForm extends BaseForm{
 									}
 								}
 								 
-							}else if(inc.getTipo() == 2) {
+							}else if(inc.getTipo().getId() == 2) {
 								if(inc.getModeloInvalido() != null) {
 									List<Modelo> modelos = cadastroService.buscarModeloPorCodigoOuDescricao(null, inc.getModeloInvalido());
 									 if(modelos.size() == 0) {

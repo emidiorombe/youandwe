@@ -132,7 +132,7 @@ public class VeiculoCtrcTable extends Table {
 			}else if(columnId.toString().equals("cor")) {
 					return new Label(v.getVeiculo().getCor().getDescricao());
 			}else if(columnId.equals("tipo")) {
-				return v.getVeiculo().getTipo() == 1 ? new Label("Nacional") : new Label("Importado");
+				return new Label(v.getVeiculo().getTipo().getNome());
 			}else if(columnId.toString().equals("dataCadastro")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getVeiculo().getDataCadastro()));
 			}else if(columnId.toString().equals("navio")) {
