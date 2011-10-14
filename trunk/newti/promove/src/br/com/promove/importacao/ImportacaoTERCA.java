@@ -1,5 +1,6 @@
 package br.com.promove.importacao;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import br.com.promove.service.ServiceFactory;
 public class ImportacaoTERCA {
 
 	private CadastroService cadastroService;
+	private DecimalFormat decimal_format = (DecimalFormat) DecimalFormat.getInstance(); 
 	private HashMap<String, Modelo> modelos;
 	
 	public ImportacaoTERCA() {
@@ -23,7 +25,7 @@ public class ImportacaoTERCA {
 	public void importar(List<String> csv) throws PromoveException{
 		loadModelos();
 		for (String linha : csv) {
-			String[] campos = linha.replaceAll("\r", ";;").split(";");
+			String[] campos = linha.replaceAll("\r", "; ; ").split(";");
 			Veiculo v = new Veiculo();
 			try {
 				if(campos[0].length() < 17)
@@ -33,12 +35,20 @@ public class ImportacaoTERCA {
 				v.setTipo(cadastroService.getById(TipoVeiculo.class, 1));
 				
 				if(campos[2] != null && !campos[2].trim().equals("")) {
-					if(campos[3] != null && !campos[3].trim().equals("")) {
-						v.setValorMercadoria(new Double(campos[3]));
-					}
-					
 					v.setNavio(campos[2]);
 					v.setTipo(cadastroService.getById(TipoVeiculo.class, 2));
+					
+					if(campos[3] != null && !campos[3].trim().equals("")) {
+						String valor = campos[3];
+						String separadorDecimal = valor.substring(valor.length() - 3, valor.length() - 2);
+						if (separadorDecimal.equals(",")) {
+							valor = valor.replaceAll("\\.", "");
+							valor = valor.replaceAll(",", "\\.");
+						} else {
+							valor = valor.replaceAll(",", "");
+						}
+						v.setValorMercadoria(new Double(valor));
+					}
 				}
 				
 				if(!modelos.containsKey(campos[1])) {
