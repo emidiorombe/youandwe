@@ -15,7 +15,6 @@ import br.com.promove.service.ServiceFactory;
 public class ImportacaoTERCA {
 
 	private CadastroService cadastroService;
-	private DecimalFormat decimal_format = (DecimalFormat) DecimalFormat.getInstance(); 
 	private HashMap<String, Modelo> modelos;
 	
 	public ImportacaoTERCA() {
