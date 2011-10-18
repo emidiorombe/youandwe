@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import br.com.promove.entity.Avaria;
 import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.entity.Resumo;
 import br.com.promove.entity.InconsistenciaAvaria;
+import br.com.promove.entity.TipoVeiculo;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.VeiculoCtrc;
@@ -248,95 +250,6 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	}
 
 	@Override
-	public String exportarXLSCtrcs(List<Ctrc> ctrcs) throws PromoveException {
-		try {
-			Workbook wb = new HSSFWorkbook();
-		    CreationHelper createHelper = wb.getCreationHelper();
-		    Sheet sheet = wb.createSheet("ctrcs");
-			Double valorMercadoria = 0.0;
-			Double taxaRCTRC = 0.03;
-			Double taxaTranspNacional = 0.08;
-			Double valorRCTRC = 0.0;
-			Double valorTranspNacional = 0.0;
-		    
-		    //Cabeçalho
-		    Row row_head = sheet.createRow(0);
-		    row_head.createCell(0).setCellValue("FILIAL");
-		    row_head.createCell(1).setCellValue("NUMERO");
-		    row_head.createCell(2).setCellValue("SERIE");
-		    row_head.createCell(3).setCellValue("DATA");
-		    row_head.createCell(4).setCellValue("UF");
-		    row_head.createCell(5).setCellValue("MUNICIPIO ORIGEM");
-		    row_head.createCell(6).setCellValue("UF");
-		    row_head.createCell(7).setCellValue("MUNICIPIO DESTINO");
-		    row_head.createCell(8).setCellValue("CHASSI");
-		    row_head.createCell(9).setCellValue("MODELO");
-		    row_head.createCell(10).setCellValue("VALOR");
-		    row_head.createCell(11).setCellValue("NAVIO");
-		    row_head.createCell(12).setCellValue("DATA");
-		    
-		    int i = 0;
-		    for(Ctrc ctrc : ctrcs) {
-		    	for (VeiculoCtrc veic : ctrc.getVeiculos()) {
-				    Row row = sheet.createRow(++i);
-				    row.createCell(0).setCellValue(ctrc.getFilial());
-				    row.createCell(1).setCellValue(ctrc.getNumero());
-				    row.createCell(2).setCellValue(ctrc.getSerie());
-				    row.createCell(3).setCellValue(date_format.format(ctrc.getDataEmissao()));
-				    row.createCell(4).setCellValue(ctrc.getUfOrigem());
-				    row.createCell(5).setCellValue(ctrc.getMunicipioOrigem());
-				    row.createCell(6).setCellValue(ctrc.getUfDestino());
-				    row.createCell(7).setCellValue(ctrc.getMunicipioDestino());
-				    
-				    if (veic.getVeiculo() != null) {
-					    String dataNavio = "";
-					    
-					    if (veic.getVeiculo().getNavio() != null &&	!veic.getVeiculo().getNavio().isEmpty()) {
-					    	dataNavio = date_format.format(veic.getVeiculo().getDataCadastro());
-					    }
-					    		
-					    row.createCell(8).setCellValue(veic.getVeiculo().getChassi());
-					    row.createCell(9).setCellValue(veic.getVeiculo().getModelo().getDescricao());
-					    row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
-					    row.createCell(11).setCellValue(veic.getVeiculo().getNavio());
-					    row.createCell(12).setCellValue(dataNavio);
-						if(veic.getValorMercadoria() != null) valorMercadoria += veic.getValorMercadoria();
-				    }
-		    	}
-		    }
-		    
-		    //Total
-		    Row row_total = sheet.createRow(++i);
-		    row_total.createCell(8).setCellValue("TOTAL");
-		    row_total.createCell(10).setCellValue(moeda_format.format(valorMercadoria));
-
-		    valorRCTRC = valorMercadoria * (taxaRCTRC / 100.0);
-		    row_total = sheet.createRow(++i);
-		    row_total.createCell(8).setCellValue("RCTR-C");
-		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaRCTRC));
-		    row_total.createCell(10).setCellValue(moeda_format.format(valorRCTRC));
-
-		    valorTranspNacional = valorMercadoria * (taxaTranspNacional / 100.0);
-		    row_total = sheet.createRow(++i);
-		    row_total.createCell(8).setCellValue("Transporte Nacional");
-		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaTranspNacional));
-		    row_total.createCell(10).setCellValue(moeda_format.format(valorTranspNacional));
-
-
-		    // Write the output to a file/
-		    String fileName = Config.getConfig("tmp_dir") + "ctrcs_" + System.currentTimeMillis()+".xls";
-		    FileOutputStream fileOut = new FileOutputStream(fileName);
-		    wb.write(fileOut);
-		    fileOut.close();
-		    
-		    return fileName;
-		}catch(Exception e) {
-			e.printStackTrace();
-			throw new PromoveException();
-		}
-	}
-
-	@Override
 	public String exportarXLSResumo(List<Resumo> resumos, String item, String subitem) throws PromoveException {
 		try {
 			Workbook wb = new HSSFWorkbook();
@@ -385,6 +298,60 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	}
 
 	@Override
+	public String exportarXLSCtrcs(List<Ctrc> ctrcs) throws PromoveException {
+		try {
+			Workbook wb = new HSSFWorkbook();
+		    CreationHelper createHelper = wb.getCreationHelper();
+		    Sheet sheet = wb.createSheet("ctrcs");
+		    //Cabeçalho
+		    Row row_head = sheet.createRow(0);
+		    row_head.createCell(0).setCellValue("FILIAL");
+		    row_head.createCell(1).setCellValue("NUMERO");
+		    row_head.createCell(2).setCellValue("SERIE");
+		    row_head.createCell(3).setCellValue("DATA");
+		    row_head.createCell(4).setCellValue("UF");
+		    row_head.createCell(5).setCellValue("MUNICIPIO ORIGEM");
+		    row_head.createCell(6).setCellValue("UF");
+		    row_head.createCell(7).setCellValue("MUNICIPIO DESTINO");
+		    row_head.createCell(8).setCellValue("CHASSI");
+		    row_head.createCell(9).setCellValue("MODELO");
+		    row_head.createCell(10).setCellValue("VALOR");
+		    
+		    int i = 0;
+		    for(Ctrc ctrc : ctrcs) {
+		    	for (VeiculoCtrc veic : ctrc.getVeiculos()) {
+				    Row row = sheet.createRow(++i);
+				    row.createCell(0).setCellValue(ctrc.getFilial());
+				    row.createCell(1).setCellValue(ctrc.getNumero());
+				    row.createCell(2).setCellValue(ctrc.getSerie());
+				    row.createCell(3).setCellValue(date_format.format(ctrc.getDataEmissao()));
+				    row.createCell(4).setCellValue(ctrc.getUfOrigem());
+				    row.createCell(5).setCellValue(ctrc.getMunicipioOrigem());
+				    row.createCell(6).setCellValue(ctrc.getUfDestino());
+				    row.createCell(7).setCellValue(ctrc.getMunicipioDestino());
+				    
+				    if (veic.getVeiculo() != null) {
+					    row.createCell(8).setCellValue(veic.getVeiculo().getChassi());
+					    row.createCell(9).setCellValue(veic.getVeiculo().getModelo().getDescricao());
+					    row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
+				    }
+		    	}
+		    }
+		    
+		    // Write the output to a file/
+		    String fileName = Config.getConfig("tmp_dir") + "ctrcs_" + System.currentTimeMillis()+".xls";
+		    FileOutputStream fileOut = new FileOutputStream(fileName);
+		    wb.write(fileOut);
+		    fileOut.close();
+		    
+		    return fileName;
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new PromoveException();
+		}
+	}
+
+	@Override
 	public String exportarXLSInconsistenciaCtrcVeiculo(List<VeiculoCtrc> lista) throws PromoveException {
 		try {
 			Workbook wb = new HSSFWorkbook();
@@ -407,7 +374,6 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    row_head.createCell(11).setCellValue("MENSAGEM");
 		    
 		    int i = 0;
-		    VeiculoCtrcDAO veiculoCtrcDAO = new VeiculoCtrcDAO();
 		    for(VeiculoCtrc veic : lista) {
 		    	InconsistenciaCtrc inconsistenciaCtrc = inconsistenciaCtrcDAO.getByPrimaryKey(veic.getInconsistencia());
 		    	Ctrc ctrc = inconsistenciaCtrc.getCtrc();
@@ -440,4 +406,174 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			throw new PromoveException();
 		}
 	}
+
+	@Override
+	public String exportarXLSAverbacao(String fileName, Date de, Date ate) throws PromoveException {
+		try {
+			CadastroService cadastroService = ServiceFactory.getService(CadastroService.class);
+			CtrcService ctrcService = ServiceFactory.getService(CtrcService.class);
+			Workbook wb = new HSSFWorkbook();
+		    CreationHelper createHelper = wb.getCreationHelper();
+			Double taxaRCTRC = 0.03;
+			Double taxaTranspNacional = 0.08;
+			Double valorRCTRC = 0.0;
+			Double valorTranspNacional = 0.0;
+		    Double valorPorto = 0.0;
+			Double valorTransporte = 0.0;
+
+		    //Cabeçalho Porto
+		    Sheet sheetPorto = wb.createSheet("Porto");
+
+		    Row row_head = sheetPorto.createRow(0);
+		    row_head.createCell(0).setCellValue("CHASSI");
+		    row_head.createCell(1).setCellValue("MODELO");
+		    row_head.createCell(2).setCellValue("VALOR");
+		    row_head.createCell(3).setCellValue("NAVIO");
+		    row_head.createCell(4).setCellValue("DATA");
+		    
+		    int i = 0;
+		    Veiculo veiculo = new Veiculo();
+		    veiculo.setTipo(cadastroService.getById(TipoVeiculo.class, 2));
+			List<Veiculo> veiculos = cadastroService.buscarVeiculoPorFiltro(veiculo, de, ate);
+		    for(Veiculo veic : veiculos) {
+			    Row row = sheetPorto.createRow(++i);
+			    String dataNavio = "";
+					    
+			    if (veic.getNavio() != null &&	!veic.getNavio().isEmpty()) {
+			    	dataNavio = date_format.format(veic.getDataCadastro());
+			    }
+			    		
+			    row.createCell(0).setCellValue(veic.getChassi());
+			    row.createCell(1).setCellValue(veic.getModelo().getDescricao());
+			    if(veic.getValorMercadoria() != null) row.createCell(2).setCellValue(moeda_format.format(veic.getValorMercadoria()));
+			    row.createCell(3).setCellValue(veic.getNavio());
+			    row.createCell(4).setCellValue(dataNavio);
+				if(veic.getValorMercadoria() != null) valorPorto += veic.getValorMercadoria();
+		    }
+		    
+		    //Total Porto
+		    Row row_total = sheetPorto.createRow(++i);
+		    row_total = sheetPorto.createRow(++i);
+		    row_total.createCell(0).setCellValue("Porto");
+		    row_total.createCell(2).setCellValue(moeda_format.format(valorPorto));
+		    
+		    valorRCTRC = valorPorto * (taxaRCTRC / 100.0);
+		    row_total = sheetPorto.createRow(++i);
+		    row_total.createCell(1).setCellValue(percentual2_format.format(taxaRCTRC));
+		    row_total.createCell(2).setCellValue(moeda_format.format(valorRCTRC));
+
+		    valorTranspNacional = valorPorto * (taxaTranspNacional / 100.0);
+		    row_total = sheetPorto.createRow(++i);
+		    row_total.createCell(1).setCellValue(percentual2_format.format(taxaTranspNacional));
+		    row_total.createCell(2).setCellValue(moeda_format.format(valorTranspNacional));
+
+		    //Cabeçalho Transporte
+		    Sheet sheetTransporte = wb.createSheet("Transporte");
+		    
+		    row_head = sheetTransporte.createRow(0);
+		    row_head.createCell(0).setCellValue("FILIAL");
+		    row_head.createCell(1).setCellValue("NUMERO");
+		    row_head.createCell(2).setCellValue("SERIE");
+		    row_head.createCell(3).setCellValue("DATA");
+		    row_head.createCell(4).setCellValue("UF");
+		    row_head.createCell(5).setCellValue("MUNICIPIO ORIGEM");
+		    row_head.createCell(6).setCellValue("UF");
+		    row_head.createCell(7).setCellValue("MUNICIPIO DESTINO");
+		    row_head.createCell(8).setCellValue("CHASSI");
+		    row_head.createCell(9).setCellValue("MODELO");
+		    row_head.createCell(10).setCellValue("VALOR");
+		    //row_head.createCell(11).setCellValue("NAVIO");
+		    //row_head.createCell(12).setCellValue("DATA");
+		    
+		    i = 0;
+			List<Ctrc> ctrcs = ctrcService.buscarCtrcPorFiltro(new Ctrc(), de, ate, "", true);
+		    for(Ctrc ctrc : ctrcs) {
+		    	for (VeiculoCtrc veic : ctrc.getVeiculos()) {
+				    Row row = sheetTransporte.createRow(++i);
+				    row.createCell(0).setCellValue(ctrc.getFilial());
+				    row.createCell(1).setCellValue(ctrc.getNumero());
+				    row.createCell(2).setCellValue(ctrc.getSerie());
+				    row.createCell(3).setCellValue(date_format.format(ctrc.getDataEmissao()));
+				    row.createCell(4).setCellValue(ctrc.getUfOrigem());
+				    row.createCell(5).setCellValue(ctrc.getMunicipioOrigem());
+				    row.createCell(6).setCellValue(ctrc.getUfDestino());
+				    row.createCell(7).setCellValue(ctrc.getMunicipioDestino());
+				    
+				    if (veic.getVeiculo() != null) {
+					    //String dataNavio = "";
+					    
+					    //if (veic.getVeiculo().getNavio() != null &&	!veic.getVeiculo().getNavio().isEmpty()) {
+					    //	dataNavio = date_format.format(veic.getVeiculo().getDataCadastro());
+					    //}
+					    		
+					    row.createCell(8).setCellValue(veic.getVeiculo().getChassi());
+					    row.createCell(9).setCellValue(veic.getVeiculo().getModelo().getDescricao());
+					    if(veic.getValorMercadoria() != null) row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
+					    //row.createCell(11).setCellValue(veic.getVeiculo().getNavio());
+					    //row.createCell(12).setCellValue(dataNavio);
+						if(veic.getValorMercadoria() != null) valorTransporte += veic.getValorMercadoria();
+				    }
+		    	}
+		    }
+		    
+		    //Total Transporte
+		    row_total = sheetTransporte.createRow(++i);
+		    row_total = sheetTransporte.createRow(++i);
+		    row_total.createCell(8).setCellValue("Transporte");
+		    row_total.createCell(10).setCellValue(moeda_format.format(valorTransporte));
+
+		    valorRCTRC = valorTransporte * (taxaRCTRC / 100.0);
+		    row_total = sheetTransporte.createRow(++i);
+		    //row_total.createCell(8).setCellValue("RCTR-C");
+		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaRCTRC));
+		    row_total.createCell(10).setCellValue(moeda_format.format(valorRCTRC));
+
+		    valorTranspNacional = valorTransporte * (taxaTranspNacional / 100.0);
+		    row_total = sheetTransporte.createRow(++i);
+		    //row_total.createCell(8).setCellValue("Transporte Nacional");
+		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaTranspNacional));
+		    row_total.createCell(10).setCellValue(moeda_format.format(valorTranspNacional));
+
+		    //Total Porto
+		    row_total = sheetTransporte.createRow(++i);
+		    row_total.createCell(8).setCellValue("Porto");
+		    row_total.createCell(10).setCellValue(moeda_format.format(valorPorto));
+
+		    valorRCTRC = valorPorto * (taxaRCTRC / 100.0);
+		    row_total = sheetTransporte.createRow(++i);
+		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaRCTRC));
+		    row_total.createCell(10).setCellValue(moeda_format.format(valorRCTRC));
+
+		    valorTranspNacional = valorPorto * (taxaTranspNacional / 100.0);
+		    row_total = sheetTransporte.createRow(++i);
+		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaTranspNacional));
+		    row_total.createCell(10).setCellValue(moeda_format.format(valorTranspNacional));
+
+		    //Total Geral
+		    row_total = sheetTransporte.createRow(++i);
+		    row_total.createCell(8).setCellValue("Total");
+		    row_total.createCell(10).setCellValue(moeda_format.format(valorTransporte + valorPorto));
+
+		    valorRCTRC = (valorTransporte + valorPorto) * (taxaRCTRC / 100.0);
+		    row_total = sheetTransporte.createRow(++i);
+		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaRCTRC));
+		    row_total.createCell(10).setCellValue(moeda_format.format(valorRCTRC));
+
+		    valorTranspNacional = (valorTransporte + valorPorto) * (taxaTranspNacional / 100.0);
+		    row_total = sheetTransporte.createRow(++i);
+		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaTranspNacional));
+		    row_total.createCell(10).setCellValue(moeda_format.format(valorTranspNacional));
+
+		    // Write the output to a file/
+		    FileOutputStream fileOut = new FileOutputStream(fileName);
+		    wb.write(fileOut);
+		    fileOut.close();
+		    
+		    return fileName;
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new PromoveException();
+		}
+	}
+
 }

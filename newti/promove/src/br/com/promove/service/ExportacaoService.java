@@ -1,5 +1,6 @@
 package br.com.promove.service;
 
+import java.util.Date;
 import java.util.List;
 
 import br.com.promove.entity.Avaria;
@@ -24,14 +25,16 @@ public interface ExportacaoService {
 
 	public String exportarXLSAvarias(List<Avaria> avarias) throws PromoveException;
 
-	public String exportarXLSVeiculos(List<Veiculo> veiculos) throws PromoveException;
-
-	public String exportarXLSCtrcs(List<Ctrc> ctrcs) throws PromoveException;
-
 	public String exportarXLSInconsistenciaAvarias(List<InconsistenciaAvaria> lista) throws PromoveException;
+
+	public String exportarXLSVeiculos(List<Veiculo> veiculos) throws PromoveException;
 
 	public String exportarXLSResumo(List<Resumo> resumos, String item, String subitem) throws PromoveException;
 
+	public String exportarXLSCtrcs(List<Ctrc> ctrcs) throws PromoveException;
+
 	public String exportarXLSInconsistenciaCtrcVeiculo(List<VeiculoCtrc> lista) throws PromoveException;
+
+	public String exportarXLSAverbacao(String fileName, Date de, Date ate) throws PromoveException;
 
 }

@@ -2,9 +2,15 @@ package br.com.promove.view;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import br.com.promove.application.PromoveApplication;
+import br.com.promove.entity.Ctrc;
+import br.com.promove.exception.PromoveException;
+import br.com.promove.service.CtrcService;
+import br.com.promove.service.ExportacaoService;
+import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.form.BaseForm;
 
 import com.vaadin.terminal.ExternalResource;
@@ -20,17 +26,17 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.VerticalLayout;
 
-public class ExportAvariaView extends BaseForm{
+public class AverbacaoView extends BaseForm{
 	private VerticalLayout layout = new VerticalLayout();
-	private Button exportar;
-	private CheckBox chkMovimentacao;
-	private CheckBox chkRegistradas;
+	private Button gerar;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
 	private PromoveApplication app;
+	private ExportacaoService exportacaoService;
 
-	public ExportAvariaView(PromoveApplication app) {
+	public AverbacaoView(PromoveApplication app) {
 		this.app = app;
+		exportacaoService = ServiceFactory.getService(ExportacaoService.class);
 		buildView();
 	}
 
@@ -38,12 +44,6 @@ public class ExportAvariaView extends BaseForm{
 		setWriteThrough(false);
 		setImmediate(true);
 		setSizeFull();
-		
-		chkMovimentacao = new CheckBox();
-		chkMovimentacao.setCaption("Considerar somente avarias");
-		
-		chkRegistradas = new CheckBox();
-		chkRegistradas.setCaption("Considerar somente primeira avaria");
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -53,18 +53,16 @@ public class ExportAvariaView extends BaseForm{
 		txtAte.setLocale(new Locale("pt", "BR"));
 		txtAte.setResolution(DateField.RESOLUTION_DAY);
 		
-		exportar = new Button("Exportar", new ExportAvariaListener(this));
+		gerar = new Button("Gerar", new AverbacaoListener(this));
 		
-		Label label = new Label("<h3>Exportar Vistorias</h3>");
+		Label label = new Label("<h3>Gerar Averbação</h3>");
 		label.setContentMode(Label.CONTENT_XHTML);
 		layout.addComponent(label);
 		layout.addComponent(this);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
-		addField("chkMovimentacao", chkMovimentacao);
-		addField("chkRegistradas", chkRegistradas);
 		layout.addComponent(createFooter());
-		layout.addComponent(exportar);
+		layout.addComponent(gerar);
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
 		
@@ -73,7 +71,7 @@ public class ExportAvariaView extends BaseForm{
 	private Component createFooter(){
 		HorizontalLayout footer = new HorizontalLayout();
 		footer.setSpacing(true);
-		footer.addComponent(exportar);
+		footer.addComponent(gerar);
 		footer.setVisible(true);
 		
 		return footer;
@@ -87,29 +85,36 @@ public class ExportAvariaView extends BaseForm{
 		this.layout = layout;
 	}
 
-	class ExportAvariaListener implements ClickListener{
+	class AverbacaoListener implements ClickListener{
 		
-		private ExportAvariaView view;
+		private AverbacaoView view;
 
-		public ExportAvariaListener(ExportAvariaView view) {
+		public AverbacaoListener(AverbacaoView view) {
 			this.view = view;
 		}
 
 		@Override
 		public void buttonClick(ClickEvent event) {
 			try {
-				String movimentacao = (Boolean)chkMovimentacao.getValue() ? "1" : "0";
-				String registradas = (Boolean)chkRegistradas.getValue() ? "1" : "0";
 				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null;
-				String fileName = "avarias_" + new SimpleDateFormat("yyyyMMdd").format(de) + "_" + new SimpleDateFormat("yyyyMMdd").format(ate) + ".xml";
+				String fileName = "averbacao_" + new SimpleDateFormat("ddMMyyyy").format(de) + "_" + new SimpleDateFormat("ddMMyyyy").format(ate) + ".xls";
 				
 				if(de == null || ate == null)
 					throw new IllegalArgumentException("Informe um período para busca");
+
+				String file = "";
+				try {
+					file = exportacaoService.exportarXLSAverbacao(fileName, de, ate);
+				} catch (PromoveException e) {
+					showErrorMessage(view, e.getMessage());
+					e.printStackTrace();
+				}
 				
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 				String path = ctx.getHttpSession().getServletContext().getContextPath();
-				event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_avarias&fileName=" + fileName + "&mov=" + movimentacao + "&re=" + registradas + "&de=" + new SimpleDateFormat("yyyyMMdd").format(de) + "&ate=" + new SimpleDateFormat("yyyyMMdd").format(ate)));
+				event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=" + fileName + "&file=" + file));
+				
 			} catch (IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());
 			}
