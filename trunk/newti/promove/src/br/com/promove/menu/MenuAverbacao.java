@@ -2,10 +2,12 @@ package br.com.promove.menu;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Usuario;
+import br.com.promove.view.AverbacaoView;
 import br.com.promove.view.CtrcVeiculoTables;
 import br.com.promove.view.CtrcView;
 import br.com.promove.view.ErroImportCtrcVeiculoTables;
 import br.com.promove.view.ErroImportCtrcView;
+import br.com.promove.view.ExportAvariaView;
 import br.com.promove.view.ImportCtrcView;
 import br.com.promove.view.form.CtrcForm;
 import br.com.promove.view.form.CtrcSearchForm;
@@ -29,6 +31,7 @@ public class MenuAverbacao extends CssLayout {
 	private Button list_ctrc;
 	private Button import_ctrc;
 	private Button erro_import_ctrc;
+	private Button averbacao;
 	
 	private PromoveApplication app;
 	
@@ -48,9 +51,10 @@ public class MenuAverbacao extends CssLayout {
 		add_ctrc = new NativeButton("Registrar CTRC");
 		import_ctrc = new NativeButton("Importar CTRCs");
 		erro_import_ctrc = new NativeButton("Auditar erros importação CTRCs");
+		averbacao = new NativeButton("Gerar Averbação");
 		
-		addListeners(list_ctrc, add_ctrc, import_ctrc, erro_import_ctrc);
-		addComponents(title, list_ctrc, add_ctrc, import_ctrc, erro_import_ctrc);
+		addListeners(list_ctrc, add_ctrc, import_ctrc, erro_import_ctrc, averbacao);
+		addComponents(title, list_ctrc, add_ctrc, import_ctrc, erro_import_ctrc, averbacao);
 				
 		setPermissionVisible();
 		
@@ -66,34 +70,38 @@ public class MenuAverbacao extends CssLayout {
 			list_ctrc.setVisible(false);
 			import_ctrc.setVisible(false);
 			erro_import_ctrc.setVisible(false);
+			averbacao.setVisible(false);
 		}
 	}
 	
 	public void changeStyleToAdd() {
-		addAndRemoveStyle(add_ctrc, list_ctrc, import_ctrc, erro_import_ctrc);
+		addAndRemoveStyle(add_ctrc, list_ctrc, import_ctrc, erro_import_ctrc, averbacao);
 		
 	}
 	
 	public void loadMainView(ClickEvent event) {
-		addAndRemoveStyle(event.getButton(), add_ctrc, list_ctrc, import_ctrc, erro_import_ctrc);
+		addAndRemoveStyle(event.getButton(), add_ctrc, list_ctrc, import_ctrc, erro_import_ctrc, averbacao);
 		if(event.getButton() == add_ctrc) {
 			CtrcForm form = new CtrcForm(app);
 			app.setMainView(form.getFormLayout());
-		}else if(event.getButton() == list_ctrc){
+		} else if(event.getButton() == list_ctrc){
 			CtrcSearchForm form = new CtrcSearchForm(app);
 			CtrcTable tableCtrc = new CtrcTable(app);
 			VeiculoCtrcTable tableVeiculo = new VeiculoCtrcTable(app);
 			CtrcVeiculoTables tables = new CtrcVeiculoTables(tableCtrc, tableVeiculo);
 			app.setMainView(new CtrcView(tables, form));
-		}else if(event.getButton() == import_ctrc) {
+		} else if(event.getButton() == import_ctrc) {
 			ImportCtrcView view = new ImportCtrcView(app);
 			app.setMainView(view.getLayout());
-		}else if(event.getButton() == erro_import_ctrc) {
+		} else if(event.getButton() == erro_import_ctrc) {
 			ErroImportCtrcTable tableCtrc = new ErroImportCtrcTable();
 			ErroImportVeiculoCtrcTable tableVeic = new ErroImportVeiculoCtrcTable(app);
 			ErroImportCtrcVeiculoTables tables = new ErroImportCtrcVeiculoTables(tableCtrc, tableVeic);
 			ErroImportCtrcForm form = new ErroImportCtrcForm(app);
 			app.setMainView(new ErroImportCtrcView(tables, form));
+		} else if(event.getButton() == averbacao) {
+			AverbacaoView view = new AverbacaoView(app);
+			app.setMainView(view.getLayout());
 		}
 	}
 	

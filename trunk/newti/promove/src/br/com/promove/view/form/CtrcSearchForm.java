@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.promove.application.PromoveApplication;
-import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Transportadora;
 import br.com.promove.entity.Ctrc;
 import br.com.promove.exception.PromoveException;
@@ -13,11 +12,9 @@ import br.com.promove.service.CtrcService;
 import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.CtrcView;
-import br.com.promove.view.form.AvariaSearchForm.AvariaSearchListener;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.validator.DoubleValidator;
 import com.vaadin.data.validator.IntegerValidator;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
@@ -165,7 +162,7 @@ public class CtrcSearchForm extends BaseForm{
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
-					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=ctrcs.xls&file=" + file + "&desconto=" + desconto));
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=ctrcs.xls&file=" + file));
 				}
 			} catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());

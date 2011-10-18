@@ -47,9 +47,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			addParamToQuery("txtcor", veiculo.getCor());
 		}
 		
-			
 		if(veiculo.getTipo() != null && veiculo.getTipo().getId() != null) {
-			if (veiculo.getTipo().getId() != 10) {
+			if (veiculo.getTipo().getId() == 10) {
 				// exceto emplacados
 				hql.append(" and v.tipo.id <> 9");
 			} else {

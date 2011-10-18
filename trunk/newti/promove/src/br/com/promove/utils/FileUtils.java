@@ -25,6 +25,7 @@ public class FileUtils {
 			Document doc = null;
 			try {
 				SAXReader reader = new SAXReader();
+				reader.setValidation(false);
 				doc = reader.read(file);
 				docs.put(file.getName(), doc);
 			} catch (DocumentException de) {
