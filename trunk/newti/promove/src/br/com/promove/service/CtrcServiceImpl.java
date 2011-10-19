@@ -169,7 +169,7 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	public List<InconsistenciaCtrc> buscarTodasInconsistenciasCtrc()throws PromoveException {
 		List<InconsistenciaCtrc> lista = null;
 		try {
-			lista = inconsistenciaCtrcDAO.getAll();
+			lista = inconsistenciaCtrcDAO.getAll("dataEmissao desc");
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

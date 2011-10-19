@@ -52,6 +52,7 @@ public class ErroImportCtrcTable extends Table {
 		setColumnAlignment("valorMercadoria", ALIGN_RIGHT);
 		
 		try {
+			setColumnCollapsed("transp", true);
 			setColumnCollapsed("placaFrota", true);
 			setColumnCollapsed("placaCarreta", true);
 			setColumnCollapsed("motorista", true);
