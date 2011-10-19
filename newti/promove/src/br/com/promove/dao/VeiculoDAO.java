@@ -27,7 +27,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 
 	public List<Veiculo> getByFilter(Veiculo veiculo, Date dtInicio, Date dtFim) throws DAOException {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select v from Veiculo v left JOIN FETCH v.modelo mod where 1 = 1");
+		hql.append("select v from Veiculo v left JOIN FETCH v.modelo mod");
+		hql.append(" where v.tipo.id <> 9");
 		
 		if(veiculo.getChassi() != null && !veiculo.getChassi().equals("")) {
 			hql.append(" and v.chassi like :txtchassi");
@@ -48,13 +49,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		}
 		
 		if(veiculo.getTipo() != null && veiculo.getTipo().getId() != null) {
-			if (veiculo.getTipo().getId() == 10) {
-				// exceto emplacados
-				hql.append(" and v.tipo.id <> 9");
-			} else {
-				hql.append(" and v.tipo = :txttipo");
-				addParamToQuery("txttipo", veiculo.getTipo());
-			}
+			hql.append(" and v.tipo = :txttipo");
+			addParamToQuery("txttipo", veiculo.getTipo());
 		}
 		
 		if(veiculo.getNavio() != null && !veiculo.getNavio().equals("")) {

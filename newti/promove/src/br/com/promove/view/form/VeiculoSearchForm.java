@@ -226,14 +226,9 @@ public class VeiculoSearchForm extends BaseForm{
 				
 				try {
 					for(TipoVeiculo tv: cadastroService.buscarTodosTiposVeiculos()){
-						Item i = c.addItem(tv);
-						i.getItemProperty("label").setValue(tv.getNome());
-						if (tv.getId() == 9) {
-							//Emplacado
-							TipoVeiculo tipo = new TipoVeiculo();
-							tipo.setId(10);
-							i = c.addItem(tipo);
-							i.getItemProperty("label").setValue("Novos");
+						if (tv.getId() != 9) {
+							Item i = c.addItem(tv);
+							i.getItemProperty("label").setValue(tv.getNome());
 						}
 					}
 				} catch (Exception e) {
