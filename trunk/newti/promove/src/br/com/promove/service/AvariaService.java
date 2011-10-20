@@ -146,6 +146,8 @@ public interface AvariaService extends Serializable{
 
 	List<InconsistenciaAvaria> buscarTodasInconsistenciasAvaria()throws PromoveException;
 
+	List<InconsistenciaAvaria> buscarInconsistenciaAvariaPorChassi(String chassi) throws PromoveException;
+
 	void excluirInconsistenciaImportAvaria(InconsistenciaAvaria inc)throws PromoveException;
 
 	void salvarAvariaDeInconsistencias(InconsistenciaAvaria inc)throws PromoveException;
