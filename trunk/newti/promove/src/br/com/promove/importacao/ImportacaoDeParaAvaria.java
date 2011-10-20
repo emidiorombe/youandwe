@@ -22,8 +22,8 @@ public class ImportacaoDeParaAvaria {
 			String chassiAntigo = campos[0];
 			String chassiNovo = campos[1];
 			
-			if(chassiAntigo.length() < 17) continue;
-			if(chassiNovo.length() < 17) continue;
+			if(chassiAntigo.length() != 17) continue;
+			if(chassiNovo.length() != 17) continue;
 
 			for (InconsistenciaAvaria inc : avariaService.buscarInconsistenciaAvariaPorChassi(chassiAntigo)) {
 				inc.setChassiInvalido(chassiNovo);
