@@ -29,7 +29,7 @@ public class ImportacaoTERCA {
 			try {
 				if(campos[0].length() < 17)
 					continue;
-				v.setChassi(campos[0]);
+				v.setChassi(campos[0].toUpperCase());
 				v.setCor(cadastroService.getById(Cor.class, new Integer(97)));
 				v.setTipo(cadastroService.getById(TipoVeiculo.class, 1));
 				

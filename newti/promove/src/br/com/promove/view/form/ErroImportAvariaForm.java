@@ -1,5 +1,7 @@
 package br.com.promove.view.form;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
+import br.com.promove.service.ImportacaoService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.ErroImportAvariaView;
 
@@ -23,12 +26,21 @@ import com.vaadin.ui.AbstractSelect.NewItemHandler;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Upload.FailedEvent;
+import com.vaadin.ui.Upload.FailedListener;
+import com.vaadin.ui.Upload.ProgressListener;
+import com.vaadin.ui.Upload.Receiver;
+import com.vaadin.ui.Upload.StartedEvent;
+import com.vaadin.ui.Upload.StartedListener;
+import com.vaadin.ui.Upload.SucceededEvent;
+import com.vaadin.ui.Upload.SucceededListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
 
 public class ErroImportAvariaForm extends BaseForm {
@@ -39,17 +51,21 @@ public class ErroImportAvariaForm extends BaseForm {
 	private AvariaService avariaService;
 	private ExportacaoService exportacaoService;
 	private PromoveApplication app;
+	private ImportacaoService importService;
 	
 	private Button save;
 	private Button saveAll;
 	private Button remove;
 	private Button export;
+	private Upload depara = new Upload(null, new ImportDeparaUploader(this));
+	private ByteArrayOutputStream file = new ByteArrayOutputStream();
 	
 	public ErroImportAvariaForm(PromoveApplication app) {
 		this.app = app;
 		cadastroService = ServiceFactory.getService(CadastroService.class);
 		avariaService = ServiceFactory.getService(AvariaService.class);
 		exportacaoService = ServiceFactory.getService(ExportacaoService.class);
+		importService = ServiceFactory.getService(ImportacaoService.class);
 		buildForm();
 	}
 	
@@ -62,12 +78,25 @@ public class ErroImportAvariaForm extends BaseForm {
 		remove = new Button("Excluir", new ErroAvariaFormListener());
 		saveAll = new Button("Revalidar Todos", new ErroAvariaFormListener());
 		export = new Button("Exportar Lista", new ErroAvariaFormListener());
+		depara.setImmediate(true);
+        depara.setButtonCaption("Importar De/Para...");
 
 		createFormBody(new BeanItem<InconsistenciaAvaria>(new InconsistenciaAvaria()));
 		layout.addComponent(this);
 		layout.addComponent(createFooter());
+		
+		Label footer = new Label("<br><i><b>De/Para:</b> Chassi atual; Chassi correto</i><br>");
+		footer.setContentMode(Label.CONTENT_XHTML);
+		layout.addComponent(footer);
+		
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
+		
+		depara.addListener(new UploadStartListener(this));
+        depara.addListener(new UploadProgressListener(this));
+        depara.addListener(new UploadSucessListener(this));
+        depara.addListener(new UploadFailedListener(this));
+		
 	}
 	
 	public void createFormBody(BeanItem<InconsistenciaAvaria> tpa) {
@@ -91,6 +120,7 @@ public class ErroImportAvariaForm extends BaseForm {
 			footer.addComponent(remove);
 		footer.addComponent(saveAll);
 		footer.addComponent(export);
+		footer.addComponent(depara);
 		footer.setVisible(true);
 
 		return footer;
@@ -159,11 +189,11 @@ public class ErroImportAvariaForm extends BaseForm {
 			}else if(event.getButton() == export) {
 				try {
 					List<InconsistenciaAvaria> lista = avariaService.buscarTodasInconsistenciasAvaria();
-					String file = exportacaoService.exportarXLSInconsistenciaAvarias(lista);
+					String fileOut = exportacaoService.exportarXLSInconsistenciaAvarias(lista);
 					
 					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 					String path = ctx.getHttpSession().getServletContext().getContextPath();
-					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=incavarias.xls&file=" + file));
+					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=incavarias.xls&file=" + fileOut));
 				} catch (Exception e) {
 					showErrorMessage(view, "Não foi possível gerar arquivo.");
 				}
@@ -222,6 +252,82 @@ public class ErroImportAvariaForm extends BaseForm {
 		}
 	}
 
+	class ImportDeparaUploader implements Receiver {
+		private String fileName;
+        private String mtype;
+		private ErroImportAvariaForm view;
+        
+		public ImportDeparaUploader(ErroImportAvariaForm view) {
+			this.view = view;
+		}
+
+		@Override
+		public OutputStream receiveUpload(String filename, String MIMEType) {
+			if(!filename.endsWith("csv")) {
+				showErrorMessage(view.getLayout(), "Formato de arquivo não reconhecido.");
+				depara.interruptUpload();
+			}
+			this.fileName = filename;
+			this.mtype = MIMEType;
+			return file;
+		}
+	}
+	
+	class UploadStartListener implements StartedListener{
+		private ErroImportAvariaForm view;
+		public UploadStartListener(ErroImportAvariaForm view ) {
+			this.view = view;
+		}
+
+		@Override
+		public void uploadStarted(StartedEvent event) {
+		}
+	}
+	
+	class UploadProgressListener implements ProgressListener{
+		private ErroImportAvariaForm view;
+
+		public UploadProgressListener(ErroImportAvariaForm view) {
+			this.view = view;
+		}
+
+		@Override
+		public void updateProgress(long readBytes, long contentLength) {
+		}
+	}
+	
+	class UploadSucessListener implements SucceededListener{
+		private ErroImportAvariaForm view;
+
+		public UploadSucessListener(ErroImportAvariaForm view) {
+			this.view = view;
+		}
+
+		@Override
+		public void uploadSucceeded(SucceededEvent event) {
+			try {
+				importService.importDeParaAvaria(new String(file.toByteArray()));
+				view.view.getTable().reloadTable();
+				showSuccessMessage(view.getLayout(), "De/Para importado com sucesso...");
+			}catch (PromoveException pe) {
+				pe.printStackTrace();
+				showErrorMessage(view, "Não foi possivel importar o De/Para.");
+			}
+		}
+	}
+	
+	class UploadFailedListener implements FailedListener{
+		private ErroImportAvariaForm view;
+
+		public UploadFailedListener(ErroImportAvariaForm view) {
+			this.view = view;
+		}
+
+		@Override
+		public void uploadFailed(FailedEvent event) {
+		}
+	}
+	
 	public void setView(ErroImportAvariaView view) {
 		this.view = view;
 	}

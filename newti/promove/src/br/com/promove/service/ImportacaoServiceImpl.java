@@ -13,6 +13,7 @@ import br.com.promove.exception.PromoveException;
 import br.com.promove.importacao.ImportacaoAvaria;
 import br.com.promove.importacao.ImportacaoCAOA;
 import br.com.promove.importacao.ImportacaoCtrc;
+import br.com.promove.importacao.ImportacaoDeParaAvaria;
 import br.com.promove.importacao.ImportacaoTERCA;
 import br.com.promove.utils.FileUtils;
 
@@ -107,6 +108,21 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 		}catch(DocumentException de) {
 			throw new PromoveException(de);
 		} catch (ParseException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
+	@Override
+	public void importDeParaAvaria(String csv) throws PromoveException {
+		try {
+			ImportacaoDeParaAvaria importacao = new ImportacaoDeParaAvaria();
+			List<String> linhas = new ArrayList<String>();
+			for(String linha : csv.split("\n")) {
+				linhas.add(linha);
+			}
+			importacao.importar(linhas);
+		} catch (PromoveException e) {
 			throw new PromoveException(e);
 		}
 		

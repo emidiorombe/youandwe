@@ -19,4 +19,7 @@ public interface ImportacaoService {
 	public void importAvariasDoDiretorio(String config, String dest)throws PromoveException;
 
 	public void importarGabardo(String url)throws PromoveException;
+
+	public void importDeParaAvaria(String csv)throws PromoveException;
+
 }

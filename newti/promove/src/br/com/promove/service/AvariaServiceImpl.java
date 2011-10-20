@@ -355,20 +355,6 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	}
 
 	@Override
-	public InconsistenciaAvaria salvarInconsistenciaImportAvaria(Avaria avaria, String msgErro)throws PromoveException {
-		try {
-			InconsistenciaAvaria inc = new InconsistenciaAvaria(avaria, msgErro);
-			inc.setChassiInvalido(StringUtilities.getChassiFromErrorMessage(msgErro));
-			if(avaria.getVeiculo() != null) inc.setChassiInvalido(avaria.getVeiculo().getChassi());
- 			inconsistenciaAvariaDAO.save(inc);
-			return inc;
-		} catch (DAOException e) {
-			throw new PromoveException(e);
-		}
-		
-	}
-
-	@Override
 	public void cleanUpSession() throws PromoveException {
 		try {
 			inconsistenciaAvariaDAO.rebuildSession();
@@ -411,6 +397,31 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		return lista;
 	}
 	
+	@Override
+	public List<InconsistenciaAvaria> buscarInconsistenciaAvariaPorChassi(String chassi) throws PromoveException {
+		List<InconsistenciaAvaria> lista = null;
+		try {
+			lista = inconsistenciaAvariaDAO.getInconsistenciaAvariaPorChassi(chassi);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+	
+	@Override
+	public InconsistenciaAvaria salvarInconsistenciaImportAvaria(Avaria avaria, String msgErro)throws PromoveException {
+		try {
+			InconsistenciaAvaria inc = new InconsistenciaAvaria(avaria, msgErro);
+			inc.setChassiInvalido(StringUtilities.getChassiFromErrorMessage(msgErro));
+			if(avaria.getVeiculo() != null) inc.setChassiInvalido(avaria.getVeiculo().getChassi());
+ 			inconsistenciaAvariaDAO.save(inc);
+			return inc;
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		
+	}
+
 	@Override
 	public void excluirInconsistenciaImportAvaria(InconsistenciaAvaria inc)throws PromoveException {
 		try {
