@@ -489,4 +489,15 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		}
 		return lista;
 	}
+
+	@Override
+	public List<Avaria> buscarAvariasPorData(Date date) throws PromoveException {
+		List<Avaria> lista = null;
+		try {
+			lista = avariaDAO.getAllByDate(date);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
 }
