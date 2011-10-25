@@ -281,4 +281,11 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		lista.add(new PieData(obj[1].toString(), obj[2].toString()));
 		itens.put(obj[0].toString(), lista);
 	}
+
+	public List<Avaria> getAllByDate(Date date) throws DAOException {
+		StringBuilder hql = new StringBuilder("select av from avarias av where av.nivel.id = 4 and av.dataLancamento = :ontem");
+		addParamToQuery("ontem", date);
+		
+		return executeQuery(hql.toString(), 0, Integer.MAX_VALUE);
+	}
 }

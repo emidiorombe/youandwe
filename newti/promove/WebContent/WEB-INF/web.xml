@@ -2,6 +2,11 @@
 <web-app id="Promove" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<display-name>promove</display-name>
 	<context-param>
+		<param-name>destinatarios_mail</param-name>
+		<param-value>clopes@promove.com.br;</param-value>
+	</context-param>
+	
+	<context-param>
 		<param-name>productionMode</param-name>
 		<param-value>true</param-value>
 	</context-param>
@@ -34,6 +39,11 @@
 	<context-param>
 		<param-name>ctrc_job</param-name>
 		<param-value>0 0 0 ? * *</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>mail_scheduler</param-name>
+		<param-value>0 0 1 ? * *</param-value>
 	</context-param>
 	
 	<context-param>

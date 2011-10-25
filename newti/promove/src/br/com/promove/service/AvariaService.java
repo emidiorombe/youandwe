@@ -158,4 +158,6 @@ public interface AvariaService extends Serializable{
 	
 	List<NivelAvaria> buscarTodosNiveisAvaria() throws PromoveException;
 
+	List<Avaria> buscarAvariasPorData(Date date) throws PromoveException;
+
 }
