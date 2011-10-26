@@ -84,4 +84,11 @@ public class DateUtils {
 		}
 	}
 
+	public static Date diaAnterior() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -1);
+		
+		return cal.getTime();
+	}
+
 }

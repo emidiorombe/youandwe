@@ -73,12 +73,13 @@ public class GeneralContextListener implements ServletContextListener{
 			CronTrigger trigger_mail  = newTrigger().withIdentity("trigger_mail", "gdefault").withSchedule(cronSchedule(mail_sched)).build();
 			
 			sched.scheduleJob(ctrcJob, trigger_ctrc);
-			sched.scheduleJob(ctrcJob, trigger_mail);
+			sched.scheduleJob(mail_job, trigger_mail);
 			
 			sched.start();
-			log.info(">>>>>>>>>>> Jobs agendados");
+			log.warn(">>>>>>>>>>> Jobs agendados");
 		}catch(Exception e) {
 			log.error("::::Não foi possivel agendar a importação de CTRC");
+			e.printStackTrace();
 		}
 		
 	}
