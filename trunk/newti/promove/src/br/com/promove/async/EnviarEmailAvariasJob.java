@@ -21,6 +21,7 @@ import org.quartz.JobExecutionException;
 import br.com.promove.entity.Avaria;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.DateUtils;
 
 public class EnviarEmailAvariasJob implements Job {
 
@@ -33,7 +34,7 @@ public class EnviarEmailAvariasJob implements Job {
 			String tos[] = data.getString("dest").split(";");
 			
 			AvariaService avariaService = ServiceFactory.getService(AvariaService.class);
-			String conteudo = montarConteudo(avariaService.buscarAvariasPorData(new Date())); 
+			String conteudo = montarConteudo(avariaService.buscarAvariasPorData(DateUtils.diaAnterior())); 
 			
 			send("smtp.promoveseguros.com.br", 25, "sica@promoveseguros.com.br", tos, "Avarias de ", conteudo);
 		} catch (Exception e) {
