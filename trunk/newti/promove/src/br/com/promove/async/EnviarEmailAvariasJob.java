@@ -1,7 +1,7 @@
 package br.com.promove.async;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -19,14 +19,16 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import br.com.promove.entity.Avaria;
+import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
+import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.utils.DateUtils;
 
 public class EnviarEmailAvariasJob implements Job {
 
 	private static Logger log = Logger.getLogger(ImportCTRCJob.class);
-
+	
 	@Override
 	public void execute(JobExecutionContext ctx) throws JobExecutionException {
 		try {
@@ -36,7 +38,7 @@ public class EnviarEmailAvariasJob implements Job {
 			AvariaService avariaService = ServiceFactory.getService(AvariaService.class);
 			String conteudo = montarConteudo(avariaService.buscarAvariasPorData(DateUtils.diaAnterior())); 
 			
-			send("smtp.promoveseguros.com.br", 25, "sica@promoveseguros.com.br", tos, "Avarias de ", conteudo);
+			send("sica@promoveseguros.com.br", tos, "Avarias de ", conteudo);
 		} catch (Exception e) {
 			log.error("Erro no envio de e-mail de avarias " + e.getMessage());
 			e.printStackTrace();
@@ -56,12 +58,17 @@ public class EnviarEmailAvariasJob implements Job {
 		return conteudo.toString();
 	}
 
-	public static void send(String smtpHost, int smtpPort, String from,	String tos[], String subject, String content) throws AddressException,
-			MessagingException {
+	public static void send(String from,	String tos[], String subject, String content) throws AddressException,
+			MessagingException, PromoveException {
+		CadastroService cadastroService = ServiceFactory.getService(CadastroService.class);
+		Map<String, String> params = cadastroService.buscarTodosParametrosAsMap();
+		
 		// Create a mail session
 		Properties props = new Properties();
-		props.put("mail.smtp.host", smtpHost);
-		props.put("mail.smtp.port", "" + smtpPort);
+		props.put("mail.smtp.auth", true);
+		props.put("mail.smtp.host", params.get("smtpHost"));
+		props.put("mail.smtp.port", params.get("smtpPort"));
+		props.put("mail.smtp.submitter", params.get("smtpPwd"));
 		Session session = Session.getDefaultInstance(props, null);
 
 		// Construct the message
@@ -79,3 +86,4 @@ public class EnviarEmailAvariasJob implements Job {
 	}
 
 }
+

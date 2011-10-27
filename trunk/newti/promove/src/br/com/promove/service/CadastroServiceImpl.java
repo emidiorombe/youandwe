@@ -2,6 +2,7 @@ package br.com.promove.service;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -485,6 +486,21 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 			throw new PromoveException(e);
 		}
 		return lista;
+	}
+
+	@Override
+	public Map<String, String> buscarTodosParametrosAsMap()
+			throws PromoveException {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			for(Object o : parametroDAO.getAll("chave")) {
+				Parametro p = (Parametro) o;
+				map.put(p.getChave(), p.getValor());
+			}
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return map;
 	}
 
 }
