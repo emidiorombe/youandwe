@@ -68,6 +68,8 @@ public interface CadastroService {
 	public void excluirParametro(Parametro bean) throws PromoveException;
 
 	public List<Parametro> buscarTodosParametros()throws PromoveException;
+	
+	public Map<String, String> buscarTodosParametrosAsMap()throws PromoveException;
 
 	public List<TipoUsuario> buscarTodosTiposUsuarios()throws PromoveException;
 
