@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>JSF2 + EJB3</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:messages/>
+        <h3>Cadastro de newsletter</h3>
+        e-mail: <h:inputText value="#{newsBean.mail}"/><br/>
+        <h:commandLink action="#{newsBean.salvar}" value="Salvar"/>
+        <br/>
+        <rich:dataTable var="m" value="#{newsBean.assinantes}" id="tb_news">
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputText value="E-mail" />
+                </f:facet>
+                <h:outputText value="#{m}" />
+            </rich:column>
+        </rich:dataTable>
+        </h:form>
+    </h:body>
+</html>
+
