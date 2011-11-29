@@ -12,14 +12,16 @@ public interface ImportacaoService {
 
 	public void importCtrc(String xml) throws PromoveException;
 
-	public void importVeiculosNacionais(String csv)throws PromoveException;
+	public void importVeiculosNacionais(String csv) throws PromoveException;
 
-	public void importVeiculosImportados(String csv)throws PromoveException;
+	public void importVeiculosImportados(String csv) throws PromoveException;
 
-	public void importAvariasDoDiretorio(String config, String dest)throws PromoveException;
+	public void importAvariasDoDiretorio(String config, String dest) throws PromoveException;
 
-	public void importarGabardo(String url)throws PromoveException;
+	public void importarGabardo(String url) throws PromoveException;
 
-	public void importDeParaAvaria(String csv)throws PromoveException;
+	public void importDeParaAvaria(String csv) throws PromoveException;
+
+	public void transfereFotos(String origem, String destino) throws PromoveException;
 
 }

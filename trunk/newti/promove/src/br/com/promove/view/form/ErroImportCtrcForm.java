@@ -6,6 +6,7 @@ import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Cor;
+import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.entity.InconsistenciaVeiculo;
 import br.com.promove.entity.Modelo;
@@ -118,6 +119,7 @@ public class ErroImportCtrcForm extends BaseForm {
 						
 						item.getBean().setVeiculo(v.get(0));
 						item.getBean().setModelo(v.get(0).getModelo().getDescricao());
+						item.getBean().setChassi(v.get(0).getChassi());
 						item.getBean().setMsgErro("");
 						
 						if (ctrcService.salvarVeiculoCtrcDeInconsistencia(item.getBean())) {
@@ -196,6 +198,10 @@ public class ErroImportCtrcForm extends BaseForm {
 					}
 					
 					ctrcService.excluirInconsistenciaCtrc(inconsistencia);
+					List<Ctrc> ctrcs = ctrcService.buscarCtrcDuplicadoPorFiltros(inconsistencia.getCtrc());
+					if (ctrcs.size() > 0) {
+						ctrcService.excluirCtrc(ctrcs.get(0));
+					}
 					view.getTables().getTableCtrc().reloadTable();
 					view.getTables().getTableVeiculo().removeAllItems();
 					createFormBody(new BeanItem<VeiculoCtrc>(new VeiculoCtrc()));
@@ -212,11 +218,14 @@ public class ErroImportCtrcForm extends BaseForm {
 				try {
 					List<InconsistenciaCtrc> buscarTodasInconsistenciasDeCtrcs = ctrcService.buscarTodasInconsistenciasCtrc();
 					for (InconsistenciaCtrc inc : buscarTodasInconsistenciasDeCtrcs) {
+						ctrcService.revalidarInconsistencia(inc, true);
+						/*
 						if(ctrcService.buscarCtrcDuplicadoPorFiltros(inc.getCtrc()).size() == 0) {
 							ctrcService.revalidarInconsistencia(inc, true);
 						} else {
 							ctrcService.excluirInconsistenciaCtrc(inc);
 						}
+						*/
 					}
 					showSuccessMessage(view, "Inconsistências salvas!");
 					view.getTables().getTableCtrc().reloadTable();

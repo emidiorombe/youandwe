@@ -39,15 +39,12 @@ public class FileUtils {
 		return docs;
 	}
 	
-	
-	class FilterXml implements FileFilter{
+	class FilterXml implements FileFilter {
 		@Override
 		public boolean accept(File file) {
 			return file.isFile() && file.getName().endsWith("xml");
 		}
-		
 	}
-
 
 	public static void removeXMLs(String str_dir) {
 		File dir = new File(str_dir);
@@ -57,16 +54,44 @@ public class FileUtils {
 		}
 	}
 
-
 	public static void removeXML(String xml) {
 		File file = new File(xml);
 		file.delete();
 	}
 
-
 	public static void moverXML(String dest, Document xml) throws IOException {
 		XMLWriter writer = new XMLWriter(new FileWriter(dest));
 		writer.write(xml);
 		writer.close();
+	}
+	
+	class FilterJpg implements FileFilter {
+		@Override
+		public boolean accept(File file) {
+			return file.isFile() && file.getName().endsWith("jpg");
+		}
+	}
+
+	public static void moveJPGs(String origem, String destino) throws PromoveException {
+		File dirOrigem = new File(origem);
+		File dirDestino = new File(destino);
+		File[] files = dirOrigem.listFiles(new FileUtils().new FilterJpg());
+		String erros = "";
+		
+		for (File fileOrigem : files) {
+			File fileDestino = new File(dirDestino, fileOrigem.getName());
+			
+			if (fileDestino.exists()) {
+				fileOrigem.delete();
+			} else {
+				if (!fileOrigem.renameTo(fileDestino)) {
+					erros += "Erro no arquivo: " + fileOrigem.getName() + ";";
+				}
+			}
+		}
+		
+		if (!erros.isEmpty()) {
+			throw new PromoveException(erros);
+		}
 	}
 }

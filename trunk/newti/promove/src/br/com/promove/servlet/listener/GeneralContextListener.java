@@ -2,6 +2,8 @@ package br.com.promove.servlet.listener;
 
 import java.util.Enumeration;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -20,9 +22,12 @@ import static org.quartz.TriggerBuilder.newTrigger;
 import br.com.promove.async.EnviarEmailAvariasJob;
 import br.com.promove.async.ImportCTRCJob;
 import br.com.promove.dao.HibernateSessionFactory;
+import br.com.promove.exception.PromoveException;
+import br.com.promove.service.AvariaService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.service.ServiceInjector;
 import br.com.promove.utils.Config;
+import br.com.promove.utils.DateUtils;
 
 import com.google.inject.Guice;
 
@@ -82,6 +87,25 @@ public class GeneralContextListener implements ServletContextListener{
 			e.printStackTrace();
 		}
 		*/
+		/*
+		EnviarEmailAvariasJob teste = new EnviarEmailAvariasJob();
+		AvariaService avariaService = ServiceFactory.getService(AvariaService.class);
+		try {
+			String conteudo = teste.montarConteudo(avariaService.buscarAvariasPorData(DateUtils.diaAnterior()));
+			EnviarEmailAvariasJob.send("sica@promoveseguros.com.br", "daniel@newti.com.br;".split(";"), "Avarias de ", conteudo);
+			System.out.println(conteudo);
+		} catch (PromoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		*/
+		
 	}
 
 }

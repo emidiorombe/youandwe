@@ -110,7 +110,6 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 		} catch (ParseException e) {
 			throw new PromoveException(e);
 		}
-		
 	}
 
 	@Override
@@ -125,7 +124,11 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 		} catch (PromoveException e) {
 			throw new PromoveException(e);
 		}
-		
+	}
+
+	@Override
+	public void transfereFotos(String origem, String destino) throws PromoveException {
+		FileUtils.moveJPGs(origem, destino);
 	}
 
 }

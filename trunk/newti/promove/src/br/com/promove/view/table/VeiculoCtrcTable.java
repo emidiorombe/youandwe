@@ -30,8 +30,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 public class VeiculoCtrcTable extends Table {
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "modelo", "cor", "dataCadastro", "tipo", "navio", "numeroNF", "serieNF", "dataNF", "valorMercadoria"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Modelo", "Cor", "Data", "Tipo", "Navio", "NF", "Série", "Data NF", "Valor Merc."};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"chassi", "modelo", "dataCadastro", "tipo", "navio", "numeroNF", "serieNF", "dataNF", "valorMercadoria"};
+	public static final String[] COL_HEADERS = new String[] {"Chassi", "Modelo", "Data", "Tipo", "Navio", "NF", "Série", "Data NF", "Valor Merc."};
 	
 	private CtrcService ctrcService;
 	private VeiculoCtrcTableContainer container;
@@ -54,9 +54,7 @@ public class VeiculoCtrcTable extends Table {
 		setContainerDataSource(getContainer());
 		addListener(new RowSelectedListener());
 		
-		addGeneratedColumn("id", new VeiculoCtrcTableColumnGenerator(this));
-		addGeneratedColumn("modelo", new VeiculoCtrcTableColumnGenerator(this));
-		addGeneratedColumn("cor", new VeiculoCtrcTableColumnGenerator(this));
+		//addGeneratedColumn("id", new VeiculoCtrcTableColumnGenerator(this));
 		addGeneratedColumn("dataCadastro", new VeiculoCtrcTableColumnGenerator(this));
 		addGeneratedColumn("tipo", new VeiculoCtrcTableColumnGenerator(this));
 		addGeneratedColumn("navio", new VeiculoCtrcTableColumnGenerator(this));
@@ -67,12 +65,6 @@ public class VeiculoCtrcTable extends Table {
 		setColumnHeaders(COL_HEADERS);
 
 		setColumnAlignment("valorMercadoria", ALIGN_RIGHT);
-		
-		try {
-			setColumnCollapsed("cor", true);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public BeanItemContainer<VeiculoCtrc> getContainer() {
@@ -127,21 +119,30 @@ public class VeiculoCtrcTable extends Table {
 		@Override
 		public Component generateCell(Table source, Object itemId, Object columnId) {
 			VeiculoCtrc v = (VeiculoCtrc)itemId;
-			if(columnId.toString().equals("modelo")) {
-				return new Label(v.getVeiculo().getModelo().getDescricao());
-			}else if(columnId.toString().equals("cor")) {
-					return new Label(v.getVeiculo().getCor().getDescricao());
-			}else if(columnId.equals("tipo")) {
-				return new Label(v.getVeiculo().getTipo().getNome());
+			if(columnId.equals("tipo")) {
+				if (v.getVeiculo() != null) {
+					return new Label(v.getVeiculo().getTipo().getNome());
+				} else {
+					return null;
+				}
 			}else if(columnId.toString().equals("dataCadastro")) {
-				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getVeiculo().getDataCadastro()));
+				if (v.getVeiculo() != null) {
+					return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getVeiculo().getDataCadastro()));
+				} else {
+					return null;
+				}
 			}else if(columnId.toString().equals("navio")) {
+				if (v.getVeiculo() != null) {
 					return new Label(v.getVeiculo().getNavio());
+				} else {
+					return null;
+				}
 			}else if(columnId.toString().equals("dataNF")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataNF()));
 			}else if(columnId.toString().equals("valorMercadoria")) {
 				double valor = v.getValorMercadoria() == null ? 0.0 : v.getValorMercadoria();
 				return new Label(formatMoeda.format(valor));
+			/*
 			}else if(columnId.toString().equals("id")) {
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 				Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
@@ -154,6 +155,7 @@ public class VeiculoCtrcTable extends Table {
 				}else {
 					return new Label(v.getId().toString());
 				}
+			*/
 			}else {
 				return null;
 			}

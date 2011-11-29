@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
@@ -45,7 +46,7 @@ public class EnviarEmailAvariasJob implements Job {
 		}
 	}
 
-	private String montarConteudo(List<Avaria> buscarAvariasPorData) {
+	public String montarConteudo(List<Avaria> buscarAvariasPorData) {
 		StringBuilder conteudo = new StringBuilder();
 		for (Avaria av : buscarAvariasPorData) {
 			conteudo.append(av.getVeiculo().getChassi()).append(";");
@@ -58,19 +59,34 @@ public class EnviarEmailAvariasJob implements Job {
 		return conteudo.toString();
 	}
 
-	public static void send(String from,	String tos[], String subject, String content) throws AddressException,
+	public static void send(String from, String tos[], String subject, String content) throws AddressException,
 			MessagingException, PromoveException {
 		CadastroService cadastroService = ServiceFactory.getService(CadastroService.class);
 		Map<String, String> params = cadastroService.buscarTodosParametrosAsMap();
 		
 		// Create a mail session
 		Properties props = new Properties();
-		props.put("mail.smtp.auth", true);
-		props.put("mail.smtp.host", params.get("smtpHost"));
-		props.put("mail.smtp.port", params.get("smtpPort"));
-		props.put("mail.smtp.submitter", params.get("smtpPwd"));
-		Session session = Session.getDefaultInstance(props, null);
-
+		//props.put("mail.smtp.auth", "true");
+		//props.put("mail.smtp.starttls.enable", "true");
+		
+		props.put("mail.smtp.host", "smtp.promoveseguros.com.br");
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "465");
+		//props.put("mail.smtp.submitter", "acisaevo");
+		//props.put("mail.smtp.host", params.get("smtpHost"));
+		//props.put("mail.smtp.port", params.get("smtpPort"));
+		//props.put("mail.smtp.submitter", params.get("smtpPwd"));
+		//Session session = Session.getDefaultInstance(props, null);
+		//Session session = Session.getInstance(props);
+		Session session = Session.getDefaultInstance(props,
+				new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication("sica@promoveseguros.com.br", "acisaevo");
+					}
+				});
+	 
 		// Construct the message
 		Message msg = new MimeMessage(session);
 		msg.setFrom(new InternetAddress(from));
@@ -82,6 +98,9 @@ public class EnviarEmailAvariasJob implements Job {
 		msg.setText(content);
 
 		// Send the message
+		//Transport transport = session.getTransport("smtp");
+		//transport.connect("smtp.promoveseguros.com.br", 465, "sica@promoveseguros.com.br", "acisaevo");
+		
 		Transport.send(msg);
 	}
 

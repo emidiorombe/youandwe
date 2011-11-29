@@ -36,7 +36,8 @@ public class VeiculoCtrc implements Serializable{
 	private Date dataNF = new Date();
 	
 	private Double valorMercadoria;
-
+	private String chassi;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -123,6 +124,14 @@ public class VeiculoCtrc implements Serializable{
 
 	public Double getValorMercadoria() {
 		return valorMercadoria;
+	}
+
+	public void setChassi(String chassi) {
+		this.chassi = chassi;
+	}
+
+	public String getChassi() {
+		return chassi;
 	}
 
 }

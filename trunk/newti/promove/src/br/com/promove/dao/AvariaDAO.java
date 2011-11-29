@@ -283,7 +283,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 	}
 
 	public List<Avaria> getAllByDate(Date date) throws DAOException {
-		StringBuilder hql = new StringBuilder("select av from Avaria av where av.nivel.id = 4 and av.dataLancamento = :ontem");
+		StringBuilder hql = new StringBuilder("select av from Avaria av where av.nivel.id = 4 and av.dataLancamento >= :ontem");
 		addParamToQuery("ontem", date);
 		
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);

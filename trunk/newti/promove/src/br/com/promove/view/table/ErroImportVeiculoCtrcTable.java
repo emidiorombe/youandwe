@@ -29,8 +29,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 public class ErroImportVeiculoCtrcTable extends Table {
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "chassiInvalido", "modelo", "tipo", "navio", "numeroNF", "serieNF", "dataNF", "valorMercadoria", "msgErro"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Modelo", "Tipo", "Navio", "NF", "Série", "Data NF", "Valor Merc.", "Mensagem"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"chassi", "modelo", "tipo", "navio", "numeroNF", "serieNF", "dataNF", "valorMercadoria", "msgErro"};
+	public static final String[] COL_HEADERS = new String[] {"Chassi", "Modelo", "Tipo", "Navio", "NF", "Série", "Data NF", "Valor Merc.", "Mensagem"};
 	
 	private CtrcService ctrcService;
 	private VeiculoCtrcTableContainer container;
@@ -53,7 +53,7 @@ public class ErroImportVeiculoCtrcTable extends Table {
 		setContainerDataSource(getContainer());
 		addListener(new RowSelectedListener());
 		
-		addGeneratedColumn("id", new VeiculoCtrcTableColumnGenerator(this));
+		//addGeneratedColumn("id", new VeiculoCtrcTableColumnGenerator(this));
 		addGeneratedColumn("dataCadastro", new VeiculoCtrcTableColumnGenerator(this));
 		addGeneratedColumn("tipo", new VeiculoCtrcTableColumnGenerator(this));
 		addGeneratedColumn("navio", new VeiculoCtrcTableColumnGenerator(this));
@@ -152,6 +152,7 @@ public class ErroImportVeiculoCtrcTable extends Table {
 			}else if(columnId.toString().equals("valorMercadoria")) {
 				double valor = v.getValorMercadoria() == null ? 0.0 : v.getValorMercadoria();
 				return new Label(formatMoeda.format(valor));
+			/*
 			}else if(columnId.toString().equals("id")) {
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 				Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
@@ -164,6 +165,7 @@ public class ErroImportVeiculoCtrcTable extends Table {
 				}else {
 					return new Label(v.getId().toString());
 				}
+			*/
 			}else {
 				return null;
 			}

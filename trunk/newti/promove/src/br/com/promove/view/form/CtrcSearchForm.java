@@ -43,6 +43,7 @@ public class CtrcSearchForm extends BaseForm{
 	private TextField txtChassi;
 	private TextField txtNumero;
 	private CheckBox chkCancelado;
+	private CheckBox chkInconsistente;
 	//private TextField txtDesconto;
 	private Button search;
 	private Button export;
@@ -80,6 +81,9 @@ public class CtrcSearchForm extends BaseForm{
 		chkCancelado = new CheckBox();
 		chkCancelado.setCaption("Considerar cancelados");
 		
+		chkInconsistente = new CheckBox();
+		chkInconsistente.setCaption("Considerar inconsistentes");
+		
 		//txtDesconto = new TextField("% Desconto");
 		//txtDesconto.addValidator(new DoubleValidator("Desconto deve ser numérico"));
 		//txtDesconto.setWidth("100px");
@@ -91,6 +95,7 @@ public class CtrcSearchForm extends BaseForm{
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
 		addField("chkCancelado", chkCancelado);
+		addField("chkInconsistente", chkInconsistente);
 		//addField("txtDesconto", txtDesconto);
 		
 		layout.addComponent(createFooter());
@@ -140,6 +145,7 @@ public class CtrcSearchForm extends BaseForm{
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null;
 				Double desconto = 0.0; //txtDesconto.getValue() != null ? Double.parseDouble((String)txtDesconto.getValue()) : 0;
 				Boolean cancelado = (Boolean)chkCancelado.getValue();
+				Boolean incons = (Boolean)chkInconsistente.getValue();
 				BeanItem<Ctrc> item = (BeanItem<Ctrc>)getItemDataSource();
 				
 				if(txtNumero.toString() == null || txtNumero.toString().isEmpty())
@@ -151,6 +157,7 @@ public class CtrcSearchForm extends BaseForm{
 					item.getBean().setNumero(Integer.parseInt(txtNumero.toString()));
 				
 				item.getBean().setCancelado(cancelado);
+				item.getBean().setInconsistente(incons);
 				
 				if(event.getButton() == search) {
 					List<Ctrc> list = ctrcService.buscarCtrcPorFiltro(item.getBean(), de, ate, txtChassi.toString(), false);

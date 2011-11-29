@@ -100,6 +100,8 @@ public class ParametroForm extends BaseForm{
 			if(propertyId.equals("chave")) {
 				if(!newLocal)
 					f.setReadOnly(true);
+			} else if(propertyId.equals("valor")) {
+				f.setWidth("250px");
 			}
 			return f;
 		}
