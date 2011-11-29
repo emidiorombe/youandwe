@@ -31,7 +31,7 @@ public class AverbacaoView extends BaseForm{
 	private Button gerar;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
-	private CheckBox chkInconsistente;
+	//private CheckBox chkInconsistente;
 	private PromoveApplication app;
 	private ExportacaoService exportacaoService;
 
@@ -54,8 +54,8 @@ public class AverbacaoView extends BaseForm{
 		txtAte.setLocale(new Locale("pt", "BR"));
 		txtAte.setResolution(DateField.RESOLUTION_DAY);
 		
-		chkInconsistente = new CheckBox();
-		chkInconsistente.setCaption("Considerar inconsistentes");
+		//chkInconsistente = new CheckBox();
+		//chkInconsistente.setCaption("Considerar inconsistentes");
 		
 		gerar = new Button("Gerar", new AverbacaoListener(this));
 		
@@ -65,7 +65,7 @@ public class AverbacaoView extends BaseForm{
 		layout.addComponent(this);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
-		addField("chkInconsistente", chkInconsistente);
+		//addField("chkInconsistente", chkInconsistente);
 		layout.addComponent(createFooter());
 		layout.addComponent(gerar);
 		layout.setSpacing(true);
@@ -103,7 +103,7 @@ public class AverbacaoView extends BaseForm{
 			try {
 				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null;
-				Boolean incons = (Boolean)chkInconsistente.getValue();
+				//Boolean incons = (Boolean)chkInconsistente.getValue();
 				String fileName = "averbacao_" + new SimpleDateFormat("ddMMyyyy").format(de) + "_" + new SimpleDateFormat("ddMMyyyy").format(ate) + ".xls";
 				
 				if(de == null || ate == null)
@@ -111,7 +111,7 @@ public class AverbacaoView extends BaseForm{
 
 				String file = "";
 				try {
-					file = exportacaoService.exportarXLSAverbacao(fileName, de, ate, incons);
+					file = exportacaoService.exportarXLSAverbacao(fileName, de, ate, true);
 				} catch (PromoveException e) {
 					showErrorMessage(view, e.getMessage());
 					e.printStackTrace();
