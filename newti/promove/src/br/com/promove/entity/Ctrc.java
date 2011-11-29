@@ -48,6 +48,7 @@ public class Ctrc implements Serializable{
 	private Double valorMercadoria;
 	private String motorista;
 	private Boolean cancelado = false;
+	private Boolean inconsistente = false;
 	
 	@OneToMany(mappedBy="ctrc", targetEntity=VeiculoCtrc.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<VeiculoCtrc> veiculos;
@@ -214,6 +215,14 @@ public class Ctrc implements Serializable{
 
 	public Boolean getCancelado() {
 		return cancelado;
+	}
+
+	public void setInconsistente(Boolean inconsistente) {
+		this.inconsistente = inconsistente;
+	}
+
+	public Boolean getInconsistente() {
+		return inconsistente;
 	}
 
 	public void setVeiculos(List<VeiculoCtrc> veiculos) {

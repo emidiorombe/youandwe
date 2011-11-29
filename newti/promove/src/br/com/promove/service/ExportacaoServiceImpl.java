@@ -408,7 +408,7 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	}
 
 	@Override
-	public String exportarXLSAverbacao(String fileName, Date de, Date ate) throws PromoveException {
+	public String exportarXLSAverbacao(String fileName, Date de, Date ate, Boolean incons) throws PromoveException {
 		try {
 			CadastroService cadastroService = ServiceFactory.getService(CadastroService.class);
 			CtrcService ctrcService = ServiceFactory.getService(CtrcService.class);
@@ -482,11 +482,11 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    row_head.createCell(8).setCellValue("CHASSI");
 		    row_head.createCell(9).setCellValue("MODELO");
 		    row_head.createCell(10).setCellValue("VALOR");
-		    //row_head.createCell(11).setCellValue("NAVIO");
-		    //row_head.createCell(12).setCellValue("DATA");
 		    
 		    i = 0;
-			List<Ctrc> ctrcs = ctrcService.buscarCtrcPorFiltro(new Ctrc(), de, ate, "", true);
+		    Ctrc ct = new Ctrc();
+		    ct.setInconsistente(incons);
+			List<Ctrc> ctrcs = ctrcService.buscarCtrcPorFiltro(ct, de, ate, "", true);
 		    for(Ctrc ctrc : ctrcs) {
 		    	for (VeiculoCtrc veic : ctrc.getVeiculos()) {
 				    Row row = sheetTransporte.createRow(++i);
@@ -499,20 +499,10 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 				    row.createCell(6).setCellValue(ctrc.getUfDestino());
 				    row.createCell(7).setCellValue(ctrc.getMunicipioDestino());
 				    
-				    if (veic.getVeiculo() != null) {
-					    //String dataNavio = "";
-					    
-					    //if (veic.getVeiculo().getNavio() != null &&	!veic.getVeiculo().getNavio().isEmpty()) {
-					    //	dataNavio = date_format.format(veic.getVeiculo().getDataCadastro());
-					    //}
-					    		
-					    row.createCell(8).setCellValue(veic.getVeiculo().getChassi());
-					    row.createCell(9).setCellValue(veic.getVeiculo().getModelo().getDescricao());
-					    if(veic.getValorMercadoria() != null) row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
-					    //row.createCell(11).setCellValue(veic.getVeiculo().getNavio());
-					    //row.createCell(12).setCellValue(dataNavio);
-						if(veic.getValorMercadoria() != null) valorTransporte += veic.getValorMercadoria();
-				    }
+				    row.createCell(8).setCellValue(veic.getChassi());
+				    row.createCell(9).setCellValue(veic.getModelo());
+				    if(veic.getValorMercadoria() != null) row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
+					if(veic.getValorMercadoria() != null) valorTransporte += veic.getValorMercadoria();
 		    	}
 		    }
 		    

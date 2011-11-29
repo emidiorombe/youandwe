@@ -154,7 +154,7 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	
 
 	@Override
-	public InconsistenciaCtrc salvarInconsistenciaImportCtrc(Ctrc ctrc, String msgErro)throws PromoveException {
+	public InconsistenciaCtrc salvarInconsistenciaImportCtrc(Ctrc ctrc, String msgErro) throws PromoveException {
 		try {
 			InconsistenciaCtrc inc = new InconsistenciaCtrc(ctrc, msgErro);
 			inconsistenciaCtrcDAO.save(inc);
@@ -166,7 +166,7 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 	}
 
 	@Override
-	public List<InconsistenciaCtrc> buscarTodasInconsistenciasCtrc()throws PromoveException {
+	public List<InconsistenciaCtrc> buscarTodasInconsistenciasCtrc() throws PromoveException {
 		List<InconsistenciaCtrc> lista = null;
 		try {
 			lista = inconsistenciaCtrcDAO.getAll("dataEmissao desc");
@@ -339,12 +339,21 @@ public class CtrcServiceImpl implements CtrcService, Serializable {
 			
 			if (veicInvalidos == 0 && (inc.getMsgErro() == null || inc.getMsgErro().isEmpty())) {
 				ok = true;
+				List<Ctrc> ctrcs = this.buscarCtrcDuplicadoPorFiltros(ctrc);
+
+				if(ctrcs.size() > 0) {
+					ctrc = ctrcs.get(0);
+				}
+
+				ctrc.setInconsistente(false);
 				ctrcDAO.save(ctrc);
+				
 				for (VeiculoCtrc veic : veics) {
 					veic.setInconsistencia(null);
-					veic.setCtrc(ctrc);
+					if (ctrcs.size() == 0) veic.setCtrc(ctrc);
 					salvarVeiculoCtrc(veic);
 				}
+				
 				inconsistenciaCtrcDAO.delete(inc);
 			}
 

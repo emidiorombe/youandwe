@@ -67,6 +67,9 @@ public class Avaria implements Serializable{
 	@OneToOne
 	private NivelAvaria nivel;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataCadastro = new Date();
+	
 	public Integer getId() {
 		return id;
 	}
@@ -163,6 +166,14 @@ public class Avaria implements Serializable{
 		this.hora = hora;
 	}
 
+	public String getModelo() {
+		return modelo;
+	}
+
+	public void setModelo(String modelo) {
+		this.modelo = modelo;
+	}
+
 	public void setNivel(NivelAvaria nivel) {
 		this.nivel = nivel;
 	}
@@ -171,12 +182,12 @@ public class Avaria implements Serializable{
 		return nivel;
 	}
 
-	public String getModelo() {
-		return modelo;
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
-	public void setModelo(String modelo) {
-		this.modelo = modelo;
+	public Date getDataCadastro() {
+		return dataCadastro;
 	}
 	
 	

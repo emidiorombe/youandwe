@@ -130,11 +130,13 @@ public class ImportacaoCtrc {
 							try {
 								String chassi = node_veic.element("veiculo_chassi").getText();
 								if (chassi != null && !chassi.isEmpty()) {
+									chassi = chassi.toUpperCase();
 									if (chassi.length() > 17) {
 										chassi = chassi.substring(0, 17);
 									}
 								
 									veic.setChassiInvalido(chassi);
+									veic.setChassi(chassi);
 									veic.setModelo(node_veic.element("veiculo_modelo").getText());
 									
 									veic.setNumeroNF(node_veic.element("veiculo_numero_nf").getText());
@@ -159,14 +161,19 @@ public class ImportacaoCtrc {
 							}
 						}
 					}
-					if(veicInvalidos > 0) {
-						throw new Exception("");
-					} else {
-						ctrcService.salvarCtrc(ct, true);
-						for(VeiculoCtrc veic: veiculos) {
-							veic.setCtrc(ct);
-							ctrcService.salvarVeiculoCtrc(veic, true);
-						}
+					
+					InconsistenciaCtrc inc = new InconsistenciaCtrc();
+					
+					if (veicInvalidos > 0) {
+						inc = ctrcService.salvarInconsistenciaImportCtrc(ct, "");
+						ct.setInconsistente(true);
+					}
+					ctrcService.salvarCtrc(ct, true);
+					
+					for (VeiculoCtrc veic: veiculos) {
+						veic.setCtrc(ct);
+						if (veicInvalidos > 0) veic.setInconsistencia(inc.getId());
+						ctrcService.salvarVeiculoCtrc(veic, true);
 					}
 				}
 				

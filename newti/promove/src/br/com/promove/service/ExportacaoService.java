@@ -35,6 +35,6 @@ public interface ExportacaoService {
 
 	public String exportarXLSInconsistenciaCtrcVeiculo(List<VeiculoCtrc> lista) throws PromoveException;
 
-	public String exportarXLSAverbacao(String fileName, Date de, Date ate) throws PromoveException;
+	public String exportarXLSAverbacao(String fileName, Date de, Date ate, Boolean incons) throws PromoveException;
 
 }

@@ -11,6 +11,7 @@ import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.Usuario;
 import br.com.promove.service.CtrcService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.StringUtilities;
 import br.com.promove.view.CtrcVeiculoTables;
 import br.com.promove.view.form.CtrcForm;
 
@@ -29,8 +30,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.BaseTheme;
 
 public class CtrcTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "motorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "cancelado"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Filial", "Numero", "Tipo", "Série", "Transportadora", "Data Emis.", "Frota", "Carreta", "Motorista", "UF", "Mun. Origem", "UF", "Mun. Destino", "Valor Merc.", "Cancelado"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "motorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "cancelado", "inconsistente"};
+	public static final String[] COL_HEADERS = new String[] {"ID", "Filial", "Numero", "Tipo", "Série", "Transportadora", "Data Emis.", "Frota", "Carreta", "Motorista", "UF", "Mun. Origem", "UF", "Mun. Destino", "Valor Merc.", "Cancelado", "Inconsistente"};
 	
 	private CtrcService ctrcService;
 	private CtrcTableContainer container;
@@ -58,6 +59,8 @@ public class CtrcTable extends Table{
 		addGeneratedColumn("transp", new CtrcTableColumnGenerator(this));
 		addGeneratedColumn("dataEmissao", new CtrcTableColumnGenerator(this));
 		addGeneratedColumn("valorMercadoria", new CtrcTableColumnGenerator(this));
+		addGeneratedColumn("cancelado", new CtrcTableColumnGenerator(this));
+		addGeneratedColumn("inconsistente", new CtrcTableColumnGenerator(this));
 		//addGeneratedColumn("taxaRct", new CtrcTableColumnGenerator(this));
 		//addGeneratedColumn("taxaRr", new CtrcTableColumnGenerator(this));
 		//addGeneratedColumn("taxaRcf", new CtrcTableColumnGenerator(this));
@@ -89,6 +92,7 @@ public class CtrcTable extends Table{
 			//setColumnCollapsed("taxaRcf", true);
 			//setColumnCollapsed("taxaFluvial", true);
 			setColumnCollapsed("cancelado", true);
+			setColumnCollapsed("inconsistente", true);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -180,6 +184,10 @@ public class CtrcTable extends Table{
 			}else if(columnId.toString().equals("valorMercadoria")) {
 				double valor = c.getValorMercadoria() == null ? 0.0 : c.getValorMercadoria();
 				return new Label(formatMoeda.format(valor));
+			} else if(columnId.toString().equals("cancelado")) {
+				return new Label(StringUtilities.booleanToReadableString(c.getCancelado()));
+			} else if(columnId.toString().equals("inconsistente")) {
+				return new Label(StringUtilities.booleanToReadableString(c.getInconsistente()));
 			/*
 			}else if(columnId.toString().equals("taxaRct") || columnId.toString().equals("taxaRcf") || columnId.toString().equals("taxaRr") || columnId.toString().equals("taxaFluvial")) {
 				double valor = 0.0;
