@@ -10,8 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -414,8 +418,15 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			CtrcService ctrcService = ServiceFactory.getService(CtrcService.class);
 			Workbook wb = new HSSFWorkbook();
 		    CreationHelper createHelper = wb.getCreationHelper();
-			Double taxaRCTRC = 0.03;
-			Double taxaTranspNacional = 0.08;
+		    DataFormat format = wb.createDataFormat();
+		    CellStyle estiloNum = wb.createCellStyle();
+            estiloNum.setDataFormat(format.getFormat("#,##0.00"));
+		    CellStyle estiloPerc = wb.createCellStyle();
+            estiloPerc.setDataFormat(format.getFormat("#,##0.0000%"));
+            Cell celula;
+            
+			Double taxaRCTRC = 0.0003;
+			Double taxaTranspNacional = 0.0008;
 			Double valorRCTRC = 0.0;
 			Double valorTranspNacional = 0.0;
 		    Double valorPorto = 0.0;
@@ -436,36 +447,57 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    veiculo.setTipo(cadastroService.getById(TipoVeiculo.class, 2));
 			List<Veiculo> veiculos = cadastroService.buscarVeiculoPorFiltro(veiculo, de, ate);
 		    for(Veiculo veic : veiculos) {
-			    Row row = sheetPorto.createRow(++i);
-			    String dataNavio = "";
-					    
-			    if (veic.getNavio() != null &&	!veic.getNavio().isEmpty()) {
-			    	dataNavio = date_format.format(veic.getDataCadastro());
-			    }
-			    		
-			    row.createCell(0).setCellValue(veic.getChassi());
-			    row.createCell(1).setCellValue(veic.getModelo().getDescricao());
-			    if(veic.getValorMercadoria() != null) row.createCell(2).setCellValue(moeda_format.format(veic.getValorMercadoria()));
-			    row.createCell(3).setCellValue(veic.getNavio());
-			    row.createCell(4).setCellValue(dataNavio);
-				if(veic.getValorMercadoria() != null) valorPorto += veic.getValorMercadoria();
+		    	if (veic.getValorMercadoria() != null) {
+				    Row row = sheetPorto.createRow(++i);
+				    String dataNavio = "";
+						    
+				    if (veic.getNavio() != null &&	!veic.getNavio().isEmpty()) {
+				    	dataNavio = date_format.format(veic.getDataCadastro());
+				    }
+				    		
+				    row.createCell(0).setCellValue(veic.getChassi());
+				    row.createCell(1).setCellValue(veic.getModelo().getDescricao());
+				    
+				    //row.createCell(2).setCellValue(moeda_format.format(veic.getValorMercadoria()));
+				    celula = row.createCell(2);
+				    celula.setCellValue(veic.getValorMercadoria());
+				    celula.setCellStyle(estiloNum);
+				    row.createCell(3).setCellValue(veic.getNavio());
+				    row.createCell(4).setCellValue(dataNavio);
+					valorPorto += veic.getValorMercadoria();
+		    	}
 		    }
 		    
 		    //Total Porto
 		    Row row_total = sheetPorto.createRow(++i);
 		    row_total = sheetPorto.createRow(++i);
 		    row_total.createCell(0).setCellValue("Porto");
-		    row_total.createCell(2).setCellValue(moeda_format.format(valorPorto));
+		    //row_total.createCell(2).setCellValue(moeda_format.format(valorPorto));
+		    celula = row_total.createCell(2);
+		    celula.setCellValue(valorPorto);
+		    celula.setCellStyle(estiloNum);
 		    
-		    valorRCTRC = valorPorto * (taxaRCTRC / 100.0);
+		    valorRCTRC = valorPorto * taxaRCTRC;
 		    row_total = sheetPorto.createRow(++i);
-		    row_total.createCell(1).setCellValue(percentual2_format.format(taxaRCTRC));
-		    row_total.createCell(2).setCellValue(moeda_format.format(valorRCTRC));
+		    //row_total.createCell(1).setCellValue(percentual2_format.format(taxaRCTRC));
+		    celula = row_total.createCell(1);
+		    celula.setCellValue(taxaRCTRC);
+		    celula.setCellStyle(estiloPerc);
+		    //row_total.createCell(2).setCellValue(moeda_format.format(valorRCTRC));
+		    celula = row_total.createCell(2);
+		    celula.setCellValue(valorRCTRC);
+		    celula.setCellStyle(estiloNum);
 
-		    valorTranspNacional = valorPorto * (taxaTranspNacional / 100.0);
+		    valorTranspNacional = valorPorto * taxaTranspNacional;
 		    row_total = sheetPorto.createRow(++i);
-		    row_total.createCell(1).setCellValue(percentual2_format.format(taxaTranspNacional));
-		    row_total.createCell(2).setCellValue(moeda_format.format(valorTranspNacional));
+		    //row_total.createCell(1).setCellValue(percentual2_format.format(taxaTranspNacional));
+		    celula = row_total.createCell(1);
+		    celula.setCellValue(taxaTranspNacional);
+		    celula.setCellStyle(estiloPerc);
+		    //row_total.createCell(2).setCellValue(moeda_format.format(valorTranspNacional));
+		    celula = row_total.createCell(2);
+		    celula.setCellValue(valorTranspNacional);
+		    celula.setCellStyle(estiloNum);
 
 		    //Cabeçalho Transporte
 		    Sheet sheetTransporte = wb.createSheet("Transporte");
@@ -501,8 +533,14 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 				    
 				    row.createCell(8).setCellValue(veic.getChassi());
 				    row.createCell(9).setCellValue(veic.getModelo());
-				    if(veic.getValorMercadoria() != null) row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
-					if(veic.getValorMercadoria() != null) valorTransporte += veic.getValorMercadoria();
+				    if(veic.getValorMercadoria() != null) {
+				    	//row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
+					    celula = row.createCell(10);
+					    celula.setCellValue(veic.getValorMercadoria());
+					    celula.setCellStyle(estiloNum);
+				    	valorTransporte += veic.getValorMercadoria();
+				    }
+					
 		    	}
 		    }
 		    
@@ -510,49 +548,94 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    row_total = sheetTransporte.createRow(++i);
 		    row_total = sheetTransporte.createRow(++i);
 		    row_total.createCell(8).setCellValue("Transporte");
-		    row_total.createCell(10).setCellValue(moeda_format.format(valorTransporte));
+		    //row_total.createCell(10).setCellValue(moeda_format.format(valorTransporte));
+		    celula = row_total.createCell(10);
+		    celula.setCellValue(valorTransporte);
+		    celula.setCellStyle(estiloNum);
 
-		    valorRCTRC = valorTransporte * (taxaRCTRC / 100.0);
+		    valorRCTRC = valorTransporte * taxaRCTRC;
 		    row_total = sheetTransporte.createRow(++i);
 		    //row_total.createCell(8).setCellValue("RCTR-C");
-		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaRCTRC));
-		    row_total.createCell(10).setCellValue(moeda_format.format(valorRCTRC));
+		    //row_total.createCell(9).setCellValue(percentual2_format.format(taxaRCTRC));
+		    celula = row_total.createCell(9);
+		    celula.setCellValue(taxaRCTRC);
+		    celula.setCellStyle(estiloPerc);
+		    //row_total.createCell(10).setCellValue(moeda_format.format(valorRCTRC));
+		    celula = row_total.createCell(10);
+		    celula.setCellValue(valorRCTRC);
+		    celula.setCellStyle(estiloNum);
 
-		    valorTranspNacional = valorTransporte * (taxaTranspNacional / 100.0);
+		    valorTranspNacional = valorTransporte * taxaTranspNacional;
 		    row_total = sheetTransporte.createRow(++i);
 		    //row_total.createCell(8).setCellValue("Transporte Nacional");
-		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaTranspNacional));
-		    row_total.createCell(10).setCellValue(moeda_format.format(valorTranspNacional));
+		    //row_total.createCell(9).setCellValue(percentual2_format.format(taxaTranspNacional));
+		    celula = row_total.createCell(9);
+		    celula.setCellValue(taxaTranspNacional);
+		    celula.setCellStyle(estiloPerc);
+		    //row_total.createCell(10).setCellValue(moeda_format.format(valorTranspNacional));
+		    celula = row_total.createCell(10);
+		    celula.setCellValue(valorTranspNacional);
+		    celula.setCellStyle(estiloNum);
 
 		    //Total Porto
 		    row_total = sheetTransporte.createRow(++i);
 		    row_total.createCell(8).setCellValue("Porto");
-		    row_total.createCell(10).setCellValue(moeda_format.format(valorPorto));
+		    //row_total.createCell(10).setCellValue(moeda_format.format(valorPorto));
+		    celula = row_total.createCell(10);
+		    celula.setCellValue(valorPorto);
+		    celula.setCellStyle(estiloNum);
 
-		    valorRCTRC = valorPorto * (taxaRCTRC / 100.0);
+		    valorRCTRC = valorPorto * taxaRCTRC;
 		    row_total = sheetTransporte.createRow(++i);
-		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaRCTRC));
-		    row_total.createCell(10).setCellValue(moeda_format.format(valorRCTRC));
+		    //row_total.createCell(9).setCellValue(percentual2_format.format(taxaRCTRC));
+		    celula = row_total.createCell(9);
+		    celula.setCellValue(taxaRCTRC);
+		    celula.setCellStyle(estiloPerc);
+		    //row_total.createCell(10).setCellValue(moeda_format.format(valorRCTRC));
+		    celula = row_total.createCell(10);
+		    celula.setCellValue(valorRCTRC);
+		    celula.setCellStyle(estiloNum);
 
-		    valorTranspNacional = valorPorto * (taxaTranspNacional / 100.0);
+		    valorTranspNacional = valorPorto * taxaTranspNacional;
 		    row_total = sheetTransporte.createRow(++i);
-		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaTranspNacional));
-		    row_total.createCell(10).setCellValue(moeda_format.format(valorTranspNacional));
+		    //row_total.createCell(9).setCellValue(percentual2_format.format(taxaTranspNacional));
+		    celula = row_total.createCell(9);
+		    celula.setCellValue(taxaTranspNacional);
+		    celula.setCellStyle(estiloPerc);
+		    //row_total.createCell(10).setCellValue(moeda_format.format(valorTranspNacional));
+		    celula = row_total.createCell(10);
+		    celula.setCellValue(valorTranspNacional);
+		    celula.setCellStyle(estiloNum);
 
 		    //Total Geral
 		    row_total = sheetTransporte.createRow(++i);
 		    row_total.createCell(8).setCellValue("Total");
-		    row_total.createCell(10).setCellValue(moeda_format.format(valorTransporte + valorPorto));
+		    //row_total.createCell(10).setCellValue(moeda_format.format(valorTransporte + valorPorto));
+		    celula = row_total.createCell(10);
+		    celula.setCellValue(valorTransporte + valorPorto);
+		    celula.setCellStyle(estiloNum);
 
-		    valorRCTRC = (valorTransporte + valorPorto) * (taxaRCTRC / 100.0);
+		    valorRCTRC = (valorTransporte + valorPorto) * taxaRCTRC;
 		    row_total = sheetTransporte.createRow(++i);
-		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaRCTRC));
-		    row_total.createCell(10).setCellValue(moeda_format.format(valorRCTRC));
+		    //row_total.createCell(9).setCellValue(percentual2_format.format(taxaRCTRC));
+		    celula = row_total.createCell(9);
+		    celula.setCellValue(taxaRCTRC);
+		    celula.setCellStyle(estiloPerc);
+		    //row_total.createCell(10).setCellValue(moeda_format.format(valorRCTRC));
+		    celula = row_total.createCell(10);
+		    celula.setCellValue(valorRCTRC);
+		    celula.setCellStyle(estiloNum);
 
-		    valorTranspNacional = (valorTransporte + valorPorto) * (taxaTranspNacional / 100.0);
+		    valorTranspNacional = (valorTransporte + valorPorto) * taxaTranspNacional;
 		    row_total = sheetTransporte.createRow(++i);
-		    row_total.createCell(9).setCellValue(percentual2_format.format(taxaTranspNacional));
-		    row_total.createCell(10).setCellValue(moeda_format.format(valorTranspNacional));
+		    //row_total.createCell(9).setCellValue(percentual2_format.format(taxaTranspNacional));
+		    celula = row_total.createCell(9);
+		    celula.setCellValue(taxaTranspNacional);
+		    celula.setCellStyle(estiloPerc);
+		    //row_total.createCell(10).setCellValue(moeda_format.format(valorTranspNacional));
+		    celula = row_total.createCell(10);
+		    celula.setCellValue(valorTranspNacional);
+		    celula.setCellStyle(estiloNum);
 
 		    // Write the output to a file/
 		    FileOutputStream fileOut = new FileOutputStream(fileName);
