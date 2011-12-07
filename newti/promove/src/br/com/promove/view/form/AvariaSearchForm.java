@@ -170,13 +170,15 @@ public class AvariaSearchForm extends BaseForm{
 		i = cmbPeriodo.addItem(1);
 		i.getItemProperty("label").setValue("Data da vistoria");
 		i = cmbPeriodo.addItem(2);
+		i.getItemProperty("label").setValue("Data de registro da vistoria");
+		i = cmbPeriodo.addItem(3);
 		i.getItemProperty("label").setValue("Data de registro do veículo");
 		
 		cmbPeriodo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		cmbPeriodo.setImmediate(true);
 		cmbPeriodo.setNullSelectionAllowed(false);
 		cmbPeriodo.setItemCaptionPropertyId("label");
-		cmbPeriodo.setWidth("250px");
+		cmbPeriodo.setWidth("200px");
 		cmbPeriodo.setValue(cmbPeriodo.getItemIds().iterator().next());
 
 		layout.addComponent(this);

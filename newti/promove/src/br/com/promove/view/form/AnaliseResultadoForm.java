@@ -142,6 +142,8 @@ public class AnaliseResultadoForm extends BaseForm{
 		i = cmbPeriodo.addItem(1);
 		i.getItemProperty("label").setValue("Data da vistoria");
 		i = cmbPeriodo.addItem(2);
+		i.getItemProperty("label").setValue("Data de registro da vistoria");
+		i = cmbPeriodo.addItem(3);
 		i.getItemProperty("label").setValue("Data de registro do veículo");
 		
 		cmbPeriodo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);

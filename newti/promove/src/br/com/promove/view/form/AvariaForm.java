@@ -11,8 +11,8 @@ import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
+import br.com.promove.entity.TipoVeiculo;
 import br.com.promove.entity.Usuario;
-import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
@@ -76,7 +76,7 @@ public class AvariaForm extends BaseForm {
 	public void createFormBody(BeanItem<Avaria> avaria){
 		setItemDataSource(avaria);
 		setFormFieldFactory(new AvariaFieldFactory(this, avaria.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"veiculo", "origem", "local", "tipo", "extensao", "nivel", "clima", "dataLancamento","hora", "foto", "observacao"});
+		setVisibleItemProperties(new Object[]{"veiculo", "origem", "local", "tipo", "extensao", "nivel", "dataLancamento","hora", "foto", "observacao"});
 		
 	}
 	
@@ -278,6 +278,10 @@ public class AvariaForm extends BaseForm {
 					if(isValid()){
 						commit();
 						BeanItem<Avaria> item = (BeanItem<Avaria>) getItemDataSource();
+						
+						if(item.getBean().getClima() == null || item.getBean().getClima().getId() == null) {
+							item.getBean().setClima(avariaService.getById(Clima.class, 6));
+						}
 						
 						WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 						Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
