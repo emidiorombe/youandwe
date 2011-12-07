@@ -5,9 +5,13 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.promove.application.PromoveApplication;
+import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Fabricante;
+import br.com.promove.entity.InconsistenciaAvaria;
+import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.TipoVeiculo;
+import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
@@ -23,6 +27,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
@@ -42,7 +47,9 @@ public class VeiculoSearchForm extends BaseForm{
 	private PopupDateField txtAte;
 	private Button search;
 	private Button export;
+	private Button novaAvaria;
 	private PromoveApplication app;
+	private Veiculo veiculo;
 	
 	public VeiculoSearchForm(PromoveApplication app) {
 		this.app = app;
@@ -58,6 +65,7 @@ public class VeiculoSearchForm extends BaseForm{
 		
 		search = new Button("Buscar", new VeiculoSearchListener());
 		export = new Button("Gerar Arquivo", new VeiculoSearchListener());
+		novaAvaria = new Button("Cadastrar Nova Avaria", new VeiculoSearchListener());
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -85,10 +93,14 @@ public class VeiculoSearchForm extends BaseForm{
 	}
 	
 	private Component createFooter(){
+		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
+		
 		HorizontalLayout footer = new HorizontalLayout();
 		footer.setSpacing(true);
 		footer.addComponent(search);
 		footer.addComponent(export);
+		if(user.getTipo().getId() == 1 || user.getTipo().getId() == 2) footer.addComponent(novaAvaria);
 		footer.setVisible(true);
 		
 		return footer;
@@ -109,33 +121,51 @@ public class VeiculoSearchForm extends BaseForm{
 		this.view = view;
 	}
 	
+	public void setVeiculo(Veiculo veiculo) {
+		this.veiculo = veiculo;
+	}
+
+	public Veiculo getVeiculo() {
+		return veiculo;
+	}
+
 	class VeiculoSearchListener implements ClickListener{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
 			try {
 				commit();
-				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
-				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
-				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
-				
-				if(item.getBean().getChassi() == null || item.getBean().getChassi().isEmpty()) {
-					if(de == null || ate == null)
-						if(item.getBean().getNavio().isEmpty())
-							throw new IllegalArgumentException("Informe um chassi, navio ou período");
-				}
-				
-				List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate);
-				
-				if(event.getButton() == search) {
-					view.getTables().getTableVeiculo().filterTable(list);
-					view.getTables().getTableAvaria().removeAllItems();
-				} else if(event.getButton() == export) {
-					String file = exportacaoService.exportarXLSVeiculos(list);
+				if(event.getButton() == novaAvaria) {
+					Avaria av = new Avaria();
+					if (veiculo != null) av.setVeiculo(veiculo);
 					
-					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
-					String path = ctx.getHttpSession().getServletContext().getContextPath();
-					event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=veiculos.xls&file=" + file));
+					AvariaForm form = new AvariaForm(app);
+					app.setMainView(form.getFormLayout());
+					form.createFormBody(new BeanItem<Avaria>(av));
+				} else {
+					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
+					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
+					
+					if(item.getBean().getChassi() == null || item.getBean().getChassi().isEmpty()) {
+						if(de == null || ate == null)
+							if(item.getBean().getNavio().isEmpty())
+								throw new IllegalArgumentException("Informe um chassi, navio ou período");
+					}
+					
+					List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate);
+					
+					if(event.getButton() == search) {
+						view.getTables().getTableVeiculo().filterTable(list);
+						view.getTables().getTableAvaria().removeAllItems();
+						veiculo = null;
+					} else if(event.getButton() == export) {
+						String file = exportacaoService.exportarXLSVeiculos(list);
+						
+						WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+						String path = ctx.getHttpSession().getServletContext().getContextPath();
+						event.getButton().getWindow().open(new ExternalResource(path + "/export?action=export_excel&fileName=veiculos.xls&file=" + file));
+					}
 				}
 			} catch(IllegalArgumentException ie) {
 				showErrorMessage(view, ie.getMessage());

@@ -274,8 +274,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			subsqlA.append(" and avaria.tipo_id = tipoavaria.id");
 			subsqlA.append(" and tipoavaria.movimentacao = :opcao");
 		}
-		if(periodo == 1 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
-			subsqlA.append(" and avaria.datalancamento");
+		if(periodo != 3 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+			subsqlA.append(" and " + (periodo == 1 ? "avaria.dataLancamento" : "avaria.dataCadastro"));
 			subsqlA.append(" between '" + dtInicio + "'");
 			subsqlA.append(" and '" + dtFim + "'");
 			
@@ -302,7 +302,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 				subsqlA.append(" and origemavaria.codigo = " + oriFim.getCodigo().toString());
 		}
 
-		if(periodo == 2 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+		if(periodo == 3 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
 			subsql.append(" and veiculo.datacadastro");
 			subsql.append(" between '" + dtInicio + "'");
 			subsql.append(" and '" + dtFim + "'");
@@ -332,8 +332,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			subsqlA.append(" where veiculo.id = avaria.veiculo_id");
 			subsqlA.append(" and avaria.tipo_id = tipoavaria.id");
 			subsqlA.append(" and tipoavaria.movimentacao = false");
-			if(periodo == 1 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
-				subsqlA.append(" and avaria.datalancamento");
+			if(periodo != 3 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+				subsqlA.append(" and " + (periodo == 1 ? "avaria.dataLancamento" : "avaria.dataCadastro"));
 				subsqlA.append(" between '" + dtInicio + "'");
 				subsqlA.append(" and '" + dtFim + "'");
 			}
@@ -347,7 +347,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		
 		subsqlB.append(" and :existe (select avaria.id from avaria, origemavaria");
 		subsqlB.append(" where veiculo.id = avaria.veiculo_id");
-		if(periodo == 1 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+		if(periodo != 3 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+			subsqlB.append(" and " + (periodo == 1 ? "avaria.dataLancamento" : "avaria.dataCadastro"));
 			subsqlB.append(" and avaria.datalancamento");
 			subsqlB.append(" between '" + dtInicio + "'");
 			subsqlB.append(" and '" + dtFim + "'");

@@ -109,19 +109,24 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			}
 		}
 		
-		if(periodo == 2 && de != null && !de.equals("") && ate != null && !ate.equals(""))
+		if(periodo == 3 && de != null && !de.equals("") && ate != null && !ate.equals(""))
 			hql.append(" and veic.dataCadastro between :dtIni and :dtFim");
 
 		if(vistoriaFinal && oriAte != null && oriAte.getId() != null) {
 			hql.append(" and exists (select av2 from Avaria av2");
 			hql.append(" where av2.veiculo = av.veiculo");
-			if(periodo == 1 && de != null && !de.equals("") && ate != null && !ate.equals(""))
-				hql.append(" and av2.dataLancamento between :dtIni and :dtFim");
+			if(de != null && !de.equals("") && ate != null && !ate.equals("")) {
+				if(periodo == 1) hql.append(" and av2.dataLancamento between :dtIni and :dtFim");
+				if(periodo == 2) hql.append(" and av2.dataCadastro between :dtIni and :dtFim");
+			}
+				
 			hql.append(" and av2.origem = :orgFinal)");
 			addParamToQuery("orgFinal", oriAte);
 		} else { 
-			if(periodo == 1 && de != null && !de.equals("") && ate != null && !ate.equals(""))
-				hql.append(" and av.dataLancamento between :dtIni and :dtFim");
+			if(de != null && !de.equals("") && ate != null && !ate.equals("")) {
+				if(periodo == 1) hql.append(" and av.dataLancamento between :dtIni and :dtFim");
+				if(periodo == 2) hql.append(" and av.dataCadastro between :dtIni and :dtFim");
+			}
 		}
 		
 		if(de != null && !de.equals("") && ate != null && !ate.equals("")) {
@@ -219,9 +224,9 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			sql.append(" and veiculo.modelo_id = modelo.id");
 		
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
-			sql.append(" and " + (periodo == 1 ? "avaria.datalancamento" : "veiculo.datacadastro"));
-			sql.append(" between '" + dtInicio +"'");
-			sql.append(" and '" + dtFim +"'");
+			if(periodo == 1) sql.append(" and avaria.dataLancamento between '" + dtInicio +"' and '" + dtFim +"'");
+			if(periodo == 2) sql.append(" and avaria.dataCadastro between '" + dtInicio +"' and '" + dtFim +"'");
+			if(periodo == 3) sql.append(" and veiculo.dataCadastro between '" + dtInicio +"' and '" + dtFim +"'");
 		}
 
 		if(veiculo.getNavio() != null && !veiculo.getNavio().equals("")) {

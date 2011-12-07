@@ -163,6 +163,7 @@ public class VeiculoTable extends Table {
 			Property property = event.getProperty();
 			BeanItem<Veiculo> item = (BeanItem<Veiculo>) getItem(getValue());
 			view.getTableAvaria().filterTable(item.getBean());
+			view.getView().getForm().setVeiculo(item.getBean());
 		}
 	}
 	
