@@ -16,7 +16,7 @@ public interface ImportacaoService {
 
 	public void importVeiculosImportados(String csv) throws PromoveException;
 
-	public void importAvariasDoDiretorio(String config, String dest) throws PromoveException;
+	public String importAvariasDoDiretorio(String origem, String destino) throws PromoveException;
 
 	public void importarGabardo(String url) throws PromoveException;
 

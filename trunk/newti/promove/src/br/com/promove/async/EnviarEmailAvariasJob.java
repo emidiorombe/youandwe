@@ -1,30 +1,16 @@
 package br.com.promove.async;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
 import org.apache.log4j.Logger;
 import org.quartz.Job;
-import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import br.com.promove.entity.Avaria;
-import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
-import br.com.promove.service.CadastroService;
+import br.com.promove.service.ImportacaoService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.Config;
 import br.com.promove.utils.DateUtils;
+import br.com.promove.utils.EmailUtils;
 
 public class EnviarEmailAvariasJob implements Job {
 
@@ -33,75 +19,24 @@ public class EnviarEmailAvariasJob implements Job {
 	@Override
 	public void execute(JobExecutionContext ctx) throws JobExecutionException {
 		try {
-			JobDataMap data = ctx.getJobDetail().getJobDataMap();
-			String tos[] = data.getString("dest").split(";");
+			//JobDataMap data = ctx.getJobDetail().getJobDataMap();
+			//String tos[] = data.getString("dest").split(";");
 			
+			ImportacaoService importService = ServiceFactory.getService(ImportacaoService.class);
 			AvariaService avariaService = ServiceFactory.getService(AvariaService.class);
-			String conteudo = montarConteudo(avariaService.buscarAvariasPorData(DateUtils.diaAnterior())); 
+			 
+			importService.transfereFotos(Config.getConfig("pasta_avaria_xml"), Config.getConfig("pasta_fotos"));
+			String conteudo = importService.importAvariasDoDiretorio(Config.getConfig("pasta_avaria_xml"), Config.getConfig("pasta_destino_xml")).replaceAll(";", "<br>");
+			if (conteudo.isEmpty()) conteudo = "Nenhum arquivo.";
+			conteudo = "<b>Lista de Arquivos importados:</b><br>" + conteudo; 
+					
 			
-			send("sica@promoveseguros.com.br", tos, "Avarias de ", conteudo);
+			conteudo += "<br><br>" + avariaService.listarAvariasPT(DateUtils.diaAtual());
+			EmailUtils.sendHtml("sica@promoveseguros.com.br", "daniel@newti.com.br;".split(";"), "SICA - Importação de Vistorias", conteudo);
 		} catch (Exception e) {
 			log.error("Erro no envio de e-mail de avarias " + e.getMessage());
 			e.printStackTrace();
 		}
-	}
-
-	public String montarConteudo(List<Avaria> buscarAvariasPorData) {
-		StringBuilder conteudo = new StringBuilder();
-		for (Avaria av : buscarAvariasPorData) {
-			conteudo.append(av.getVeiculo().getChassi()).append(";");
-			conteudo.append(av.getVeiculo().getModelo().getDescricao()).append(";");
-			conteudo.append(av.getOrigem().getDescricao()).append(";");
-			conteudo.append(av.getLocal().getDescricao()).append(";");
-			conteudo.append(av.getTipo().getDescricao()).append(";");
-			conteudo.append("\n");
-		}
-		return conteudo.toString();
-	}
-
-	public static void send(String from, String tos[], String subject, String content) throws AddressException,
-			MessagingException, PromoveException {
-		CadastroService cadastroService = ServiceFactory.getService(CadastroService.class);
-		Map<String, String> params = cadastroService.buscarTodosParametrosAsMap();
-		
-		// Create a mail session
-		Properties props = new Properties();
-		//props.put("mail.smtp.auth", "true");
-		//props.put("mail.smtp.starttls.enable", "true");
-		
-		props.put("mail.smtp.host", "smtp.promoveseguros.com.br");
-		props.put("mail.smtp.socketFactory.port", "465");
-		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.port", "465");
-		//props.put("mail.smtp.submitter", "acisaevo");
-		//props.put("mail.smtp.host", params.get("smtpHost"));
-		//props.put("mail.smtp.port", params.get("smtpPort"));
-		//props.put("mail.smtp.submitter", params.get("smtpPwd"));
-		//Session session = Session.getDefaultInstance(props, null);
-		//Session session = Session.getInstance(props);
-		Session session = Session.getDefaultInstance(props,
-				new javax.mail.Authenticator() {
-					protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication("sica@promoveseguros.com.br", "acisaevo");
-					}
-				});
-	 
-		// Construct the message
-		Message msg = new MimeMessage(session);
-		msg.setFrom(new InternetAddress(from));
-		msg.setRecipient(Message.RecipientType.TO, new InternetAddress(tos[0]));
-		for(int i = 1; i < tos.length; i++) {
-			msg.setRecipient(Message.RecipientType.CC, new InternetAddress(tos[i]));
-		}
-		msg.setSubject(subject);
-		msg.setText(content);
-
-		// Send the message
-		//Transport transport = session.getTransport("smtp");
-		//transport.connect("smtp.promoveseguros.com.br", 465, "sica@promoveseguros.com.br", "acisaevo");
-		
-		Transport.send(msg);
 	}
 
 }

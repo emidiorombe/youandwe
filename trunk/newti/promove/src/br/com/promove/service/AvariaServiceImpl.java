@@ -1,6 +1,7 @@
 package br.com.promove.service;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,7 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	private NivelAvariaDAO nivelDAO;
 	private InconsistenciaAvariaDAO inconsistenciaAvariaDAO;
 	private VeiculoDAO veiculoDAO;
+	private static SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy");
 	
 	AvariaServiceImpl() {
 		tipoDAO = new TipoAvariaDAO();
@@ -491,13 +493,41 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 	}
 
 	@Override
-	public List<Avaria> buscarAvariasPorData(Date date) throws PromoveException {
+	public String listarAvariasPT(Date date) throws PromoveException {
 		List<Avaria> lista = null;
 		try {
-			lista = avariaDAO.getAllByDate(date);
+			Avaria av = new Avaria();
+			av.setNivel(this.getById(NivelAvaria.class, 4));
+			lista = avariaDAO.getAvariasPorFiltro(av, DateUtils.diaAnterior(), date, 2, false, false, false, null, null, null);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
-		return lista;
+		StringBuilder conteudo = new StringBuilder();
+		conteudo.append("<b>Lista de Possivel PT:</b><br>");
+		if (lista.size() == 0) {
+			conteudo.append("Sem ocorrencias.");
+		} else {
+			conteudo.append("<table style=\"FONT-FAMILY: 'Arial','sans-serif'; FONT-SIZE: 10pt\">");
+			conteudo.append("<tr><b>");
+			conteudo.append("<td>Data da Vistoria</td>");
+			conteudo.append("<td>Chassi</td>");
+			conteudo.append("<td>Modelo</td>");
+			conteudo.append("<td>Local da Vistoria</td>");
+			conteudo.append("<td>Peca Avariada</td>");
+			conteudo.append("<td>Tipo de Avaria</td>");
+			conteudo.append("</b></tr>");
+			for (Avaria av : lista) {
+				conteudo.append("<tr>");
+				conteudo.append("<td>" + date_format.format(av.getDataLancamento()) + "</td>");
+				conteudo.append("<td>" + av.getVeiculo().getChassi() + "</td>");
+				conteudo.append("<td>" + av.getVeiculo().getModelo().getDescricao() + "</td>");
+				conteudo.append("<td>" + av.getOrigem().getDescricao() + "</td>");
+				conteudo.append("<td>" + av.getLocal().getDescricao() + "</td>");
+				conteudo.append("<td>" + av.getTipo().getDescricao() + "</td>");
+				conteudo.append("</tr>");
+			}
+			conteudo.append("</table><br>");
+		}
+		return conteudo.toString();
 	}
 }
