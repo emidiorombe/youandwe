@@ -58,26 +58,26 @@ public class GeneralContextListener implements ServletContextListener{
 		}
 		
 		//Inicializa o 'Scheduler' para execução dos jobs assincronos
-		/*
+		
 		try {
 			SchedulerFactory sf = new StdSchedulerFactory();
 	        Scheduler sched = sf.getScheduler();
 	        
-	        String cron_scheduler = ctx.getServletContext().getInitParameter("ctrc_job");
-	        String url_ctrc = ctx.getServletContext().getInitParameter("ctrc_ws_url");
+	        //String cron_scheduler = ctx.getServletContext().getInitParameter("ctrc_job");
+	        //String url_ctrc = ctx.getServletContext().getInitParameter("ctrc_ws_url");
 	        String dest_param = ctx.getServletContext().getInitParameter("destinatarios_mail");
 	        String mail_sched = ctx.getServletContext().getInitParameter("mail_scheduler");
 	        
-			JobDetail ctrcJob = newJob(ImportCTRCJob.class).withIdentity("job_ctrc", "gdefault").build();
-			ctrcJob.getJobDataMap().put("url", url_ctrc);
+			//JobDetail ctrcJob = newJob(ImportCTRCJob.class).withIdentity("job_ctrc", "gdefault").build();
+			//ctrcJob.getJobDataMap().put("url", url_ctrc);
 			
 			JobDetail mail_job = newJob(EnviarEmailAvariasJob.class).withIdentity("job_mail", "gdefault").build();
-			mail_job.getJobDataMap().put("dest", dest_param);
+			//mail_job.getJobDataMap().put("dest", dest_param);
 			
-			CronTrigger trigger_ctrc  = newTrigger().withIdentity("trigger_ctrc", "gdefault").withSchedule(cronSchedule(cron_scheduler)).build();
+			//CronTrigger trigger_ctrc  = newTrigger().withIdentity("trigger_ctrc", "gdefault").withSchedule(cronSchedule(cron_scheduler)).build();
 			CronTrigger trigger_mail  = newTrigger().withIdentity("trigger_mail", "gdefault").withSchedule(cronSchedule(mail_sched)).build();
 			
-			sched.scheduleJob(ctrcJob, trigger_ctrc);
+			//sched.scheduleJob(ctrcJob, trigger_ctrc);
 			sched.scheduleJob(mail_job, trigger_mail);
 			
 			sched.start();
@@ -86,26 +86,6 @@ public class GeneralContextListener implements ServletContextListener{
 			log.error("::::Não foi possivel agendar jobs");
 			e.printStackTrace();
 		}
-		*/
-		/*
-		EnviarEmailAvariasJob teste = new EnviarEmailAvariasJob();
-		AvariaService avariaService = ServiceFactory.getService(AvariaService.class);
-		try {
-			String conteudo = teste.montarConteudo(avariaService.buscarAvariasPorData(DateUtils.diaAnterior()));
-			EnviarEmailAvariasJob.send("sica@promoveseguros.com.br", "daniel@newti.com.br;".split(";"), "Avarias de ", conteudo);
-			System.out.println(conteudo);
-		} catch (PromoveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (AddressException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		*/
-		
 	}
 
 }

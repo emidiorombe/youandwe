@@ -6,9 +6,12 @@ import java.io.Serializable;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.exception.PromoveException;
+import br.com.promove.service.AvariaService;
 import br.com.promove.service.ImportacaoService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.utils.Config;
+import br.com.promove.utils.DateUtils;
+import br.com.promove.utils.EmailUtils;
 import br.com.promove.view.form.BaseForm;
 
 import com.vaadin.ui.Button;
@@ -39,6 +42,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 	private Button import_from_server;
 	private ByteArrayOutputStream file = new ByteArrayOutputStream();
 	private ImportacaoService importService;
+	private AvariaService avariaService;
 
 	private ProgressIndicator pi = new ProgressIndicator();
 
@@ -49,7 +53,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 		this.app = app;
 		buildLayout();
 		importService = ServiceFactory.getService(ImportacaoService.class);
-		
+		avariaService = ServiceFactory.getService(AvariaService.class);
 	}
 
 	private void buildLayout() {
@@ -233,12 +237,22 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 		public void buttonClick(ClickEvent event) {
 			try {
 				importService.transfereFotos(Config.getConfig("pasta_avaria_xml"), Config.getConfig("pasta_fotos"));
-				importService.importAvariasDoDiretorio(Config.getConfig("pasta_avaria_xml"), Config.getConfig("pasta_destino_xml"));
+				String conteudo = importService.importAvariasDoDiretorio(Config.getConfig("pasta_avaria_xml"), Config.getConfig("pasta_destino_xml")).replaceAll(";", "<br>");
+				if (conteudo.isEmpty()) conteudo = "Nenhum arquivo.";
+				conteudo = "<b>Lista de Arquivos importados:</b><br>" + conteudo; 
+
+				try {
+					conteudo += "<br><br>" + avariaService.listarAvariasPT(DateUtils.diaAtual());
+					EmailUtils.sendHtml("sica@promoveseguros.com.br", "daniel@newti.com.br;".split(";"), "SICA - Importação de Vistorias", conteudo);
+					System.out.println();
+				} catch (PromoveException e) {
+					e.printStackTrace();
+				} 
+				
 			}catch(Exception e) {
 				showErrorMessage(view.getLayout(), e.getMessage());
 				e.printStackTrace();
 			}
-			
 		}
 		
 	}
