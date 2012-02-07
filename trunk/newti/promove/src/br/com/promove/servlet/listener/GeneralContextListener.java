@@ -21,6 +21,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 
 import br.com.promove.async.EnviarEmailAvariasJob;
 import br.com.promove.async.ImportCTRCJob;
+import br.com.promove.async.TesteJob;
 import br.com.promove.dao.HibernateSessionFactory;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
@@ -63,24 +64,36 @@ public class GeneralContextListener implements ServletContextListener{
 			SchedulerFactory sf = new StdSchedulerFactory();
 	        Scheduler sched = sf.getScheduler();
 	        
-	        //String cron_scheduler = ctx.getServletContext().getInitParameter("ctrc_job");
-	        //String url_ctrc = ctx.getServletContext().getInitParameter("ctrc_ws_url");
-	        String dest_param = ctx.getServletContext().getInitParameter("destinatarios_mail");
-	        String mail_sched = ctx.getServletContext().getInitParameter("mail_scheduler");
+	        ////String cron_scheduler = ctx.getServletContext().getInitParameter("ctrc_job");
+	        ////String url_ctrc = ctx.getServletContext().getInitParameter("ctrc_ws_url");
+	        //String dest_param = ctx.getServletContext().getInitParameter("destinatarios_mail");
+	        //String mail_sched = ctx.getServletContext().getInitParameter("mail_scheduler");
+	        String teste_sched = ctx.getServletContext().getInitParameter("teste_job");
 	        
-			//JobDetail ctrcJob = newJob(ImportCTRCJob.class).withIdentity("job_ctrc", "gdefault").build();
-			//ctrcJob.getJobDataMap().put("url", url_ctrc);
+			////JobDetail ctrcJob = newJob(ImportCTRCJob.class).withIdentity("job_ctrc", "gdefault").build();
+			////ctrcJob.getJobDataMap().put("url", url_ctrc);
 			
-			JobDetail mail_job = newJob(EnviarEmailAvariasJob.class).withIdentity("job_mail", "gdefault").build();
-			//mail_job.getJobDataMap().put("dest", dest_param);
+			//JobDetail mail_job = newJob(EnviarEmailAvariasJob.class).withIdentity("job_mail", "gdefault").build();
+			////mail_job.getJobDataMap().put("dest", dest_param);
+	        
+	        JobDetail teste_job = newJob(TesteJob.class).withIdentity("job_teste", "gdefault").build();
+	        //teste_job.getJobDataMap().put("sched", teste_sched);
 			
-			//CronTrigger trigger_ctrc  = newTrigger().withIdentity("trigger_ctrc", "gdefault").withSchedule(cronSchedule(cron_scheduler)).build();
-			CronTrigger trigger_mail  = newTrigger().withIdentity("trigger_mail", "gdefault").withSchedule(cronSchedule(mail_sched)).build();
+			////CronTrigger trigger_ctrc  = newTrigger().withIdentity("trigger_ctrc", "gdefault").withSchedule(cronSchedule(cron_scheduler)).build();
+			//CronTrigger trigger_mail  = newTrigger().withIdentity("trigger_mail", "gdefault").withSchedule(cronSchedule(mail_sched)).build();
+	        
+	        CronTrigger trigger_teste  = newTrigger().withIdentity("trigger_teste", "gdefault").withSchedule(cronSchedule(teste_sched)).build();
+
+			////////JobDetail jDetail = new JobDetail("JDBC Connection","mysql",ConnectionJob.class);
+			////////CronTrigger crTrigger = new CronTrigger("cronTrigger","mysql","0/8 * * * * ?");			
 			
-			//sched.scheduleJob(ctrcJob, trigger_ctrc);
-			sched.scheduleJob(mail_job, trigger_mail);
+			////sched.scheduleJob(ctrcJob, trigger_ctrc);
+			//sched.scheduleJob(mail_job, trigger_mail);
+	        
+	        sched.scheduleJob(teste_job, trigger_teste);
 			
 			sched.start();
+			
 			log.warn(">>>>>>>>>>> Jobs agendados");
 		}catch(Exception e) {
 			log.error("::::Não foi possivel agendar jobs");

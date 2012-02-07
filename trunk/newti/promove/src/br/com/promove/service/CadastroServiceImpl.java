@@ -167,6 +167,7 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	public void salvarFilial(Filial bean) throws PromoveException {
 		try {
 			filialDAO.save(bean);
+			filialDAO.flushSession();
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
