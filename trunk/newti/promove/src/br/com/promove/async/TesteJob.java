@@ -31,7 +31,7 @@ public class TesteJob implements Job, Serializable {
 		CadastroService cad = ServiceFactory.getService(CadastroService.class);
 		
 		try {
-			HibernateSessionFactory.getSession();
+			HibernateSessionFactory.getSession().beginTransaction();
 			
 			List<Filial> lista = cad.buscarTodasFiliais();
 			
@@ -49,12 +49,14 @@ public class TesteJob implements Job, Serializable {
 			for (Filial filial : lista) {
 				if (filial.getCodigo() == 5555) System.out.println("DEPOIS " + filial.getNome());
 			}
-			
+			HibernateSessionFactory.getSession().getTransaction().commit();
 			log.warn("Teste realizada com sucesso.");
 		} catch (PromoveException e) {
+			HibernateSessionFactory.getSession().getTransaction().rollback();
 			log.error("Erro no Teste " + e.getMessage());
 			e.printStackTrace();
 		} catch (Exception e) {
+			HibernateSessionFactory.getSession().getTransaction().rollback();
 			log.error("Erro no Teste " + e.getMessage());
 			e.printStackTrace();
 		}
