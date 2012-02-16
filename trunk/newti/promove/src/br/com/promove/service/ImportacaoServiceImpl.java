@@ -58,23 +58,34 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 		ImportacaoTERCA import_terca = new ImportacaoTERCA();
 		List<String> linhas = new ArrayList<String>();
 		
-		String[] cabecalho = linhas.get(0).replaceAll("\r", "; ; ; ; ").split(";");
-		
-		if (cabecalho[0].toUpperCase() != "CHASSI" || cabecalho[1].toUpperCase() != "MODELO") {
-			throw new PromoveException("Arquivo com colunas incorretas");
-		}
-
-		if (tipo == 1 && !(cabecalho[2].toUpperCase().isEmpty())) {
-			throw new PromoveException("Arquivo com colunas incorretas (Veículos Nacionais)");
-		}
-
-		if (tipo == 2 && (cabecalho[2].toUpperCase() != "NAVIO" || cabecalho[3].toUpperCase() != "VALOR")) {
-			throw new PromoveException("Arquivo com colunas incorretas (Veículos Importados)");
-		}
-
 		for(String linha : csv.split("\n")) {
 			linhas.add(linha);
 		}
+		
+		if (linhas.size() == 0) {
+			throw new PromoveException("Arquivo vazio");
+		}
+		
+		String[] cabecalho = linhas.get(0).replaceAll("\r", "; ; ; ; ").split(";");
+		
+		if (tipo == 1) {
+			if (!cabecalho[0].toUpperCase().trim().equals("CHASSI") || 
+					!cabecalho[1].toUpperCase().trim().equals("MODELO") ||
+					!cabecalho[2].toUpperCase().isEmpty()) {
+				throw new PromoveException("Arquivo com colunas incorretas (Chassi, Modelo)");
+			}
+		}
+		
+		if (tipo == 2) {
+			if (!cabecalho[0].toUpperCase().trim().equals("CHASSI") || 
+					!cabecalho[1].toUpperCase().trim().equals("MODELO") ||
+					!cabecalho[2].toUpperCase().trim().equals("NAVIO") ||
+					!cabecalho[3].toUpperCase().substring(0, 5).equals("VALOR")) {
+				throw new PromoveException("Arquivo com colunas incorretas (Chassi, Modelo, Navio, Valor)");
+			}
+			
+		}
+		
 		import_terca.importar(linhas, data);
 	}
 

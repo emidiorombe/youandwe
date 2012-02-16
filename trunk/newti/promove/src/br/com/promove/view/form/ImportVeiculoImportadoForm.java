@@ -224,7 +224,9 @@ public class ImportVeiculoImportadoForm extends BaseForm {
 				importService.importVeiculosImportados(new String(file.toByteArray()), data, tipo);
 				showSuccessMessage(view.getLayout(), "Arquivo importado com sucesso");
 			} catch (PromoveException pe) {
-				showErrorMessage(view, "Não foi possivel importar o arquivo de veículos");
+				pe.printStackTrace();
+				//showErrorMessage(view, "Não foi possivel importar o arquivo de veículos");
+				showErrorMessage(view, pe.getMessage());
 			}
 		}
 	}

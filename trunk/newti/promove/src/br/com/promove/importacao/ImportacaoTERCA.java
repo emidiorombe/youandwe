@@ -27,7 +27,7 @@ public class ImportacaoTERCA {
 			String[] campos = linha.replaceAll("\r", "; ; ").split(";");
 			Veiculo v = new Veiculo();
 			try {
-				if(campos[0].length() != 17) {
+				if (campos[0].length() != 17) {
 					continue;
 				}
 				
@@ -38,11 +38,11 @@ public class ImportacaoTERCA {
 					v.setDataCadastro(data);
 				}
 				
-				if(campos[2] != null && !campos[2].trim().equals("")) {
+				if (campos[2] != null && !campos[2].trim().equals("")) {
 					v.setNavio(campos[2]);
 					v.setTipo(cadastroService.getById(TipoVeiculo.class, 2));
 					
-					if(campos[3] != null && !campos[3].trim().equals("")) {
+					if (campos[3] != null && !campos[3].trim().equals("")) {
 						String valor = campos[3];
 						String separadorDecimal = valor.substring(valor.length() - 3, valor.length() - 2);
 						if (separadorDecimal.equals(",")) {
@@ -55,9 +55,9 @@ public class ImportacaoTERCA {
 					}
 				}
 				
-				if(!modelos.containsKey(campos[1])) {
+				if (!modelos.containsKey(campos[1])) {
 					throw new Exception("Modelo " + campos[1] + " não existe;");
-				}else {
+				} else {
 					v.setModelo(modelos.get(campos[1]));
 				}
 				
@@ -77,7 +77,5 @@ public class ImportacaoTERCA {
 		for (Modelo modelo : lista) {
 			modelos.put(modelo.getDescricao(), modelo);
 		}
-		
 	}
-	
 }
