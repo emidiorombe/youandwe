@@ -267,7 +267,7 @@ public class AvariaSearchForm extends BaseForm{
 			
 			try {
 				if(propertyId.equals("chassi")) {
-					TextField tf = new TextField("Chassi");
+					TextField tf = new TextField("Chassi / FZ");
 					tf.setNullRepresentation("");
 					tf.setImmediate(true);
 					tf.setWidth("200px");

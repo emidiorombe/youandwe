@@ -1,6 +1,6 @@
 package br.com.promove.importacao;
 
-import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,17 +21,22 @@ public class ImportacaoTERCA {
 		cadastroService = ServiceFactory.getService(CadastroService.class);
 	}
 	
-	public void importar(List<String> csv) throws PromoveException{
+	public void importar(List<String> csv, Date data) throws PromoveException{
 		loadModelos();
 		for (String linha : csv) {
 			String[] campos = linha.replaceAll("\r", "; ; ").split(";");
 			Veiculo v = new Veiculo();
 			try {
-				if(campos[0].length() < 17)
+				if(campos[0].length() != 17) {
 					continue;
+				}
+				
 				v.setChassi(campos[0].toUpperCase());
 				v.setCor(cadastroService.getById(Cor.class, new Integer(97)));
 				v.setTipo(cadastroService.getById(TipoVeiculo.class, 1));
+				if (data != null) {
+					v.setDataCadastro(data);
+				}
 				
 				if(campos[2] != null && !campos[2].trim().equals("")) {
 					v.setNavio(campos[2]);

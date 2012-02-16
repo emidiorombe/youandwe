@@ -59,7 +59,7 @@ public class GeneralContextListener implements ServletContextListener{
 		}
 		
 		//Inicializa o 'Scheduler' para execução dos jobs assincronos
-		
+		/*
 		try {
 			SchedulerFactory sf = new StdSchedulerFactory();
 	        Scheduler sched = sf.getScheduler();
@@ -99,6 +99,7 @@ public class GeneralContextListener implements ServletContextListener{
 			log.error("::::Não foi possivel agendar jobs");
 			e.printStackTrace();
 		}
+		*/
 	}
 
 }

@@ -194,6 +194,7 @@ public class VeiculoSearchForm extends BaseForm{
 			
 			if(propertyId.equals("chassi")) {
 				f.setWidth("200px");
+				f.setCaption("Chassi / FZ");
 			}else if(propertyId.equals("modelo")) {
 				try {
 					ComboBox c = new ComboBox("Modelo");

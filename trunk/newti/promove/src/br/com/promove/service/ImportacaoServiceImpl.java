@@ -3,6 +3,7 @@ package br.com.promove.service;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -53,18 +54,28 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 	}
 
 	@Override
-	public void importVeiculosImportados(String csv) throws PromoveException {
-		try {
-			ImportacaoTERCA import_terca = new ImportacaoTERCA();
-			List<String> linhas = new ArrayList<String>();
-			for(String linha : csv.split("\n")) {
-				linhas.add(linha);
-			}
-			import_terca.importar(linhas);
-		} catch (PromoveException e) {
-			throw new PromoveException(e);
-		}
+	public void importVeiculosImportados(String csv, Date data, Integer tipo) throws PromoveException {
+		ImportacaoTERCA import_terca = new ImportacaoTERCA();
+		List<String> linhas = new ArrayList<String>();
 		
+		String[] cabecalho = linhas.get(0).replaceAll("\r", "; ; ; ; ").split(";");
+		
+		if (cabecalho[0].toUpperCase() != "CHASSI" || cabecalho[1].toUpperCase() != "MODELO") {
+			throw new PromoveException("Arquivo com colunas incorretas");
+		}
+
+		if (tipo == 1 && !(cabecalho[2].toUpperCase().isEmpty())) {
+			throw new PromoveException("Arquivo com colunas incorretas (Veículos Nacionais)");
+		}
+
+		if (tipo == 2 && (cabecalho[2].toUpperCase() != "NAVIO" || cabecalho[3].toUpperCase() != "VALOR")) {
+			throw new PromoveException("Arquivo com colunas incorretas (Veículos Importados)");
+		}
+
+		for(String linha : csv.split("\n")) {
+			linhas.add(linha);
+		}
+		import_terca.importar(linhas, data);
 	}
 
 	@Override

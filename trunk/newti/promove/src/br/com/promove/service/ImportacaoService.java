@@ -1,5 +1,7 @@
 package br.com.promove.service;
 
+import java.util.Date;
+
 import br.com.promove.exception.PromoveException;
 
 /**
@@ -14,7 +16,7 @@ public interface ImportacaoService {
 
 	public void importVeiculosNacionais(String csv) throws PromoveException;
 
-	public void importVeiculosImportados(String csv) throws PromoveException;
+	public void importVeiculosImportados(String csv, Date data, Integer tipo) throws PromoveException;
 
 	public String importAvariasDoDiretorio(String origem, String destino) throws PromoveException;
 
