@@ -167,7 +167,6 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	public void salvarFilial(Filial bean) throws PromoveException {
 		try {
 			filialDAO.save(bean);
-			filialDAO.flushSession();
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -319,13 +318,13 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	}
 
 	@Override
-	public List<Veiculo> buscarVeiculoPorFiltro(Veiculo veiculo, Date dtInicio, Date dtFim) throws PromoveException {
+	public List<Veiculo> buscarVeiculoPorFiltro(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, String sort) throws PromoveException {
 		List<Veiculo> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaHQLQuery(dtInicio); 
 			Date fim = DateUtils.montarDataFinalParaHQLQuery(dtFim); 
 			
-			lista = veiculoDAO.getByFilter(veiculo, init, fim);
+			lista = veiculoDAO.getByFilter(veiculo, init, fim, periodo, sort);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -462,13 +461,13 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	}
 
 	@Override
-	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException {
+	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException {
 		List<Veiculo> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaHQLQuery(de); 
 			Date fim = DateUtils.montarDataFinalParaHQLQuery(ate); 
 			
-			lista = veiculoDAO.buscarVeiculosAuditoria(veiculo, init, fim, oride, oriate);
+			lista = veiculoDAO.buscarVeiculosAuditoria(veiculo, init, fim, periodo, oride, oriate);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

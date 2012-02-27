@@ -62,21 +62,24 @@ public class ImportacaoCtrc {
 		importTagCtrc(doc);
 	}
 	
-	public void importarGabardo(String url) throws DocumentException, ParseException, PromoveException {
+	public String importarGabardo(String url) throws DocumentException, ParseException, PromoveException {
 		loadTransportadoras();
 		String xml;
 		try {
 			xml = makeRequest(url);
 			Document doc = DocumentHelper.parseText(xml);
-			importTagCtrc(doc);
+			return importTagCtrc(doc);
 		} catch (IOException e) {
 			throw new PromoveException(e);
 		}
 	}
 
-	private void importTagCtrc(Document doc) throws ParseException, PromoveException {
+	private String importTagCtrc(Document doc) throws ParseException, PromoveException {
 		List<Element> ctrcs = doc.selectNodes("//retorno/ctrc");
+		Integer cont = 0;
+		
 		for(Element node_ct : ctrcs) {
+			cont++;
 			Ctrc ct = new Ctrc();
 			List<VeiculoCtrc> veiculos = new ArrayList<VeiculoCtrc>();
 			
@@ -185,6 +188,7 @@ public class ImportacaoCtrc {
 				}
 			}
 		}
+		return cont.toString();
 	}
 
 	private void loadTransportadoras() throws PromoveException {

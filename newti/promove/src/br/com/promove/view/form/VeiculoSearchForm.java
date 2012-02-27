@@ -7,8 +7,6 @@ import java.util.Locale;
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.Fabricante;
-import br.com.promove.entity.InconsistenciaAvaria;
-import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.TipoVeiculo;
 import br.com.promove.entity.Usuario;
@@ -27,7 +25,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
@@ -45,6 +42,7 @@ public class VeiculoSearchForm extends BaseForm{
 	private VeiculoListView view;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
+	private ComboBox cmbPeriodo;
 	private Button search;
 	private Button export;
 	private Button novaAvaria;
@@ -62,6 +60,7 @@ public class VeiculoSearchForm extends BaseForm{
 		setWriteThrough(false);
 		setImmediate(true);
 		setSizeFull();
+		Item i;
 		
 		search = new Button("Buscar", new VeiculoSearchListener());
 		export = new Button("Gerar Arquivo", new VeiculoSearchListener());
@@ -75,10 +74,26 @@ public class VeiculoSearchForm extends BaseForm{
 		txtAte.setLocale(new Locale("pt", "BR"));
 		txtAte.setResolution(DateField.RESOLUTION_DAY);
 		
+		cmbPeriodo = new ComboBox("Período por");
+		cmbPeriodo.addContainerProperty("label", String.class, null);
+		
+		i = cmbPeriodo.addItem(3);
+		i.getItemProperty("label").setValue("Data do veículo");
+		i = cmbPeriodo.addItem(4);
+		i.getItemProperty("label").setValue("Data de registro do veículo");
+		
+		cmbPeriodo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+		cmbPeriodo.setImmediate(true);
+		cmbPeriodo.setNullSelectionAllowed(false);
+		cmbPeriodo.setItemCaptionPropertyId("label");
+		cmbPeriodo.setWidth("200px");
+		cmbPeriodo.setValue(cmbPeriodo.getItemIds().iterator().next());
+
 		createFormBody(new BeanItem<Veiculo>(new Veiculo()));
 		layout.addComponent(this);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
+		addField("cmbPeriodo", cmbPeriodo);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
@@ -145,6 +160,7 @@ public class VeiculoSearchForm extends BaseForm{
 				} else {
 					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+					Integer periodo = (Integer)cmbPeriodo.getValue();
 					BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
 					
 					if(item.getBean().getChassi() == null || item.getBean().getChassi().isEmpty()) {
@@ -153,7 +169,7 @@ public class VeiculoSearchForm extends BaseForm{
 								throw new IllegalArgumentException("Informe um chassi, navio ou período");
 					}
 					
-					List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate);
+					List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate, periodo, "v.chassi");
 					
 					if(event.getButton() == search) {
 						view.getTables().getTableVeiculo().filterTable(list);

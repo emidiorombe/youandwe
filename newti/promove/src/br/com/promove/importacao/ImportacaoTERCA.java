@@ -35,7 +35,7 @@ public class ImportacaoTERCA {
 				v.setCor(cadastroService.getById(Cor.class, new Integer(97)));
 				v.setTipo(cadastroService.getById(TipoVeiculo.class, 1));
 				if (data != null) {
-					v.setDataCadastro(data);
+					v.setDataLancamento(data);
 				}
 				
 				if (campos[2] != null && !campos[2].trim().equals("")) {

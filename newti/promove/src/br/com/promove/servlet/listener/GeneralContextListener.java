@@ -59,38 +59,37 @@ public class GeneralContextListener implements ServletContextListener{
 		}
 		
 		//Inicializa o 'Scheduler' para execução dos jobs assincronos
-		/*
 		try {
 			SchedulerFactory sf = new StdSchedulerFactory();
 	        Scheduler sched = sf.getScheduler();
 	        
-	        ////String cron_scheduler = ctx.getServletContext().getInitParameter("ctrc_job");
-	        ////String url_ctrc = ctx.getServletContext().getInitParameter("ctrc_ws_url");
+	        //String cron_scheduler = ctx.getServletContext().getInitParameter("ctrc_job");
+	        //String url_ctrc = ctx.getServletContext().getInitParameter("ctrc_ws_url");
 	        //String dest_param = ctx.getServletContext().getInitParameter("destinatarios_mail");
-	        //String mail_sched = ctx.getServletContext().getInitParameter("mail_scheduler");
-	        String teste_sched = ctx.getServletContext().getInitParameter("teste_job");
+	        //String dest_ctrc_param = ctx.getServletContext().getInitParameter("destinatarios_ctrc");
+	        String mail_sched = ctx.getServletContext().getInitParameter("mail_scheduler");
+	        //String teste_sched = ctx.getServletContext().getInitParameter("teste_job");
 	        
-			////JobDetail ctrcJob = newJob(ImportCTRCJob.class).withIdentity("job_ctrc", "gdefault").build();
-			////ctrcJob.getJobDataMap().put("url", url_ctrc);
+			//JobDetail ctrcJob = newJob(ImportCTRCJob.class).withIdentity("job_ctrc", "gdefault").build();
+			//ctrcJob.getJobDataMap().put("url", url_ctrc);
 			
-			//JobDetail mail_job = newJob(EnviarEmailAvariasJob.class).withIdentity("job_mail", "gdefault").build();
-			////mail_job.getJobDataMap().put("dest", dest_param);
+			JobDetail mail_job = newJob(EnviarEmailAvariasJob.class).withIdentity("job_mail", "gdefault").build();
+			//mail_job.getJobDataMap().put("dest", dest_param);
 	        
-	        JobDetail teste_job = newJob(TesteJob.class).withIdentity("job_teste", "gdefault").build();
+	        //JobDetail teste_job = newJob(TesteJob.class).withIdentity("job_teste", "gdefault").build();
 	        //teste_job.getJobDataMap().put("sched", teste_sched);
 			
-			////CronTrigger trigger_ctrc  = newTrigger().withIdentity("trigger_ctrc", "gdefault").withSchedule(cronSchedule(cron_scheduler)).build();
-			//CronTrigger trigger_mail  = newTrigger().withIdentity("trigger_mail", "gdefault").withSchedule(cronSchedule(mail_sched)).build();
-	        
-	        CronTrigger trigger_teste  = newTrigger().withIdentity("trigger_teste", "gdefault").withSchedule(cronSchedule(teste_sched)).build();
+			//CronTrigger trigger_ctrc  = newTrigger().withIdentity("trigger_ctrc", "gdefault").withSchedule(cronSchedule(cron_scheduler)).build();
+			CronTrigger trigger_mail  = newTrigger().withIdentity("trigger_mail", "gdefault").withSchedule(cronSchedule(mail_sched)).build();
+	        //CronTrigger trigger_teste  = newTrigger().withIdentity("trigger_teste", "gdefault").withSchedule(cronSchedule(teste_sched)).build();
 
 			////////JobDetail jDetail = new JobDetail("JDBC Connection","mysql",ConnectionJob.class);
 			////////CronTrigger crTrigger = new CronTrigger("cronTrigger","mysql","0/8 * * * * ?");			
 			
-			////sched.scheduleJob(ctrcJob, trigger_ctrc);
-			//sched.scheduleJob(mail_job, trigger_mail);
+			//sched.scheduleJob(ctrcJob, trigger_ctrc);
+			sched.scheduleJob(mail_job, trigger_mail);
 	        
-	        sched.scheduleJob(teste_job, trigger_teste);
+	        //sched.scheduleJob(teste_job, trigger_teste);
 			
 			sched.start();
 			
@@ -99,7 +98,6 @@ public class GeneralContextListener implements ServletContextListener{
 			log.error("::::Não foi possivel agendar jobs");
 			e.printStackTrace();
 		}
-		*/
 	}
 
 }

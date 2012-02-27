@@ -97,7 +97,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 						try {
 							Date dataNavio = date_format.parse(av.getVeiculo().getNavio().substring(av.getVeiculo().getNavio().length() - 10, av.getVeiculo().getNavio().length()));
 							
-							hql.append(" and veic.dataCadastro between :dtNavioIni and :dtNavioFim");
+							hql.append(" and veic.dataLancamento between :dtNavioIni and :dtNavioFim");
 							addParamToQuery("dtNavioIni", DateUtils.montarDataInicialParaHQLQuery(dataNavio));
 							addParamToQuery("dtNavioFim", DateUtils.montarDataFinalParaHQLQuery(dataNavio));
 						} catch (ParseException e) {
@@ -109,10 +109,12 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			}
 		}
 		
-		if(periodo == 3 && de != null && !de.equals("") && ate != null && !ate.equals(""))
-			hql.append(" and veic.dataCadastro between :dtIni and :dtFim");
+		if (de != null && !de.equals("") && ate != null && !ate.equals("")) {
+			if (periodo == 3) hql.append(" and veic.dataLancamento between :dtIni and :dtFim");
+			if (periodo == 4) hql.append(" and veic.dataCadastro between :dtIni and :dtFim");
+		}
 
-		if(vistoriaFinal && oriAte != null && oriAte.getId() != null) {
+		if (vistoriaFinal && oriAte != null && oriAte.getId() != null) {
 			hql.append(" and exists (select av2 from Avaria av2");
 			hql.append(" where av2.veiculo = av.veiculo");
 			if(de != null && !de.equals("") && ate != null && !ate.equals("")) {
@@ -173,7 +175,6 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		addParamToQuery("orAv", av.getOrigem());
 		
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
-
 	}
 
 	public List<Avaria> getAvariasDuplicadasPorFiltro(Veiculo veiculo, Avaria av) throws DAOException {
@@ -226,7 +227,8 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
 			if(periodo == 1) sql.append(" and avaria.dataLancamento between '" + dtInicio +"' and '" + dtFim +"'");
 			if(periodo == 2) sql.append(" and avaria.dataCadastro between '" + dtInicio +"' and '" + dtFim +"'");
-			if(periodo == 3) sql.append(" and veiculo.dataCadastro between '" + dtInicio +"' and '" + dtFim +"'");
+			if(periodo == 3) sql.append(" and veiculo.dataLancamento between '" + dtInicio +"' and '" + dtFim +"'");
+			if(periodo == 4) sql.append(" and veiculo.dataCadastro between '" + dtInicio +"' and '" + dtFim +"'");
 		}
 
 		if(veiculo.getNavio() != null && !veiculo.getNavio().equals("")) {
@@ -234,7 +236,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			try {
 				Date dataNavio = date_format.parse(veiculo.getNavio().substring(veiculo.getNavio().length() - 10, veiculo.getNavio().length()));
 				
-				sql.append(" and veiculo.dataCadastro between '" + DateUtils.montarDataInicialParaHQLQuery(dataNavio) + "'");
+				sql.append(" and veiculo.dataLancamento between '" + DateUtils.montarDataInicialParaHQLQuery(dataNavio) + "'");
 				sql.append(" and '" + DateUtils.montarDataFinalParaHQLQuery(dataNavio) + "'");
 			} catch (ParseException e) {
 				e.printStackTrace();

@@ -125,10 +125,10 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 	}
 
 	@Override
-	public void importarGabardo(String url) throws PromoveException {
+	public String importarGabardo(String url) throws PromoveException {
 		try {
 			ImportacaoCtrc import_ctrc = new ImportacaoCtrc();
-			import_ctrc.importarGabardo(url);
+			return import_ctrc.importarGabardo(url);
 		}catch(DocumentException de) {
 			throw new PromoveException(de);
 		} catch (ParseException e) {

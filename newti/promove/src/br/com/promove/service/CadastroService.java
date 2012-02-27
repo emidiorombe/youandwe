@@ -4,12 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.vaadin.ui.PopupDateField;
-import com.vaadin.ui.TextField;
-
-import br.com.promove.entity.Clima;
 import br.com.promove.entity.Cor;
-import br.com.promove.entity.Ctrc;
 import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Filial;
 import br.com.promove.entity.InconsistenciaVeiculo;
@@ -83,7 +78,7 @@ public interface CadastroService {
 
 	public List<Veiculo> buscarTodosVeiculos()throws PromoveException;
 
-	public List<Veiculo> buscarVeiculoPorFiltro(Veiculo veiculo, Date txtDe, Date txtAte)throws PromoveException;
+	public List<Veiculo> buscarVeiculoPorFiltro(Veiculo veiculo, Date txtDe, Date txtAte, Integer periodo, String sort) throws PromoveException;
 
 	public List<Veiculo> buscarVeiculosPorChassi(String chassi)throws PromoveException;
 
@@ -107,7 +102,7 @@ public interface CadastroService {
 
 	public List<Veiculo> buscarVeiculosPorFZ(String fz)throws PromoveException;
 
-	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date de, Date ate, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException;
+	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException;
 
 	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, Boolean vistoriaFinal) throws PromoveException;
 }
