@@ -9,6 +9,7 @@ import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import br.com.promove.dao.HibernateSessionFactory;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.ImportacaoService;
 import br.com.promove.service.ServiceFactory;
@@ -23,6 +24,8 @@ public class ImportCTRCJob implements Job{
 		ImportacaoService imp = ServiceFactory.getService(ImportacaoService.class);
 		
 		try {
+			HibernateSessionFactory.getSession().beginTransaction();
+
 			JobDataMap data = ctx.getJobDetail().getJobDataMap();
 			String url = data.getString("url");
 			System.out.println(url);
@@ -34,6 +37,9 @@ public class ImportCTRCJob implements Job{
 			
 			String query = "?dataIni=" + DateUtils.getStringFromDate(ontem.getTime(), null) + "&dataFim=" + DateUtils.getStringFromDate(now.getTime(), null);
 			imp.importarGabardo(url + query);
+			
+			HibernateSessionFactory.getSession().getTransaction().commit();
+			
 			log.warn("Importação de CTRC realizada com sucesso.");
 		} catch (PromoveException e) {
 			log.error("Erro na importação de CTRC " + e.getMessage());

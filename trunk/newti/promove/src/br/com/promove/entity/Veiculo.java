@@ -50,6 +50,9 @@ public class Veiculo implements Serializable {
 	
 	private Double valorMercadoria;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataLancamento = new Date();
+	
 	@Transient
 	private String origensfaltantes;
 	
@@ -153,6 +156,14 @@ public class Veiculo implements Serializable {
 
 	public Double getValorMercadoria() {
 		return valorMercadoria;
+	}
+
+	public void setDataLancamento(Date dataLancamento) {
+		this.dataLancamento = dataLancamento;
+	}
+
+	public Date getDataLancamento() {
+		return dataLancamento;
 	}
 
 	public List<Avaria> getAvarias() {

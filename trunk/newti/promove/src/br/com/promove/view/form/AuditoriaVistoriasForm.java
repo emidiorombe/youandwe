@@ -1,15 +1,11 @@
 package br.com.promove.view.form;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import br.com.promove.application.PromoveApplication;
-import br.com.promove.entity.Avaria;
-import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.OrigemAvaria;
-import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.TipoVeiculo;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
@@ -18,7 +14,6 @@ import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.AuditoriaVistoriasView;
-import br.com.promove.view.form.VeiculoSearchForm.VeiculoFieldFactory;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
@@ -27,7 +22,6 @@ import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
@@ -49,6 +43,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 	private Button export;
 	private ComboBox cmbOrigemDe;
 	private ComboBox cmbOrigemAte;
+	private ComboBox cmbPeriodo;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
 	private PromoveApplication app;
@@ -121,12 +116,28 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		txtAte.setLocale(new Locale("pt", "BR"));
 		txtAte.setResolution(DateField.RESOLUTION_DAY);
 		
+		cmbPeriodo = new ComboBox("Período por");
+		cmbPeriodo.addContainerProperty("label", String.class, null);
+		
+		i = cmbPeriodo.addItem(3);
+		i.getItemProperty("label").setValue("Data do veículo");
+		i = cmbPeriodo.addItem(4);
+		i.getItemProperty("label").setValue("Data de registro do veículo");
+		
+		cmbPeriodo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+		cmbPeriodo.setImmediate(true);
+		cmbPeriodo.setNullSelectionAllowed(false);
+		cmbPeriodo.setItemCaptionPropertyId("label");
+		cmbPeriodo.setWidth("200px");
+		cmbPeriodo.setValue(cmbPeriodo.getItemIds().iterator().next());
+
 		createFormBody(new BeanItem<Veiculo>(new Veiculo()));
 		layout.addComponent(this);
 		addField("cmbOrigemDe", cmbOrigemDe);
 		addField("cmbOrigemAte", cmbOrigemAte);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
+		addField("cmbPeriodo", cmbPeriodo);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
@@ -245,6 +256,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 				commit();
 				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+				Integer periodo = (Integer)cmbPeriodo.getValue();
 				OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
 				OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
 				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
@@ -253,7 +265,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 					if(item.getBean().getNavio().isEmpty())
 						throw new IllegalArgumentException("Informe um navio ou período");
 				
-				List<Veiculo> veiculos = cadastroService.buscarVeiculosAuditoria(item.getBean(), de, ate, oride, oriate);
+				List<Veiculo> veiculos = cadastroService.buscarVeiculosAuditoria(item.getBean(), de, ate, periodo, oride, oriate);
 				
 				if(event.getButton() == search) {
 					view.getTables().getTableVeiculo().filterTable(veiculos);

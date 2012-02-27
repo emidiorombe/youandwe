@@ -20,7 +20,7 @@ public interface ImportacaoService {
 
 	public String importAvariasDoDiretorio(String origem, String destino) throws PromoveException;
 
-	public void importarGabardo(String url) throws PromoveException;
+	public String importarGabardo(String url) throws PromoveException;
 
 	public void importDeParaAvaria(String csv) throws PromoveException;
 

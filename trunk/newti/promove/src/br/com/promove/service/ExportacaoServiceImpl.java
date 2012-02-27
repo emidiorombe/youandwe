@@ -445,7 +445,7 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    int i = 0;
 		    Veiculo veiculo = new Veiculo();
 		    veiculo.setTipo(cadastroService.getById(TipoVeiculo.class, 2));
-			List<Veiculo> veiculos = cadastroService.buscarVeiculoPorFiltro(veiculo, de, ate);
+			List<Veiculo> veiculos = cadastroService.buscarVeiculoPorFiltro(veiculo, de, ate, 3, "v.navio, v.chassi");
 		    for(Veiculo veic : veiculos) {
 		    	if (veic.getValorMercadoria() != null) {
 				    Row row = sheetPorto.createRow(++i);

@@ -2,8 +2,6 @@ package br.com.promove.view;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.view.form.VeiculoSearchForm;
-import br.com.promove.view.table.AvariaTable;
-import br.com.promove.view.table.VeiculoTable;
 
 import com.vaadin.ui.SplitPanel;
 
@@ -23,7 +21,7 @@ public class VeiculoListView extends SplitPanel{
 		form.setView(this);
 		setFirstComponent(form.getFormLayout());
 		setSecondComponent(tables);
-		setSplitPosition(45);
+		setSplitPosition(50);
 		
 	}
 

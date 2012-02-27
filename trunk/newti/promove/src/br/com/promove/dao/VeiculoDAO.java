@@ -25,7 +25,11 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		return executeQuery(hql.toString(), 0, Integer.MAX_VALUE);
 	}
 
-	public List<Veiculo> getByFilter(Veiculo veiculo, Date dtInicio, Date dtFim) throws DAOException {
+	public List<Veiculo> getByFilter(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo) throws DAOException {
+		return getByFilter(veiculo, dtInicio, dtFim, periodo, "v.chassi"); 
+	}
+
+	public List<Veiculo> getByFilter(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, String sort) throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select v from Veiculo v left JOIN FETCH v.modelo mod");
 		hql.append(" where v.tipo.id <> 9");
@@ -59,7 +63,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			try {
 				Date dataNavio = date_format.parse(veiculo.getNavio().substring(veiculo.getNavio().length() - 10, veiculo.getNavio().length()));
 				
-				hql.append(" and v.dataCadastro between :dtNavioIni and :dtNavioFim");
+				hql.append(" and v.dataLancamento between :dtNavioIni and :dtNavioFim");
 				addParamToQuery("dtNavioIni", DateUtils.montarDataInicialParaHQLQuery(dataNavio));
 				addParamToQuery("dtNavioFim", DateUtils.montarDataFinalParaHQLQuery(dataNavio));
 			} catch (ParseException e) {
@@ -69,12 +73,14 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		}
 		
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
-			hql.append(" and v.dataCadastro between :dtIni and :dtFim");
+			if (periodo == 3) hql.append(" and v.dataLancamento between :dtIni and :dtFim");
+			if (periodo == 4) hql.append(" and v.dataCadastro between :dtIni and :dtFim");
+
 			addParamToQuery("dtIni", dtInicio);
 			addParamToQuery("dtFim", dtFim);
 		}
 		
-		hql.append(" order by v.chassi");
+		hql.append(" order by " + sort);
 		
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
@@ -92,7 +98,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		hql.append("select v from Veiculo v where ");
 		hql.append(" v.chassi like :txtchassi ");
 		hql.append(" and v.modelo.codigoExternoImportacao = :txtmod ");
-		hql.append(" and v.dataCadastro between :dataini and :datafim ");
+		hql.append(" and v.dataLancamento between :dataini and :datafim ");
 		addParamToQuery("txtchassi",  "%"+chassi.substring(2));
 		addParamToQuery("txtmod",  chassi.substring(0, 2));
 		
@@ -123,7 +129,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		
 		StringBuilder sql = new StringBuilder();
 		sql.append("select navio||' - '||to_char(data, 'dd/mm/yyyy') from (");
-		sql.append("select distinct navio, cast(datacadastro as date) as data");
+		sql.append("select distinct navio, cast(dataLancamento as date) as data");
 		sql.append(" from veiculo where tipo_id = 2 and navio is not null");
 		sql.append(" order by data desc) as lista");
 
@@ -132,7 +138,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		return lista;
 	}
 
-	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date dtInicio, Date dtFim, OrigemAvaria oriInicio, OrigemAvaria oriFim) throws DAOException {
+	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim) throws DAOException {
 		//if ((oriFim == null || oriFim.getId() == null) &&
 		//		oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
 		//if ((oriInicio == null || oriInicio.getId() == null) &&
@@ -204,7 +210,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		hql.append(" where v.tipo.id <> 9");
 		
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
-			hql.append(" and v.dataCadastro between :dtIni and :dtFim");
+			if (periodo == 3) hql.append(" and v.dataLancamento between :dtIni and :dtFim");
+			if (periodo == 4) hql.append(" and v.dataCadastro between :dtIni and :dtFim");
 			addParamToQuery("dtIni", dtInicio);
 			addParamToQuery("dtFim", dtFim);
 		}
@@ -220,7 +227,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			try {
 				Date dataNavio = date_format.parse(veiculo.getNavio().substring(veiculo.getNavio().length() - 10, veiculo.getNavio().length()));
 				
-				hql.append(" and v.dataCadastro between :dtNavioIni and :dtNavioFim");
+				hql.append(" and v.dataLancamento between :dtNavioIni and :dtNavioFim");
 				addParamToQuery("dtNavioIni", DateUtils.montarDataInicialParaHQLQuery(dataNavio));
 				addParamToQuery("dtNavioFim", DateUtils.montarDataFinalParaHQLQuery(dataNavio));
 			} catch (ParseException e) {
@@ -274,7 +281,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			subsqlA.append(" and avaria.tipo_id = tipoavaria.id");
 			subsqlA.append(" and tipoavaria.movimentacao = :opcao");
 		}
-		if(periodo != 3 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+		if ((periodo == 1 || periodo == 2) && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
 			subsqlA.append(" and " + (periodo == 1 ? "avaria.dataLancamento" : "avaria.dataCadastro"));
 			subsqlA.append(" between '" + dtInicio + "'");
 			subsqlA.append(" and '" + dtFim + "'");
@@ -302,8 +309,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 				subsqlA.append(" and origemavaria.codigo = " + oriFim.getCodigo().toString());
 		}
 
-		if(periodo == 3 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
-			subsql.append(" and veiculo.datacadastro");
+		if ((periodo == 3 || periodo == 4) && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+			subsql.append(" and veiculo." + (periodo == 3 ? "dataLancamento" : "dataCadastro"));
 			subsql.append(" between '" + dtInicio + "'");
 			subsql.append(" and '" + dtFim + "'");
 		}
@@ -313,7 +320,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			try {
 				Date dataNavio = date_format.parse(veiculo.getNavio().substring(veiculo.getNavio().length() - 10, veiculo.getNavio().length()));
 				
-				subsql.append(" and veiculo.dataCadastro between '" + DateUtils.montarDataInicialParaHQLQuery(dataNavio) + "'");
+				subsql.append(" and veiculo.dataLancamento between '" + DateUtils.montarDataInicialParaHQLQuery(dataNavio) + "'");
 				subsql.append(" and '" + DateUtils.montarDataFinalParaHQLQuery(dataNavio) + "'");
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -332,8 +339,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			subsqlA.append(" where veiculo.id = avaria.veiculo_id");
 			subsqlA.append(" and avaria.tipo_id = tipoavaria.id");
 			subsqlA.append(" and tipoavaria.movimentacao = false");
-			if(periodo != 3 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
-				subsqlA.append(" and " + (periodo == 1 ? "avaria.dataLancamento" : "avaria.dataCadastro"));
+			if ((periodo == 1 || periodo == 2) && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
+				subsqlA.append(" and avaria." + (periodo == 1 ? "dataLancamento" : "dataCadastro"));
 				subsqlA.append(" between '" + dtInicio + "'");
 				subsqlA.append(" and '" + dtFim + "'");
 			}

@@ -144,6 +144,8 @@ public class AnaliseResultadoForm extends BaseForm{
 		i = cmbPeriodo.addItem(2);
 		i.getItemProperty("label").setValue("Data de registro da vistoria");
 		i = cmbPeriodo.addItem(3);
+		i.getItemProperty("label").setValue("Data do veículo");
+		i = cmbPeriodo.addItem(4);
 		i.getItemProperty("label").setValue("Data de registro do veículo");
 		
 		cmbPeriodo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
@@ -298,9 +300,9 @@ public class AnaliseResultadoForm extends BaseForm{
 				
 				Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 				Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
+				Integer periodo = (Integer)cmbPeriodo.getValue();
 				OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
 				OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
-				Integer periodo = (Integer)cmbPeriodo.getValue();
 				String item = (String)cmbItem.getValue();
 				Boolean vistoriaFinal = (Boolean)chkVistoriaFinal.getValue();
 				

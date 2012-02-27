@@ -31,6 +31,8 @@ public class TesteJob implements Job, Serializable {
 		CadastroService cad = ServiceFactory.getService(CadastroService.class);
 		
 		try {
+			System.out.println("JOB executado");
+			
 			HibernateSessionFactory.getSession().beginTransaction();
 			
 			List<Filial> lista = cad.buscarTodasFiliais();
