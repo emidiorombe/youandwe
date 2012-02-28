@@ -2,6 +2,7 @@ package br.com.promove.view.form;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
