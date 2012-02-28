@@ -27,11 +27,11 @@ public class ImportacaoTERCA {
 			String[] campos = linha.replaceAll("\r", "; ; ").split(";");
 			Veiculo v = new Veiculo();
 			try {
-				if (campos[0].length() != 17) {
+				if (campos[0].trim().length() != 17) {
 					continue;
 				}
 				
-				v.setChassi(campos[0].toUpperCase());
+				v.setChassi(campos[0].trim().toUpperCase());
 				v.setCor(cadastroService.getById(Cor.class, new Integer(97)));
 				v.setTipo(cadastroService.getById(TipoVeiculo.class, 1));
 				if (data != null) {
@@ -39,7 +39,7 @@ public class ImportacaoTERCA {
 				}
 				
 				if (campos[2] != null && !campos[2].trim().equals("")) {
-					v.setNavio(campos[2]);
+					v.setNavio(campos[2].trim());
 					v.setTipo(cadastroService.getById(TipoVeiculo.class, 2));
 					
 					if (campos[3] != null && !campos[3].trim().equals("")) {
