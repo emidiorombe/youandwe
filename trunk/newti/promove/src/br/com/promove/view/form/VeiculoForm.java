@@ -1,5 +1,7 @@
 package br.com.promove.view.form;
 
+import java.util.Locale;
+
 import br.com.promove.entity.Cor;
 import br.com.promove.entity.Modelo;
 import br.com.promove.entity.TipoVeiculo;
@@ -15,9 +17,11 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.AbstractSelect.Filtering;
@@ -53,14 +57,12 @@ public class VeiculoForm extends BaseForm{
 		form_layout.addComponent(createFooter());
 		form_layout.setSpacing(true);
 		form_layout.setMargin(false, true, false, true);
-		
 	}
 
 	public void createFormBody(BeanItem<Veiculo> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new VeiculoFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"chassi", "modelo", "cor", "tipo", "navio"});
-		
+		setVisibleItemProperties(new Object[]{"chassi", "modelo", "cor", "dataLancamento", "tipo", "navio"});
 	}
 	
 	private Component createFooter(){
@@ -153,6 +155,12 @@ public class VeiculoForm extends BaseForm{
 				}catch (PromoveException e) {
 					showErrorMessage(form, "Não foi possível buscar as Cores");
 				}
+			}else if(propertyId.equals("dataLancamento")) {
+				PopupDateField data = new PopupDateField("Data");
+				data.setResolution(DateField.RESOLUTION_DAY);
+				data.setLocale(new Locale("pt", "BR"));
+				data.setRequired(true);
+				return data;
 			}else if(propertyId.equals("tipo")) {
 				ComboBox c = new ComboBox("Tipo de Veículo");
 				c.addContainerProperty("label", String.class, null);

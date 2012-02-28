@@ -7,7 +7,6 @@ import br.com.promove.view.CtrcVeiculoTables;
 import br.com.promove.view.CtrcView;
 import br.com.promove.view.ErroImportCtrcVeiculoTables;
 import br.com.promove.view.ErroImportCtrcView;
-import br.com.promove.view.ExportAvariaView;
 import br.com.promove.view.ImportCtrcView;
 import br.com.promove.view.form.CtrcForm;
 import br.com.promove.view.form.CtrcSearchForm;
@@ -65,7 +64,7 @@ public class MenuAverbacao extends CssLayout {
 		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
 		
-		if(user.getTipo().getId() != 1 && user.getTipo().getId() != 7) {
+		if(user.getTipo().getId() != 1 && user.getTipo().getId() != 7) { //Administrador/Averbação
 			add_ctrc.setVisible(false); 
 			list_ctrc.setVisible(false);
 			import_ctrc.setVisible(false);

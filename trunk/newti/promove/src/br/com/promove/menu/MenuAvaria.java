@@ -93,16 +93,16 @@ public class MenuAvaria  extends CssLayout{
 		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
 		
-		if(user.getTipo().getId() != 1 && user.getTipo().getId() != 2) {
+		if(user.getTipo().getId() != 1 && user.getTipo().getId() != 2) { //Administrador/Corretora
 			add.setVisible(false); 
 			add_veiculo.setVisible(false);
 			import_avaria.setVisible(false);
-			if(user.getTipo().getId() != 5)
+			if(user.getTipo().getId() != 5) //Op.Logistico
 				erro_import_avaria.setVisible(false);
 			import_veiculos.setVisible(false);
 			erro_import_veiculos.setVisible(false);
 			export.setVisible(false);
-			if(user.getTipo().getId() != 3 && user.getTipo().getId() != 5) { 
+			if(user.getTipo().getId() != 3 && user.getTipo().getId() != 5) { //Seguradora/Op.Logistico
 				auditoria.setVisible(false);
 				analise.setVisible(false);
 				resumo.setVisible(false);

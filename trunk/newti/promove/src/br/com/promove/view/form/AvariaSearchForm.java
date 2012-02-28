@@ -15,6 +15,7 @@ import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.TipoVeiculo;
+import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
@@ -73,6 +74,9 @@ public class AvariaSearchForm extends BaseForm{
 	}
 
 	private void buildForm() {
+		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
+
 		setWriteThrough(false);
 		setImmediate(true);
 		coluna1.setImmediate(true);
@@ -91,9 +95,11 @@ public class AvariaSearchForm extends BaseForm{
 			//i = cmbOrigemAte.addItem(new OrigemAvaria());
 			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
-				i = cmbOrigemAte.addItem(or);
-				i.getItemProperty("label").setValue(or.getDescricao());
-				cmbOrigemAte.setValue(or);
+				if(user.getTipo().getId() != 9 || or.getFilial().getCodigo().equals(user.getFilial().getCodigo())) { //Consulta por Local
+					i = cmbOrigemAte.addItem(or);
+					i.getItemProperty("label").setValue(or.getDescricao());
+					cmbOrigemAte.setValue(or);
+				}
 			}
 		} catch (PromoveException e) {
 			showErrorMessage(this, "Não foi possível buscar os Locais de Vistoria");
@@ -445,6 +451,9 @@ public class AvariaSearchForm extends BaseForm{
 					
 					return c;
 				}else if(propertyId.equals("origem")) {
+					WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+					Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
+
 					ComboBox c = new ComboBox("Local de Vistoria De");
 					c.addContainerProperty("label", String.class, null);
 
@@ -452,8 +461,10 @@ public class AvariaSearchForm extends BaseForm{
 					//i_default.getItemProperty("label").setValue("Selecione...");
 
 					for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
-						Item i = c.addItem(or);
-						i.getItemProperty("label").setValue(or.getDescricao());
+						if(user.getTipo().getId() != 9 || or.getFilial().getCodigo().equals(user.getFilial().getCodigo())) { //Consulta por Local
+							Item i = c.addItem(or);
+							i.getItemProperty("label").setValue(or.getDescricao());
+						}
 					}
 					
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);

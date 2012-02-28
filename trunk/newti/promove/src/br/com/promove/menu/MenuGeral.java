@@ -101,7 +101,8 @@ public class MenuGeral extends CssLayout{
 	private void setPermissionVisible() {
 		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
-		if(user.getTipo().getId() != 1) {
+		
+		if(user.getTipo().getId() != 1) { // Administrador
 			parametro.setVisible(false);
 			filial.setVisible(false);
 			usuario.setVisible(false);
@@ -109,7 +110,7 @@ public class MenuGeral extends CssLayout{
 			transp.setVisible(false);
 		}
 		
-		if(user.getTipo().getId() != 1 && user.getTipo().getId() != 2) {
+		if(user.getTipo().getId() != 1 && user.getTipo().getId() != 2) { // Adminstrador/Corretora
 			modelo.setVisible(false); 
 			cor.setVisible(false);
 			tipo.setVisible(false);
