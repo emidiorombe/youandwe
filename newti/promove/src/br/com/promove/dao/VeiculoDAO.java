@@ -186,7 +186,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			try {
 				Date dataNavio = date_format.parse(veiculo.getNavio().substring(veiculo.getNavio().length() - 10, veiculo.getNavio().length()));
 				
-				hql.append(" and v.dataCadastro between :dtNavioIni and :dtNavioFim");
+				hql.append(" and v.dataLancamento between :dtNavioIni and :dtNavioFim");
 				addParamToQuery("dtNavioIni", DateUtils.montarDataInicialParaHQLQuery(dataNavio));
 				addParamToQuery("dtNavioFim", DateUtils.montarDataFinalParaHQLQuery(dataNavio));
 			} catch (ParseException e) {

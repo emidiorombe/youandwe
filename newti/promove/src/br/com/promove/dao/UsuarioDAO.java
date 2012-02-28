@@ -11,6 +11,7 @@ public class UsuarioDAO extends BaseDAO<Integer, Usuario>{
 		hql.append(" u.codigo = :txtnome");
 		hql.append(" and u.senha = :txtsenha");
 		hql.append(" and u.tipo <> 6");
+		hql.append(" and u.tipo <> 10");
 		addParamToQuery("txtnome",  Integer.parseInt(user));
 		addParamToQuery("txtsenha",  password);
 		return (Usuario) executeQueryOneResult(hql.toString(), paramsToQuery);

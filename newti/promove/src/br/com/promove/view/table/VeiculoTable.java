@@ -27,8 +27,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.BaseTheme;
 
 public class VeiculoTable extends Table {
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "chassi", "modelo", "cor", "dataCadastro", "tipo", "navio"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Modelo", "Cor", "Data", "Tipo", "Navio"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "chassi", "modelo", "cor", "dataLancamento", "dataCadastro", "tipo", "navio"};
+	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Modelo", "Cor", "Data Lanc.", "Data Cad.", "Tipo", "Navio"};
 	
 	private CadastroService cadastroService;
 	private VeiculoTableContainer container;
@@ -61,8 +61,9 @@ public class VeiculoTable extends Table {
 		addGeneratedColumn("id", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("modelo", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("cor", new VeiculoTableColumnGenerator(this));
-		addGeneratedColumn("dataCadastro", new VeiculoTableColumnGenerator(this));
+		addGeneratedColumn("dataLancamento", new VeiculoTableColumnGenerator(this));
 		addGeneratedColumn("tipo", new VeiculoTableColumnGenerator(this));
+		addGeneratedColumn("dataCadastro", new VeiculoTableColumnGenerator(this));
 		
 		if (origens) {
 			addGeneratedColumn("origens", new VeiculoTableColumnGenerator(this));
@@ -71,6 +72,7 @@ public class VeiculoTable extends Table {
 		
 		try {
 			setColumnCollapsed("cor", true);
+			setColumnCollapsed("dataCadastro", true);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -134,8 +136,10 @@ public class VeiculoTable extends Table {
 				b.setDebugId("av&"+v.getChassi());
 				return b;
 			*/
-			}else if(columnId.toString().equals("dataCadastro")) {
+			}else if(columnId.toString().equals("dataLancamento")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataCadastro()));
+			}else if(columnId.toString().equals("dataCadastro")) {
+				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(v.getDataLancamento()));
 			}else if(columnId.toString().equals("id")) {
 				WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 				Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");

@@ -33,8 +33,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.Window;
 
 public class AvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "modelo", "dataLancamento", "hora", "origem", "local", "tipo", "extensao", "nivel", "fotos", "clima", "usuario", "observacao"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Modelo", "Data Lanc.", "Hora", "Local", "Peça", "Tipo", "Extensão", "Nível", "Fotos", "Clima", "Usuário", "Obs"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "modelo", "dataLancamento", "hora", "dataCadastro", "origem", "local", "tipo", "extensao", "nivel", "fotos", "clima", "usuario", "observacao"};
+	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Modelo", "Data Lanc.", "Hora", "Data Cad.", "Local", "Peça", "Tipo", "Extensão", "Nível", "Fotos", "Clima", "Usuário", "Obs"};
 	
 	private AvariaService avariaService;
 	private AvariaTableContainer container;
@@ -72,12 +72,14 @@ public class AvariaTable extends Table{
 		//addGeneratedColumn("extensao", new AvariaTableColumnGenerator(this));
 		//addGeneratedColumn("clima", new AvariaTableColumnGenerator(this));
 		addGeneratedColumn("dataLancamento", new AvariaTableColumnGenerator(this));
+		addGeneratedColumn("dataCadastro", new AvariaTableColumnGenerator(this));
 		//addGeneratedColumn("usuario", new AvariaTableColumnGenerator(this));
 		//addGeneratedColumn("observacao", new AvariaTableColumnGenerator(this));
 		addGeneratedColumn("fotos", new AvariaTableColumnGenerator(this));
 		
 		try {
 			setColumnCollapsed("hora", true);
+			setColumnCollapsed("dataCadastro", true);
 			setColumnCollapsed("extensao", true);
 			setColumnCollapsed("nivel", true);
 			setColumnCollapsed("clima", true);
@@ -143,6 +145,8 @@ public class AvariaTable extends Table{
 			final Avaria av = (Avaria)itemId;
 			if(columnId.toString().equals("dataLancamento")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(av.getDataLancamento()));
+			} else if(columnId.toString().equals("dataCadastro")) {
+				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(av.getDataCadastro()));
 			//}else if(columnId.toString().equals("observacao")) {
 			//		if(av.getObservacao() != null && av.getObservacao().length() > 5)
 			//			return new Label(av.getObservacao().substring(0, 5) + "...");
