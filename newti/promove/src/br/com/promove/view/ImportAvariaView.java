@@ -3,10 +3,12 @@ package br.com.promove.view;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.Map;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
+import br.com.promove.service.CadastroService;
 import br.com.promove.service.ImportacaoService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.utils.Config;
@@ -43,6 +45,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 	private ByteArrayOutputStream file = new ByteArrayOutputStream();
 	private ImportacaoService importService;
 	private AvariaService avariaService;
+	private CadastroService cadastroService;
 
 	private ProgressIndicator pi = new ProgressIndicator();
 
@@ -54,6 +57,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 		buildLayout();
 		importService = ServiceFactory.getService(ImportacaoService.class);
 		avariaService = ServiceFactory.getService(AvariaService.class);
+		cadastroService = ServiceFactory.getService(CadastroService.class);
 	}
 
 	private void buildLayout() {
@@ -236,6 +240,8 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 		@Override
 		public void buttonClick(ClickEvent event) {
 			try {
+				Map<String, String> params = cadastroService.buscarTodosParametrosAsMap();
+				
 				importService.transfereFotos(Config.getConfig("pasta_avaria_xml"), Config.getConfig("pasta_fotos"));
 				String conteudo = importService.importAvariasDoDiretorio(Config.getConfig("pasta_avaria_xml"), Config.getConfig("pasta_destino_xml")).replaceAll(";", "<br>");
 				if (conteudo.isEmpty()) conteudo = "Nenhum arquivo.";
@@ -243,7 +249,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 
 				try {
 					conteudo += "<br><br>" + avariaService.listarAvariasPT(DateUtils.diaAtual());
-					EmailUtils.sendHtml("sica@promoveseguros.com.br", "daniel@newti.com.br;".split(";"), "SICA - Importação de Vistorias", conteudo);
+					EmailUtils.sendHtml(params.get("smtpEmail"), params.get("emailVistorias").split(";"), "SICA - Importacao de Vistorias", conteudo);
 					System.out.println();
 				} catch (PromoveException e) {
 					e.printStackTrace();

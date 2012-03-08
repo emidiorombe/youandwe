@@ -317,9 +317,12 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		    row_head.createCell(5).setCellValue("MUNICIPIO ORIGEM");
 		    row_head.createCell(6).setCellValue("UF");
 		    row_head.createCell(7).setCellValue("MUNICIPIO DESTINO");
-		    row_head.createCell(8).setCellValue("CHASSI");
-		    row_head.createCell(9).setCellValue("MODELO");
-		    row_head.createCell(10).setCellValue("VALOR");
+		    row_head.createCell(8).setCellValue("MOTORISTA");
+		    row_head.createCell(9).setCellValue("FROTA");
+		    row_head.createCell(10).setCellValue("CARRETA");
+		    row_head.createCell(11).setCellValue("CHASSI");
+		    row_head.createCell(12).setCellValue("MODELO");
+		    row_head.createCell(13).setCellValue("VALOR");
 		    
 		    int i = 0;
 		    for(Ctrc ctrc : ctrcs) {
@@ -333,11 +336,14 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 				    row.createCell(5).setCellValue(ctrc.getMunicipioOrigem());
 				    row.createCell(6).setCellValue(ctrc.getUfDestino());
 				    row.createCell(7).setCellValue(ctrc.getMunicipioDestino());
+				    row.createCell(8).setCellValue(ctrc.getMotorista());
+				    row.createCell(9).setCellValue(ctrc.getPlacaFrota());
+				    row.createCell(10).setCellValue(ctrc.getPlacaCarreta());
 				    
 				    if (veic.getVeiculo() != null) {
-					    row.createCell(8).setCellValue(veic.getVeiculo().getChassi());
-					    row.createCell(9).setCellValue(veic.getVeiculo().getModelo().getDescricao());
-					    row.createCell(10).setCellValue(moeda_format.format(veic.getValorMercadoria()));
+					    row.createCell(11).setCellValue(veic.getVeiculo().getChassi());
+					    row.createCell(12).setCellValue(veic.getVeiculo().getModelo().getDescricao());
+					    row.createCell(13).setCellValue(moeda_format.format(veic.getValorMercadoria()));
 				    }
 		    	}
 		    }
