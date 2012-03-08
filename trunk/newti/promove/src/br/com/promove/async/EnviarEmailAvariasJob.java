@@ -1,6 +1,7 @@
 package br.com.promove.async;
 
 import java.util.Calendar;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.quartz.Job;
@@ -11,6 +12,7 @@ import org.quartz.JobExecutionException;
 import br.com.promove.dao.HibernateSessionFactory;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
+import br.com.promove.service.CadastroService;
 import br.com.promove.service.ImportacaoService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.utils.Config;
@@ -24,9 +26,12 @@ public class EnviarEmailAvariasJob implements Job {
 	@Override
 	public void execute(JobExecutionContext ctx) throws JobExecutionException {
 		ImportacaoService imp = ServiceFactory.getService(ImportacaoService.class);
+		CadastroService cadastroService = ServiceFactory.getService(CadastroService.class);
 		
 		// Vistorias
 		try {
+			Map<String, String> params = cadastroService.buscarTodosParametrosAsMap();
+			
 			//JobDataMap data = ctx.getJobDetail().getJobDataMap();
 			//String tos[] = data.getString("dest").split(";");
 			
@@ -41,7 +46,7 @@ public class EnviarEmailAvariasJob implements Job {
 			conteudo = "<b>Lista de Arquivos importados:</b><br>" + conteudo; 
 					
 			conteudo += "<br><br>" + avariaService.listarAvariasPT(DateUtils.diaAtual());
-			EmailUtils.sendHtml("sica@promoveseguros.com.br", "daniel@newti.com.br;".split(";"), "SICA - Importação de Vistorias", conteudo);
+			EmailUtils.sendHtml(params.get("smtpEmail"), params.get("emailVistorias").split(";"), "SICA - Importacao de Vistorias", conteudo);
 			
 			HibernateSessionFactory.getSession().getTransaction().commit();
 			
