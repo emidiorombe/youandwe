@@ -70,6 +70,10 @@ public class Avaria implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataCadastro = new Date();
 	
+	private String chassiGravado;
+	private String etiqueta;
+	private String autoDestrutivel;
+
 	public Integer getId() {
 		return id;
 	}
@@ -189,6 +193,28 @@ public class Avaria implements Serializable{
 	public Date getDataCadastro() {
 		return dataCadastro;
 	}
-	
-	
+
+	public void setChassiGravado(String chassiGravado) {
+		this.chassiGravado = chassiGravado;
+	}
+
+	public String getChassiGravado() {
+		return chassiGravado;
+	}
+
+	public void setEtiqueta(String etiqueta) {
+		this.etiqueta = etiqueta;
+	}
+
+	public String getEtiqueta() {
+		return etiqueta;
+	}
+
+	public void setAutoDestrutivel(String autoDestrutivel) {
+		this.autoDestrutivel = autoDestrutivel;
+	}
+
+	public String getAutoDestrutivel() {
+		return autoDestrutivel;
+	}
 }
