@@ -87,6 +87,14 @@ public class ImportacaoAvaria {
 					av.setNivel(avariaService.getById(NivelAvaria.class, new Integer(node_av.element("nivel").getText())));
 				if (!node_av.element("obs").getText().trim().replaceAll("\r", "").isEmpty())
 					av.setObservacao(node_av.element("obs").getText());
+				
+				try {
+					av.setChassiGravado(node_av.element("gravado").getText());
+					av.setEtiqueta(node_av.element("etiqueta").getText());
+					av.setAutoDestrutivel(node_av.element("auto").getText());
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
 
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				av.setHora(node_av.element("hora").getText());

@@ -56,6 +56,10 @@ public class InconsistenciaAvaria implements Serializable{
 	@OneToOne
 	private NivelAvaria nivel;
 	
+	private String chassiGravado;
+	private String etiqueta;
+	private String autoDestrutivel;
+
 	public InconsistenciaAvaria() {}
 	
 	public InconsistenciaAvaria(Avaria av, String msgErro) {
@@ -71,6 +75,9 @@ public class InconsistenciaAvaria implements Serializable{
 		this.hora = av.getHora();
 		this.nivel = av.getNivel();
 		this.msgErro = msgErro;
+		this.chassiGravado = av.getChassiGravado();
+		this.etiqueta = av.getEtiqueta();
+		this.autoDestrutivel = av.getAutoDestrutivel();
 	}
 
 	public Integer getId() {
@@ -174,6 +181,9 @@ public class InconsistenciaAvaria implements Serializable{
 		av.setVeiculo(veiculo);
 		av.setHora(hora);
 		av.setNivel(nivel);
+		av.setChassiGravado(chassiGravado);
+		av.setEtiqueta(etiqueta);
+		av.setAutoDestrutivel(autoDestrutivel);
 		return av;
 	}
 	
@@ -201,4 +211,27 @@ public class InconsistenciaAvaria implements Serializable{
 		return nivel;
 	}
 	
+	public void setChassiGravado(String chassiGravado) {
+		this.chassiGravado = chassiGravado;
+	}
+
+	public String getChassiGravado() {
+		return chassiGravado;
+	}
+
+	public void setEtiqueta(String etiqueta) {
+		this.etiqueta = etiqueta;
+	}
+
+	public String getEtiqueta() {
+		return etiqueta;
+	}
+
+	public void setAutoDestrutivel(String autoDestrutivel) {
+		this.autoDestrutivel = autoDestrutivel;
+	}
+
+	public String getAutoDestrutivel() {
+		return autoDestrutivel;
+	}
 }
