@@ -22,6 +22,8 @@ public class ImportacaoDeParaAvaria {
 			String chassiAntigo = campos[0];
 			String chassiNovo = campos[1];
 			
+			System.out.println(chassiNovo);
+			
 			if(chassiAntigo.length() != 17) continue;
 			if(chassiNovo.length() != 17) continue;
 

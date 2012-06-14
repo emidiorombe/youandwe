@@ -110,10 +110,11 @@ public class TipoAvariaForm extends BaseForm {
 					f.setReadOnly(true);
 				f.addValidator(new IntegerValidator(
 						"Código deve ser um número inteiro"));
-			} else if (propertyId.equals("descricao")) {
-				f.addValidator(new StringLengthValidator(
-						"Descrição deve ter no mínimo 3 e no máximo 50 caracteres",
-						3, 50, false));
+			} else if(propertyId.equals("descricao")) {
+				f.setWidth("300px");
+				//f.addValidator(new StringLengthValidator(
+				//		"Descrição deve ter no mínimo 3 e no máximo 50 caracteres",
+				//		3, 50, false));
 			}
 
 			return f;

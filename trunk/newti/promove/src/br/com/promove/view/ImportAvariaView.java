@@ -249,7 +249,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 
 				try {
 					conteudo += "<br><br>" + avariaService.listarAvariasPT(DateUtils.diaAtual());
-					EmailUtils.sendHtml(params.get("smtpEmail"), params.get("emailVistorias").split(";"), "SICA - Importacao de Vistorias", conteudo);
+					EmailUtils.sendHtml(params.get("smtpEmail"), params.get("emailVistorias").split(";"), "SIGA - Importacao de Vistorias", conteudo);
 					System.out.println();
 				} catch (PromoveException e) {
 					e.printStackTrace();

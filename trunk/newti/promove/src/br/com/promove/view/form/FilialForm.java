@@ -103,6 +103,8 @@ public class FilialForm extends BaseForm{
 			if(propertyId.equals("codigo")) {
 				if(!newLocal)
 					f.setReadOnly(true);
+			} else if(propertyId.equals("nome")) {
+				f.setWidth("300px");
 			}else if(propertyId.equals("codigoExterno")) {
 				f.addValidator(new IntegerValidator("Código externo deve ser numérico"));
 			}

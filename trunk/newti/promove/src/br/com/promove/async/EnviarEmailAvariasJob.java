@@ -46,7 +46,7 @@ public class EnviarEmailAvariasJob implements Job {
 			conteudo = "<b>Lista de Arquivos importados:</b><br>" + conteudo; 
 					
 			conteudo += "<br><br>" + avariaService.listarAvariasPT(DateUtils.diaAtual());
-			EmailUtils.sendHtml(params.get("smtpEmail"), params.get("emailVistorias").split(";"), "SICA - Importacao de Vistorias", conteudo);
+			EmailUtils.sendHtml(params.get("smtpEmail"), params.get("emailVistorias").split(";"), "SIGA - Importacao de Vistorias", conteudo);
 			
 			HibernateSessionFactory.getSession().getTransaction().commit();
 			
@@ -76,7 +76,7 @@ public class EnviarEmailAvariasJob implements Job {
 			conteudo = conteudo + DateUtils.getStringFromDate(ontem.getTime(), "dd/mm/yyyy") + "<br><br>";
 			conteudo = conteudo + "<b>Quantidade de CTRCs importados: </b>";
 			conteudo = conteudo + imp.importarGabardo(url + query) + "<br>"; 
-			EmailUtils.sendHtml("sica@promoveseguros.com.br", "daniel@newti.com.br;".split(";"), "SICA - Importação de CTRC", conteudo);
+			EmailUtils.sendHtml("sica@promoveseguros.com.br", "daniel@newti.com.br;".split(";"), "SIGA - Importação de CTRC", conteudo);
 			
 			HibernateSessionFactory.getSession().getTransaction().commit();
 			

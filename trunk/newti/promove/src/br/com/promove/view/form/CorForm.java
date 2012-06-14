@@ -101,6 +101,8 @@ public class CorForm extends BaseForm{
 			if(propertyId.equals("codigo")) {
 				if(!newCor)
 					f.setReadOnly(true);
+			} else if(propertyId.equals("descricao")) {
+				f.setWidth("300px");
 			}else if(propertyId.equals("codigoExterno")) {
 				f.setRequired(false);
 			}

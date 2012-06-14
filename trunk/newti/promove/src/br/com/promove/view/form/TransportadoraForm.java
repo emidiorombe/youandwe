@@ -100,6 +100,8 @@ public class TransportadoraForm extends BaseForm{
 			if(propertyId.equals("codigo")) {
 				if(!newLocal)
 					f.setReadOnly(true);
+			} else if(propertyId.equals("descricao")) {
+				f.setWidth("300px");
 			}
 			return f;
 		}

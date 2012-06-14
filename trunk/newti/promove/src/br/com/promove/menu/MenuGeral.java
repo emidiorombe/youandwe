@@ -2,38 +2,47 @@ package br.com.promove.menu;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Usuario;
+import br.com.promove.view.CarretaView;
 import br.com.promove.view.ClimaAvariaView;
 import br.com.promove.view.CorView;
 import br.com.promove.view.ExportCadastroView;
 import br.com.promove.view.ExtensaoAvariaView;
 import br.com.promove.view.FabricanteView;
 import br.com.promove.view.FilialView;
+import br.com.promove.view.FrotaView;
 import br.com.promove.view.LocalAvariaView;
 import br.com.promove.view.ModeloView;
+import br.com.promove.view.MotoristaView;
 import br.com.promove.view.OrigemAvariaView;
 import br.com.promove.view.ParametroView;
 import br.com.promove.view.TipoAvariaView;
 import br.com.promove.view.TransportadoraView;
 import br.com.promove.view.UsuarioView;
+import br.com.promove.view.form.CarretaForm;
 import br.com.promove.view.form.ClimaForm;
 import br.com.promove.view.form.CorForm;
 import br.com.promove.view.form.ExtensaoAvariaForm;
 import br.com.promove.view.form.FabricanteForm;
 import br.com.promove.view.form.FilialForm;
+import br.com.promove.view.form.FrotaForm;
 import br.com.promove.view.form.LocalAvariaForm;
 import br.com.promove.view.form.ModeloForm;
+import br.com.promove.view.form.MotoristaForm;
 import br.com.promove.view.form.OrigemAvariaForm;
 import br.com.promove.view.form.ParametroForm;
 import br.com.promove.view.form.TipoAvariaForm;
 import br.com.promove.view.form.TransportadoraForm;
 import br.com.promove.view.form.UsuarioForm;
+import br.com.promove.view.table.CarretaTable;
 import br.com.promove.view.table.ClimaTable;
 import br.com.promove.view.table.CorTable;
 import br.com.promove.view.table.ExtensaoAvariaTable;
 import br.com.promove.view.table.FabricanteTable;
 import br.com.promove.view.table.FilialTable;
+import br.com.promove.view.table.FrotaTable;
 import br.com.promove.view.table.LocalAvariaTable;
 import br.com.promove.view.table.ModeloTable;
+import br.com.promove.view.table.MotoristaTable;
 import br.com.promove.view.table.OrigemAvariaTable;
 import br.com.promove.view.table.ParametroTable;
 import br.com.promove.view.table.TipoAvariaTable;
@@ -63,6 +72,9 @@ public class MenuGeral extends CssLayout{
 	private Button extensao;
 	private Button clima;
 	private Button transp;
+	private Button frota;
+	private Button carreta;
+	private Button motorista;
 	private Button export;
 	
 	public MenuGeral(PromoveApplication app) {
@@ -89,13 +101,14 @@ public class MenuGeral extends CssLayout{
 		extensao = new NativeButton("Extensão de Avaria");
 		clima = new NativeButton("Condição Climática");
 		transp = new NativeButton("Transportadora");
+		frota = new NativeButton("Frota");
+		carreta = new NativeButton("Carreta");
+		motorista = new NativeButton("Motorista");
 		export = new NativeButton("Exportar Cadastros Básicos");
 		
-		
-		addListeners(parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, export);
-		addComponents(title, parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, export);
+		addListeners(parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, frota, carreta, motorista, export);
+		addComponents(title, parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, frota, carreta, motorista, export);
 		setPermissionVisible();
-		
 	}
 	
 	private void setPermissionVisible() {
@@ -118,6 +131,9 @@ public class MenuGeral extends CssLayout{
 			origem.setVisible(false);
 			extensao.setVisible(false);
 			clima.setVisible(false);
+			frota.setVisible(false);
+			carreta.setVisible(false);
+			motorista.setVisible(false);
 			export.setVisible(false);
 		}
 	}
@@ -138,7 +154,7 @@ public class MenuGeral extends CssLayout{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			addAndRemoveStyle(event.getButton(), parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp);
+			addAndRemoveStyle(event.getButton(), parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, frota, carreta, motorista);
 			if(event.getButton() == parametro) {
 				ParametroTable table = new ParametroTable();
 				ParametroForm form= new ParametroForm();
@@ -187,6 +203,18 @@ public class MenuGeral extends CssLayout{
 				TransportadoraTable table = new TransportadoraTable();
 				TransportadoraForm form = new TransportadoraForm();
 				app.setMainView(new TransportadoraView(table, form));
+			} else if(event.getButton() == frota){
+				FrotaTable table = new FrotaTable();
+				FrotaForm form = new FrotaForm();
+				app.setMainView(new FrotaView(table, form));
+			} else if(event.getButton() == carreta){
+				CarretaTable table = new CarretaTable();
+				CarretaForm form = new CarretaForm();
+				app.setMainView(new CarretaView(table, form));
+			} else if(event.getButton() == motorista){
+				MotoristaTable table = new MotoristaTable();
+				MotoristaForm form = new MotoristaForm();
+				app.setMainView(new MotoristaView(table, form));
 			} else if(event.getButton() == export){
 				app.setMainView(new ExportCadastroView(app).getLayout());
 			}

@@ -49,7 +49,7 @@ public class PromoveToolbar extends CssLayout{
 		left.addStyleName("left");
 		addComponent(left);
 
-		Label title = new Label("SICA");
+		Label title = new Label("SIGA");
 		title.addStyleName("h1");
 		left.addComponent(title);
 		

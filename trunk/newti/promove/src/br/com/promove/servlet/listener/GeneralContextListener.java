@@ -47,7 +47,7 @@ public class GeneralContextListener implements ServletContextListener{
 
 	@Override
 	public void contextInitialized(ServletContextEvent ctx) {
-		log.warn(">>>>>>>>>>> Iniciando SICA");
+		log.warn(">>>>>>>>>>> Iniciando SIGA");
 		
 		ServiceFactory.setInjector(Guice.createInjector(new ServiceInjector()));
 		HibernateSessionFactory.initializeFactory();
