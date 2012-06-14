@@ -105,8 +105,10 @@ public class UsuarioForm extends BaseForm{
 				if(!newUser)
 					f.setReadOnly(true);
 				
+			} else if(propertyId.equals("nome")) {
+				f.setWidth("300px");
 			}else if(propertyId.equals("senha")) {
-					((TextField)f).setSecret(true);
+				((TextField)f).setSecret(true);
 			}else if(propertyId.equals("filial")) {
 				try {
 					ComboBox c = new ComboBox("Filial");
@@ -143,8 +145,8 @@ public class UsuarioForm extends BaseForm{
 				}catch (PromoveException e) {
 					showErrorMessage(view,"Não foi possível buscar Filiais");
 				}
-				
 			}else if(propertyId.equals("mail")) {
+				f.setWidth("300px");
 				f.setRequired(false);
 			}else if(propertyId.equals("tipo")) {
 				try {
@@ -175,9 +177,7 @@ public class UsuarioForm extends BaseForm{
 								}
 							}
 						}
-					
 					}
-	                    
 					
 					return c;
 				}catch (PromoveException e) {

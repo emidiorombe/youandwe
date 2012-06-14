@@ -17,25 +17,26 @@ import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
-import br.com.promove.entity.Fabricante;
+import br.com.promove.entity.Carreta;
 import br.com.promove.entity.Filial;
-import br.com.promove.entity.Modelo;
-import br.com.promove.entity.Usuario;
+import br.com.promove.entity.Frota;
+import br.com.promove.entity.Motorista;
+import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.utils.StringUtilities;
-import br.com.promove.view.ModeloView;
+import br.com.promove.view.MotoristaView;
 
-public class ModeloForm extends BaseForm{
+public class MotoristaForm extends BaseForm{
 	private Button save;
 	private Button novo;
 	private Button remove;
-	private ModeloView view;
+	private MotoristaView view;
 	private VerticalLayout form_layout = new VerticalLayout();
 	private CadastroService cadastroService;
 	
-	public ModeloForm() {
+	public MotoristaForm() {
 		cadastroService = ServiceFactory.getService(CadastroService.class);
 		buildForm();
 	}
@@ -45,11 +46,11 @@ public class ModeloForm extends BaseForm{
 		setImmediate(true);
 		setSizeFull();
 		
-		save = new Button("Salvar", new ModeloFormListener());
-		remove = new Button("Excluir", new ModeloFormListener());
-		novo = new Button("Novo", new ModeloFormListener());
+		save = new Button("Salvar", new MotoristaFormListener());
+		remove = new Button("Excluir", new MotoristaFormListener());
+		novo = new Button("Novo", new MotoristaFormListener());
 		
-		createFormBody(new BeanItem<Modelo>(new Modelo()));
+		createFormBody(new BeanItem<Motorista>(new Motorista()));
 		form_layout.addComponent(this);
 		form_layout.addComponent(createFooter());
 		form_layout.setSpacing(true);
@@ -68,20 +69,20 @@ public class ModeloForm extends BaseForm{
 		return footer;
 	}
 	
-	public void createFormBody(BeanItem<Modelo> item) {
+	public void createFormBody(BeanItem<Motorista> item) {
 		setItemDataSource(item);
-		setFormFieldFactory(new ModeloFieldFactory(item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"codigo", "descricao", "fabricante", "codigoExternoNacional", "codigoExternoImportacao"});
+		setFormFieldFactory(new MotoristaFieldFactory(item.getBean().getId() == null));
+		setVisibleItemProperties(new Object[]{"codigo", "nome", "cnh", "rg", "cpf", "frota", "carreta"});
 	}
 	
-	private void addNewModelo() {
-		createFormBody(new BeanItem<Modelo>(new Modelo()));
+	private void addNewMotorista() {
+		createFormBody(new BeanItem<Motorista>(new Motorista()));
 		
 	}
 	
-	class ModeloFieldFactory extends DefaultFieldFactory{
+	class MotoristaFieldFactory extends DefaultFieldFactory{
 		private boolean newLocal;
-		public ModeloFieldFactory(boolean b) {
+		public MotoristaFieldFactory(boolean b) {
 			newLocal = b;
 		}
 
@@ -98,54 +99,81 @@ public class ModeloForm extends BaseForm{
 			if(propertyId.equals("codigo")) {
 				if(!newLocal)
 					f.setReadOnly(true);
-			} else if(propertyId.equals("descricao")) {
+			} else if(propertyId.equals("nome")) {
 				f.setWidth("300px");
-			}else if(propertyId.equals("fabricante")) {
+			}else if(propertyId.equals("frota")) {
 				try {
-					ComboBox c = new ComboBox("Fabricante");
+					ComboBox c = new ComboBox("Frota");
 					c.addContainerProperty("label", String.class, null);
 					
-					for(Fabricante fab : cadastroService.buscarTodosFabricantes()) {
-						Item i = c.addItem(fab);
-						i.getItemProperty("label").setValue(fab.getNome());
+					for(Frota fr: cadastroService.buscarTodasFrotas()) {
+						Item i = c.addItem(fr);
+						i.getItemProperty("label").setValue(fr.getPlaca());
 					}
 					
-					c.setRequired(true);
-					c.setRequiredError("Fabricante obrigatório");
 					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 					c.setImmediate(true);
-					c.setNullSelectionAllowed(false);
+					c.setNullSelectionAllowed(true);
 					c.setPropertyDataSource(item.getItemProperty(propertyId));
 					c.setItemCaptionPropertyId("label");
 					
 					if (c.size() > 0) {
-						Fabricante f2 = ((BeanItem<Modelo>) getItemDataSource()).getBean().getFabricante();
+						Frota f2 = ((BeanItem<Motorista>) getItemDataSource()).getBean().getFrota();
 						if(f2 != null) {
-							Iterator<Fabricante> it = c.getItemIds().iterator(); 
+							Iterator<Frota> it = c.getItemIds().iterator(); 
 							while(it.hasNext()) {
-								Fabricante f1 = it.next();
+								Frota f1 = it.next();
 								if(f2.getId().equals(f1.getId())) {
 									c.setValue(f1);
 								}
 							}
 						}
-					
 					}
 					
 					return c;
 				}catch (PromoveException e) {
-					showErrorMessage(view,"Não foi possível buscar Fabricantes");
+					showErrorMessage(view,"Não foi possível buscar Frotas");
 				}
-				
-			}else if(propertyId.toString().contains("codigoExterno")) {
-				f.setRequired(false);
+			}else if(propertyId.equals("carreta")) {
+				try {
+					ComboBox c = new ComboBox("Carreta");
+					c.addContainerProperty("label", String.class, null);
+					
+					for(Carreta ca: cadastroService.buscarTodasCarretas()) {
+						Item i = c.addItem(ca);
+						i.getItemProperty("label").setValue(ca.getPlaca());
+					}
+					
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(true);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					
+					if (c.size() > 0) {
+						Carreta f2 = ((BeanItem<Motorista>) getItemDataSource()).getBean().getCarreta();
+						if(f2 != null) {
+							Iterator<Carreta> it = c.getItemIds().iterator(); 
+							while(it.hasNext()) {
+								Carreta f1 = it.next();
+								if(f2.getId().equals(f1.getId())) {
+									c.setValue(f1);
+								}
+							}
+						}
+					}
+					
+					return c;
+				}catch (PromoveException e) {
+					showErrorMessage(view,"Não foi possível buscar Frotas");
+				}
 			}
 			return f;
 		}
 		
 	}
 	
-	class ModeloFormListener implements ClickListener{
+	class MotoristaFormListener implements ClickListener{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
@@ -154,38 +182,38 @@ public class ModeloForm extends BaseForm{
 					validate();
 					if(isValid()){
 						commit();
-						BeanItem<Modelo> item = (BeanItem<Modelo>) getItemDataSource();
-						cadastroService.salvarModelo(item.getBean());
+						BeanItem<Motorista> item = (BeanItem<Motorista>) getItemDataSource();
+						cadastroService.salvarMotorista(item.getBean());
 						view.getTable().getContainer().addItem(item.getBean());
-						addNewModelo();
-						showSuccessMessage(view, "Modelo salvo!");
+						addNewMotorista();
+						showSuccessMessage(view, "Motorista salvo!");
 					}
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
-					showErrorMessage(view,"Não foi possível salvar Modelo");
+					showErrorMessage(view,"Não foi possível salvar Motorista");
 				}
 				
 			}else if(event.getButton() == novo){
-				addNewModelo();
+				addNewMotorista();
 			}else if(event.getButton() == remove){
 				try {
-					BeanItem<Modelo> item = (BeanItem<Modelo>) getItemDataSource();
+					BeanItem<Motorista> item = (BeanItem<Motorista>) getItemDataSource();
 					if(item.getBean().getId() != null) {
-						cadastroService.excluirModelo(item.getBean());
+						cadastroService.excluirMotorista(item.getBean());
 						view.getTable().getContainer().removeItem(item.getBean());
-						showSuccessMessage(view, "Modelo removido");
+						showSuccessMessage(view, "Motorista removido");
 					}
-					addNewModelo();
+					addNewMotorista();
 				}catch(PromoveException de){
-					showErrorMessage(view, "Não foi possível remover Modelo");
+					showErrorMessage(view, "Não foi possível remover Motorista");
 				}
 			}
 		}
 
 	}
 
-	public void setView(ModeloView view) {
+	public void setView(MotoristaView view) {
 		this.view = view;
 	}
 

@@ -4,6 +4,6 @@
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <property name="java-output-path" value="/promove/build/classes"/>
-        <property name="context-root" value="sica"/>
+        <property name="context-root" value="siga"/>
     </wb-module>
 </project-modules>

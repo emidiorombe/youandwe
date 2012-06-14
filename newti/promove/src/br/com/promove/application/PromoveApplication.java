@@ -32,7 +32,7 @@ public class PromoveApplication extends Application {
 	private void buildMainLayout() {
 		setTheme("reindeermods");
 		main = new VerticalLayout();
-		Window mainWindow = new Window("SICA", main);
+		Window mainWindow = new Window("SIGA", main);
 		setMainWindow(mainWindow);
 		main.setSizeFull();
 		main.addComponent(getToolbar());

@@ -1,5 +1,7 @@
 package br.com.promove.view.form;
 
+import java.util.Iterator;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
@@ -13,25 +15,23 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
-import br.com.promove.entity.LocalAvaria;
+import br.com.promove.entity.Frota;
 import br.com.promove.exception.PromoveException;
-import br.com.promove.service.AvariaService;
+import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.utils.StringUtilities;
-import br.com.promove.view.LocalAvariaView;
+import br.com.promove.view.FrotaView;
 
-public class LocalAvariaForm extends BaseForm{
-
+public class FrotaForm extends BaseForm{
 	private Button save;
 	private Button novo;
 	private Button remove;
+	private FrotaView view;
+	private VerticalLayout form_layout = new VerticalLayout();
+	private CadastroService cadastroService;
 	
-	private LocalAvariaView view;
-	private VerticalLayout f_layout = new VerticalLayout();
-	private AvariaService avariaService;
-	
-	public LocalAvariaForm() {
-		avariaService = ServiceFactory.getService(AvariaService.class);
+	public FrotaForm() {
+		cadastroService = ServiceFactory.getService(CadastroService.class);
 		buildForm();
 	}
 	
@@ -40,15 +40,15 @@ public class LocalAvariaForm extends BaseForm{
 		setImmediate(true);
 		setSizeFull();
 		
-		save = new Button("Salvar", new LocalAvariaFormListener());
-		remove = new Button("Excluir", new LocalAvariaFormListener());
-		novo = new Button("Novo", new LocalAvariaFormListener());
+		save = new Button("Salvar", new FrotaFormListener());
+		remove = new Button("Excluir", new FrotaFormListener());
+		novo = new Button("Novo", new FrotaFormListener());
 		
-		createFormBody(new BeanItem<LocalAvaria>(new LocalAvaria()));
-		f_layout.addComponent(this);
-		f_layout.addComponent(createFooter());
-		f_layout.setSpacing(true);
-		f_layout.setMargin(false, true, false, true);
+		createFormBody(new BeanItem<Frota>(new Frota()));
+		form_layout.addComponent(this);
+		form_layout.addComponent(createFooter());
+		form_layout.setSpacing(true);
+		form_layout.setMargin(false, true, false, true);
 		
 	}
 	
@@ -62,32 +62,21 @@ public class LocalAvariaForm extends BaseForm{
 		
 		return footer;
 	}
-
-	public void setView(LocalAvariaView view) {
-		this.view = view;
-		
-	}
-
-	public Component getFormLayout() {
-		return f_layout;
-	}
-
-	public void createFormBody(BeanItem<LocalAvaria> item) {
+	
+	public void createFormBody(BeanItem<Frota> item) {
 		setItemDataSource(item);
-		setFormFieldFactory(new LocalAvariaFieldFactory(item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"codigo", "descricao", "acessorio"});
-		
+		setFormFieldFactory(new FrotaFieldFactory(item.getBean().getId() == null));
+		setVisibleItemProperties(new Object[]{"codigo", "placa"});
+	}
+	
+	private void addNewFrota() {
+		createFormBody(new BeanItem<Frota>(new Frota()));
 		
 	}
 	
-	private void addNewLocalAvaria() {
-		createFormBody(new BeanItem<LocalAvaria>(new LocalAvaria()));
-		
-	}
-	
-	class LocalAvariaFieldFactory extends DefaultFieldFactory{
+	class FrotaFieldFactory extends DefaultFieldFactory{
 		private boolean newLocal;
-		public LocalAvariaFieldFactory(boolean b) {
+		public FrotaFieldFactory(boolean b) {
 			newLocal = b;
 		}
 
@@ -104,15 +93,13 @@ public class LocalAvariaForm extends BaseForm{
 			if(propertyId.equals("codigo")) {
 				if(!newLocal)
 					f.setReadOnly(true);
-			} else if(propertyId.equals("descricao")) {
-				f.setWidth("300px");
 			}
 			return f;
 		}
 		
 	}
 	
-	class LocalAvariaFormListener implements ClickListener{
+	class FrotaFormListener implements ClickListener{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
@@ -121,35 +108,43 @@ public class LocalAvariaForm extends BaseForm{
 					validate();
 					if(isValid()){
 						commit();
-						BeanItem<LocalAvaria> item = (BeanItem<LocalAvaria>) getItemDataSource();
-						avariaService.salvarLocalAvaria(item.getBean());
+						BeanItem<Frota> item = (BeanItem<Frota>) getItemDataSource();
+						cadastroService.salvarFrota(item.getBean());
 						view.getTable().getContainer().addItem(item.getBean());
-						addNewLocalAvaria();
-						showSuccessMessage(view, "Peça salva!");
+						addNewFrota();
+						showSuccessMessage(view, "Frota salvo!");
 					}
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
-					showErrorMessage(view,"Não foi possível salvar Peça");
+					showErrorMessage(view,"Não foi possível salvar Frota");
 				}
 				
 			}else if(event.getButton() == novo){
-				addNewLocalAvaria();
+				addNewFrota();
 			}else if(event.getButton() == remove){
 				try {
-					BeanItem<LocalAvaria> item = (BeanItem<LocalAvaria>) getItemDataSource();
+					BeanItem<Frota> item = (BeanItem<Frota>) getItemDataSource();
 					if(item.getBean().getId() != null) {
-						avariaService.excluirLocalAvaria(item.getBean());
+						cadastroService.excluirFrota(item.getBean());
 						view.getTable().getContainer().removeItem(item.getBean());
-						showSuccessMessage(view, "Peça removida");
+						showSuccessMessage(view, "Frota removido");
 					}
-					addNewLocalAvaria();
+					addNewFrota();
 				}catch(PromoveException de){
-					showErrorMessage(view, "Não foi possível remover Peça");
+					showErrorMessage(view, "Não foi possível remover Frota");
 				}
 			}
 		}
 
+	}
+
+	public void setView(FrotaView view) {
+		this.view = view;
+	}
+
+	public Component getFormLayout() {
+		return form_layout;
 	}
 
 }

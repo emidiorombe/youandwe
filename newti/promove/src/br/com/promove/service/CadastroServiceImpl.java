@@ -1,3 +1,4 @@
+/*
 package br.com.promove.service;
 
 import java.io.Serializable;
@@ -504,3 +505,4 @@ public class CadastroServiceImpl implements CadastroService, Serializable{
 	}
 
 }
+*/

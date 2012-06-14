@@ -38,5 +38,8 @@
 		<mapping class="br.com.promove.entity.NivelAvaria" />
 		<mapping class="br.com.promove.entity.TipoVeiculo" />
 		<mapping class="br.com.promove.entity.Parametro" />
+		<mapping class="br.com.promove.entity.Motorista" />
+		<mapping class="br.com.promove.entity.Frota" />
+		<mapping class="br.com.promove.entity.Carreta" />
 	</session-factory>
 </hibernate-configuration>

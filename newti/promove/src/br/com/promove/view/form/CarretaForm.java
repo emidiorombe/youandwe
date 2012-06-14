@@ -1,37 +1,40 @@
 package br.com.promove.view.form;
 
+import java.util.Iterator;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
-import br.com.promove.entity.LocalAvaria;
+import br.com.promove.entity.Fabricante;
+import br.com.promove.entity.Carreta;
 import br.com.promove.exception.PromoveException;
-import br.com.promove.service.AvariaService;
+import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.utils.StringUtilities;
-import br.com.promove.view.LocalAvariaView;
+import br.com.promove.view.CarretaView;
 
-public class LocalAvariaForm extends BaseForm{
-
+public class CarretaForm extends BaseForm{
 	private Button save;
 	private Button novo;
 	private Button remove;
+	private CarretaView view;
+	private VerticalLayout form_layout = new VerticalLayout();
+	private CadastroService cadastroService;
 	
-	private LocalAvariaView view;
-	private VerticalLayout f_layout = new VerticalLayout();
-	private AvariaService avariaService;
-	
-	public LocalAvariaForm() {
-		avariaService = ServiceFactory.getService(AvariaService.class);
+	public CarretaForm() {
+		cadastroService = ServiceFactory.getService(CadastroService.class);
 		buildForm();
 	}
 	
@@ -40,15 +43,15 @@ public class LocalAvariaForm extends BaseForm{
 		setImmediate(true);
 		setSizeFull();
 		
-		save = new Button("Salvar", new LocalAvariaFormListener());
-		remove = new Button("Excluir", new LocalAvariaFormListener());
-		novo = new Button("Novo", new LocalAvariaFormListener());
+		save = new Button("Salvar", new CarretaFormListener());
+		remove = new Button("Excluir", new CarretaFormListener());
+		novo = new Button("Novo", new CarretaFormListener());
 		
-		createFormBody(new BeanItem<LocalAvaria>(new LocalAvaria()));
-		f_layout.addComponent(this);
-		f_layout.addComponent(createFooter());
-		f_layout.setSpacing(true);
-		f_layout.setMargin(false, true, false, true);
+		createFormBody(new BeanItem<Carreta>(new Carreta()));
+		form_layout.addComponent(this);
+		form_layout.addComponent(createFooter());
+		form_layout.setSpacing(true);
+		form_layout.setMargin(false, true, false, true);
 		
 	}
 	
@@ -62,32 +65,21 @@ public class LocalAvariaForm extends BaseForm{
 		
 		return footer;
 	}
-
-	public void setView(LocalAvariaView view) {
-		this.view = view;
-		
-	}
-
-	public Component getFormLayout() {
-		return f_layout;
-	}
-
-	public void createFormBody(BeanItem<LocalAvaria> item) {
+	
+	public void createFormBody(BeanItem<Carreta> item) {
 		setItemDataSource(item);
-		setFormFieldFactory(new LocalAvariaFieldFactory(item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"codigo", "descricao", "acessorio"});
-		
+		setFormFieldFactory(new CarretaFieldFactory(item.getBean().getId() == null));
+		setVisibleItemProperties(new Object[]{"codigo", "placa"});
+	}
+	
+	private void addNewCarreta() {
+		createFormBody(new BeanItem<Carreta>(new Carreta()));
 		
 	}
 	
-	private void addNewLocalAvaria() {
-		createFormBody(new BeanItem<LocalAvaria>(new LocalAvaria()));
-		
-	}
-	
-	class LocalAvariaFieldFactory extends DefaultFieldFactory{
+	class CarretaFieldFactory extends DefaultFieldFactory{
 		private boolean newLocal;
-		public LocalAvariaFieldFactory(boolean b) {
+		public CarretaFieldFactory(boolean b) {
 			newLocal = b;
 		}
 
@@ -104,15 +96,13 @@ public class LocalAvariaForm extends BaseForm{
 			if(propertyId.equals("codigo")) {
 				if(!newLocal)
 					f.setReadOnly(true);
-			} else if(propertyId.equals("descricao")) {
-				f.setWidth("300px");
 			}
 			return f;
 		}
 		
 	}
 	
-	class LocalAvariaFormListener implements ClickListener{
+	class CarretaFormListener implements ClickListener{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
@@ -121,35 +111,43 @@ public class LocalAvariaForm extends BaseForm{
 					validate();
 					if(isValid()){
 						commit();
-						BeanItem<LocalAvaria> item = (BeanItem<LocalAvaria>) getItemDataSource();
-						avariaService.salvarLocalAvaria(item.getBean());
+						BeanItem<Carreta> item = (BeanItem<Carreta>) getItemDataSource();
+						cadastroService.salvarCarreta(item.getBean());
 						view.getTable().getContainer().addItem(item.getBean());
-						addNewLocalAvaria();
-						showSuccessMessage(view, "Peça salva!");
+						addNewCarreta();
+						showSuccessMessage(view, "Carreta salvo!");
 					}
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
 				}catch(PromoveException de){
-					showErrorMessage(view,"Não foi possível salvar Peça");
+					showErrorMessage(view,"Não foi possível salvar Carreta");
 				}
 				
 			}else if(event.getButton() == novo){
-				addNewLocalAvaria();
+				addNewCarreta();
 			}else if(event.getButton() == remove){
 				try {
-					BeanItem<LocalAvaria> item = (BeanItem<LocalAvaria>) getItemDataSource();
+					BeanItem<Carreta> item = (BeanItem<Carreta>) getItemDataSource();
 					if(item.getBean().getId() != null) {
-						avariaService.excluirLocalAvaria(item.getBean());
+						cadastroService.excluirCarreta(item.getBean());
 						view.getTable().getContainer().removeItem(item.getBean());
-						showSuccessMessage(view, "Peça removida");
+						showSuccessMessage(view, "Carreta removido");
 					}
-					addNewLocalAvaria();
+					addNewCarreta();
 				}catch(PromoveException de){
-					showErrorMessage(view, "Não foi possível remover Peça");
+					showErrorMessage(view, "Não foi possível remover Carreta");
 				}
 			}
 		}
 
+	}
+
+	public void setView(CarretaView view) {
+		this.view = view;
+	}
+
+	public Component getFormLayout() {
+		return form_layout;
 	}
 
 }

@@ -101,6 +101,8 @@ public class FabricanteForm extends BaseForm{
 			if(propertyId.equals("codigo")) {
 				if(!newLocal)
 					f.setReadOnly(true);
+			} else if(propertyId.equals("nome")) {
+				f.setWidth("300px");
 			}
 			return f;
 		}
