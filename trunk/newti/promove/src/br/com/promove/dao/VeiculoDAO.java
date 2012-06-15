@@ -356,7 +356,6 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		subsqlB.append(" where veiculo.id = avaria.veiculo_id");
 		if(periodo != 3 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
 			subsqlB.append(" and " + (periodo == 1 ? "avaria.dataLancamento" : "avaria.dataCadastro"));
-			subsqlB.append(" and avaria.datalancamento");
 			subsqlB.append(" between '" + dtInicio + "'");
 			subsqlB.append(" and '" + dtFim + "'");
 		}
