@@ -14,6 +14,7 @@ import br.com.promove.utils.StringUtilities;
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.validator.DoubleValidator;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -62,7 +63,7 @@ public class VeiculoForm extends BaseForm{
 	public void createFormBody(BeanItem<Veiculo> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new VeiculoFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"chassi", "modelo", "cor", "dataLancamento", "tipo", "navio"});
+		setVisibleItemProperties(new Object[]{"chassi", "modelo", "cor", "dataLancamento", "tipo", "navio", "valorMercadoria"});
 	}
 	
 	private Component createFooter(){
@@ -183,6 +184,9 @@ public class VeiculoForm extends BaseForm{
 				c.setItemCaptionPropertyId("label");
 				
 				return c;
+			} else if(propertyId.equals("valorMercadoria")) {					
+				f.setRequired(false);
+				f.addValidator(new DoubleValidator(propertyId.toString() + " deve ser numérico"));
 			}
 			return f;
 		}
