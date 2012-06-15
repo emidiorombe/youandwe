@@ -280,8 +280,10 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 				    row.createCell(2).setCellValue(percentual_format.format(resumos.get(i).getPercentualItem()));
 			    }
 			    row.createCell(3).setCellValue(resumos.get(i).getSubitem());
-			    row.createCell(4).setCellValue(resumos.get(i).getQuantidadeSubitem());
-			    row.createCell(5).setCellValue(percentual_format.format(resumos.get(i).getPercentualSubitem()));
+			    if (resumos.get(i).getQuantidadeSubitem() != null) {
+			    	row.createCell(4).setCellValue(resumos.get(i).getQuantidadeSubitem());
+			    	row.createCell(5).setCellValue(percentual_format.format(resumos.get(i).getPercentualSubitem()));
+			    }
 			    if (vl != null) itemTotal += vl;
 		    }
 		    Row row_footer = sheet.createRow(i+1);
