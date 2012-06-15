@@ -72,9 +72,9 @@ public class MenuGeral extends CssLayout{
 	private Button extensao;
 	private Button clima;
 	private Button transp;
+	private Button motorista;
 	private Button frota;
 	private Button carreta;
-	private Button motorista;
 	private Button export;
 	
 	public MenuGeral(PromoveApplication app) {
@@ -101,13 +101,13 @@ public class MenuGeral extends CssLayout{
 		extensao = new NativeButton("Extensão de Avaria");
 		clima = new NativeButton("Condição Climática");
 		transp = new NativeButton("Transportadora");
+		motorista = new NativeButton("Motorista");
 		frota = new NativeButton("Frota");
 		carreta = new NativeButton("Carreta");
-		motorista = new NativeButton("Motorista");
 		export = new NativeButton("Exportar Cadastros Básicos");
 		
-		addListeners(parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, frota, carreta, motorista, export);
-		addComponents(title, parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, frota, carreta, motorista, export);
+		addListeners(parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, motorista, frota, carreta, export);
+		addComponents(title, parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, motorista, frota, carreta, export);
 		setPermissionVisible();
 	}
 	
@@ -131,9 +131,9 @@ public class MenuGeral extends CssLayout{
 			origem.setVisible(false);
 			extensao.setVisible(false);
 			clima.setVisible(false);
+			motorista.setVisible(false);
 			frota.setVisible(false);
 			carreta.setVisible(false);
-			motorista.setVisible(false);
 			export.setVisible(false);
 		}
 	}
@@ -154,7 +154,7 @@ public class MenuGeral extends CssLayout{
 
 		@Override
 		public void buttonClick(ClickEvent event) {
-			addAndRemoveStyle(event.getButton(), parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, frota, carreta, motorista);
+			addAndRemoveStyle(event.getButton(), parametro, filial, usuario, fabricante, modelo, cor, tipo, local, origem, extensao, clima, transp, motorista, frota, carreta);
 			if(event.getButton() == parametro) {
 				ParametroTable table = new ParametroTable();
 				ParametroForm form= new ParametroForm();
@@ -203,6 +203,10 @@ public class MenuGeral extends CssLayout{
 				TransportadoraTable table = new TransportadoraTable();
 				TransportadoraForm form = new TransportadoraForm();
 				app.setMainView(new TransportadoraView(table, form));
+			} else if(event.getButton() == motorista){
+				MotoristaTable table = new MotoristaTable();
+				MotoristaForm form = new MotoristaForm();
+				app.setMainView(new MotoristaView(table, form));
 			} else if(event.getButton() == frota){
 				FrotaTable table = new FrotaTable();
 				FrotaForm form = new FrotaForm();
@@ -211,10 +215,6 @@ public class MenuGeral extends CssLayout{
 				CarretaTable table = new CarretaTable();
 				CarretaForm form = new CarretaForm();
 				app.setMainView(new CarretaView(table, form));
-			} else if(event.getButton() == motorista){
-				MotoristaTable table = new MotoristaTable();
-				MotoristaForm form = new MotoristaForm();
-				app.setMainView(new MotoristaView(table, form));
 			} else if(event.getButton() == export){
 				app.setMainView(new ExportCadastroView(app).getLayout());
 			}

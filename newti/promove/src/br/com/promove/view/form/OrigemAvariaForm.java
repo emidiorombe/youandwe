@@ -238,7 +238,6 @@ public class OrigemAvariaForm extends BaseForm{
 				}catch (PromoveException e) {
 					showErrorMessage(view,"Não foi possível buscar Filiais");
 				}
-				
 			}
 
 			return f;
