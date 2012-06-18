@@ -7,6 +7,7 @@ import br.com.promove.entity.Carreta;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.StringUtilities;
 import br.com.promove.view.CarretaView;
 
 import com.vaadin.data.Property;
@@ -17,8 +18,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 public class CarretaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "placa"};
-	public static final String[] COL_HEADERS = new String[] {"Código", "Placa"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "placa", "ativo"};
+	public static final String[] COL_HEADERS = new String[] {"Código", "Placa", "Ativo"};
 	
 	private CarretaView view;
 	private CadastroService cadastroService;
@@ -39,7 +40,9 @@ public class CarretaTable extends Table{
 		setVisibleColumns(NATURAL_COL_ORDER);
 		setColumnHeaders(COL_HEADERS);
 		addListener(new RowSelectedListener());
-	}
+
+		addGeneratedColumn("ativo", new CarretaTableColumnGenerator());
+}
 
 	public void setView(CarretaView view) {
 		this.view = view;
@@ -78,8 +81,12 @@ public class CarretaTable extends Table{
 
 		@Override
 		public Component generateCell(Table source, Object itemId, Object columnId) {
-			Carreta f = (Carreta)itemId;
-			return null;
+			Carreta c = (Carreta)itemId;
+			if(columnId.toString().equals("ativo")) {
+				return new Label(StringUtilities.booleanToReadableString(c.getAtivo()));
+			} else {
+				return null;
+			}
 		}
 		
 	}

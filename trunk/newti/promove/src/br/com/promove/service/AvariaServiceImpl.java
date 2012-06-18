@@ -1,3 +1,4 @@
+/*
 package br.com.promove.service;
 
 import java.io.Serializable;
@@ -531,3 +532,4 @@ public class AvariaServiceImpl implements AvariaService, Serializable {
 		return conteudo.toString();
 	}
 }
+*/

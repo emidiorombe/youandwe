@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -20,17 +19,17 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import com.vaadin.ui.Label;
-
+import br.com.promove.dao.CarretaDAO;
 import br.com.promove.dao.ClimaDAO;
 import br.com.promove.dao.ExtensaoDAO;
+import br.com.promove.dao.FrotaDAO;
 import br.com.promove.dao.InconsistenciaCtrcDAO;
 import br.com.promove.dao.LocalAvariaDAO;
+import br.com.promove.dao.MotoristaDAO;
 import br.com.promove.dao.NivelAvariaDAO;
 import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.dao.UsuarioDAO;
-import br.com.promove.dao.VeiculoCtrcDAO;
 import br.com.promove.entity.Avaria;
 import br.com.promove.entity.InconsistenciaCtrc;
 import br.com.promove.entity.Resumo;
@@ -59,6 +58,9 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	private ExtensaoDAO extensaoDAO;
 	private NivelAvariaDAO nivelDAO;
 	private InconsistenciaCtrcDAO inconsistenciaCtrcDAO;
+	private FrotaDAO frotaDAO;
+	private CarretaDAO carretaDAO;
+	private MotoristaDAO motoristaDAO;
 	private static NumberFormat percentual_format = new DecimalFormat("#0.0'%'");
 	private static NumberFormat percentual2_format = new DecimalFormat("#0.00'%'");
 	private static NumberFormat moeda_format = new DecimalFormat("#0.00");
@@ -73,6 +75,9 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 		extensaoDAO = new ExtensaoDAO();
 		nivelDAO = new NivelAvariaDAO();
 		inconsistenciaCtrcDAO = new InconsistenciaCtrcDAO();
+		frotaDAO = new FrotaDAO();
+		carretaDAO = new CarretaDAO();
+		motoristaDAO = new MotoristaDAO();
 	}
 
 	@Override
@@ -86,6 +91,9 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 			listas.put("clima", climaDAO.getAll());
 			listas.put("extensao", extensaoDAO.getAll());
 			listas.put("nivel", nivelDAO.getAll());
+			listas.put("frota", frotaDAO.getAll("placa"));
+			listas.put("carreta", carretaDAO.getAll("placa"));
+			listas.put("motorista", motoristaDAO.getAll("nome"));
 			
 			return CadastrosBasicosExport.gerarXmlExportacao(listas, novo);
 			

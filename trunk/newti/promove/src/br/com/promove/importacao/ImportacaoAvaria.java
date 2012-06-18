@@ -13,11 +13,14 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Carreta;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.FotoAvaria;
+import br.com.promove.entity.Frota;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
+import br.com.promove.entity.Motorista;
 import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
@@ -27,6 +30,7 @@ import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.StringUtilities;
 
 public class ImportacaoAvaria {
 	private String xmlContent;
@@ -41,6 +45,12 @@ public class ImportacaoAvaria {
 	private HashMap<Integer, OrigemAvaria> origens;
 	private HashMap<String, OrigemAvaria> origensTipoFilial;
 	private HashMap<Integer, Usuario> usuarios;
+	private HashMap<String, Frota> frotas;
+	private HashMap<String, Frota> frotasPlaca;
+	private HashMap<String, Carreta> carretas;
+	private HashMap<String, Carreta> carretasPlaca;
+	private HashMap<Integer, Motorista> motoristas;
+	private HashMap<String, Motorista> motoristasCnh;
 
 	public ImportacaoAvaria() {
 		avariaService = ServiceFactory.getService(AvariaService.class);
@@ -59,6 +69,9 @@ public class ImportacaoAvaria {
 		loadOrigens();
 		loadOrigensTipoFilial();
 		loadUsuarios();
+		loadFrotas();
+		loadCarretas();
+		loadMotoristas();
 
 		Document doc = DocumentHelper.parseText(xml);
 		importTagVistoria(doc);
@@ -96,6 +109,38 @@ public class ImportacaoAvaria {
 					e.printStackTrace();
 				}
 
+				try {
+					if (!node_av.element("codigo_frota").getText().trim().isEmpty()) {
+						av.setFrota(frotasPlaca.get(node_av.element("placa_frota").getText()));
+					} else {
+						av.setFrota(frotas.get(node_av.element("codigo_frota").getText()));
+					}
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+					
+				try {
+					if (!node_av.element("codigo_carreta").getText().trim().isEmpty()) {
+						av.setCarreta(carretasPlaca.get(node_av.element("placa_carreta").getText()));
+					} else {
+						av.setCarreta(carretas.get(node_av.element("codigo_carreta").getText()));
+					}
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+					
+				try {
+					if (!node_av.element("codigo_motorista").getText().trim().isEmpty()) {
+						av.setMotorista(motoristasCnh.get(node_av.element("cnh_motorista").getText()));
+					} else {
+						av.setMotorista(motoristas.get(new Integer(node_av.element("codigo_motorista").getText())));
+					}
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+
+				av.setChassiOriginal(StringUtilities.getChassiFromErrorMessage(node_av.element("chassi").getText()));
+				
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				av.setHora(node_av.element("hora").getText());
 
@@ -115,7 +160,7 @@ public class ImportacaoAvaria {
 				//Se não existir o veículo, gravar a inconsistência
 				if(veiculos.size() == 0) {
 					msgErro += "Veiculo " + node_av.element("chassi").getText() + " não existe!;";
-					InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, msgErro);
+					InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, msgErro, node_av);
 					
 					Element node_fotos = ((Element)node_av).element("fotos");
 					Iterator it = node_fotos.elementIterator();
@@ -153,7 +198,7 @@ public class ImportacaoAvaria {
 					}
 				}
 			}catch(Exception e) {
-				avariaService.salvarInconsistenciaImportAvaria(av, e.getMessage());
+				avariaService.salvarInconsistenciaImportAvaria(av, e.getMessage(), node_av);
 			}
 		}
 	}
@@ -201,7 +246,7 @@ public class ImportacaoAvaria {
 				//Se não existir o veículo, gravar a inconsistência
 				if(veiculos.size() == 0) {
 					msgErro += "Veiculo " + node_av.element("chassi").getText() + " não existe!;";
-					InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, msgErro);
+					InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, msgErro, node_av);
 					
 					Element node_fotos = ((Element)node_av).element("fotos");
 					Iterator it = node_fotos.elementIterator();
@@ -239,7 +284,7 @@ public class ImportacaoAvaria {
 					}
 				}
 			}catch(Exception e) {
-				avariaService.salvarInconsistenciaImportAvaria(av, e.getMessage());
+				avariaService.salvarInconsistenciaImportAvaria(av, e.getMessage(), node_av);
 			}
 		}
 	}
@@ -295,7 +340,7 @@ public class ImportacaoAvaria {
 					throw new Exception(msgErro);
 				}
 			}catch(Exception e) {
-				avariaService.salvarInconsistenciaImportAvaria(av, e.getMessage());
+				avariaService.salvarInconsistenciaImportAvaria(av, e.getMessage(), node_av);
 			}
 		}
 	}
@@ -358,6 +403,36 @@ public class ImportacaoAvaria {
 		}
 	}
 
+	private void loadFrotas() throws PromoveException {
+		frotas = new HashMap<String, Frota>();
+		frotasPlaca = new HashMap<String, Frota>();
+		List<Frota> lista = cadastroService.buscarTodasFrotas();
+		for (Frota el : lista) {
+			frotas.put(el.getCodigo(), el);
+			frotasPlaca.put(el.getPlaca(), el);
+		}
+	}
+
+	private void loadCarretas() throws PromoveException {
+		carretas = new HashMap<String, Carreta>();
+		carretasPlaca = new HashMap<String, Carreta>();
+		List<Carreta> lista = cadastroService.buscarTodasCarretas();
+		for (Carreta el : lista) {
+			carretas.put(el.getCodigo(), el);
+			carretasPlaca.put(el.getPlaca(), el);
+		}
+	}
+
+	private void loadMotoristas() throws PromoveException {
+		motoristas = new HashMap<Integer, Motorista>();
+		motoristasCnh = new HashMap<String, Motorista>();
+		List<Motorista> lista = cadastroService.buscarTodosMotoristas();
+		for (Motorista el : lista) {
+			motoristas.put(el.getCodigo(), el);
+			motoristasCnh.put(el.getCnh(), el);
+		}
+	}
+
 	private String verificaInconsistencias(Avaria av, Element node_av, String tipo) {
 		String msgErro = "";
 		
@@ -385,6 +460,33 @@ public class ImportacaoAvaria {
 		if (av.getUsuario() == null)
 			msgErro += "Usuario " + node_av.element("usuario").getText() + " não existe;";
 		
+		try {
+			if (av.getFrota() == null) {
+				if (!node_av.element("codigo_frota").getText().trim().isEmpty()) { 
+					msgErro += "Frota " + node_av.element("codigo_frota").getText() + " não existe;";
+				} else if (!node_av.element("placa_frota").getText().trim().isEmpty()) {
+					msgErro += "Frota(Placa) " + node_av.element("placa_frota").getText() + " não existe;";
+				}
+			}
+				
+			if (av.getCarreta() == null) {
+				if (!node_av.element("codgo_carreta").getText().trim().isEmpty()) { 
+					msgErro += "Carreta " + node_av.element("codigo_carreta").getText() + " não existe;";
+				} else if (!node_av.element("placa_carreta").getText().trim().isEmpty()) {
+					msgErro += "Carreta(Placa) " + node_av.element("placa_carreta").getText() + " não existe;";
+				}
+			}
+			
+			if (av.getMotorista() == null) {
+				if (!node_av.element("codigo_motorista").getText().trim().isEmpty()) { 
+					msgErro += "Motorista " + node_av.element("codigo_motorista").getText() + " não existe;";
+				} else if (!node_av.element("cnh_motorista").getText().trim().isEmpty()) {
+					msgErro += "Motorista(CNH) " + node_av.element("cnh_motorista").getText() + " não existe;";
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 			
 		return msgErro;
 	}

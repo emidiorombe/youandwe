@@ -7,9 +7,12 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import br.com.promove.entity.Carreta;
 import br.com.promove.entity.Clima;
 import br.com.promove.entity.ExtensaoAvaria;
+import br.com.promove.entity.Frota;
 import br.com.promove.entity.LocalAvaria;
+import br.com.promove.entity.Motorista;
 import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.TipoAvaria;
@@ -23,22 +26,24 @@ public class CadastrosBasicosExport {
 		if (novo.equals("1")) {
 			Element root = xml.addElement("dados_pre_req"); //cadastros
 			createUsuario(root, listas.get("usuario"));
-			createOldPatio(root);
+			createPatio(root);
 			createOrigemAvaria(root, listas.get("origem"));
 			createLocalAvaria(root, listas.get("local"));
 			createTipoAvaria(root, listas.get("tipo"));
 			createClima(root, listas.get("clima"));
+			createFrota(root, listas.get("frota"));
+			createCarreta(root, listas.get("carreta"));
+			createMotorista(root, listas.get("motorista"));
 			//createExtensaoAvaria(root, listas.get("extensao"));
 			//createNivelAvaria(root, listas.get("nivel"));
 		} else {
 			Element root = xml.addElement("dados_pre_req");
-			// TODO remover OLD
-			createOldUsuario(root, listas.get("usuario"));
-			createOldPatio(root);
+			createUsuario(root, listas.get("usuario"));
+			createPatio(root);
 			createOldOrigem(root, listas.get("origem"));
 			createOldLocal(root, listas.get("local"));
 			createOldTipo(root, listas.get("tipo"));
-			createOldClima(root, listas.get("clima"));
+			createClima(root, listas.get("clima"));
 		}
 		
 		return xml.asXML();
@@ -109,11 +114,52 @@ public class CadastrosBasicosExport {
 		}
 	}
 	
-	private static void createOldClima(Element root, List<Clima> list) {
-		for (Clima clima : list) {
-			Element el_clima = root.addElement("climat");
-			el_clima.addAttribute("codigo", clima.getCodigo().toString());
-			el_clima.addElement("descricao").addText(clima.getDescricao());
+	private static void createPatio(Element root) {
+		Element el_user = root.addElement("patio");
+		el_user.addAttribute("codigo", "1");
+		el_user.addElement("descricao").addText("PATIO");
+	}
+
+	private static void createFrota(Element root, List<Frota> list) {
+		for (Frota fr : list) {
+			if (fr.getAtivo()) {
+				Element el_user = root.addElement("frota");
+				el_user.addAttribute("codigo", fr.getCodigo());
+				el_user.addElement("placa").addText(fr.getPlaca());
+			}
+		}
+	}
+
+	private static void createCarreta(Element root, List<Carreta> list) {
+		for (Carreta ca : list) {
+			if (ca.getAtivo()) {
+				Element el_user = root.addElement("carreta");
+				el_user.addAttribute("codigo", ca.getCodigo());
+				el_user.addElement("placa").addText(ca.getPlaca());
+			}
+		}
+	}
+
+	private static void createMotorista(Element root, List<Motorista> list) {
+		for (Motorista mo : list) {
+			if (mo.getAtivo()) {
+				Element el_user = root.addElement("motorista");
+				el_user.addAttribute("codigo", mo.getCodigo().toString());
+				el_user.addElement("nome").addText(mo.getNome());
+				el_user.addElement("cnh").addText(mo.getCnh());
+				el_user.addElement("cpf").addText(mo.getCpf());
+				el_user.addElement("rg").addText(mo.getRg());
+				if (mo.getFrota() == null) {
+					el_user.addElement("frota");
+				} else {
+					el_user.addElement("frota").addText(mo.getFrota().getCodigo());
+				}
+				if (mo.getCarreta() == null) {
+					el_user.addElement("carreta");
+				} else {
+					el_user.addElement("carreta").addText(mo.getCarreta().getCodigo());
+				}
+			}
 		}
 	}
 
@@ -133,12 +179,6 @@ public class CadastrosBasicosExport {
 		}
 	}
 
-	private static void createOldPatio(Element root) {
-		Element el_user = root.addElement("patio");
-		el_user.addAttribute("codigo", "1");
-		el_user.addElement("descricao").addText("PATIO");
-	}
-
 	private static void createOldTipo(Element root, List<TipoAvaria> list) { 
 		for (TipoAvaria tipo : list) {
 			Element el_tipo = root.addElement("tipo_avaria");
@@ -146,16 +186,4 @@ public class CadastrosBasicosExport {
 			el_tipo.addElement("descricao").addText(tipo.getDescricao());
 		}
 	}
-
-	private static void createOldUsuario(Element root, List<Usuario> list) {
-		for (Usuario us : list) {
-			Element el_user = root.addElement("usuario");
-			el_user.addAttribute("codigo", us.getCodigo().toString());
-			el_user.addElement("nome").addText(us.getNome());
-			el_user.addElement("senha").addText(us.getSenha());
-			el_user.addElement("patio").addText("1");
-			el_user.addElement("filial").addText(us.getFilial().getCodigo().toString());
-		}
-	}
-	
 }

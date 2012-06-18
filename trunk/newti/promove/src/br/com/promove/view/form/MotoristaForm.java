@@ -18,10 +18,8 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
 import br.com.promove.entity.Carreta;
-import br.com.promove.entity.Filial;
 import br.com.promove.entity.Frota;
 import br.com.promove.entity.Motorista;
-import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
@@ -72,7 +70,7 @@ public class MotoristaForm extends BaseForm{
 	public void createFormBody(BeanItem<Motorista> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new MotoristaFieldFactory(item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"codigo", "nome", "cnh", "rg", "cpf", "frota", "carreta"});
+		setVisibleItemProperties(new Object[]{"codigo", "nome", "cnh", "rg", "cpf", "frota", "carreta", "ativo"});
 	}
 	
 	private void addNewMotorista() {

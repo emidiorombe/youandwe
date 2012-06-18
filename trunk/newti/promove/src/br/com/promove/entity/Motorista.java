@@ -21,7 +21,7 @@ public class Motorista implements Serializable{
 	private String cnh;
 	private String rg;
 	private String cpf;
-	private Boolean ativo;
+	private Boolean ativo = true;
 
 	@OneToOne
 	private Frota frota;

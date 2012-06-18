@@ -20,7 +20,7 @@ public class Frota implements Serializable{
 	@Column(unique=true)
 	private String codigo;
 	private String placa;
-	private Boolean ativo;
+	private Boolean ativo = true;
 	
 	//@OneToOne
 	//private Motorista motorista;

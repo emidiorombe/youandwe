@@ -1,7 +1,5 @@
 package br.com.promove.view.form;
 
-import java.util.Iterator;
-
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
@@ -66,7 +64,7 @@ public class FrotaForm extends BaseForm{
 	public void createFormBody(BeanItem<Frota> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new FrotaFieldFactory(item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"codigo", "placa"});
+		setVisibleItemProperties(new Object[]{"codigo", "placa", "ativo"});
 	}
 	
 	private void addNewFrota() {
@@ -112,7 +110,7 @@ public class FrotaForm extends BaseForm{
 						cadastroService.salvarFrota(item.getBean());
 						view.getTable().getContainer().addItem(item.getBean());
 						addNewFrota();
-						showSuccessMessage(view, "Frota salvo!");
+						showSuccessMessage(view, "Frota salva!");
 					}
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
@@ -128,7 +126,7 @@ public class FrotaForm extends BaseForm{
 					if(item.getBean().getId() != null) {
 						cadastroService.excluirFrota(item.getBean());
 						view.getTable().getContainer().removeItem(item.getBean());
-						showSuccessMessage(view, "Frota removido");
+						showSuccessMessage(view, "Frota removida");
 					}
 					addNewFrota();
 				}catch(PromoveException de){

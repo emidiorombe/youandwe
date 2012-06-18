@@ -46,11 +46,8 @@ public class InconsistenciaAvaria implements Serializable{
 	private Usuario usuario;
 	
 	private String observacao;
-	
 	private String msgErro;
-	
 	private String chassiInvalido;
-	
 	private String hora;
 	
 	@OneToOne
@@ -59,6 +56,19 @@ public class InconsistenciaAvaria implements Serializable{
 	private String chassiGravado;
 	private String etiqueta;
 	private String autoDestrutivel;
+
+	@OneToOne
+	private Motorista motorista;
+	
+	@OneToOne
+	private Frota frota;
+	
+	@OneToOne
+	private Carreta carreta;
+	
+	private String chassiOriginal;
+	private String arquivo;
+	private String nomeMotorista;
 
 	public InconsistenciaAvaria() {}
 	
@@ -78,6 +88,11 @@ public class InconsistenciaAvaria implements Serializable{
 		this.chassiGravado = av.getChassiGravado();
 		this.etiqueta = av.getEtiqueta();
 		this.autoDestrutivel = av.getAutoDestrutivel();
+		this.motorista = av.getMotorista();
+		this.frota = av.getFrota();
+		this.carreta = av.getCarreta();
+		this.chassiOriginal = av.getChassiOriginal();
+		this.arquivo = av.getArquivo();
 	}
 
 	public Integer getId() {
@@ -184,6 +199,11 @@ public class InconsistenciaAvaria implements Serializable{
 		av.setChassiGravado(chassiGravado);
 		av.setEtiqueta(etiqueta);
 		av.setAutoDestrutivel(autoDestrutivel);
+		av.setFrota(frota);
+		av.setCarreta(carreta);
+		av.setMotorista(motorista);
+		av.setChassiOriginal(chassiOriginal);
+		av.setArquivo(arquivo);
 		return av;
 	}
 	
@@ -233,5 +253,53 @@ public class InconsistenciaAvaria implements Serializable{
 
 	public String getAutoDestrutivel() {
 		return autoDestrutivel;
+	}
+
+	public void setMotorista(Motorista motorista) {
+		this.motorista = motorista;
+	}
+
+	public Motorista getMotorista() {
+		return motorista;
+	}
+
+	public void setFrota(Frota frota) {
+		this.frota = frota;
+	}
+
+	public Frota getFrota() {
+		return frota;
+	}
+
+	public void setCarreta(Carreta carreta) {
+		this.carreta = carreta;
+	}
+
+	public Carreta getCarreta() {
+		return carreta;
+	}
+
+	public void setChassiOriginal(String chassiOriginal) {
+		this.chassiOriginal = chassiOriginal;
+	}
+
+	public String getChassiOriginal() {
+		return chassiOriginal;
+	}
+
+	public void setArquivo(String arquivo) {
+		this.arquivo = arquivo;
+	}
+
+	public String getArquivo() {
+		return arquivo;
+	}
+
+	public void setNomeMotorista(String nomeMotorista) {
+		this.nomeMotorista = nomeMotorista;
+	}
+
+	public String getNomeMotorista() {
+		return nomeMotorista;
 	}
 }
