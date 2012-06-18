@@ -7,6 +7,7 @@ import br.com.promove.entity.Frota;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.StringUtilities;
 import br.com.promove.view.FrotaView;
 
 import com.vaadin.data.Property;
@@ -17,8 +18,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 public class FrotaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "placa"};
-	public static final String[] COL_HEADERS = new String[] {"Código", "Placa"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "placa", "ativo"};
+	public static final String[] COL_HEADERS = new String[] {"Código", "Placa", "ativo"};
 	
 	private FrotaView view;
 	private CadastroService cadastroService;
@@ -39,6 +40,8 @@ public class FrotaTable extends Table{
 		setVisibleColumns(NATURAL_COL_ORDER);
 		setColumnHeaders(COL_HEADERS);
 		addListener(new RowSelectedListener());
+
+		addGeneratedColumn("ativo", new FrotaTableColumnGenerator());
 	}
 
 	public void setView(FrotaView view) {
@@ -79,9 +82,12 @@ public class FrotaTable extends Table{
 		@Override
 		public Component generateCell(Table source, Object itemId, Object columnId) {
 			Frota f = (Frota)itemId;
-			return null;
+			if(columnId.toString().equals("ativo")) {
+				return new Label(StringUtilities.booleanToReadableString(f.getAtivo()));
+			} else {
+				return null;
+			}
 		}
-		
 	}
 	
 	class RowSelectedListener implements ValueChangeListener{

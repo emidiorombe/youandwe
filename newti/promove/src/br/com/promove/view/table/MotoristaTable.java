@@ -7,6 +7,7 @@ import br.com.promove.entity.Motorista;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.StringUtilities;
 import br.com.promove.view.MotoristaView;
 
 import com.vaadin.data.Property;
@@ -17,8 +18,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 public class MotoristaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "nome", "cpf", "rg", "cnh", "frota", "carreta"};
-	public static final String[] COL_HEADERS = new String[] {"Código", "Nome", "CPF", "RG", "CNH", "Frota", "Carreta"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "nome", "cpf", "rg", "cnh", "frota", "carreta", "ativo"};
+	public static final String[] COL_HEADERS = new String[] {"Código", "Nome", "CPF", "RG", "CNH", "Frota", "Carreta", "Ativo"};
 	
 	private MotoristaView view;
 	private CadastroService cadastroService;
@@ -39,6 +40,8 @@ public class MotoristaTable extends Table{
 		setVisibleColumns(NATURAL_COL_ORDER);
 		setColumnHeaders(COL_HEADERS);
 		addListener(new RowSelectedListener());
+
+		addGeneratedColumn("ativo", new MotoristaTableColumnGenerator());
 	}
 
 	public void setView(MotoristaView view) {
@@ -78,8 +81,12 @@ public class MotoristaTable extends Table{
 
 		@Override
 		public Component generateCell(Table source, Object itemId, Object columnId) {
-			Motorista f = (Motorista)itemId;
-			return null;
+			Motorista m = (Motorista)itemId;
+			if(columnId.toString().equals("ativo")) {
+				return new Label(StringUtilities.booleanToReadableString(m.getAtivo()));
+			} else {
+				return null;
+			}
 		}
 	}
 	

@@ -58,7 +58,6 @@ public class Avaria implements Serializable{
 	private Usuario usuario;
 	
 	private String observacao;
-	
 	private String hora;
 	
 	@Transient
@@ -73,6 +72,19 @@ public class Avaria implements Serializable{
 	private String chassiGravado;
 	private String etiqueta;
 	private String autoDestrutivel;
+
+	@OneToOne
+	private Motorista motorista;
+	
+	@OneToOne
+	private Frota frota;
+	
+	@OneToOne
+	private Carreta carreta;
+	
+	private String chassiOriginal;
+	private String arquivo;
+	private String nomeMotorista;
 
 	public Integer getId() {
 		return id;
@@ -216,5 +228,45 @@ public class Avaria implements Serializable{
 
 	public String getAutoDestrutivel() {
 		return autoDestrutivel;
+	}
+
+	public void setMotorista(Motorista motorista) {
+		this.motorista = motorista;
+	}
+
+	public Motorista getMotorista() {
+		return motorista;
+	}
+
+	public void setFrota(Frota frota) {
+		this.frota = frota;
+	}
+
+	public Frota getFrota() {
+		return frota;
+	}
+
+	public void setCarreta(Carreta carreta) {
+		this.carreta = carreta;
+	}
+
+	public Carreta getCarreta() {
+		return carreta;
+	}
+
+	public void setChassiOriginal(String chassiOriginal) {
+		this.chassiOriginal = chassiOriginal;
+	}
+
+	public String getChassiOriginal() {
+		return chassiOriginal;
+	}
+
+	public void setArquivo(String arquivo) {
+		this.arquivo = arquivo;
+	}
+
+	public String getArquivo() {
+		return arquivo;
 	}
 }

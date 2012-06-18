@@ -1,23 +1,18 @@
 package br.com.promove.view.form;
 
-import java.util.Iterator;
-
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
-import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.Carreta;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
@@ -69,7 +64,7 @@ public class CarretaForm extends BaseForm{
 	public void createFormBody(BeanItem<Carreta> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new CarretaFieldFactory(item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"codigo", "placa"});
+		setVisibleItemProperties(new Object[]{"codigo", "placa", "ativo"});
 	}
 	
 	private void addNewCarreta() {
@@ -115,7 +110,7 @@ public class CarretaForm extends BaseForm{
 						cadastroService.salvarCarreta(item.getBean());
 						view.getTable().getContainer().addItem(item.getBean());
 						addNewCarreta();
-						showSuccessMessage(view, "Carreta salvo!");
+						showSuccessMessage(view, "Carreta salva!");
 					}
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);
@@ -131,7 +126,7 @@ public class CarretaForm extends BaseForm{
 					if(item.getBean().getId() != null) {
 						cadastroService.excluirCarreta(item.getBean());
 						view.getTable().getContainer().removeItem(item.getBean());
-						showSuccessMessage(view, "Carreta removido");
+						showSuccessMessage(view, "Carreta removida");
 					}
 					addNewCarreta();
 				}catch(PromoveException de){
