@@ -71,7 +71,7 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 		if (tipo == 1) {
 			if (!cabecalho[0].toUpperCase().trim().equals("CHASSI") || 
 					!cabecalho[1].toUpperCase().trim().equals("MODELO") ||
-					!cabecalho[2].toUpperCase().isEmpty()) {
+					!cabecalho[2].toUpperCase().trim().isEmpty()) {
 				throw new PromoveException("Arquivo com colunas incorretas (Chassi, Modelo)");
 			}
 		}
