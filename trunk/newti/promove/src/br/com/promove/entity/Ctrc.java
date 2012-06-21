@@ -47,12 +47,13 @@ public class Ctrc implements Serializable{
 	private Double taxaFluvial;
 	private Double valorMercadoria;
 	private String motorista;
+	private String nomeMotorista;
 	private Boolean cancelado = false;
 	private Boolean inconsistente = false;
 	
 	@OneToMany(mappedBy="ctrc", targetEntity=VeiculoCtrc.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<VeiculoCtrc> veiculos;
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -203,6 +204,14 @@ public class Ctrc implements Serializable{
 
 	public String getMotorista() {
 		return motorista;
+	}
+
+	public void setNomeMotorista(String nomeMotorista) {
+		this.nomeMotorista = nomeMotorista;
+	}
+
+	public String getNomeMotorista() {
+		return nomeMotorista;
 	}
 
 	public Double getTaxas() {
