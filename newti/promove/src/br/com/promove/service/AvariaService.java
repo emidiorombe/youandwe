@@ -442,7 +442,7 @@ public class AvariaService implements Serializable {
 		try {
 			InconsistenciaAvaria inc = new InconsistenciaAvaria(avaria, msgErro);
 			inc.setChassiInvalido(StringUtilities.getChassiFromErrorMessage(msgErro));
-			inc.setNomeMotorista(node_av.element("motorista_nome").getText());
+			if (node_av != null && node_av.element("motorista_nome") != null) inc.setNomeMotorista(node_av.element("motorista_nome").getText());
 			if(avaria.getVeiculo() != null) inc.setChassiInvalido(avaria.getVeiculo().getChassi());
  			inconsistenciaAvariaDAO.save(inc);
 			return inc;

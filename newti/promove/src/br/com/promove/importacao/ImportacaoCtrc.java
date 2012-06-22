@@ -108,7 +108,7 @@ public class ImportacaoCtrc {
 				ct.setMunicipioOrigem(node_ct.element("municipio_origem").getText());
 				ct.setUfDestino(node_ct.element("uf_destino").getText());
 				ct.setMunicipioDestino(node_ct.element("municipio_destino").getText());
-				ct.setMotorista(node_ct.element("nome_motorista").getText());
+				ct.setNomeMotorista(node_ct.element("nome_motorista").getText());
 				ct.setCancelado(node_ct.element("situacao").getText().equals("3") ? true : false);
 				
 				ct.setTaxaRct(new Double(trataNumero(node_ct.element("taxa_rct").getText())));

@@ -109,34 +109,28 @@ public class ImportacaoAvaria {
 					e.printStackTrace();
 				}
 
-				try {
+				if (node_av.element("codigo_frota") != null || node_av.element("placa_frota") != null) {
 					if (!node_av.element("codigo_frota").getText().trim().isEmpty()) {
 						av.setFrota(frotasPlaca.get(node_av.element("placa_frota").getText()));
 					} else {
 						av.setFrota(frotas.get(node_av.element("codigo_frota").getText()));
 					}
-				}catch(Exception e) {
-					e.printStackTrace();
 				}
 					
-				try {
+				if (node_av.element("codigo_carreta") != null || node_av.element("placa_carreta") != null) {
 					if (!node_av.element("codigo_carreta").getText().trim().isEmpty()) {
 						av.setCarreta(carretasPlaca.get(node_av.element("placa_carreta").getText()));
 					} else {
 						av.setCarreta(carretas.get(node_av.element("codigo_carreta").getText()));
 					}
-				}catch(Exception e) {
-					e.printStackTrace();
 				}
 					
-				try {
+				if (node_av.element("codigo_motorista") != null || node_av.element("cnh_motorista") != null) {
 					if (!node_av.element("codigo_motorista").getText().trim().isEmpty()) {
 						av.setMotorista(motoristasCnh.get(node_av.element("cnh_motorista").getText()));
 					} else {
 						av.setMotorista(motoristas.get(new Integer(node_av.element("codigo_motorista").getText())));
 					}
-				}catch(Exception e) {
-					e.printStackTrace();
 				}
 
 				av.setChassiOriginal(StringUtilities.getChassiFromErrorMessage(node_av.element("chassi").getText()));
@@ -460,7 +454,7 @@ public class ImportacaoAvaria {
 		if (av.getUsuario() == null)
 			msgErro += "Usuario " + node_av.element("usuario").getText() + " não existe;";
 		
-		try {
+		if (node_av.element("codigo_frota") != null || node_av.element("placa_frota") != null) {
 			if (av.getFrota() == null) {
 				if (!node_av.element("codigo_frota").getText().trim().isEmpty()) { 
 					msgErro += "Frota " + node_av.element("codigo_frota").getText() + " não existe;";
@@ -468,15 +462,19 @@ public class ImportacaoAvaria {
 					msgErro += "Frota(Placa) " + node_av.element("placa_frota").getText() + " não existe;";
 				}
 			}
-				
+		}
+			
+		if (node_av.element("codigo_carreta") != null || node_av.element("placa_carreta") != null) {
 			if (av.getCarreta() == null) {
-				if (!node_av.element("codgo_carreta").getText().trim().isEmpty()) { 
+				if (!node_av.element("codigo_carreta").getText().trim().isEmpty()) { 
 					msgErro += "Carreta " + node_av.element("codigo_carreta").getText() + " não existe;";
 				} else if (!node_av.element("placa_carreta").getText().trim().isEmpty()) {
 					msgErro += "Carreta(Placa) " + node_av.element("placa_carreta").getText() + " não existe;";
 				}
 			}
-			
+		}
+		
+		if (node_av.element("codigo_motorista") != null || node_av.element("cnh_motorista") != null) {
 			if (av.getMotorista() == null) {
 				if (!node_av.element("codigo_motorista").getText().trim().isEmpty()) { 
 					msgErro += "Motorista " + node_av.element("codigo_motorista").getText() + " não existe;";
@@ -484,8 +482,6 @@ public class ImportacaoAvaria {
 					msgErro += "Motorista(CNH) " + node_av.element("cnh_motorista").getText() + " não existe;";
 				}
 			}
-		}catch(Exception e) {
-			e.printStackTrace();
 		}
 			
 		return msgErro;
