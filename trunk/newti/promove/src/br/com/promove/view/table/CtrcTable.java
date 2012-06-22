@@ -30,7 +30,7 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.BaseTheme;
 
 public class CtrcTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "motorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "cancelado", "inconsistente"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "nomeMotorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "cancelado", "inconsistente"};
 	public static final String[] COL_HEADERS = new String[] {"ID", "Filial", "Numero", "Tipo", "Série", "Transportadora", "Data Emis.", "Frota", "Carreta", "Motorista", "UF", "Mun. Origem", "UF", "Mun. Destino", "Valor Merc.", "Cancelado", "Inconsistente"};
 	
 	private CtrcService ctrcService;
@@ -82,7 +82,7 @@ public class CtrcTable extends Table{
 			setColumnCollapsed("transp", true);
 			setColumnCollapsed("placaFrota", true);
 			setColumnCollapsed("placaCarreta", true);
-			//setColumnCollapsed("motorista", true);
+			//setColumnCollapsed("nomeMotorista", true);
 			setColumnCollapsed("ufOrigem", true);
 			//setColumnCollapsed("municipioOrigem", true);
 			setColumnCollapsed("ufDestino", true);

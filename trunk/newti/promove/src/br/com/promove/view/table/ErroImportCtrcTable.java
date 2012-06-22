@@ -21,7 +21,7 @@ import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.ErroImportCtrcVeiculoTables;
 
 public class ErroImportCtrcTable extends Table {
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "motorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "cancelado", "msgErro"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "nomeMotorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "cancelado", "msgErro"};
 	public static final String[] COL_HEADERS = new String[] {"Filial", "Numero", "Tipo", "Série", "Transportadora", "Data", "Frota", "Carreta", "Motorista", "UF", "Origem", "UF", "Destino", "Valor Merc.", "Cancelado", "Mensagem"};
 	
 	private ErroImportCtrcVeiculoTables view;

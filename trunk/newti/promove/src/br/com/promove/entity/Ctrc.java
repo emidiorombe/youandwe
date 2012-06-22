@@ -46,7 +46,6 @@ public class Ctrc implements Serializable{
 	private Double taxaRcf;
 	private Double taxaFluvial;
 	private Double valorMercadoria;
-	private String motorista;
 	private String nomeMotorista;
 	private Boolean cancelado = false;
 	private Boolean inconsistente = false;
@@ -196,14 +195,6 @@ public class Ctrc implements Serializable{
 
 	public Double getValorMercadoria() {
 		return valorMercadoria;
-	}
-
-	public void setMotorista(String motorista) {
-		this.motorista = motorista;
-	}
-
-	public String getMotorista() {
-		return motorista;
 	}
 
 	public void setNomeMotorista(String nomeMotorista) {

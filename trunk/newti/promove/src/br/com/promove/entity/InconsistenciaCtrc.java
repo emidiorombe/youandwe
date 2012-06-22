@@ -43,8 +43,8 @@ public class InconsistenciaCtrc implements Serializable{
 	private Double taxaFluvial;
 	private String msgErro;
 	private Double valorMercadoria;
-	private String motorista;
 	private Boolean cancelado = false;
+	private String nomeMotorista;
 	
 	public InconsistenciaCtrc() {}
 	
@@ -66,7 +66,7 @@ public class InconsistenciaCtrc implements Serializable{
 		this.taxaRcf= ct.getTaxaRcf();
 		this.taxaFluvial = ct.getTaxaFluvial();
 		this.valorMercadoria = ct.getValorMercadoria();
-		this.motorista = ct.getMotorista();
+		this.nomeMotorista = ct.getNomeMotorista();
 		this.cancelado = ct.getCancelado();
 		this.msgErro = msgErro;
 	}
@@ -223,20 +223,20 @@ public class InconsistenciaCtrc implements Serializable{
 		return valorMercadoria;
 	}
 
-	public void setMotorista(String motorista) {
-		this.motorista = motorista;
-	}
-
-	public String getMotorista() {
-		return motorista;
-	}
-
 	public void setCancelado(Boolean cancelado) {
 		this.cancelado = cancelado;
 	}
 
 	public Boolean getCancelado() {
 		return cancelado;
+	}
+
+	public void setNomeMotorista(String nomeMotorista) {
+		this.nomeMotorista = nomeMotorista;
+	}
+
+	public String getNomeMotorista() {
+		return nomeMotorista;
 	}
 
 	public void setCtrc(Ctrc ct) {
@@ -257,7 +257,7 @@ public class InconsistenciaCtrc implements Serializable{
 		this.taxaRcf= ct.getTaxaRcf();
 		this.taxaFluvial = ct.getTaxaFluvial();
 		this.valorMercadoria = ct.getValorMercadoria();
-		this.motorista = ct.getMotorista();
+		this.nomeMotorista = ct.getNomeMotorista();
 		this.cancelado = ct.getCancelado();
 	}
 
@@ -280,7 +280,7 @@ public class InconsistenciaCtrc implements Serializable{
 		ct.setTaxaRcf(this.getTaxaRcf());
 		ct.setTaxaFluvial(this.getTaxaFluvial());
 		ct.setValorMercadoria(this.getValorMercadoria());
-		ct.setMotorista(this.getMotorista());
+		ct.setNomeMotorista(this.getNomeMotorista());
 		ct.setCancelado(this.getCancelado());
 		return ct;
 	}

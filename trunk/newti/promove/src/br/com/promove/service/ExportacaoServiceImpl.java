@@ -346,7 +346,7 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 				    row.createCell(5).setCellValue(ctrc.getMunicipioOrigem());
 				    row.createCell(6).setCellValue(ctrc.getUfDestino());
 				    row.createCell(7).setCellValue(ctrc.getMunicipioDestino());
-				    row.createCell(8).setCellValue(ctrc.getMotorista());
+				    row.createCell(8).setCellValue(ctrc.getNomeMotorista());
 				    row.createCell(9).setCellValue(ctrc.getPlacaFrota());
 				    row.createCell(10).setCellValue(ctrc.getPlacaCarreta());
 				    

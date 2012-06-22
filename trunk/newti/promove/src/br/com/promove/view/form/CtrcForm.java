@@ -67,7 +67,7 @@ public class CtrcForm extends BaseForm{
 	public void createFormBody(BeanItem<Ctrc> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new CtrcFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "motorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "cancelado"});
+		setVisibleItemProperties(new Object[]{"filial", "numero", "tipo", "serie", "transp", "dataEmissao", "placaFrota", "placaCarreta", "nomeMotorista", "ufOrigem", "municipioOrigem", "ufDestino", "municipioDestino", "valorMercadoria", "cancelado"});
 	}
 	
 	private Component createFooter(){
@@ -152,7 +152,7 @@ public class CtrcForm extends BaseForm{
 				if(propertyId.equals("ufOrigem") || propertyId.equals("ufDestino")) {					
 					f.setCaption(f.getCaption().replaceAll("Uf", "UF"));
 					f.setWidth("100px");
-				} else if(propertyId.equals("motorista") || propertyId.equals("municipioOrigem") || propertyId.equals("municipioDestino")) {					
+				} else if(propertyId.equals("nomeMotorista") || propertyId.equals("municipioOrigem") || propertyId.equals("municipioDestino")) {					
 					f.setWidth("300px");
 				} else if(propertyId.equals("valorMercadoria")) {					
 					f.addValidator(new DoubleValidator(propertyId.toString() + " deve ser numérico"));
