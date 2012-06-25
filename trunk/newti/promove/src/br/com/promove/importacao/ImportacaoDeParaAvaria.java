@@ -22,10 +22,10 @@ public class ImportacaoDeParaAvaria {
 			String chassiAntigo = campos[0];
 			String chassiNovo = campos[1];
 			
-			System.out.println(chassiNovo);
-			
 			//Tratar erro excel (converte texto para número ao salvar em CSV)
-			if(chassiAntigo.length() == 16 && chassiAntigo.substring(7, 16) == "000000000") chassiAntigo = "0" + chassiAntigo;
+			if(chassiAntigo.length() == 16 && chassiAntigo.substring(7, 16).equals("000000000")) chassiAntigo = "0" + chassiAntigo;
+			
+			System.out.println(chassiAntigo);
 			
 			if(chassiAntigo.length() != 17) continue;
 			if(chassiNovo.length() != 17) continue;

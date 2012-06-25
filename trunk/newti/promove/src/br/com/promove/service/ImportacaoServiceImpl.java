@@ -142,7 +142,6 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 			ImportacaoDeParaAvaria importacao = new ImportacaoDeParaAvaria();
 			List<String> linhas = new ArrayList<String>();
 			for(String linha : csv.split("\n")) {
-				System.out.println(linha);
 				linhas.add(linha);
 			}
 			importacao.importar(linhas);
