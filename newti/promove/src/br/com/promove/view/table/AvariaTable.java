@@ -78,6 +78,7 @@ public class AvariaTable extends Table{
 		addGeneratedColumn("fotos", new AvariaTableColumnGenerator(this));
 		
 		try {
+			setColumnCollapsed("chassiOriginal", true);
 			setColumnCollapsed("hora", true);
 			setColumnCollapsed("dataCadastro", true);
 			setColumnCollapsed("extensao", true);
@@ -145,7 +146,7 @@ public class AvariaTable extends Table{
 			final Avaria av = (Avaria)itemId;
 			if(columnId.toString().equals("dataLancamento")) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(av.getDataLancamento()));
-			} else if(columnId.toString().equals("dataCadastro")) {
+			} else if(columnId.toString().equals("dataCadastro") && av.getDataCadastro() != null) {
 				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(av.getDataCadastro()));
 			//}else if(columnId.toString().equals("observacao")) {
 			//		if(av.getObservacao() != null && av.getObservacao().length() > 5)
