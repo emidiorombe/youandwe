@@ -133,7 +133,7 @@ public class ImportacaoAvaria {
 					}
 				}
 
-				av.setChassiOriginal(StringUtilities.getChassiFromErrorMessage(node_av.element("chassi").getText()));
+				av.setChassiOriginal(node_av.element("chassi").getText());
 				
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				av.setHora(node_av.element("hora").getText());

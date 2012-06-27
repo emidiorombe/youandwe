@@ -248,7 +248,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 				conteudo = "<b>Lista de Arquivos importados:</b><br>" + conteudo; 
 
 				try {
-					conteudo += "<br><br>" + avariaService.listarAvariasPT(DateUtils.diaAtual());
+					conteudo = avariaService.listarAvariasPT(DateUtils.diaAtual()) + "<br><br>" + conteudo;
 					EmailUtils.sendHtml(params.get("smtpEmail"), params.get("emailVistorias").split(";"), "SIGA - Importacao de Vistorias", conteudo);
 					System.out.println();
 				} catch (PromoveException e) {

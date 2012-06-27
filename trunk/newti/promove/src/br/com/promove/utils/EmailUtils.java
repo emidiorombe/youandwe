@@ -62,21 +62,21 @@ public class EmailUtils {
 		// Construct the message
 		Message msg = new MimeMessage(session);
 		try {
-			msg.setFrom(new InternetAddress(from));
-			msg.setRecipient(Message.RecipientType.TO, new InternetAddress(tos[0]));
-			for(int i = 1; i < tos.length; i++) {
-				msg.setRecipient(Message.RecipientType.CC, new InternetAddress(tos[i]));
+			for(int i = 0; i < tos.length; i++) {
+				msg.setFrom(new InternetAddress(from));
+				msg.setRecipient(Message.RecipientType.TO, new InternetAddress(tos[i]));
+				//msg.setRecipient(Message.RecipientType.CC, new InternetAddress(tos[i]));
+				msg.setSubject(subject);
+				//msg.setText(content);
+				msg.setContent(content, "text/html");
+				msg.setSentDate(new Date());
+				
+				// Send the message
+				//Transport transport = session.getTransport("smtp");
+				//transport.connect("smtp.promoveseguros.com.br", 465, "sica@promoveseguros.com.br", "acisaevo");
+				
+				Transport.send(msg);
 			}
-			msg.setSubject(subject);
-			//msg.setText(content);
-			msg.setContent(content, "text/html");
-			msg.setSentDate(new Date());
-			
-			// Send the message
-			//Transport transport = session.getTransport("smtp");
-			//transport.connect("smtp.promoveseguros.com.br", 465, "sica@promoveseguros.com.br", "acisaevo");
-			
-			Transport.send(msg);
 		} catch (AddressException e) {
 			throw new PromoveException(e);
 		} catch (MessagingException e) {

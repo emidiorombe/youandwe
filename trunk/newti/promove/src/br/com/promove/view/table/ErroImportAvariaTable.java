@@ -12,24 +12,20 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 import br.com.promove.entity.InconsistenciaAvaria;
-import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
-import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
 import br.com.promove.view.ErroImportAvariaView;
 
 public class ErroImportAvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"chassiInvalido", "dataLancamento", "hora", "origem", "local", "tipo", "extensao", "nivel", "clima", "usuario", "observacao", "msgErro"};
-	public static final String[] COL_HEADERS = new String[] {"Chassi", "Data Lanc.", "Hora", "Local", "Peça", "Tipo", "Extensão", "Nível", "Clima", "Usuário", "Obs", "Mensagem"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"chassiInvalido", "chassiOriginal", "dataLancamento", "hora", "origem", "local", "tipo", "extensao", "nivel", "clima", "usuario", "observacao", "msgErro"};
+	public static final String[] COL_HEADERS = new String[] {"Chassi", "Chassi Original", "Data Lanc.", "Hora", "Local", "Peça", "Tipo", "Extensão", "Nível", "Clima", "Usuário", "Obs", "Mensagem"};
 	
 	private ErroImportAvariaView view;
-	private CadastroService cadastroService;
 	private ErroImportAvariaContainer container;
 	private AvariaService avariaService;
 	
 	public ErroImportAvariaTable() {
-		cadastroService = ServiceFactory.getService(CadastroService.class);
 		avariaService = ServiceFactory.getService(AvariaService.class);
 		buildTable();
 	}
@@ -48,6 +44,7 @@ public class ErroImportAvariaTable extends Table{
 		addGeneratedColumn("dataLancamento", new ErroImportVeiculoColumnGenerator());
 		
 		try {
+			setColumnCollapsed("chassiOriginal", true);
 			setColumnCollapsed("hora", true);
 			setColumnCollapsed("extensao", true);
 			setColumnCollapsed("nivel", true);
@@ -100,15 +97,11 @@ public class ErroImportAvariaTable extends Table{
 		public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 			Property property = event.getProperty();
 			BeanItem<InconsistenciaAvaria> item =  (BeanItem<InconsistenciaAvaria>) getItem(getValue());
-			//TODO remover isso item.getBean().setVeiculo(new Veiculo(item.getBean().getChassiInvalido()));
             view.getForm().createFormBody(item);
-			
 		}
-		
 	}
 	
 	class ErroImportVeiculoColumnGenerator implements Table.ColumnGenerator{
-
 		@Override
 		public Component generateCell(Table source, Object itemId, Object columnId) {
 			InconsistenciaAvaria inc = (InconsistenciaAvaria) itemId;
