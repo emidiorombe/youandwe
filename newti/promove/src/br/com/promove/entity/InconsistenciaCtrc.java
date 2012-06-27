@@ -46,6 +46,15 @@ public class InconsistenciaCtrc implements Serializable{
 	private Boolean cancelado = false;
 	private String nomeMotorista;
 	
+	@OneToOne
+	private Motorista motorista;
+	
+	@OneToOne
+	private Frota frota;
+	
+	@OneToOne
+	private Carreta carreta;
+	
 	public InconsistenciaCtrc() {}
 	
 	public InconsistenciaCtrc(Ctrc ct, String msgErro) {
@@ -239,6 +248,30 @@ public class InconsistenciaCtrc implements Serializable{
 		return nomeMotorista;
 	}
 
+	public void setMotorista(Motorista motorista) {
+		this.motorista = motorista;
+	}
+
+	public Motorista getMotorista() {
+		return motorista;
+	}
+
+	public void setFrota(Frota frota) {
+		this.frota = frota;
+	}
+
+	public Frota getFrota() {
+		return frota;
+	}
+
+	public void setCarreta(Carreta carreta) {
+		this.carreta = carreta;
+	}
+
+	public Carreta getCarreta() {
+		return carreta;
+	}
+
 	public void setCtrc(Ctrc ct) {
 		this.filial = ct.getFilial();
 		this.numero = ct.getNumero();
@@ -259,6 +292,9 @@ public class InconsistenciaCtrc implements Serializable{
 		this.valorMercadoria = ct.getValorMercadoria();
 		this.nomeMotorista = ct.getNomeMotorista();
 		this.cancelado = ct.getCancelado();
+		this.motorista = ct.getMotorista();
+		this.frota = ct.getFrota();
+		this.carreta = ct.getCarreta();
 	}
 
 	public Ctrc getCtrc() {
@@ -282,6 +318,9 @@ public class InconsistenciaCtrc implements Serializable{
 		ct.setValorMercadoria(this.getValorMercadoria());
 		ct.setNomeMotorista(this.getNomeMotorista());
 		ct.setCancelado(this.getCancelado());
+		ct.setMotorista(this.getMotorista());
+		ct.setFrota(this.getFrota());
+		ct.setCarreta(this.getCarreta());
 		return ct;
 	}
 }

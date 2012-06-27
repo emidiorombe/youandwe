@@ -269,4 +269,12 @@ public class Avaria implements Serializable{
 	public String getArquivo() {
 		return arquivo;
 	}
+
+	public void setNomeMotorista(String nomeMotorista) {
+		this.nomeMotorista = nomeMotorista;
+	}
+
+	public String getNomeMotorista() {
+		return nomeMotorista;
+	}
 }

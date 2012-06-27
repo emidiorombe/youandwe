@@ -53,6 +53,15 @@ public class Ctrc implements Serializable{
 	@OneToMany(mappedBy="ctrc", targetEntity=VeiculoCtrc.class, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<VeiculoCtrc> veiculos;
 
+	@OneToOne
+	private Motorista motorista;
+	
+	@OneToOne
+	private Frota frota;
+	
+	@OneToOne
+	private Carreta carreta;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -233,9 +242,32 @@ public class Ctrc implements Serializable{
 		return veiculos;
 	}
 
+	public void setMotorista(Motorista motorista) {
+		this.motorista = motorista;
+	}
+
+	public Motorista getMotorista() {
+		return motorista;
+	}
+
+	public void setFrota(Frota frota) {
+		this.frota = frota;
+	}
+
+	public Frota getFrota() {
+		return frota;
+	}
+
+	public void setCarreta(Carreta carreta) {
+		this.carreta = carreta;
+	}
+
+	public Carreta getCarreta() {
+		return carreta;
+	}
+
 	@Override
 	public String toString() {
 		return (filial + " - " + numero + " - " + tipo + " - " + serie + " - " + transp);
 	}
-
 }
