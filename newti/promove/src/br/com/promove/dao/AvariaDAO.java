@@ -136,7 +136,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			addParamToQuery("dtFim", ate);
 		}
 		
-		if (!posterior) {
+		if (posterior) {
 			hql.append(" and (tp.movimentacao = true");
 			hql.append(" or (select max(av2.origem.codigo) from Avaria av2");
 			hql.append(" where av2.veiculo = av.veiculo");
