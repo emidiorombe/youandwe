@@ -27,7 +27,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		return executeQuery(hql.toString(), 0, Integer.MAX_VALUE);
 	}
 
-	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws DAOException {
+	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, Boolean posterior, Boolean cancelados, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws DAOException {
 		//if ((oriAte == null || oriAte.getId() == null) &&
 		//		av.getOrigem() != null && av.getOrigem().getId() != null) oriAte = av.getOrigem();
 		//if ((av.getOrigem() == null || av.getOrigem().getId() == null) && 
@@ -130,11 +130,25 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 				if(periodo == 2) hql.append(" and av.dataCadastro between :dtIni and :dtFim");
 			}
 		}
-		
+
 		if(de != null && !de.equals("") && ate != null && !ate.equals("")) {
 			addParamToQuery("dtIni", de);
 			addParamToQuery("dtFim", ate);
 		}
+		
+		if (!posterior) {
+			hql.append(" and (tp.movimentacao = true");
+			hql.append(" or (select max(av2.origem.codigo) from Avaria av2");
+			hql.append(" where av2.veiculo = av.veiculo");
+			hql.append(" and av2.local = av.local");
+			hql.append(" and av2.tipo = av.tipo)");
+			hql.append(" = (select max(av3.origem.codigo) from Avaria av3");
+			hql.append(" where av3.veiculo = av.veiculo))");
+		} 
+		
+		if (!cancelados) {
+			//hql.append(" and av2.status <> '3'");
+		} 
 		
 		if(responsabilidade != null && responsabilidade.getId() != null) {
 			hql.append(" and ori.responsabilidade = :txtResponsabilidade");
