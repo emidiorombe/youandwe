@@ -345,13 +345,13 @@ public class AvariaService implements Serializable {
 		
 	}
 
-	public List<Avaria> buscarAvariaPorFiltros(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws PromoveException {
+	public List<Avaria> buscarAvariaPorFiltros(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, Boolean posterior, Boolean cancelados, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws PromoveException {
 		List<Avaria> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaHQLQuery(de); 
 			Date fim = DateUtils.montarDataFinalParaHQLQuery(ate); 
 			
-			lista = avariaDAO.getAvariasPorFiltro(av, init, fim, periodo, movimentacao, registradas, vistoriaFinal, oriAte, responsabilidade, fabricante);
+			lista = avariaDAO.getAvariasPorFiltro(av, init, fim, periodo, movimentacao, registradas, vistoriaFinal, posterior, cancelados, oriAte, responsabilidade, fabricante);
 		} catch (DAOException e) {
 			e.printStackTrace();
 			throw new PromoveException(e);
@@ -520,7 +520,7 @@ public class AvariaService implements Serializable {
 		try {
 			Avaria av = new Avaria();
 			av.setNivel(this.getById(NivelAvaria.class, 4));
-			lista = avariaDAO.getAvariasPorFiltro(av, DateUtils.diaAnterior(), date, 2, false, false, false, null, null, null);
+			lista = avariaDAO.getAvariasPorFiltro(av, date, date, 2, false, false, false, false, false, null, null, null);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

@@ -45,7 +45,7 @@ public class EnviarEmailAvariasJob implements Job {
 			if (conteudo.isEmpty()) conteudo = "Nenhum arquivo.";
 			conteudo = "<b>Lista de Arquivos importados:</b><br>" + conteudo; 
 					
-			conteudo += "<br><br>" + avariaService.listarAvariasPT(DateUtils.diaAtual());
+			conteudo = avariaService.listarAvariasPT(DateUtils.diaAtual()) + "<br><br>" + conteudo;
 			EmailUtils.sendHtml(params.get("smtpEmail"), params.get("emailVistorias").split(";"), "SIGA - Importacao de Vistorias", conteudo);
 			
 			HibernateSessionFactory.getSession().getTransaction().commit();

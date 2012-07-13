@@ -67,7 +67,7 @@ public class ExportacaoServlet extends HttpServlet{
 				response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 				
 				Avaria avaria = new Avaria();
-				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(avaria, dataDe, dataAte, 1, movimentacao, registradas, false, null, null, null);
+				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(avaria, dataDe, dataAte, 1, movimentacao, registradas, false, false, false, null, null, null);
 				
 				response.getWriter().print(export.exportarXMLAvarias(avarias));
 			}catch(IOException ioe) {
