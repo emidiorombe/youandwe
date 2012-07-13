@@ -164,7 +164,7 @@ public class AvariaSearchForm extends BaseForm{
 		chkVistoriaFinal.setCaption("Considerar como base as vistorias no local final");
 		
 		chkPosterior = new CheckBox();
-		chkPosterior.setCaption("Considerar avarias sem ocorrência posterior");
+		chkPosterior.setCaption("Desconsiderar avarias sem ocorrência posterior");
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -217,10 +217,7 @@ public class AvariaSearchForm extends BaseForm{
 		coluna2.addField("chkMovimentacao", chkMovimentacao);
 		coluna2.addField("chkRegistradas", chkRegistradas);
 		coluna2.addField("chkVistoriaFinal", chkVistoriaFinal);
-		
-		if(user.getTipo().getId() == 1 || user.getTipo().getId() == 2) {
-			coluna2.addField("chkPosterior", chkPosterior);
-		}
+		coluna2.addField("chkPosterior", chkPosterior);
 		
 		colunas.addComponent(coluna1);
 		colunas.addComponent(coluna2);
