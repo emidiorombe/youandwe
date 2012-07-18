@@ -63,6 +63,7 @@ public class AvariaSearchForm extends BaseForm{
 	private CheckBox chkRegistradas;
 	private CheckBox chkVistoriaFinal;
 	private CheckBox chkPosterior;
+	private CheckBox chkCancelados;
 	private ComboBox cmbPeriodo;
 	private PromoveApplication app;
 	
@@ -164,7 +165,10 @@ public class AvariaSearchForm extends BaseForm{
 		chkVistoriaFinal.setCaption("Considerar como base as vistorias no local final");
 		
 		chkPosterior = new CheckBox();
-		chkPosterior.setCaption("Desconsiderar avarias sem ocorrência posterior");
+		chkPosterior.setCaption("Desconsiderar avarias sem ocorrência na última vistoria");
+		
+		chkCancelados = new CheckBox();
+		chkCancelados.setCaption("Considerar avarias canceladas");
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -211,6 +215,7 @@ public class AvariaSearchForm extends BaseForm{
 		coluna1.addField("txtDe", txtDe);
 		coluna1.addField("txtAte", txtAte);
 		coluna1.addField("cmbPeriodo", cmbPeriodo);
+		coluna1.addField("chkCancelados", chkCancelados);
 		
 		coluna2.addField("cmbOrigemAte", cmbOrigemAte);
 		coluna2.addField("cmbResponsabilidade", cmbResponsabilidade);
@@ -511,7 +516,7 @@ public class AvariaSearchForm extends BaseForm{
 				Boolean registradas = (Boolean)chkRegistradas.getValue();
 				Boolean vistoriaFinal = (Boolean)chkVistoriaFinal.getValue();
 				Boolean posterior = (Boolean)chkPosterior.getValue();
-				Boolean cancelados = (Boolean)chkPosterior.getValue();
+				Boolean cancelados = (Boolean)chkCancelados.getValue();
 				BeanItem<Veiculo> veiculo = (BeanItem<Veiculo>)coluna1.getItemDataSource();
 				BeanItem<Avaria> avaria = (BeanItem<Avaria>)coluna2.getItemDataSource();
 				avaria.getBean().setVeiculo(veiculo.getBean());

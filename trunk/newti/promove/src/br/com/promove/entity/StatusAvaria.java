@@ -9,16 +9,16 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-public class TipoVeiculo implements Serializable {
+public class StatusAvaria implements Serializable {
 	@Id
-	@SequenceGenerator(name="seq_tipo_veiculo", sequenceName="seq_tipo_veiculo")
-	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_tipo_veiculo")
+	@SequenceGenerator(name="seq_status_avaria", sequenceName="seq_status_avaria")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seq_status_avaria")
 	private Integer id;
 	private String nome;
 	
-	public TipoVeiculo() {}
+	public StatusAvaria() {}
 	
-	public TipoVeiculo(String nome) {
+	public StatusAvaria(String nome) {
 		super();
 		this.nome = nome;
 	}

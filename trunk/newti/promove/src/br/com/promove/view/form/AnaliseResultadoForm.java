@@ -62,6 +62,7 @@ public class AnaliseResultadoForm extends BaseForm{
 	private ComboBox cmbPeriodo;
 	private ComboBox cmbItem;
 	private CheckBox chkVistoriaFinal;
+	private CheckBox chkPosterior;
 	private PromoveApplication app;
 	
 	public AnaliseResultadoForm(PromoveApplication app) {
@@ -128,6 +129,9 @@ public class AnaliseResultadoForm extends BaseForm{
 		chkVistoriaFinal = new CheckBox();
 		chkVistoriaFinal.setCaption("Listar Veiculos em Processo");
 		
+		chkPosterior = new CheckBox();
+		chkPosterior.setCaption("Desconsiderar avarias sem ocorrência na última vistoria");
+		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
 		txtDe.setResolution(DateField.RESOLUTION_DAY);
@@ -182,6 +186,7 @@ public class AnaliseResultadoForm extends BaseForm{
 		addField("cmbPeriodo", cmbPeriodo);
 		addField("cmbItem", cmbItem);
 		addField("chkVistoriaFinal", chkVistoriaFinal);
+		addField("chkPosterior", chkPosterior);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
@@ -305,7 +310,8 @@ public class AnaliseResultadoForm extends BaseForm{
 				OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
 				String item = (String)cmbItem.getValue();
 				Boolean vistoriaFinal = (Boolean)chkVistoriaFinal.getValue();
-				
+				Boolean posterior = (Boolean)chkPosterior.getValue();
+				Boolean cancelados = false;
 				String itemLabel = (String)cmbItem.getItemCaption(item);
 				
 				BeanItem<Veiculo> veic = (BeanItem<Veiculo>)getItemDataSource();
@@ -314,7 +320,7 @@ public class AnaliseResultadoForm extends BaseForm{
 					if(veic.getBean().getNavio().isEmpty())
 						throw new IllegalArgumentException("Informe um navio ou período");
 			
-				itens = cadastroService.buscarAnaliseResultado(veic.getBean(), de, ate, periodo, oride, oriate, item, vistoriaFinal);
+				itens = cadastroService.buscarAnaliseResultado(veic.getBean(), de, ate, periodo, oride, oriate, item, vistoriaFinal, posterior, cancelados);
 				
 				if(event.getButton() == search) {
 					resumos = criaListaResumoesComItens(itens);

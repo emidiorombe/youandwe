@@ -21,7 +21,7 @@ public class AnaliseResultadoView extends SplitPanel {
 		form.setView(this);
 		setFirstComponent(form.getLayout());
 		setSecondComponent(table);
-		setSplitPosition(60);
+		setSplitPosition(65);
 		
 	}
 	

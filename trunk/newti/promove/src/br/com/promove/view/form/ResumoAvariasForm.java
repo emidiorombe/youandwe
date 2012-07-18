@@ -32,6 +32,7 @@ import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
@@ -61,6 +62,7 @@ public class ResumoAvariasForm extends BaseForm{
 	private ComboBox cmbPeriodo;
 	private ComboBox cmbItem;
 	private ComboBox cmbSubitem;
+	private CheckBox chkPosterior;
 	private PromoveApplication app;
 	
 	public ResumoAvariasForm(PromoveApplication app) {
@@ -123,6 +125,9 @@ public class ResumoAvariasForm extends BaseForm{
 		cmbOrigemAte.setItemCaptionPropertyId("label");
 		cmbOrigemAte.setWidth("250px");
 		//cmbOrigemAte.setValue(cmbOrigemAte.getItemIds().iterator().next());
+		
+		chkPosterior = new CheckBox();
+		chkPosterior.setCaption("Desconsiderar avarias sem ocorrência na última vistoria");
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -204,6 +209,8 @@ public class ResumoAvariasForm extends BaseForm{
 		addField("cmbPeriodo", cmbPeriodo);
 		addField("cmbItem", cmbItem);
 		addField("cmbSubItem", cmbSubitem);
+		addField("chkPosterior", chkPosterior);
+		addField("chkCanceladas", chkPosterior);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
@@ -329,6 +336,8 @@ public class ResumoAvariasForm extends BaseForm{
 				Integer periodo = (Integer)cmbPeriodo.getValue();
 				item = (String)cmbItem.getValue();
 				subitem = (String)cmbSubitem.getValue();
+				Boolean posterior = (Boolean)chkPosterior.getValue();
+				Boolean cancelados = false;
 				
 				if (item.isEmpty() && !subitem.isEmpty()) item = subitem;
 				if (subitem.equals(item)) subitem = "";
@@ -343,7 +352,7 @@ public class ResumoAvariasForm extends BaseForm{
 					if(veic.getBean().getNavio().isEmpty())
 						throw new IllegalArgumentException("Informe um navio ou período");
 				
-				itens = avariaService.buscarResumo(veic.getBean(), de, ate, periodo, oride, oriate, item, subitem);
+				itens = avariaService.buscarResumo(veic.getBean(), de, ate, periodo, oride, oriate, item, subitem, posterior, cancelados);
 				
 				if(event.getButton() == search) {
 					resumos = criaListaResumoesComItens(itens);

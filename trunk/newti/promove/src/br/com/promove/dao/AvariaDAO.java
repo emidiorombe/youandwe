@@ -144,11 +144,11 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			hql.append(" and av2.tipo = av.tipo)");
 			hql.append(" = (select max(av3.origem.codigo) from Avaria av3");
 			hql.append(" where av3.veiculo = av.veiculo))");
-		} 
+		}
 		
 		if (!cancelados) {
-			//hql.append(" and av2.status <> '3'");
-		} 
+			hql.append(" and av.status.id <> 3");
+		}
 		
 		if(responsabilidade != null && responsabilidade.getId() != null) {
 			hql.append(" and ori.responsabilidade = :txtResponsabilidade");
@@ -207,7 +207,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
-	public Map<String, List<PieData>> buscarResumo(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, String item, String subitem) throws DAOException {
+	public Map<String, List<PieData>> buscarResumo(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, String item, String subitem, Boolean posterior, Boolean cancelados) throws DAOException {
 		//if ((oriFim == null || oriFim.getId() == null) &&
 		//		oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
 		//if ((oriInicio == null || oriInicio.getId() == null) &&
@@ -271,6 +271,21 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		sql.append(" and av2.veiculo_id = avaria.veiculo_id");
 		sql.append(" and av2.tipo_id = avaria.tipo_id and av2.local_id = avaria.local_id");
 		sql.append(" and ori2.codigo < origemavaria.codigo)");
+		
+		if (posterior) {
+			sql.append(" and (select max(ori2.codigo) from avaria av2, origemavaria ori2");
+			sql.append(" where av2.origem_id = ori2.id");
+			sql.append(" and av2.veiculo_id = avaria.veiculo_id");
+			sql.append(" and av2.local_id = avaria.local_id");
+			sql.append(" and av2.tipo_id = avaria.tipo_id)");
+			sql.append(" = (select max(ori3.codigo) from avaria av3, origemavaria ori3");
+			sql.append(" where av3.origem_id = ori3.id");
+			sql.append(" and av3.veiculo_id = avaria.veiculo_id)");
+		}
+		
+		if (!cancelados) {
+			sql.append(" and avaria.status_id <> 3");
+		}
 		
 		if (!item.isEmpty() || !subitem.isEmpty()) {
 			sql.append(" group by");

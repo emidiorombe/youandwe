@@ -10,6 +10,7 @@ import br.com.promove.entity.ExtensaoAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.StatusAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.TipoVeiculo;
 import br.com.promove.entity.Usuario;
@@ -76,7 +77,7 @@ public class AvariaForm extends BaseForm {
 	public void createFormBody(BeanItem<Avaria> avaria){
 		setItemDataSource(avaria);
 		setFormFieldFactory(new AvariaFieldFactory(this, avaria.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"veiculo", "origem", "local", "tipo", "extensao", "nivel", "dataLancamento","hora", "foto", "observacao"});
+		setVisibleItemProperties(new Object[]{"veiculo", "origem", "local", "tipo", "extensao", "nivel", "dataLancamento","hora", "foto", "observacao", "status"});
 		
 	}
 	
@@ -253,6 +254,26 @@ public class AvariaForm extends BaseForm {
 					tf.setImmediate(true);
 					tf.setWidth("70px");
 					return tf;
+				}else if(propertyId.equals("status")) {
+					ComboBox c = new ComboBox("Status");
+					c.addContainerProperty("label", String.class, null);
+					
+					for(StatusAvaria stat: avariaService.buscarTodosStatusAvaria()){
+						Item i = c.addItem(stat);
+						i.getItemProperty("label").setValue(stat.getNome());
+					}
+					
+					c.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+					c.setImmediate(true);
+					c.setNullSelectionAllowed(false);
+					c.setPropertyDataSource(item.getItemProperty(propertyId));
+					c.setItemCaptionPropertyId("label");
+					c.setWidth("150px");
+					
+					if (c.getValue() ==  null && c.size() > 0)
+	                    c.setValue(c.getItemIds().iterator().next());
+					
+					return c;
 				}
 			}catch(PromoveException pe) {
 				pe.printStackTrace();
@@ -286,7 +307,16 @@ public class AvariaForm extends BaseForm {
 						WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 						Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
 						
-						item.getBean().setUsuario(user);
+						if (item.getBean().getId() == null) {
+							item.getBean().setUsuario(user);
+							if (item.getBean().getStatus().getId() != 3) {
+								item.getBean().setStatus(avariaService.getById(StatusAvaria.class, 1));
+							}
+						} else {
+							if (item.getBean().getStatus().getId() != 3) {
+								item.getBean().setStatus(avariaService.getById(StatusAvaria.class, 2));
+							}
+						}
 						
 						avariaService.salvarAvaria(item.getBean());
 						addNewAvaria();
