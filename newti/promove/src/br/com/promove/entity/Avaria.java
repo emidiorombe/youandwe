@@ -86,6 +86,9 @@ public class Avaria implements Serializable{
 	private String arquivo;
 	private String nomeMotorista;
 
+	@OneToOne
+	private StatusAvaria status;
+
 	public Integer getId() {
 		return id;
 	}
@@ -276,5 +279,13 @@ public class Avaria implements Serializable{
 
 	public String getNomeMotorista() {
 		return nomeMotorista;
+	}
+
+	public void setStatus(StatusAvaria status) {
+		this.status = status;
+	}
+
+	public StatusAvaria getStatus() {
+		return status;
 	}
 }

@@ -526,13 +526,13 @@ public class CadastroService implements Serializable {
 		return lista;
 	}
 
-	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, Boolean vistoriaFinal) throws PromoveException {
+	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, Boolean vistoriaFinal, Boolean posterior, Boolean cancelados) throws PromoveException {
 		Map<String, List<PieData>> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaSQLQuery(de); 
 			Date fim = DateUtils.montarDataFinalParaSQLQuery(ate);
 			
-			lista = veiculoDAO.buscarAnaliseResultado(veiculo, init, fim, periodo, oride, oriate, item, vistoriaFinal);
+			lista = veiculoDAO.buscarAnaliseResultado(veiculo, init, fim, periodo, oride, oriate, item, vistoriaFinal, posterior, cancelados);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

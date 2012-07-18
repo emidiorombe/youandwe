@@ -41,5 +41,6 @@
 		<mapping class="br.com.promove.entity.Motorista" />
 		<mapping class="br.com.promove.entity.Frota" />
 		<mapping class="br.com.promove.entity.Carreta" />
+		<mapping class="br.com.promove.entity.StatusAvaria" />
 	</session-factory>
 </hibernate-configuration>

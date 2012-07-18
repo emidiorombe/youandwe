@@ -17,6 +17,7 @@ import br.com.promove.dao.LocalAvariaDAO;
 import br.com.promove.dao.NivelAvariaDAO;
 import br.com.promove.dao.OrigemAvariaDAO;
 import br.com.promove.dao.ResponsabilidadeDAO;
+import br.com.promove.dao.StatusAvariaDAO;
 import br.com.promove.dao.TipoAvariaDAO;
 import br.com.promove.dao.VeiculoDAO;
 import br.com.promove.entity.Avaria;
@@ -30,6 +31,7 @@ import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
 import br.com.promove.entity.ResponsabilidadeAvaria;
+import br.com.promove.entity.StatusAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
@@ -54,6 +56,7 @@ public class AvariaService implements Serializable {
 	private NivelAvariaDAO nivelDAO;
 	private InconsistenciaAvariaDAO inconsistenciaAvariaDAO;
 	private VeiculoDAO veiculoDAO;
+	private StatusAvariaDAO statusAvariaDAO;
 	private static SimpleDateFormat date_format = new SimpleDateFormat("dd/MM/yyyy");
 	
 	AvariaService() {
@@ -68,6 +71,7 @@ public class AvariaService implements Serializable {
 		inconsistenciaAvariaDAO = new InconsistenciaAvariaDAO(); 
 		veiculoDAO = new VeiculoDAO();
 		nivelDAO = new NivelAvariaDAO();
+		statusAvariaDAO = new StatusAvariaDAO();
 	}
 
 	/**
@@ -492,13 +496,13 @@ public class AvariaService implements Serializable {
 		
 	}
 
-	public Map<String, List<PieData>> buscarResumo(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, String subitem) throws PromoveException {
+	public Map<String, List<PieData>> buscarResumo(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, String subitem, Boolean posterior, Boolean cancelados) throws PromoveException {
 		Map<String, List<PieData>> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaSQLQuery(de); 
 			Date fim = DateUtils.montarDataFinalParaSQLQuery(ate); 
 			
-			lista = avariaDAO.buscarResumo(veiculo, init, fim, periodo, oride, oriate, item, subitem);
+			lista = avariaDAO.buscarResumo(veiculo, init, fim, periodo, oride, oriate, item, subitem, posterior, cancelados);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -509,6 +513,16 @@ public class AvariaService implements Serializable {
 		List<NivelAvaria> lista = null;
 		try {
 			lista = nivelDAO.getAll();
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	public List<StatusAvaria> buscarTodosStatusAvaria() throws PromoveException {
+		List<StatusAvaria> lista = null;
+		try {
+			lista = statusAvariaDAO.getAll();
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

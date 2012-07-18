@@ -255,7 +255,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		return lista;
 	}
 
-	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, String item, Boolean vistoriaFinal) throws DAOException {
+	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, String item, Boolean vistoriaFinal, Boolean posterior, Boolean cancelados) throws DAOException {
 		//if ((oriFim == null || oriFim.getId() == null) &&
 		//		oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
 		//if ((oriInicio == null || oriInicio.getId() == null) &&
@@ -349,6 +349,22 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			if (oriFim != null && oriFim.getId() != null)
 				subsqlA.append(" and origemavaria.codigo <= " + oriFim.getCodigo().toString());
 			subsqlA.append(" and avaria.origem_id = origemavaria.id)");
+			
+			if (posterior) {
+				subsqlA.append(" and (select max(ori2.codigo) from avaria av2, origemavaria ori2");
+				subsqlA.append(" where av2.origem_id = ori2.id");
+				subsqlA.append(" and av2.veiculo_id = avaria.veiculo_id");
+				subsqlA.append(" and av2.local_id = avaria.local_id");
+				subsqlA.append(" and av2.tipo_id = avaria.tipo_id)");
+				subsqlA.append(" = (select max(ori3.codigo) from avaria av3, origemavaria ori3");
+				subsqlA.append(" where av3.origem_id = ori3.id");
+				subsqlA.append(" and av3.veiculo_id = avaria.veiculo_id)");
+			}
+			
+			if (!cancelados) {
+				subsqlA.append(" and avaria.status_id <> 3");
+			}
+			
 		}
 		subsqlA.append(" group by veiculo.id, " + nomeItem);
 		
