@@ -21,7 +21,7 @@ public class TipoAvaria implements Serializable{
 	private Boolean falta = false;
 	private Boolean perdaTotal = false;
 	private Boolean movimentacao = false;
-	private static final long serialVersionUID = -5865309663518451811L;
+	private String descricaoSeguradora;
 
 	public TipoAvaria(){}
 	
@@ -84,6 +84,14 @@ public class TipoAvaria implements Serializable{
 
 	public Boolean getMovimentacao() {
 		return movimentacao;
+	}
+
+	public void setDescricaoSeguradora(String descricaoSeguradora) {
+		this.descricaoSeguradora = descricaoSeguradora;
+	}
+
+	public String getDescricaoSeguradora() {
+		return descricaoSeguradora;
 	}
 
 	@Override

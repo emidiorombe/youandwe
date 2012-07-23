@@ -18,8 +18,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 public class TipoAvariaTable extends Table {
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "descricao", "falta", "perdaTotal", "movimentacao"};
-	public static final String[] COL_HEADERS = new String[] {"Código", "Descrição", "Falta", "PT", "Movimentação"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "descricao", "falta", "perdaTotal", "movimentacao", "descricaoSeguradora"};
+	public static final String[] COL_HEADERS = new String[] {"Código", "Descrição", "Falta", "PT", "Movimentação", "Descrição Seguradora"};
 	private TipoAvariaView view;
 	private TipoAvariaContainer container;
 	private AvariaService avariaService;
