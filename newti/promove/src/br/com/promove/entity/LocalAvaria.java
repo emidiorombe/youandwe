@@ -20,6 +20,7 @@ public class LocalAvaria implements Serializable{
 	private String descricao;
 	private Boolean acessorio = false;
 	private static final long serialVersionUID = 5053227920409244439L;
+	private String descricaoSeguradora;
 	
 	public LocalAvaria() {
 	}
@@ -52,6 +53,14 @@ public class LocalAvaria implements Serializable{
 		this.acessorio = acessorio;
 	}
 	
+	public void setDescricaoSeguradora(String descricaoSeguradora) {
+		this.descricaoSeguradora = descricaoSeguradora;
+	}
+
+	public String getDescricaoSeguradora() {
+		return descricaoSeguradora;
+	}
+
 	@Override
 	public String toString() {
 		return descricao;

@@ -58,7 +58,7 @@ public class TipoAvariaForm extends BaseForm {
 		setItemDataSource(tpa);
 		setFormFieldFactory(new TipoAvariaFieldFactory(
 				tpa.getBean().getId() == null));
-		setVisibleItemProperties(new Object[] { "codigo", "descricao", "falta", "perdaTotal", "movimentacao"});
+		setVisibleItemProperties(new Object[] { "codigo", "descricao", "falta", "perdaTotal", "movimentacao", "descricaoSeguradora"});
 
 	}
 
@@ -115,6 +115,9 @@ public class TipoAvariaForm extends BaseForm {
 				//f.addValidator(new StringLengthValidator(
 				//		"Descrição deve ter no mínimo 3 e no máximo 50 caracteres",
 				//		3, 50, false));
+			} else if(propertyId.equals("descricaoSeguradora")) {
+				f.setWidth("300px");
+				f.setRequired(false);
 			}
 
 			return f;

@@ -18,8 +18,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
 public class LocalAvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "descricao", "acessorio"};
-	public static final String[] COL_HEADERS = new String[] {"Código", "Descrição", "Acessório"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"codigo", "descricao", "acessorio", "descricaoSeguradora"};
+	public static final String[] COL_HEADERS = new String[] {"Código", "Descrição", "Acessório", "Descrição Seguradora"};
 	
 	private LocalAvariaView view;
 	private AvariaService avariaService;

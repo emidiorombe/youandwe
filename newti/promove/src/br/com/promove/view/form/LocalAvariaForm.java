@@ -75,7 +75,7 @@ public class LocalAvariaForm extends BaseForm{
 	public void createFormBody(BeanItem<LocalAvaria> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new LocalAvariaFieldFactory(item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"codigo", "descricao", "acessorio"});
+		setVisibleItemProperties(new Object[]{"codigo", "descricao", "acessorio", "descricaoSeguradora"});
 		
 		
 	}
@@ -106,6 +106,9 @@ public class LocalAvariaForm extends BaseForm{
 					f.setReadOnly(true);
 			} else if(propertyId.equals("descricao")) {
 				f.setWidth("300px");
+			} else if(propertyId.equals("descricaoSeguradora")) {
+				f.setWidth("300px");
+				f.setRequired(false);
 			}
 			return f;
 		}
