@@ -13,6 +13,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.promove.exception.DAOException;
+import br.com.promove.exception.PromoveException;
+import br.com.promove.service.AvariaService;
+import br.com.promove.service.ServiceFactory;
+
 @Entity
 public class InconsistenciaAvaria implements Serializable{
 	
@@ -185,6 +190,7 @@ public class InconsistenciaAvaria implements Serializable{
 
 	public Avaria getAvaria() {
 		Avaria av = new Avaria();
+		
 		av.setClima(clima);
 		av.setDataLancamento(dataLancamento);
 		av.setExtensao(extensao);

@@ -23,6 +23,7 @@ import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.Motorista;
 import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
+import br.com.promove.entity.StatusAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
@@ -134,6 +135,7 @@ public class ImportacaoAvaria {
 				}
 
 				av.setChassiOriginal(node_av.element("chassi").getText());
+				av.setStatus(avariaService.getById(StatusAvaria.class, 4));
 				
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				av.setHora(node_av.element("hora").getText());

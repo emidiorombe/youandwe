@@ -480,6 +480,7 @@ public class AvariaService implements Serializable {
 			
 			if(list.size() > 0) {
 				if(buscarAvariaDuplicadaPorFiltros(list, avaria).size() == 0) {
+					avaria.setStatus(this.getById(StatusAvaria.class, 4));
 					avaria.setVeiculo(list.get(0));
 					avariaDAO.save(avaria);
 					List<FotoAvaria> fotos = fotoDAO.getByInconsistencia(inc.getId());
