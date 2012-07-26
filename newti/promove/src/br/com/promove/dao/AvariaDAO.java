@@ -182,11 +182,13 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		hql.append(" and av.tipo = :tpAv ");
 		hql.append(" and av.local = :lcAv ");
 		hql.append(" and av.origem = :orAv ");
+		hql.append(" and av.dataLancamento = :DtLanc ");
 
 		addParamToQuery("listchassi", StringUtilities.listVeiculoToChassiInClause(veiculos));
 		addParamToQuery("tpAv", av.getTipo());
 		addParamToQuery("lcAv", av.getLocal());
 		addParamToQuery("orAv", av.getOrigem());
+		addParamToQuery("dtLanc", av.getDataLancamento());
 		
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
