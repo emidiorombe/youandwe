@@ -7,6 +7,7 @@ import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.InconsistenciaAvaria;
+import br.com.promove.entity.StatusAvaria;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
@@ -145,6 +146,7 @@ public class ErroImportAvariaForm extends BaseForm {
 						}else
 							item.getBean().setVeiculo(v.get(0));
 
+						item.getBean().getAvaria().setStatus(avariaService.getById(StatusAvaria.class, 4));
 						avariaService.salvarAvaria(item.getBean().getAvaria());
 						avariaService.excluirInconsistenciaImportAvaria(item.getBean());
 						//view.getTable().reloadTable();
