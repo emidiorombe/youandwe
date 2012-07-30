@@ -146,7 +146,7 @@ public class ErroImportAvariaForm extends BaseForm {
 						}else
 							item.getBean().setVeiculo(v.get(0));
 
-						item.getBean().getAvaria().setStatus(avariaService.getById(StatusAvaria.class, 4));
+						item.getBean().getAvaria().setStatus(avariaService.getById(StatusAvaria.class, 5));
 						avariaService.salvarAvaria(item.getBean().getAvaria());
 						avariaService.excluirInconsistenciaImportAvaria(item.getBean());
 						//view.getTable().reloadTable();

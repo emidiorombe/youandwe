@@ -13,6 +13,7 @@ import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
 import br.com.promove.entity.ResponsabilidadeAvaria;
+import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 import br.com.promove.utils.DateUtils;
@@ -27,7 +28,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		return executeQuery(hql.toString(), 0, Integer.MAX_VALUE);
 	}
 
-	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, Boolean posterior, Boolean cancelados, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws DAOException {
+	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, Boolean posterior, Boolean cancelados, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante, Usuario user) throws DAOException {
 		//if ((oriAte == null || oriAte.getId() == null) &&
 		//		av.getOrigem() != null && av.getOrigem().getId() != null) oriAte = av.getOrigem();
 		//if ((av.getOrigem() == null || av.getOrigem().getId() == null) && 
@@ -150,6 +151,12 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			hql.append(" and av.status.id <> 3");
 		}
 		
+		if (user != null) {
+			if (user.getTipo().getId() != 1 && user.getTipo().getId() != 2) {
+				hql.append(" and av.origem.tipo <> '3'");
+			}
+		}
+	
 		if(responsabilidade != null && responsabilidade.getId() != null) {
 			hql.append(" and ori.responsabilidade = :txtResponsabilidade");
 			addParamToQuery("txtResponsabilidade", responsabilidade);

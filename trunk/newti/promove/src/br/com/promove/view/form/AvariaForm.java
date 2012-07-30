@@ -12,7 +12,6 @@ import br.com.promove.entity.NivelAvaria;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.StatusAvaria;
 import br.com.promove.entity.TipoAvaria;
-import br.com.promove.entity.TipoVeiculo;
 import br.com.promove.entity.Usuario;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;

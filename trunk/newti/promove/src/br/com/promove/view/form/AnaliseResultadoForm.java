@@ -14,6 +14,7 @@ import br.com.promove.entity.Resumo;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
 import br.com.promove.entity.TipoVeiculo;
+import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.exportacao.GraficoExport;
@@ -74,6 +75,9 @@ public class AnaliseResultadoForm extends BaseForm{
 	}
 
 	private void buildForm() {
+		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
+		
 		setWriteThrough(false);
 		setImmediate(true);
 		setSizeFull();
@@ -90,8 +94,12 @@ public class AnaliseResultadoForm extends BaseForm{
 			//i = cmbOrigemDe.addItem(new OrigemAvaria());
 			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
-				i = cmbOrigemDe.addItem(or);
-				i.getItemProperty("label").setValue(or.getDescricao());
+				if((user.getTipo().getId() == 9 && or.getFilial().getCodigo().equals(user.getFilial().getCodigo())) ||
+						user.getTipo().getId() == 1 || user.getTipo().getId() == 2 || !or.getTipo().equals("3")
+						) { // Consulta por Local / Sinistro
+					i = cmbOrigemDe.addItem(or);
+					i.getItemProperty("label").setValue(or.getDescricao());
+				}
 			}
 		} catch (PromoveException e) {
 			showErrorMessage(this, "Não foi possível buscar as Origens");
@@ -111,9 +119,13 @@ public class AnaliseResultadoForm extends BaseForm{
 			//i = cmbOrigemAte.addItem(new OrigemAvaria());
 			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
-				i = cmbOrigemAte.addItem(or);
-				i.getItemProperty("label").setValue(or.getDescricao());
-				cmbOrigemAte.setValue(or);
+				if((user.getTipo().getId() == 9 && or.getFilial().getCodigo().equals(user.getFilial().getCodigo())) ||
+						user.getTipo().getId() == 1 || user.getTipo().getId() == 2 || !or.getTipo().equals("3")
+						) { // Consulta por Local / Sinistro
+					i = cmbOrigemAte.addItem(or);
+					i.getItemProperty("label").setValue(or.getDescricao());
+					cmbOrigemAte.setValue(or);
+				}
 			}
 		} catch (PromoveException e) {
 			showErrorMessage(this, "Não foi possível buscar as Origens");

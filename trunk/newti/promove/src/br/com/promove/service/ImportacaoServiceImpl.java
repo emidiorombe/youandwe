@@ -1,3 +1,4 @@
+/*
 package br.com.promove.service;
 
 import java.io.Serializable;
@@ -18,11 +19,6 @@ import br.com.promove.importacao.ImportacaoDeParaAvaria;
 import br.com.promove.importacao.ImportacaoTERCA;
 import br.com.promove.utils.FileUtils;
 
-/**
- * 
- * @author Rafael Nunes
- *
- */
 public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 
 	@Override
@@ -156,3 +152,4 @@ public class ImportacaoServiceImpl implements ImportacaoService, Serializable{
 	}
 
 }
+*/

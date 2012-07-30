@@ -108,10 +108,13 @@ public class AvariaTable extends Table{
 	}
 	
 	public void filterTable(Veiculo veiculo) {
+		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
+		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
+		
 		try {
 			Avaria avaria = new Avaria();
 			avaria.setVeiculo(veiculo);
-			filterTable(avariaService.buscarAvariaPorFiltros(avaria, null, null, 1, false, false, false, false, false, null, null, null));
+			filterTable(avariaService.buscarAvariaPorFiltros(avaria, null, null, 1, false, false, false, false, false, null, null, null, user));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
