@@ -31,7 +31,6 @@ import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
-import br.com.promove.utils.StringUtilities;
 
 public class ImportacaoAvaria {
 	private String xmlContent;
@@ -86,6 +85,8 @@ public class ImportacaoAvaria {
 			Avaria av = new Avaria();
 			
 			try {
+				String chassi = node_av.element("chassi").getText();
+				
 				av.setClima(climas.get(new Integer(node_av.element("concli").getText())));
 				av.setOrigem(origens.get(new Integer(node_av.element("origem").getText())));
 				// TODO temporario
@@ -134,7 +135,7 @@ public class ImportacaoAvaria {
 					}
 				}
 
-				av.setChassiOriginal(node_av.element("chassi").getText());
+				av.setChassiOriginal(chassi);
 				av.setStatus(avariaService.getById(StatusAvaria.class, 4));
 				
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
@@ -142,7 +143,6 @@ public class ImportacaoAvaria {
 
 				String msgErro = verificaInconsistencias(av, node_av, "vistorias");
 				
-				String chassi = node_av.element("chassi").getText();
 				List<Veiculo> veiculos = null;
 				
 				if(chassi.contains("000000000")) {
@@ -155,7 +155,7 @@ public class ImportacaoAvaria {
 				
 				//Se não existir o veículo, gravar a inconsistência
 				if(veiculos.size() == 0) {
-					msgErro += "Veiculo " + node_av.element("chassi").getText() + " não existe!;";
+					msgErro += "Veiculo " + chassi + " não existe!;";
 					InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, msgErro, node_av);
 					
 					Element node_fotos = ((Element)node_av).element("fotos");
@@ -205,6 +205,8 @@ public class ImportacaoAvaria {
 			Avaria av = new Avaria();
 			
 			try {
+				String chassi = node_av.element("chassi").getText();
+				
 				String ext = node_av.element("gravid").getText();
 				ext  = ext.equals("L") ? "9" : (ext.equals("G") ? "10" : ext); //(ext.equals("0") ? "9999": ext));
 				//av.setClima(avariaService.getById(Clima.class, new Integer(node_av.element("concli").getText())));
@@ -228,7 +230,6 @@ public class ImportacaoAvaria {
 				
 				String msgErro = verificaInconsistencias(av, node_av, "avarias");
 				
-				String chassi = node_av.element("chassi").getText();
 				List<Veiculo> veiculos = null;
 				
 				if(chassi.contains("000000000")) {
@@ -241,7 +242,7 @@ public class ImportacaoAvaria {
 				
 				//Se não existir o veículo, gravar a inconsistência
 				if(veiculos.size() == 0) {
-					msgErro += "Veiculo " + node_av.element("chassi").getText() + " não existe!;";
+					msgErro += "Veiculo " + chassi + " não existe!;";
 					InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, msgErro, node_av);
 					
 					Element node_fotos = ((Element)node_av).element("fotos");
@@ -290,6 +291,8 @@ public class ImportacaoAvaria {
 		for (Element node_av : avarias) {
 			Avaria av = new Avaria();
 			try {
+				String chassi = node_av.element("chassi").getText();
+				
 				//av.setClima(avariaService.getById(Clima.class, new Integer("4")));
 				//av.setExtensao(avariaService.getById(ExtensaoAvaria.class, new Integer("9999")));
 				//av.setTipo(avariaService.getById(TipoAvaria.class, new Integer("300")));
@@ -308,7 +311,6 @@ public class ImportacaoAvaria {
 				
 				String msgErro = verificaInconsistencias(av, node_av, "movto");
 				
-				String chassi = node_av.element("chassi").getText();
 				List<Veiculo> veiculos = null;
 				
 				if(chassi.contains("000000000")) {
@@ -321,7 +323,7 @@ public class ImportacaoAvaria {
 				
 				//Se não existir o veículo, gravar a inconsistência
 				if(veiculos.size() == 0) { 
-					msgErro += "Veiculo " + node_av.element("chassi").getText() + " não existe!;";
+					msgErro += "Veiculo " + chassi + " não existe!;";
 				}else {
 					av.setVeiculo(veiculos.get(0));
 					

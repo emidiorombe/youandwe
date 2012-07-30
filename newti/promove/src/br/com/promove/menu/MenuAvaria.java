@@ -10,6 +10,7 @@ import br.com.promove.view.ErroImportAvariaView;
 import br.com.promove.view.ErroImportVeiculoView;
 import br.com.promove.view.ExportAvariaView;
 import br.com.promove.view.ImportAvariaView;
+import br.com.promove.view.ImportSinistroView;
 import br.com.promove.view.ImportVeiculoView;
 import br.com.promove.view.ResumoAvariasView;
 import br.com.promove.view.VeiculoAvariaTables;
@@ -46,6 +47,7 @@ public class MenuAvaria  extends CssLayout{
 	private Button add_veiculo;
 	private Button list_veiculo;
 	private Button import_avaria;
+	private Button import_sinistro;
 	private Button erro_import_avaria;
 	private Button import_veiculos;
 	private Button erro_import_veiculos;
@@ -73,6 +75,7 @@ public class MenuAvaria  extends CssLayout{
 		list_veiculo = new NativeButton("Listar Veículos");
 		add_veiculo = new NativeButton("Registrar Veículo");
 		import_avaria = new NativeButton("Importar Vistorias");
+		import_sinistro = new NativeButton("Importar Sinistros");
 		erro_import_avaria = new NativeButton("Auditar erros de importação de Vistorias");
 		import_veiculos = new NativeButton("Importar Veículos");
 		erro_import_veiculos = new NativeButton("Auditar erros de importação de Veículos");
@@ -81,8 +84,8 @@ public class MenuAvaria  extends CssLayout{
 		analise = new NativeButton("Análise de Resultado");
 		resumo = new NativeButton("Resumo de Avarias");
 
-		addListeners(list, add, list_veiculo, add_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export, auditoria, analise, resumo);
-		addComponents(title, list, add, list_veiculo, add_veiculo, import_avaria, erro_import_avaria, import_veiculos, erro_import_veiculos, export, auditoria, analise, resumo);
+		addListeners(list, add, list_veiculo, add_veiculo, import_avaria, import_sinistro, erro_import_avaria, import_veiculos, erro_import_veiculos, export, auditoria, analise, resumo);
+		addComponents(title, list, add, list_veiculo, add_veiculo, import_avaria, import_sinistro, erro_import_avaria, import_veiculos, erro_import_veiculos, export, auditoria, analise, resumo);
 				
 		setPermissionVisible();
 		
@@ -93,10 +96,14 @@ public class MenuAvaria  extends CssLayout{
 		WebApplicationContext ctx = (WebApplicationContext) app.getContext();
 		Usuario user = (Usuario) ctx.getHttpSession().getAttribute("loggedUser");
 		
+		//TODO remover
+		import_sinistro.setVisible(false);
+
 		if(user.getTipo().getId() != 1 && user.getTipo().getId() != 2) { //Administrador/Corretora
 			add.setVisible(false); 
 			add_veiculo.setVisible(false);
 			import_avaria.setVisible(false);
+			//import_sinistro.setVisible(false);
 			if(user.getTipo().getId() != 5) //Op.Logistico
 				erro_import_avaria.setVisible(false);
 			import_veiculos.setVisible(false);
@@ -111,12 +118,12 @@ public class MenuAvaria  extends CssLayout{
 	}
 	
 	public void changeStyleToAdd() {
-		addAndRemoveStyle(add, list, import_avaria, erro_import_avaria, export, auditoria, analise, resumo, add_veiculo, list_veiculo, import_veiculos, erro_import_veiculos);
+		addAndRemoveStyle(add, list, import_avaria, import_sinistro, erro_import_avaria, export, auditoria, analise, resumo, add_veiculo, list_veiculo, import_veiculos, erro_import_veiculos);
 		
 	}
 	
 	public void loadMainView(ClickEvent event) {
-		addAndRemoveStyle(event.getButton(), add, list, import_avaria, erro_import_avaria, export, auditoria, analise, resumo, add_veiculo, list_veiculo, import_veiculos, erro_import_veiculos);
+		addAndRemoveStyle(event.getButton(), add, list, import_avaria, import_sinistro, erro_import_avaria, export, auditoria, analise, resumo, add_veiculo, list_veiculo, import_veiculos, erro_import_veiculos);
 		if(event.getButton() == add) {
 			AvariaForm form = new AvariaForm(app);
 			app.setMainView(form.getFormLayout());
@@ -135,6 +142,9 @@ public class MenuAvaria  extends CssLayout{
 			app.setMainView(new VeiculoListView(tables, form));
 		}else if(event.getButton() == import_avaria) {
 			ImportAvariaView view = new ImportAvariaView(app);
+			app.setMainView(view.getLayout());
+		}else if(event.getButton() == import_sinistro) {
+			ImportSinistroView view = new ImportSinistroView(app);
 			app.setMainView(view.getLayout());
 		}else if(event.getButton() == erro_import_avaria) {
 			ErroImportAvariaTable table = new ErroImportAvariaTable();

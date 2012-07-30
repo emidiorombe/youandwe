@@ -33,6 +33,7 @@ import br.com.promove.entity.PieData;
 import br.com.promove.entity.ResponsabilidadeAvaria;
 import br.com.promove.entity.StatusAvaria;
 import br.com.promove.entity.TipoAvaria;
+import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.DAOException;
 import br.com.promove.exception.PromoveException;
@@ -349,13 +350,13 @@ public class AvariaService implements Serializable {
 		
 	}
 
-	public List<Avaria> buscarAvariaPorFiltros(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, Boolean posterior, Boolean cancelados, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante) throws PromoveException {
+	public List<Avaria> buscarAvariaPorFiltros(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, Boolean posterior, Boolean cancelados, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante, Usuario user) throws PromoveException {
 		List<Avaria> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaHQLQuery(de); 
 			Date fim = DateUtils.montarDataFinalParaHQLQuery(ate); 
 			
-			lista = avariaDAO.getAvariasPorFiltro(av, init, fim, periodo, movimentacao, registradas, vistoriaFinal, posterior, cancelados, oriAte, responsabilidade, fabricante);
+			lista = avariaDAO.getAvariasPorFiltro(av, init, fim, periodo, movimentacao, registradas, vistoriaFinal, posterior, cancelados, oriAte, responsabilidade, fabricante, user);
 		} catch (DAOException e) {
 			e.printStackTrace();
 			throw new PromoveException(e);
@@ -480,7 +481,7 @@ public class AvariaService implements Serializable {
 			
 			if(list.size() > 0) {
 				if(buscarAvariaDuplicadaPorFiltros(list, avaria).size() == 0) {
-					avaria.setStatus(this.getById(StatusAvaria.class, 4));
+					avaria.setStatus(this.getById(StatusAvaria.class, 5));
 					avaria.setVeiculo(list.get(0));
 					avariaDAO.save(avaria);
 					List<FotoAvaria> fotos = fotoDAO.getByInconsistencia(inc.getId());
@@ -535,7 +536,7 @@ public class AvariaService implements Serializable {
 		try {
 			Avaria av = new Avaria();
 			av.setNivel(this.getById(NivelAvaria.class, 4));
-			lista = avariaDAO.getAvariasPorFiltro(av, date, date, 2, false, false, false, false, false, null, null, null);
+			lista = avariaDAO.getAvariasPorFiltro(av, date, date, 2, false, false, false, false, false, null, null, null, null);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

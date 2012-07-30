@@ -97,7 +97,9 @@ public class AvariaSearchForm extends BaseForm{
 			//i = cmbOrigemAte.addItem(new OrigemAvaria());
 			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
-				if(user.getTipo().getId() != 9 || or.getFilial().getCodigo().equals(user.getFilial().getCodigo())) { //Consulta por Local
+				if((user.getTipo().getId() == 9 && or.getFilial().getCodigo().equals(user.getFilial().getCodigo())) ||
+						user.getTipo().getId() == 1 || user.getTipo().getId() == 2 || !or.getTipo().equals("3")
+						) { // Consulta por Local / Sinistro
 					i = cmbOrigemAte.addItem(or);
 					i.getItemProperty("label").setValue(or.getDescricao());
 					cmbOrigemAte.setValue(or);
@@ -473,7 +475,9 @@ public class AvariaSearchForm extends BaseForm{
 					//i_default.getItemProperty("label").setValue("Selecione...");
 
 					for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
-						if(user.getTipo().getId() != 9 || or.getFilial().getCodigo().equals(user.getFilial().getCodigo())) { //Consulta por Local
+						if((user.getTipo().getId() == 9 && or.getFilial().getCodigo().equals(user.getFilial().getCodigo())) ||
+								user.getTipo().getId() == 1 || user.getTipo().getId() == 2 || !or.getTipo().equals("3")
+								) { // Consulta por Local / Sinistro
 							Item i = c.addItem(or);
 							i.getItemProperty("label").setValue(or.getDescricao());
 						}
@@ -527,7 +531,7 @@ public class AvariaSearchForm extends BaseForm{
 							throw new IllegalArgumentException("Informe um chassi, navio ou período");
 				}
 				
-				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(avaria.getBean(), de, ate, periodo, movimentacao, registradas, vistoriaFinal, posterior, cancelados, oriAte, responsabilidade, fabricante);
+				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(avaria.getBean(), de, ate, periodo, movimentacao, registradas, vistoriaFinal, posterior, cancelados, oriAte, responsabilidade, fabricante, null);
 
 				if(event.getButton() == search) {
 					view.getTable().filterTable(avarias);
