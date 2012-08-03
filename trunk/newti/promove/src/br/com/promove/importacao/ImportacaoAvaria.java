@@ -61,7 +61,7 @@ public class ImportacaoAvaria {
 		this.xmlContent = xmlContent;
 	}
 
-	public void importar(String xml) throws DocumentException, ParseException, PromoveException {
+	public void importar(String xml, String nomeArquivo) throws DocumentException, ParseException, PromoveException {
 		loadClimas();
 		loadExtensoes();
 		loadTipos();
@@ -74,12 +74,12 @@ public class ImportacaoAvaria {
 		loadMotoristas();
 
 		Document doc = DocumentHelper.parseText(xml);
-		importTagVistoria(doc);
-		importTagAvaria(doc);
-		importTagMovimento(doc);
+		importTagVistoria(doc, nomeArquivo);
+		importTagAvaria(doc, nomeArquivo);
+		importTagMovimento(doc, nomeArquivo);
 	}
 
-	private void importTagVistoria(Document doc) throws ParseException, PromoveException {
+	private void importTagVistoria(Document doc, String nomeArquivo) throws ParseException, PromoveException {
 		List<Element> avarias = doc.selectNodes("//dados_coletados/vistorias");
 		for (Element node_av : avarias) {
 			Avaria av = new Avaria();
@@ -136,6 +136,7 @@ public class ImportacaoAvaria {
 				}
 
 				av.setChassiOriginal(chassi);
+				av.setArquivo(nomeArquivo);
 				av.setStatus(avariaService.getById(StatusAvaria.class, 4));
 				
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
@@ -170,11 +171,11 @@ public class ImportacaoAvaria {
 					}
 					
 				}else {
+					av.setVeiculo(veiculos.get(0));
+					
 					if (!msgErro.isEmpty()) {
 						throw new Exception(msgErro);
 					}
-					
-					av.setVeiculo(veiculos.get(0));
 					
 					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av).size() > 0) {
 						//Ja existe essa avaria
@@ -199,7 +200,7 @@ public class ImportacaoAvaria {
 		}
 	}
 
-	private void importTagAvaria(Document doc) throws ParseException, PromoveException {
+	private void importTagAvaria(Document doc, String nomeArquivo) throws ParseException, PromoveException {
 		List<Element> avarias = doc.selectNodes("//dados_coletados/avarias");
 		for (Element node_av : avarias) {
 			Avaria av = new Avaria();
@@ -224,6 +225,11 @@ public class ImportacaoAvaria {
 				if (av.getOrigem() == null)
 					av.setOrigem(origens.get(new Integer(node_av.element("origem").getText() + "0")));
 				av.setUsuario(usuarios.get(new Integer(node_av.element("usuario").getText())));
+				
+				av.setChassiOriginal(chassi);
+				av.setArquivo(nomeArquivo);
+				av.setStatus(avariaService.getById(StatusAvaria.class, 4));
+				
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				//av.setHora(node_av.element("hora").getText());
 				av.setObservacao(node_av.element("obs").getText());
@@ -257,11 +263,11 @@ public class ImportacaoAvaria {
 					}
 					
 				}else {
+					av.setVeiculo(veiculos.get(0));
+					
 					if (!msgErro.isEmpty()) {
 						throw new Exception(msgErro);
 					}
-					
-					av.setVeiculo(veiculos.get(0));
 					
 					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av).size() > 0) {
 						//Ja existe essa avaria
@@ -286,7 +292,7 @@ public class ImportacaoAvaria {
 		}
 	}
 
-	private void importTagMovimento(Document doc) throws ParseException, PromoveException {
+	private void importTagMovimento(Document doc, String nomeArquivo) throws ParseException, PromoveException {
 		List<Element> avarias = doc.selectNodes("//dados_coletados/movto");
 		for (Element node_av : avarias) {
 			Avaria av = new Avaria();
@@ -306,6 +312,11 @@ public class ImportacaoAvaria {
 				// TODO remover fixos
 				av.setOrigem(origensTipoFilial.get(node_av.element("filial").getText() + "_" + node_av.element("tipo").getText()));
 				av.setUsuario(usuarios.get(new Integer(node_av.element("usuario").getText())));
+				
+				av.setChassiOriginal(chassi);
+				av.setArquivo(nomeArquivo);
+				av.setStatus(avariaService.getById(StatusAvaria.class, 4));
+				
 				av.setDataLancamento(date_format.parse(node_av.element("data").getText()));
 				av.setHora(node_av.element("hora").getText());
 				
@@ -326,6 +337,10 @@ public class ImportacaoAvaria {
 					msgErro += "Veiculo " + chassi + " não existe!;";
 				}else {
 					av.setVeiculo(veiculos.get(0));
+					
+					if (!msgErro.isEmpty()) {
+						throw new Exception(msgErro);
+					}
 					
 					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av).size() > 0) {
 						//Ja existe essa avaria

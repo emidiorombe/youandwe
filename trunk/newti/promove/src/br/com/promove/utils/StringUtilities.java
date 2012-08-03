@@ -1,6 +1,5 @@
 package br.com.promove.utils;
 
-import java.util.Iterator;
 import java.util.List;
 
 import br.com.promove.entity.Veiculo;
@@ -48,9 +47,10 @@ public class StringUtilities {
 			String erros[] = msgErro.split(";");
 			for (String erro : erros) {
 				if(erro.startsWith(fieldErro)) {
-					String campos[] = erro.split(" ");
-					if(campos.length >= 2)
-						return campos[1];
+					//String campos[] = erro.split(" ");
+					//if(campos.length >= 2)
+					//	return campos[1];
+					return erro.replaceAll(fieldErro + " ", " ").replaceAll(" não existe!", " ").replaceAll(" não existe", " ").trim();
 				}
 			}
 		}

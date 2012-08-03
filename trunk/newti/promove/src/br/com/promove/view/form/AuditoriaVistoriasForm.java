@@ -76,9 +76,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 			//i = cmbOrigemDe.addItem(new OrigemAvaria());
 			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
-				if((user.getTipo().getId() == 9 && or.getFilial().getCodigo().equals(user.getFilial().getCodigo())) ||
-						user.getTipo().getId() == 1 || user.getTipo().getId() == 2 || !or.getTipo().equals("3")
-						) { // Consulta por Local / Sinistro
+				if (user.getTipo().getId() != 9 || or.getFilial().getCodigo().equals(user.getFilial().getCodigo())) { // Consulta por Local
 					i = cmbOrigemDe.addItem(or);
 					i.getItemProperty("label").setValue(or.getDescricao());
 				}
@@ -101,12 +99,10 @@ public class AuditoriaVistoriasForm extends BaseForm{
 			//i = cmbOrigemAte.addItem(new OrigemAvaria());
 			//i.getItemProperty("label").setValue("Selecione...");
 			for(OrigemAvaria or: avariaService.buscarTodasOrigensAvaria()){
-				if((user.getTipo().getId() == 9 && or.getFilial().getCodigo().equals(user.getFilial().getCodigo())) ||
-						user.getTipo().getId() == 1 || user.getTipo().getId() == 2 || !or.getTipo().equals("3")
-						) { // Consulta por Local / Sinistro
+				if (user.getTipo().getId() != 9 || or.getFilial().getCodigo().equals(user.getFilial().getCodigo())) { // Consulta por Local
 					i = cmbOrigemAte.addItem(or);
 					i.getItemProperty("label").setValue(or.getDescricao());
-					cmbOrigemAte.setValue(or);
+					if (!or.getTipo().equals("3")) cmbOrigemAte.setValue(or);
 				}
 			}
 		} catch (PromoveException e) {
