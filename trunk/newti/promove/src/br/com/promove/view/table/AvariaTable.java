@@ -89,6 +89,7 @@ public class AvariaTable extends Table{
 			setColumnCollapsed("dataSinistro", true);
 			setColumnCollapsed("notaFiscal", true);
 			setColumnCollapsed("numeroCtrc", true);
+			setColumnCollapsed("numeroSinistro", true);
 			setColumnCollapsed("dataSinistro", true);
 			setColumnCollapsed("dnConcessionaria", true);
 			setColumnCollapsed("nomeConcessionaria", true);
