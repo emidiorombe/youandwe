@@ -3,11 +3,14 @@ package br.com.promove.view.form;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.InconsistenciaAvaria;
+import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.StatusAvaria;
+import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
@@ -16,6 +19,7 @@ import br.com.promove.service.CadastroService;
 import br.com.promove.service.ExportacaoService;
 import br.com.promove.service.ImportacaoService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.StringUtilities;
 import br.com.promove.view.ErroImportAvariaView;
 
 import com.vaadin.data.Item;
@@ -53,6 +57,8 @@ public class ErroImportAvariaForm extends BaseForm {
 	private ExportacaoService exportacaoService;
 	private PromoveApplication app;
 	private ImportacaoService importService;
+	private HashMap<String, TipoAvaria> tiposDescricao;
+	private HashMap<String, LocalAvaria> locaisDescricao;
 	
 	private Button save;
 	private Button saveAll;
@@ -139,6 +145,10 @@ public class ErroImportAvariaForm extends BaseForm {
 						BeanItem<InconsistenciaAvaria> item = (BeanItem<InconsistenciaAvaria>) getItemDataSource();
 						if (item.getBean().getId() == null || item.getBean().getChassiInvalido() == null)
 							throw new IllegalArgumentException("Selecione um registro!");
+						if (item.getBean().getAvaria().getTipo() == null)
+							throw new IllegalArgumentException("Tipo de Avaria Inválido!");
+						if (item.getBean().getAvaria().getLocal() == null)
+							throw new IllegalArgumentException("Peça Inválida!");
 						String chassi = item.getBean().getChassiInvalido().substring(0, 17);
 						List<Veiculo> v = cadastroService.buscarVeiculosPorChassi(chassi);
 						if (v.size() == 0) {
@@ -176,9 +186,24 @@ public class ErroImportAvariaForm extends BaseForm {
 				}
 			}else if(event.getButton() == saveAll) {
 				try {
+					loadTipos();
+					loadLocais();
+					
 					List<InconsistenciaAvaria> lista = avariaService.buscarTodasInconsistenciasAvaria();
 					for (InconsistenciaAvaria inc : lista) {
-						avariaService.salvarAvariaDeInconsistencias(inc);
+						if (inc.getTipo() == null) {
+							String tipoAvaria = StringUtilities.getValueFromErrorMessage(inc.getMsgErro(), "Tipo");
+							inc.setTipo(tiposDescricao.get(tipoAvaria));
+						}
+						
+						if (inc.getLocal() == null) {
+							String localAvaria = StringUtilities.getValueFromErrorMessage(inc.getMsgErro(), "Local");
+							inc.setLocal(locaisDescricao.get(localAvaria));
+						}
+						
+						if (inc.getTipo() != null && inc.getLocal() != null) {
+							avariaService.salvarAvariaDeInconsistencias(inc);
+						}
 					}
 					view.getTable().reloadTable();
 					showSuccessMessage(view, "Inconsistências salvas!");
@@ -200,9 +225,7 @@ public class ErroImportAvariaForm extends BaseForm {
 					showErrorMessage(view, "Não foi possível gerar arquivo.");
 				}
 			}
-			
 		}
-		
 	}
 	
 	class ErroVeiculoFieldFactory extends DefaultFieldFactory {
@@ -338,4 +361,20 @@ public class ErroImportAvariaForm extends BaseForm {
 		return layout;
 	}
 
+	private void loadTipos() throws PromoveException {
+		tiposDescricao = new HashMap<String, TipoAvaria>();
+		List<TipoAvaria> lista = avariaService.buscarTodosTipoAvaria();
+		for (TipoAvaria tipo : lista) {
+			tiposDescricao.put(tipo.getDescricaoSeguradora(), tipo);
+		}
+	}
+	
+	private void loadLocais() throws PromoveException {
+		locaisDescricao = new HashMap<String, LocalAvaria>();
+		List<LocalAvaria> lista = avariaService.buscarTodosLocaisAvaria();
+		for (LocalAvaria local : lista) {
+			locaisDescricao.put(local.getDescricaoSeguradora(), local);
+		}
+	}
+	
 }

@@ -88,6 +88,16 @@ public class Avaria implements Serializable{
 
 	@OneToOne
 	private StatusAvaria status;
+	
+	private Long numeroSinistro;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataSinistro;
+
+	private Integer notaFiscal;
+	private Integer numeroCtrc;
+	private Integer dnConcessionaria;
+	private String nomeConcessionaria;
 
 	public Integer getId() {
 		return id;
@@ -287,5 +297,53 @@ public class Avaria implements Serializable{
 
 	public StatusAvaria getStatus() {
 		return status;
+	}
+
+	public void setNumeroSinistro(Long numeroSinistro) {
+		this.numeroSinistro = numeroSinistro;
+	}
+
+	public Long getNumeroSinistro() {
+		return numeroSinistro;
+	}
+
+	public void setDataSinistro(Date dataSinistro) {
+		this.dataSinistro = dataSinistro;
+	}
+
+	public Date getDataSinistro() {
+		return dataSinistro;
+	}
+
+	public void setNotaFiscal(Integer notaFiscal) {
+		this.notaFiscal = notaFiscal;
+	}
+
+	public Integer getNotaFiscal() {
+		return notaFiscal;
+	}
+
+	public void setNumeroCtrc(Integer numeroCtrc) {
+		this.numeroCtrc = numeroCtrc;
+	}
+
+	public Integer getNumeroCtrc() {
+		return numeroCtrc;
+	}
+
+	public void setDnConcessionaria(Integer dnConcessionaria) {
+		this.dnConcessionaria = dnConcessionaria;
+	}
+
+	public Integer getDnConcessionaria() {
+		return dnConcessionaria;
+	}
+
+	public void setNomeConcessionaria(String nomeConcessionaria) {
+		this.nomeConcessionaria = nomeConcessionaria;
+	}
+
+	public String getNomeConcessionaria() {
+		return nomeConcessionaria;
 	}
 }

@@ -33,8 +33,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.Window;
 
 public class AvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "chassiOriginal", "modelo", "dataLancamento", "hora", "dataCadastro", "origem", "local", "tipo", "extensao", "nivel", "fotos", "clima", "usuario", "status", "observacao"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Chassi Original", "Modelo", "Data Lanc.", "Hora", "Data Cad.", "Local", "Peça", "Tipo", "Extensão", "Nível", "Fotos", "Clima", "Usuário", "Status", "Obs"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "chassiOriginal", "modelo", "dataLancamento", "hora", "dataCadastro", "origem", "local", "tipo", "extensao", "nivel", "fotos", "clima", "usuario", "status", "observacao", "numeroSinistro", "dataSinistro", "notaFiscal", "numeroCtrc", "dnConcessionaria", "nomeConcessionaria", "arquivo"};
+	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Chassi Original", "Modelo", "Data Lanc.", "Hora", "Data Cad.", "Local", "Peça", "Tipo", "Extensão", "Nível", "Fotos", "Clima", "Usuário", "Status", "Obs", "Sinistro", "Data Sinistro", "Nota Fiscal", "CTRC", "DN", "Concessionária", "Arquivo"};
 	
 	private AvariaService avariaService;
 	private AvariaTableContainer container;
@@ -76,6 +76,7 @@ public class AvariaTable extends Table{
 		//addGeneratedColumn("usuario", new AvariaTableColumnGenerator(this));
 		//addGeneratedColumn("observacao", new AvariaTableColumnGenerator(this));
 		addGeneratedColumn("fotos", new AvariaTableColumnGenerator(this));
+		addGeneratedColumn("dataSinistro", new AvariaTableColumnGenerator(this));
 		
 		try {
 			setColumnCollapsed("chassiOriginal", true);
@@ -85,6 +86,14 @@ public class AvariaTable extends Table{
 			setColumnCollapsed("nivel", true);
 			setColumnCollapsed("clima", true);
 			setColumnCollapsed("usuario", true);
+			setColumnCollapsed("dataSinistro", true);
+			setColumnCollapsed("notaFiscal", true);
+			setColumnCollapsed("numeroCtrc", true);
+			setColumnCollapsed("dataSinistro", true);
+			setColumnCollapsed("dnConcessionaria", true);
+			setColumnCollapsed("nomeConcessionaria", true);
+			setColumnCollapsed("numeroCtrc", true);
+			setColumnCollapsed("arquivo", true);
 			//setColumnCollapsed("observacao", true);
 			if (this instanceof AvariaVeiculoTable) {
 				setColumnCollapsed("veiculo", true);
@@ -157,6 +166,8 @@ public class AvariaTable extends Table{
 			//			return new Label(av.getObservacao().substring(0, 5) + "...");
 			//		else
 			//			return new Label(av.getObservacao());
+			} else if(columnId.toString().equals("dataSinistro") && av.getDataSinistro() != null) {
+				return new Label(new SimpleDateFormat("dd/MM/yyyy").format(av.getDataCadastro()));
 			}else if(columnId.toString().equals("fotos")) { 
 				Button b = new Button(Integer.toString(av.getFotos().size()));	
 				b.setStyleName(BaseTheme.BUTTON_LINK);
@@ -181,7 +192,6 @@ public class AvariaTable extends Table{
 							w.addComponent(emb);
 						}
 					}
-					
 				});
 				
 				return b;
@@ -243,12 +253,10 @@ public class AvariaTable extends Table{
 			right.addStyleName("right");
 			return right;
 		}
-
 	}
 	
 	public void setView(AvariaSearchView view) {
 		this.view = view;
-		
 	}
-
 }
+

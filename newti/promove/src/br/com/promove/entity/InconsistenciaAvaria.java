@@ -13,11 +13,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.promove.exception.DAOException;
-import br.com.promove.exception.PromoveException;
-import br.com.promove.service.AvariaService;
-import br.com.promove.service.ServiceFactory;
-
 @Entity
 public class InconsistenciaAvaria implements Serializable{
 	
@@ -75,6 +70,16 @@ public class InconsistenciaAvaria implements Serializable{
 	private String arquivo;
 	private String nomeMotorista;
 
+	private Long numeroSinistro;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataSinistro;
+
+	private Integer notaFiscal;
+	private Integer numeroCtrc;
+	private Integer dnConcessionaria;
+	private String nomeConcessionaria;
+
 	public InconsistenciaAvaria() {}
 	
 	public InconsistenciaAvaria(Avaria av, String msgErro) {
@@ -98,6 +103,12 @@ public class InconsistenciaAvaria implements Serializable{
 		this.carreta = av.getCarreta();
 		this.chassiOriginal = av.getChassiOriginal();
 		this.arquivo = av.getArquivo();
+		this.numeroSinistro = av.getNumeroSinistro();
+		this.dataSinistro = av.getDataSinistro();
+		this.notaFiscal = av.getNotaFiscal();
+		this.numeroCtrc = av.getNumeroCtrc();
+		this.dnConcessionaria = av.getDnConcessionaria();
+		this.nomeConcessionaria = av.getNomeConcessionaria();
 	}
 
 	public Integer getId() {
@@ -307,5 +318,53 @@ public class InconsistenciaAvaria implements Serializable{
 
 	public String getNomeMotorista() {
 		return nomeMotorista;
+	}
+
+	public void setNumeroSinistro(Long numeroSinistro) {
+		this.numeroSinistro = numeroSinistro;
+	}
+
+	public Long getNumeroSinistro() {
+		return numeroSinistro;
+	}
+
+	public void setDataSinistro(Date dataSinistro) {
+		this.dataSinistro = dataSinistro;
+	}
+
+	public Date getDataSinistro() {
+		return dataSinistro;
+	}
+
+	public void setNotaFiscal(Integer notaFiscal) {
+		this.notaFiscal = notaFiscal;
+	}
+
+	public Integer getNotaFiscal() {
+		return notaFiscal;
+	}
+
+	public void setNumeroCtrc(Integer numeroCtrc) {
+		this.numeroCtrc = numeroCtrc;
+	}
+
+	public Integer getNumeroCtrc() {
+		return numeroCtrc;
+	}
+
+	public void setDnConcessionaria(Integer dnConcessionaria) {
+		this.dnConcessionaria = dnConcessionaria;
+	}
+
+	public Integer getDnConcessionaria() {
+		return dnConcessionaria;
+	}
+
+	public void setNomeConcessionaria(String nomeConcessionaria) {
+		this.nomeConcessionaria = nomeConcessionaria;
+	}
+
+	public String getNomeConcessionaria() {
+		return nomeConcessionaria;
 	}
 }

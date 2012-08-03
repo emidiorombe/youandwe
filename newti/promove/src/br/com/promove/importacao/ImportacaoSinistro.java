@@ -36,7 +36,7 @@ public class ImportacaoSinistro {
 		avariaService = ServiceFactory.getService(AvariaService.class);
 	}
 	
-	public void importar(List<String> csv, Usuario user) throws PromoveException{
+	public void importar(List<String> csv, Usuario user, String nomeArquivo) throws PromoveException {
 		loadClimas();
 		loadExtensoes();
 		loadTipos();
@@ -44,56 +44,76 @@ public class ImportacaoSinistro {
 		loadOrigens();
 		
 		for (String linha : csv) {
-			String[] campos = linha.replaceAll("\r", ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;").split(";");
+			String[] campos = linha.replaceAll("\r", "; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ").split(";");
 			Avaria av = new Avaria();
 			
-			if (campos[10].trim().length() != 17) {
+			String chassi = campos[10].trim();
+			
+			if (chassi.length() != 17) {
 				continue;
 			}
-				
-			try {
-				String chassi = campos[10].trim();
-				
-				av.setClima(climas.get(new Integer("4")));
-				av.setOrigem(origens.get(new Integer("1000")));
-				av.setUsuario(user);
-				
-				av.setTipo(tiposDescricao.get(campos[9].trim()));
-				av.setLocal(locaisDescricao.get(campos[13].trim()));
-				av.setExtensao(extensoes.get(new Integer("0")));
-				
-				av.setChassiOriginal(chassi);
-				av.setStatus(avariaService.getById(StatusAvaria.class, 4));
-				
-				av.setDataLancamento(date_format.parse(campos[3].trim()));
-				//av.setHora("00:00");
 
-				String msgErro = verificaInconsistencias(av, campos);
+			String[] tiposAvaria = campos[9].trim().replaceAll(" \\/ ", " \\| ").split("\\/");
+			String[] locaisAvaria = campos[13].trim().replaceAll(" \\/ ", " \\| ").split("\\/");
+
+			for (int cont = 0; cont < (tiposAvaria.length > locaisAvaria.length ? tiposAvaria.length : locaisAvaria.length); cont++) {
 				
-				List<Veiculo> veiculos = null;
-				
-				veiculos = cadastroService.buscarVeiculosPorChassi(chassi);
-				
-				//Se não existir o veículo, gravar a inconsistência
-				if(veiculos.size() == 0) {
-					msgErro += "Veiculo " + chassi + " não existe!;";
-					InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, msgErro, null);
-				} else {
-					if (!msgErro.isEmpty()) {
-						throw new Exception(msgErro);
-					}
+				try {
+					av.setClima(climas.get(new Integer("4")));
+					av.setOrigem(origens.get(new Integer("1000")));
+					av.setUsuario(user);
 					
-					av.setVeiculo(veiculos.get(0));
+					String tipoAvaria = tiposAvaria[cont > tiposAvaria.length - 1 ? tiposAvaria.length - 1 : cont].trim().replaceAll(" \\| ", " \\/ ");
+					String localAvaria = locaisAvaria[cont > locaisAvaria.length - 1 ? locaisAvaria.length - 1 : cont].trim().replaceAll(" \\| ", " \\/ ");
 					
-					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av).size() > 0) {
-						//Ja existe essa avaria
-						continue;
-					}
+					//av.setTipo(tiposDescricao.get(campos[9].trim()));
+					av.setTipo(tiposDescricao.get(tipoAvaria));
+					//av.setLocal(locaisDescricao.get(campos[13].trim()));
+					av.setLocal(locaisDescricao.get(localAvaria));
+					
+					av.setExtensao(extensoes.get(new Integer("0")));
+					
+					av.setChassiOriginal(chassi);
+					av.setArquivo(nomeArquivo);
+					av.setStatus(avariaService.getById(StatusAvaria.class, 4));
+					
+					av.setDnConcessionaria(new Integer(campos[4].trim()));
+					av.setNomeConcessionaria(campos[7].trim());
+					
+					av.setNumeroSinistro(new Long(campos[0].trim()));
+					av.setNotaFiscal(new Integer(campos[14].trim()));
+					av.setNumeroCtrc(new Integer(campos[16].trim()));
+					
+					av.setDataLancamento(date_format.parse(campos[2].trim()));
+					av.setDataSinistro(date_format.parse(campos[3].trim()));
+					//av.setHora("00:00");
 	
-					avariaService.salvarAvaria(av, true);
+					String msgErro = verificaInconsistencias(av, campos, tipoAvaria, localAvaria);
+					
+					List<Veiculo> veiculos = null;
+					
+					veiculos = cadastroService.buscarVeiculosPorChassi(chassi);
+					
+					//Se não existir o veículo, gravar a inconsistência
+					if(veiculos.size() == 0) {
+						msgErro += "Veiculo " + chassi + " não existe!;";
+						InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, msgErro, null);
+					} else {
+						av.setVeiculo(veiculos.get(0));
+						
+						if (!msgErro.isEmpty()) {
+							throw new Exception(msgErro);
+						}
+						if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av).size() > 0) {
+							//Ja existe essa avaria
+							continue;
+						}
+		
+						avariaService.salvarAvaria(av, true);
+					}
+				}catch(Exception e) {
+					avariaService.salvarInconsistenciaImportAvaria(av, e.getMessage(), null);
 				}
-			}catch(Exception e) {
-				avariaService.salvarInconsistenciaImportAvaria(av, e.getMessage(), null);
 			}
 		}
 	}
@@ -138,16 +158,15 @@ public class ImportacaoSinistro {
 		}
 	}
 	
-	private String verificaInconsistencias(Avaria av, String[] campos) {
+	private String verificaInconsistencias(Avaria av, String[] campos, String tipoAvaria, String localAvaria) {
 		String msgErro = "";
 		
 		if (av.getTipo() == null)
-			msgErro += "Tipo " + campos[9].trim() + " não existe;";
+			msgErro += "Tipo " + tipoAvaria + " não existe;";
 		
 		if (av.getLocal() == null)
-			msgErro += "Local " + campos[13].trim() + " não existe;";
+			msgErro += "Local " + localAvaria + " não existe;";
 		
 		return msgErro;
 	}
-
 }

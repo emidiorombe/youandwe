@@ -25,10 +25,10 @@ import br.com.promove.utils.FileUtils;
  *
  */
 public class ImportacaoService {
-	public void importAvaria(String xml) throws PromoveException {
+	public void importAvaria(String xml, String nomeArquivo) throws PromoveException {
 		try {
 			ImportacaoAvaria import_avaria = new ImportacaoAvaria();
-			import_avaria.importar(xml);
+			import_avaria.importar(xml, nomeArquivo);
 		}catch(DocumentException de) {
 			throw new PromoveException(de);
 		} catch (ParseException e) {
@@ -36,7 +36,7 @@ public class ImportacaoService {
 		}
 	}
 
-	public void importSinistro(String csv, Usuario user) throws PromoveException {
+	public void importSinistro(String csv, Usuario user, String nomeArquivo) throws PromoveException {
 		ImportacaoSinistro import_sinistro = new ImportacaoSinistro();
 		List<String> linhas = new ArrayList<String>();
 		
@@ -48,14 +48,14 @@ public class ImportacaoService {
 			throw new PromoveException("Arquivo vazio");
 		}
 		
-		String[] cabecalho = linhas.get(9).replaceAll("\r", ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;").split(";");
+		String[] cabecalho = linhas.get(9).replaceAll("\r", ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;").split(";");
 		
-		if (!cabecalho[10].toUpperCase().trim().equals("Chassi") || 
-				!cabecalho[37].toUpperCase().trim().equals("Data Faturamento Autorizado")) {
+		if (!cabecalho[10].toUpperCase().trim().equals("CHASSI") || 
+				!cabecalho[37].toUpperCase().trim().equals("DATA FATURAMENTO AUTORIZADO")) {
 			throw new PromoveException("Arquivo inválido");
 		}
 		
-		import_sinistro.importar(linhas, user);
+		import_sinistro.importar(linhas, user, nomeArquivo);
 	}
 
 	public void importVeiculosNacionais(String csv) throws PromoveException {
@@ -114,7 +114,7 @@ public class ImportacaoService {
 		
 		for (Map.Entry<String, Document> doc : xmls.entrySet()) {
 			try {
-				importAvaria(doc.getValue().asXML());
+				importAvaria(doc.getValue().asXML(), doc.getKey());
 				FileUtils.moverXML(destino+doc.getKey(), doc.getValue());
 				FileUtils.removeXML(origem+doc.getKey());
 				lista.append(doc.getKey() + ";");

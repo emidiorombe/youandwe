@@ -3,24 +3,17 @@ package br.com.promove.view;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.util.Map;
 
 import br.com.promove.application.PromoveApplication;
 import br.com.promove.entity.Usuario;
 import br.com.promove.exception.PromoveException;
-import br.com.promove.service.AvariaService;
-import br.com.promove.service.CadastroService;
 import br.com.promove.service.ImportacaoService;
 import br.com.promove.service.ServiceFactory;
-import br.com.promove.utils.Config;
-import br.com.promove.utils.DateUtils;
-import br.com.promove.utils.EmailUtils;
 import br.com.promove.view.form.BaseForm;
 
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -37,17 +30,14 @@ import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
 import com.vaadin.ui.VerticalLayout;
 
-public class ImportSinistroView extends BaseForm implements Serializable{
+public class ImportSinistroView extends BaseForm implements Serializable {
 	private VerticalLayout layout = new VerticalLayout();
 	private Label state = new Label();
 	private Label fileName = new Label();
 	private Label textualProgress = new Label();
 	private Button cancelProcessing;
-	private Button import_from_server;
 	private ByteArrayOutputStream file = new ByteArrayOutputStream();
 	private ImportacaoService importService;
-	private AvariaService avariaService;
-	private CadastroService cadastroService;
 
 	private ProgressIndicator pi = new ProgressIndicator();
 
@@ -58,8 +48,6 @@ public class ImportSinistroView extends BaseForm implements Serializable{
 		this.app = app;
 		buildLayout();
 		importService = ServiceFactory.getService(ImportacaoService.class);
-		avariaService = ServiceFactory.getService(AvariaService.class);
-		cadastroService = ServiceFactory.getService(CadastroService.class);
 	}
 
 	private void buildLayout() {
@@ -86,11 +74,11 @@ public class ImportSinistroView extends BaseForm implements Serializable{
 
         Panel p = createStatusPanel(cancelProcessing);
 
+        layout.addComponent(p);
         upload.addListener(new UploadStartListener(this));
         upload.addListener(new UploadProgressListener(this));
         upload.addListener(new UploadSucessListener(this));
         upload.addListener(new UploadFailedListener(this));
-
 	}
 
 	private Panel createStatusPanel(final Button cancelProcessing) {
@@ -195,9 +183,11 @@ public class ImportSinistroView extends BaseForm implements Serializable{
 				cancelProcessing.setVisible(false);
 				state.setValue("Recebido...");
 				pi.setValue(100f);
-				importService.importSinistro(new String(file.toByteArray()), user);
+				importService.importSinistro(new String(file.toByteArray()), user, fileName.getValue().toString());
+				
 				showSuccessMessage(view.getLayout(), "Arquivo importado com sucesso...");
 			}catch (PromoveException pe) {
+				pe.printStackTrace();
 				showErrorMessage(view, "Não foi possivel importar o arquivo de Sinistros.");
 			}
 		}
