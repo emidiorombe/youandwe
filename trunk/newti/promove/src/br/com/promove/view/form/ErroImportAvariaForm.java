@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
+import br.com.promove.entity.Avaria;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
 import br.com.promove.entity.StatusAvaria;
@@ -156,13 +157,11 @@ public class ErroImportAvariaForm extends BaseForm {
 						}else
 							item.getBean().setVeiculo(v.get(0));
 
-						item.getBean().getAvaria().setStatus(avariaService.getById(StatusAvaria.class, 5));
 						avariaService.salvarAvaria(item.getBean().getAvaria());
 						avariaService.excluirInconsistenciaImportAvaria(item.getBean());
 						//view.getTable().reloadTable();
 						view.getTable().getContainer().removeItem(item.getBean());
 						showSuccessMessage(view, "Inconsistência salva!");
-						
 					}
 				}catch(InvalidValueException ive){
 					setValidationVisible(true);

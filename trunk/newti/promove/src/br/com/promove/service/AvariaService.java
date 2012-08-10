@@ -307,6 +307,7 @@ public class AvariaService implements Serializable {
 				if(list.size() > 0)
 					throw new IllegalArgumentException("Avaria já cadastrada");
 				
+				if (bean.getStatus() == null) bean.setStatus(this.getById(StatusAvaria.class, 5));
 				avariaDAO.save(bean);
 			}else {
 				avariaDAO.saveWithId(bean);

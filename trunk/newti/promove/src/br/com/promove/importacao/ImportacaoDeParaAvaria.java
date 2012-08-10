@@ -23,9 +23,12 @@ public class ImportacaoDeParaAvaria {
 			String chassiNovo = campos[1];
 			
 			//Tratar erro excel (converte texto para número ao salvar em CSV)
-			if(chassiAntigo.length() == 16 && chassiAntigo.substring(7, 16).equals("000000000")) chassiAntigo = "0" + chassiAntigo;
+			if (!chassiAntigo.trim().toUpperCase().equals("CHASSI")) {
+				if(chassiAntigo.length() == 16 && chassiAntigo.substring(7, 16).equals("000000000")) chassiAntigo = "0" + chassiAntigo;
+				if(chassiAntigo.length() == 7) chassiAntigo = "0" + chassiAntigo;
+			}
 			
-			if(chassiAntigo.length() != 17) continue;
+			if(chassiAntigo.length() != 17 && chassiAntigo.length() != 8) continue;
 			if(chassiNovo.length() != 17) continue;
 
 			for (InconsistenciaAvaria inc : avariaService.buscarInconsistenciaAvariaPorChassi(chassiAntigo)) {
