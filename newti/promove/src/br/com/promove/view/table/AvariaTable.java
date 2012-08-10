@@ -33,8 +33,8 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.Window;
 
 public class AvariaTable extends Table{
-	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "chassiOriginal", "modelo", "dataLancamento", "hora", "dataCadastro", "origem", "local", "tipo", "extensao", "nivel", "fotos", "clima", "usuario", "status", "observacao", "numeroSinistro", "dataSinistro", "notaFiscal", "numeroCtrc", "dnConcessionaria", "nomeConcessionaria", "arquivo"};
-	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Chassi Original", "Modelo", "Data Lanc.", "Hora", "Data Cad.", "Local", "Peça", "Tipo", "Extensão", "Nível", "Fotos", "Clima", "Usuário", "Status", "Obs", "Sinistro", "Data Sinistro", "Nota Fiscal", "CTRC", "DN", "Concessionária", "Arquivo"};
+	public static final Object[] NATURAL_COL_ORDER = new Object[] {"id", "veiculo", "chassiOriginal", "arquivo", "modelo", "dataLancamento", "hora", "dataCadastro", "origem", "local", "tipo", "extensao", "nivel", "fotos", "clima", "usuario", "status", "observacao", "numeroSinistro", "dataSinistro", "notaFiscal", "numeroCtrc", "dnConcessionaria", "nomeConcessionaria", "arquivo"};
+	public static final String[] COL_HEADERS = new String[] {"ID", "Chassi", "Chassi Original", "Arquivo", "Modelo", "Data Lanc.", "Hora", "Data Cad.", "Local", "Peça", "Tipo", "Extensão", "Nível", "Fotos", "Clima", "Usuário", "Status", "Obs", "Sinistro", "Data Sinistro", "Nota Fiscal", "CTRC", "DN", "Concessionária", "Arquivo"};
 	
 	private AvariaService avariaService;
 	private AvariaTableContainer container;
@@ -80,6 +80,7 @@ public class AvariaTable extends Table{
 		
 		try {
 			setColumnCollapsed("chassiOriginal", true);
+			setColumnCollapsed("arquivo", true);
 			setColumnCollapsed("hora", true);
 			setColumnCollapsed("dataCadastro", true);
 			setColumnCollapsed("extensao", true);
