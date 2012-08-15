@@ -139,11 +139,13 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		
 		if (posterior) {
 			hql.append(" and (tp.movimentacao = true");
-			hql.append(" or (select max(av2.origem.codigo) from Avaria av2");
+			//hql.append(" or (select max(av2.origem.codigo) from Avaria av2");
+			hql.append(" or (select max(av2.dataLancamento) from Avaria av2");
 			hql.append(" where av2.veiculo = av.veiculo");
 			hql.append(" and av2.local = av.local");
 			hql.append(" and av2.tipo = av.tipo)");
-			hql.append(" = (select max(av3.origem.codigo) from Avaria av3");
+			//hql.append(" = (select max(av3.origem.codigo) from Avaria av3");
+			hql.append(" = (select max(av3.dataLancamento) from Avaria av3");
 			hql.append(" where av3.veiculo = av.veiculo))");
 		}
 		
@@ -175,14 +177,15 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			hql.append("not exists (select av2 from Avaria av2");
 			hql.append(" where av2.veiculo = av.veiculo");
 			hql.append(" and av2.tipo.id = av.tipo.id and av2.local.id = av.local.id");
-			hql.append(" and av2.origem.codigo < av.origem.codigo))");
+			//hql.append(" and av2.origem.codigo < av.origem.codigo))");
+			hql.append(" and av2.dataLancamento < av.dataLancamento))");
 		}
 
 		hql.append(" order by av.origem.codigo, av.dataLancamento");
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
 
-	public List<Avaria> getAvariasDuplicadasPorFiltro(List<Veiculo> veiculos,Avaria av) throws DAOException{
+	public List<Avaria> getAvariasDuplicadasPorFiltro(List<Veiculo> veiculos, Avaria av) throws DAOException {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select av from Avaria av left join fetch av.veiculo veic ");
 		hql.append(" where veic.chassi in (:listchassi) ");
@@ -207,11 +210,13 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		hql.append(" and av.tipo = :tpAv ");
 		hql.append(" and av.local = :lcAv ");
 		hql.append(" and av.origem = :orAv ");
+		hql.append(" and av.dataLancamento = :dataAv ");
 
 		addParamToQuery("txtchassi", veiculo.getChassi());
 		addParamToQuery("tpAv", av.getTipo());
 		addParamToQuery("lcAv", av.getLocal());
 		addParamToQuery("orAv", av.getOrigem());
+		addParamToQuery("dataAv", av.getDataLancamento());
 		
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 	}
@@ -275,21 +280,25 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		if (oriFim != null && oriFim.getId() != null)
 			sql.append(" and origemavaria.codigo <= " + oriFim.getCodigo().toString());
 		
-		sql.append(" and not exists (select * from avaria av2, origemavaria ori2");
-		sql.append(" where av2.origem_id = ori2.id");
-		sql.append(" and av2.veiculo_id = avaria.veiculo_id");
+		//sql.append(" and not exists (select * from avaria av2, origemavaria ori2");
+		sql.append(" and not exists (select * from avaria av2");
+		sql.append(" where av2.veiculo_id = avaria.veiculo_id");
+		//sql.append(" av2.origem_id = ori2.id");
 		sql.append(" and av2.tipo_id = avaria.tipo_id and av2.local_id = avaria.local_id");
-		sql.append(" and ori2.codigo < origemavaria.codigo)");
+		//sql.append(" and ori2.codigo < origemavaria.codigo)");
+		sql.append(" and av2.dataLancamento < avaria.dataLancamento)");
 		
 		if (posterior) {
-			sql.append(" and (select max(ori2.codigo) from avaria av2, origemavaria ori2");
-			sql.append(" where av2.origem_id = ori2.id");
-			sql.append(" and av2.veiculo_id = avaria.veiculo_id");
+			//sql.append(" and (select max(ori2.codigo) from avaria av2, origemavaria ori2");
+			sql.append(" and (select max(av2.dataLancamento) from avaria av2");
+			sql.append(" where av2.veiculo_id = avaria.veiculo_id");
+			//sql.append(" and av2.origem_id = ori2.id");
 			sql.append(" and av2.local_id = avaria.local_id");
 			sql.append(" and av2.tipo_id = avaria.tipo_id)");
-			sql.append(" = (select max(ori3.codigo) from avaria av3, origemavaria ori3");
-			sql.append(" where av3.origem_id = ori3.id");
-			sql.append(" and av3.veiculo_id = avaria.veiculo_id)");
+			//sql.append(" = (select max(ori3.codigo) from avaria av3, origemavaria ori3");
+			sql.append(" = (select max(av3.dataLancamento) from avaria av3");
+			sql.append(" where av3.veiculo_id = avaria.veiculo_id)");
+			//sql.append(" and av3.origem_id = ori3.id");
 		}
 		
 		if (!cancelados) {
