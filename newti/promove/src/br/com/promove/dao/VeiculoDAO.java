@@ -351,14 +351,22 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			subsqlA.append(" and avaria.origem_id = origemavaria.id)");
 			
 			if (posterior) {
-				subsqlA.append(" and (select max(ori2.codigo) from avaria av2, origemavaria ori2");
+				subsqlA.append(" and (select max(av2.dataLancamento) from avaria av2, origemavaria ori2");
 				subsqlA.append(" where av2.origem_id = ori2.id");
 				subsqlA.append(" and av2.veiculo_id = avaria.veiculo_id");
 				subsqlA.append(" and av2.local_id = avaria.local_id");
-				subsqlA.append(" and av2.tipo_id = avaria.tipo_id)");
-				subsqlA.append(" = (select max(ori3.codigo) from avaria av3, origemavaria ori3");
+				subsqlA.append(" and av2.tipo_id = avaria.tipo_id");
+				subsqlA.append(" and ori2.codigo = (select max(ori2a.codigo) from avaria av2a, origemavaria ori2a");
+				subsqlA.append(" where av2a.origem_id = ori2a.id");
+				subsqlA.append(" and av2a.veiculo_id = avaria.veiculo_id");
+				subsqlA.append(" and av2a.local_id = avaria.local_id");
+				subsqlA.append(" and av2a.tipo_id = avaria.tipo_id))");
+				subsqlA.append(" = (select max(av3.dataLancamento) from avaria av3, origemavaria ori3");
 				subsqlA.append(" where av3.origem_id = ori3.id");
 				subsqlA.append(" and av3.veiculo_id = avaria.veiculo_id)");
+				subsqlA.append(" and ori3.codigo = (select max(ori3a.codigo) from avaria av3a, origemavaria ori3a");
+				subsqlA.append(" where av3a.origem_id = ori3a.id");
+				subsqlA.append(" and av3a.veiculo_id = avaria.veiculo_id))");
 			}
 			
 			if (!cancelados) {
