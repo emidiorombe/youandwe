@@ -351,16 +351,14 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			subsqlA.append(" and avaria.origem_id = origemavaria.id)");
 			
 			if (posterior) {
-				//subsqlA.append(" and (select max(ori2.codigo) from avaria av2, origemavaria ori2");
-				subsqlA.append(" and (select max(av2.dataLancamento) from avaria av2");
-				subsqlA.append(" where av2.veiculo_id = avaria.veiculo_id");
-				//subsqlA.append(" and av2.origem_id = ori2.id");
+				subsqlA.append(" and (select max(ori2.codigo) from avaria av2, origemavaria ori2");
+				subsqlA.append(" where av2.origem_id = ori2.id");
+				subsqlA.append(" and av2.veiculo_id = avaria.veiculo_id");
 				subsqlA.append(" and av2.local_id = avaria.local_id");
 				subsqlA.append(" and av2.tipo_id = avaria.tipo_id)");
-				//subsqlA.append(" = (select max(ori3.codigo) from avaria av3, origemavaria ori3");
-				subsqlA.append(" = (select max(av3.dataLancamento) from avaria av3");
-				subsqlA.append(" where av3.veiculo_id = avaria.veiculo_id)");
-				//subsqlA.append(" and av3.origem_id = ori3.id");
+				subsqlA.append(" = (select max(ori3.codigo) from avaria av3, origemavaria ori3");
+				subsqlA.append(" where av3.origem_id = ori3.id");
+				subsqlA.append(" and av3.veiculo_id = avaria.veiculo_id)");
 			}
 			
 			if (!cancelados) {
@@ -386,13 +384,13 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		sql.append("select item, tipo, cast(count(*) as integer) from (");
 		if (item.equals("origemavaria")) {
 			StringBuilder subsqlC = new StringBuilder();
-			//subsqlC.append(" and not exists (select av2.id from avaria av2, origemavaria ori2");
-			subsqlC.append(" and not exists (select av2.id from avaria av2");
-			subsqlC.append(" where av2.veiculo_id = avaria.veiculo_id");
-			//subsqlC.append(" and av2.origem_id = ori2.id");
+			subsqlC.append(" and not exists (select av2.id from avaria av2, origemavaria ori2");
+			subsqlC.append(" where av2.origem_id = ori2.id");
+			subsqlC.append(" and av2.veiculo_id = avaria.veiculo_id");
 			subsqlC.append(" and av2.tipo_id = avaria.tipo_id and av2.local_id = avaria.local_id");
-			//subsqlC.append(" and ori2.codigo < origemavaria.codigo)");
-			subsqlC.append(" and av2.dataLancamento < avaria.dataLancamento)");
+			subsqlC.append(" and (ori2.codigo < origemavaria.codigo");
+			subsqlC.append("      or (ori2.codigo = origemavaria.codigo");
+			subsqlC.append("          and av2.dataLancamento < avaria.dataLancamento)))");
 			
 			sql.append(subsqlA.toString().replaceAll(":tipo", "Avariados").replaceAll(":opcao", "true" + subsqlC.toString()));
 			sql.append(" UNION ALL");
