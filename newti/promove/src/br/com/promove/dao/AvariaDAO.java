@@ -307,7 +307,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			sql.append(" and av2a.veiculo_id = avaria.veiculo_id");
 			sql.append(" and av2a.local_id = avaria.local_id");
 			sql.append(" and av2a.tipo_id = avaria.tipo_id)");
-			sql.append(" = (select max(ori3.codigo) from avaria av3a, origemavaria ori3a");
+			sql.append(" = (select max(ori3a.codigo) from avaria av3a, origemavaria ori3a");
 			sql.append(" where av3a.origem_id = ori3a.id");
 			sql.append(" and av3a.veiculo_id = avaria.veiculo_id)");
 			
@@ -324,7 +324,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			sql.append(" = (select max(av3.dataLancamento) from avaria av3, origemavaria ori3");
 			sql.append(" where av3.origem_id = ori3.id");
 			sql.append(" and av3.veiculo_id = avaria.veiculo_id");
-			sql.append(" and ori3.codigo = (select max(ori3.codigo) from avaria av3a, origemavaria ori3a");
+			sql.append(" and ori3.codigo = (select max(ori3a.codigo) from avaria av3a, origemavaria ori3a");
 			sql.append(" where av3a.origem_id = ori3a.id");
 			sql.append(" and av3a.veiculo_id = avaria.veiculo_id))");
 		}
