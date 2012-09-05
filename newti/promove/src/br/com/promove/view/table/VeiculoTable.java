@@ -9,6 +9,7 @@ import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.view.AuditoriaVistoriasTables;
 import br.com.promove.view.VeiculoAvariaTables;
 import br.com.promove.view.form.VeiculoForm;
 
@@ -167,7 +168,8 @@ public class VeiculoTable extends Table {
 			Property property = event.getProperty();
 			BeanItem<Veiculo> item = (BeanItem<Veiculo>) getItem(getValue());
 			view.getTableAvaria().filterTable(item.getBean());
-			view.getView().getForm().setVeiculo(item.getBean());
+			if (!(view instanceof AuditoriaVistoriasTables))
+				view.getView().getForm().setVeiculo(item.getBean());
 		}
 	}
 	

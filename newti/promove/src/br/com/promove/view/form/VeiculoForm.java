@@ -9,6 +9,7 @@ import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.DateUtils;
 import br.com.promove.utils.StringUtilities;
 
 import com.vaadin.data.Item;
@@ -28,8 +29,6 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-
-
 
 public class VeiculoForm extends BaseForm{
 	private VerticalLayout form_layout = new VerticalLayout();
@@ -207,6 +206,9 @@ public class VeiculoForm extends BaseForm{
 					if(isValid()){
 						commit();
 						BeanItem<Veiculo> item = (BeanItem<Veiculo>) getItemDataSource();
+						
+						item.getBean().setDataLancamento(DateUtils.montarDataInicialParaSQLQuery(item.getBean().getDataLancamento()));
+						
 						cadastroService.salvarVeiculo(item.getBean());
 						addNewVeiculo();
 						showSuccessMessage(form, "Veiculo salvo!");

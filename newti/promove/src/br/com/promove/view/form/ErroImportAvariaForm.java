@@ -63,6 +63,7 @@ public class ErroImportAvariaForm extends BaseForm {
 	
 	private Button save;
 	private Button saveAll;
+	private Button saveDupl;
 	private Button remove;
 	private Button export;
 	private Upload depara = new Upload(null, new ImportDeparaUploader(this));
@@ -84,7 +85,8 @@ public class ErroImportAvariaForm extends BaseForm {
 
 		save = new Button("Salvar", new ErroAvariaFormListener());
 		remove = new Button("Excluir", new ErroAvariaFormListener());
-		saveAll = new Button("Revalidar Todos", new ErroAvariaFormListener());
+		saveAll = new Button("Revalidar Inconsistencias", new ErroAvariaFormListener());
+		saveDupl = new Button("Revalidar Duplicidades", new ErroAvariaFormListener());
 		export = new Button("Exportar Lista", new ErroAvariaFormListener());
 		depara.setImmediate(true);
         depara.setButtonCaption("Importar De/Para...");
@@ -127,6 +129,7 @@ public class ErroImportAvariaForm extends BaseForm {
 		if(user.getTipo().getId() == 1 || user.getTipo().getId() == 2)
 			footer.addComponent(remove);
 		footer.addComponent(saveAll);
+		footer.addComponent(saveDupl);
 		footer.addComponent(export);
 		footer.addComponent(depara);
 		footer.setVisible(true);
@@ -201,7 +204,36 @@ public class ErroImportAvariaForm extends BaseForm {
 						}
 						
 						if (inc.getTipo() != null && inc.getLocal() != null) {
-							avariaService.salvarAvariaDeInconsistencias(inc);
+							avariaService.salvarAvariaDeInconsistencias(inc, true);
+						}
+					}
+					view.getTable().reloadTable();
+					showSuccessMessage(view, "Inconsistências salvas!");
+
+				}catch(InvalidValueException ive){
+					setValidationVisible(true);
+				}catch(PromoveException de){
+					showErrorMessage(view, "Não foi possível salvar Inconsistências");
+				}
+			}else if(event.getButton() == saveDupl) {
+				try {
+					loadTipos();
+					loadLocais();
+					
+					List<InconsistenciaAvaria> lista = avariaService.buscarTodasInconsistenciasAvaria();
+					for (InconsistenciaAvaria inc : lista) {
+						if (inc.getTipo() == null) {
+							String tipoAvaria = StringUtilities.getValueFromErrorMessage(inc.getMsgErro(), "Tipo");
+							inc.setTipo(tiposDescricao.get(tipoAvaria));
+						}
+						
+						if (inc.getLocal() == null) {
+							String localAvaria = StringUtilities.getValueFromErrorMessage(inc.getMsgErro(), "Local");
+							inc.setLocal(locaisDescricao.get(localAvaria));
+						}
+						
+						if (inc.getTipo() != null && inc.getLocal() != null) {
+							avariaService.salvarAvariaDeInconsistencias(inc, false);
 						}
 					}
 					view.getTable().reloadTable();

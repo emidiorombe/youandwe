@@ -33,7 +33,7 @@ public class ImportacaoDeParaAvaria {
 
 			for (InconsistenciaAvaria inc : avariaService.buscarInconsistenciaAvariaPorChassi(chassiAntigo)) {
 				inc.setChassiInvalido(chassiNovo);
-				avariaService.salvarAvariaDeInconsistencias(inc);
+				avariaService.salvarAvariaDeInconsistencias(inc, true);
 			}
 		}
 	}

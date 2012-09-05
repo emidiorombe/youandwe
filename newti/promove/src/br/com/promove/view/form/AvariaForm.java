@@ -17,6 +17,7 @@ import br.com.promove.exception.PromoveException;
 import br.com.promove.service.AvariaService;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.DateUtils;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator.InvalidValueException;
@@ -316,6 +317,8 @@ public class AvariaForm extends BaseForm {
 								item.getBean().setStatus(avariaService.getById(StatusAvaria.class, 2));
 							}
 						}
+						
+						item.getBean().setDataLancamento(DateUtils.montarDataInicialParaSQLQuery(item.getBean().getDataLancamento()));
 						
 						avariaService.salvarAvaria(item.getBean());
 						addNewAvaria();
