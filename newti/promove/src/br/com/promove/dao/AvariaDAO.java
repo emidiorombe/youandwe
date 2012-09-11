@@ -118,6 +118,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		if (vistoriaFinal && oriAte != null && oriAte.getId() != null) {
 			hql.append(" and exists (select av2 from Avaria av2");
 			hql.append(" where av2.veiculo = av.veiculo");
+			hql.append(" and av2.status.id <> 3");
 			if(de != null && !de.equals("") && ate != null && !ate.equals("")) {
 				if(periodo == 1) hql.append(" and av2.dataLancamento between :dtIni and :dtFim");
 				if(periodo == 2) hql.append(" and av2.dataCadastro between :dtIni and :dtFim");
@@ -142,23 +143,29 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			
 			hql.append(" or ( (select max(av2a.origem.codigo) from Avaria av2a");
 			hql.append(" where av2a.veiculo = av.veiculo");
+			hql.append(" and av2a.status.id <> 3");
 			hql.append(" and av2a.local = av.local");
 			hql.append(" and av2a.tipo = av.tipo)");
 			hql.append(" = (select max(av3a.origem.codigo) from Avaria av3a");
-			hql.append(" where av3a.veiculo = av.veiculo)");
+			hql.append(" where av3a.veiculo = av.veiculo");
+			hql.append(" and av3a.status.id <> 3)");
 			
 			hql.append(" and (select max(av2.dataLancamento) from Avaria av2");
 			hql.append(" where av2.veiculo = av.veiculo");
+			hql.append(" and av2.status.id <> 3");
 			hql.append(" and av2.local = av.local");
 			hql.append(" and av2.tipo = av.tipo");
 			hql.append(" and av2.origem.codigo = (select max(av2a.origem.codigo) from Avaria av2a");
 			hql.append(" where av2a.veiculo = av.veiculo");
+			hql.append(" and av2a.status.id <> 3");
 			hql.append(" and av2a.local = av.local");
 			hql.append(" and av2a.tipo = av.tipo))");
 			hql.append(" = (select max(av3.dataLancamento) from Avaria av3");
 			hql.append(" where av3.veiculo = av.veiculo");
+			hql.append(" and av3.status.id <> 3");
 			hql.append(" and av3.origem.codigo = (select max(av3a.origem.codigo) from Avaria av3a");
-			hql.append(" where av3a.veiculo = av.veiculo)) ))");
+			hql.append(" where av3a.veiculo = av.veiculo");
+			hql.append(" and av3a.status.id <> 3)) ))");
 		}
 		
 		if (!cancelados) {
@@ -188,6 +195,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			//if(!movimentacao) hql.append("tp.movimentacao = true or ");
 			//hql.append("not exists (select av2 from Avaria av2");
 			//hql.append(" where av2.veiculo = av.veiculo");
+			//hql.append(" and av2.status.id <> 3");
 			//hql.append(" and av2.tipo = av.tipo and av2.local = av.local");
 			//hql.append(" and av2.origem.codigo <= ori.codigo");
 			//hql.append(" and (av2.origem.codigo < ori.codigo");
@@ -197,11 +205,13 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			
 			hql.append(" or ( ori.codigo = (select min(av2.origem.codigo) from Avaria av2");
 			hql.append(" where av2.veiculo = av.veiculo");
+			hql.append(" and av2.status.id <> 3");
 			hql.append(" and av2.local = av.local");
 			hql.append(" and av2.tipo = av.tipo)");
 			
 			hql.append(" and av.dataLancamento = (select min(av2.dataLancamento) from Avaria av2");
 			hql.append(" where av2.veiculo = av.veiculo");
+			hql.append(" and av2.status.id <> 3");
 			hql.append(" and av2.local = av.local");
 			hql.append(" and av2.tipo = av.tipo");
 			hql.append(" and av2.origem.codigo = ori.codigo) ))");
@@ -337,6 +347,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		sql.append(" and not exists (select * from avaria av2, origemavaria ori2");
 		sql.append(" where av2.origem_id = ori2.id");
 		sql.append(" and av2.veiculo_id = avaria.veiculo_id");
+		sql.append(" and av2.status_id <> 3");
 		sql.append(" and av2.tipo_id = avaria.tipo_id and av2.local_id = avaria.local_id");
 		sql.append(" and (ori2.codigo < origemavaria.codigo");
 		sql.append("      or (ori2.codigo = origemavaria.codigo");
@@ -347,12 +358,14 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			sql.append(" from avaria av2, origemavaria ori2");
 			sql.append(" where av2.origem_id = ori2.id");
 			sql.append(" and av2.veiculo_id = avaria.veiculo_id");
+			sql.append(" and av2.status_id <> 3");
 			sql.append(" and av2.local_id = avaria.local_id");
 			sql.append(" and av2.tipo_id = avaria.tipo_id)");
 			sql.append(" = (select max(to_char(ori3.codigo, '000000')||to_char(av3.dataLancamento,'yyyymmdd'))");
 			sql.append(" from avaria av3, origemavaria ori3");
 			sql.append(" where av3.origem_id = ori3.id");
-			sql.append(" and av3.veiculo_id = avaria.veiculo_id)");
+			sql.append(" and av3.veiculo_id = avaria.veiculo_id");
+			sql.append(" and av2.status_id <> 3)");
 		}
 		
 		if (!cancelados) {
