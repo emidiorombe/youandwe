@@ -337,6 +337,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		if (!item.equals("origemavaria")) {
 			subsqlA.append(" and :existe (select avaria.id from avaria, tipoavaria, origemavaria");
 			subsqlA.append(" where veiculo.id = avaria.veiculo_id");
+			subsqlA.append(" and avaria.status_id <> 3");
 			subsqlA.append(" and avaria.tipo_id = tipoavaria.id");
 			subsqlA.append(" and tipoavaria.movimentacao = false");
 			if ((periodo == 1 || periodo == 2) && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
@@ -355,12 +356,14 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 				subsqlA.append(" from avaria av2, origemavaria ori2");
 				subsqlA.append(" where av2.origem_id = ori2.id");
 				subsqlA.append(" and av2.veiculo_id = avaria.veiculo_id");
+				subsqlA.append(" and av2.status_id <> 3");
 				subsqlA.append(" and av2.local_id = avaria.local_id");
 				subsqlA.append(" and av2.tipo_id = avaria.tipo_id)");
 				subsqlA.append(" = (select max(to_char(ori3.codigo, '000000')||to_char(av3.dataLancamento,'yyyymmdd'))");
 				subsqlA.append(" from avaria av3a, origemavaria ori3a");
 				subsqlA.append(" where av3.origem_id = ori3.id");
-				subsqlA.append(" and av3.veiculo_id = avaria.veiculo_id)");
+				subsqlA.append(" and av3.veiculo_id = avaria.veiculo_id");
+				subsqlA.append(" and av2.status_id <> 3)");
 			}
 			
 			if (!cancelados) {
@@ -372,6 +375,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		
 		subsqlB.append(" and :existe (select avaria.id from avaria, origemavaria");
 		subsqlB.append(" where veiculo.id = avaria.veiculo_id");
+		subsqlB.append(" and av2.status_id <> 3");
 		if(periodo != 3 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
 			subsqlB.append(" and " + (periodo == 1 ? "avaria.dataLancamento" : "avaria.dataCadastro"));
 			subsqlB.append(" between '" + dtInicio + "'");
@@ -389,6 +393,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			subsqlC.append(" and not exists (select av2.id from avaria av2, origemavaria ori2");
 			subsqlC.append(" where av2.origem_id = ori2.id");
 			subsqlC.append(" and av2.veiculo_id = avaria.veiculo_id");
+			subsqlC.append(" and av2.status_id <> 3");
 			subsqlC.append(" and av2.tipo_id = avaria.tipo_id and av2.local_id = avaria.local_id");
 			subsqlC.append(" and (ori2.codigo < origemavaria.codigo");
 			subsqlC.append("      or (ori2.codigo = origemavaria.codigo");
