@@ -375,10 +375,10 @@ public class AvariaService implements Serializable {
 		return lista;
 	}
 
-	public List<Avaria> buscarAvariaDuplicadaPorFiltros(List<Veiculo> veiculos,	Avaria av, Boolean consideraData) throws PromoveException {
+	public List<Avaria> buscarAvariaDuplicadaPorFiltros(List<Veiculo> veiculos,	Avaria av) throws PromoveException {
 		List<Avaria> lista = null;
 		try {
-			lista = avariaDAO.getAvariasDuplicadasPorFiltro(veiculos, av, consideraData);
+			lista = avariaDAO.getAvariasDuplicadasPorFiltro(veiculos, av);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -388,7 +388,27 @@ public class AvariaService implements Serializable {
 	public List<Avaria> buscarAvariaDuplicadaPorFiltros(Veiculo veiculo, Avaria av) throws PromoveException {
 		List<Avaria> lista = null;
 		try {
-			lista = avariaDAO.getAvariasDuplicadasPorFiltro(veiculo, av, true);
+			lista = avariaDAO.getAvariasDuplicadasPorFiltro(veiculo, av);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+
+	public List<Avaria> buscarAvariaDuplicadaPorData(List<Veiculo> veiculos,	Avaria av) throws PromoveException {
+		List<Avaria> lista = null;
+		try {
+			lista = avariaDAO.getAvariasDuplicadasPorData(veiculos, av);
+		} catch (DAOException e) {
+			throw new PromoveException(e);
+		}
+		return lista;
+	}
+	
+	public List<Avaria> buscarAvariaDuplicadaPorData(Veiculo veiculo, Avaria av) throws PromoveException {
+		List<Avaria> lista = null;
+		try {
+			lista = avariaDAO.getAvariasDuplicadasPorData(veiculo, av);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
@@ -466,7 +486,7 @@ public class AvariaService implements Serializable {
 		
 	}
 
-	public void salvarAvariaDeInconsistencias(InconsistenciaAvaria inc, Boolean consideraData) throws PromoveException {
+	public void salvarAvariaDeInconsistencias(InconsistenciaAvaria inc, Boolean verificaData) throws PromoveException {
 		try {
 			Avaria avaria = inc.getAvaria();
 			List<Veiculo> list = null;
@@ -476,22 +496,27 @@ public class AvariaService implements Serializable {
 			if (chassi.contains("000000000")) {
 				chassi = chassi.replace("000000000", "");
 				list = veiculoDAO.getByModeloFZAndData(chassi, avaria.getDataLancamento());
-			}else {
+			} else {
 				list = veiculoDAO.getByChassi(chassi);
 			}
 			
 			if (list.size() > 0) {
-				if (buscarAvariaDuplicadaPorFiltros(list, avaria, consideraData).size() == 0) {
-					avaria.setStatus(this.getById(StatusAvaria.class, 5));
-					avaria.setVeiculo(list.get(0));
-					avariaDAO.save(avaria);
-					List<FotoAvaria> fotos = fotoDAO.getByInconsistencia(inc.getId());
-					for (FotoAvaria foto : fotos) {
-						foto.setAvaria(avaria);
-						fotoDAO.saveWithId(foto);
+				if (verificaData && this.buscarAvariaDuplicadaPorData(list, avaria).size() > 0) {
+					inc.setMsgErro("Existe vistoria em outra data!;");
+					inconsistenciaAvariaDAO.save(inc);
+				} else {
+					if (buscarAvariaDuplicadaPorFiltros(list, avaria).size() == 0) {
+						avaria.setStatus(this.getById(StatusAvaria.class, 5));
+						avaria.setVeiculo(list.get(0));
+						avariaDAO.save(avaria);
+						List<FotoAvaria> fotos = fotoDAO.getByInconsistencia(inc.getId());
+						for (FotoAvaria foto : fotos) {
+							foto.setAvaria(avaria);
+							fotoDAO.saveWithId(foto);
+						}
 					}
+					inconsistenciaAvariaDAO.delete(inc);
 				}
-				inconsistenciaAvariaDAO.delete(inc);
 			}
 		} catch (DAOException e) {
 			throw new PromoveException(e);

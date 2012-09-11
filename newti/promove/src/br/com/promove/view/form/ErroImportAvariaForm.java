@@ -7,10 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import br.com.promove.application.PromoveApplication;
-import br.com.promove.entity.Avaria;
 import br.com.promove.entity.InconsistenciaAvaria;
 import br.com.promove.entity.LocalAvaria;
-import br.com.promove.entity.StatusAvaria;
 import br.com.promove.entity.TipoAvaria;
 import br.com.promove.entity.Usuario;
 import br.com.promove.entity.Veiculo;
@@ -407,5 +405,4 @@ public class ErroImportAvariaForm extends BaseForm {
 			locaisDescricao.put(local.getDescricaoSeguradora(), local);
 		}
 	}
-	
 }
