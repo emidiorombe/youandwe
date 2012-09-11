@@ -177,7 +177,11 @@ public class ImportacaoAvaria {
 						throw new Exception(msgErro);
 					}
 					
-					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av, false).size() > 0) {
+					if(avariaService.buscarAvariaDuplicadaPorData(veiculos, av).size() > 0) {
+						throw new Exception("Existe vistoria em outra data!;");
+					}
+					
+					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av).size() > 0) {
 						//Ja existe essa avaria
 						continue;
 					}
@@ -269,7 +273,7 @@ public class ImportacaoAvaria {
 						throw new Exception(msgErro);
 					}
 					
-					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av, false).size() > 0) {
+					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av).size() > 0) {
 						//Ja existe essa avaria
 						continue;
 					}
@@ -342,7 +346,7 @@ public class ImportacaoAvaria {
 						throw new Exception(msgErro);
 					}
 					
-					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av, false).size() > 0) {
+					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av).size() > 0) {
 						//Ja existe essa avaria
 						continue;
 					}
