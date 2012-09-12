@@ -365,7 +365,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			sql.append(" from avaria av3, origemavaria ori3");
 			sql.append(" where av3.origem_id = ori3.id");
 			sql.append(" and av3.veiculo_id = avaria.veiculo_id");
-			sql.append(" and av2.status_id <> 3)");
+			sql.append(" and av3.status_id <> 3)");
 		}
 		
 		if (!cancelados) {

@@ -360,10 +360,10 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 				subsqlA.append(" and av2.local_id = avaria.local_id");
 				subsqlA.append(" and av2.tipo_id = avaria.tipo_id)");
 				subsqlA.append(" = (select max(to_char(ori3.codigo, '000000')||to_char(av3.dataLancamento,'yyyymmdd'))");
-				subsqlA.append(" from avaria av3a, origemavaria ori3a");
+				subsqlA.append(" from avaria av3, origemavaria ori3");
 				subsqlA.append(" where av3.origem_id = ori3.id");
 				subsqlA.append(" and av3.veiculo_id = avaria.veiculo_id");
-				subsqlA.append(" and av2.status_id <> 3)");
+				subsqlA.append(" and av3.status_id <> 3)");
 			}
 			
 			if (!cancelados) {
@@ -375,7 +375,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		
 		subsqlB.append(" and :existe (select avaria.id from avaria, origemavaria");
 		subsqlB.append(" where veiculo.id = avaria.veiculo_id");
-		subsqlB.append(" and av2.status_id <> 3");
+		subsqlB.append(" and avaria.status_id <> 3");
 		if(periodo != 3 && dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
 			subsqlB.append(" and " + (periodo == 1 ? "avaria.dataLancamento" : "avaria.dataCadastro"));
 			subsqlB.append(" between '" + dtInicio + "'");
