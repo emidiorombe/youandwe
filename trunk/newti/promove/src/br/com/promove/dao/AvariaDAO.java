@@ -261,6 +261,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		StringBuilder hql = new StringBuilder();
 		hql.append("select av from Avaria av left join fetch av.veiculo veic ");
 		hql.append(" where veic.chassi in (:listchassi) ");
+		hql.append(" and av.status.id <> '3' ");
 		hql.append(" and av.origem = :orAv ");
 		hql.append(" and av.dataLancamento <> :dtLanc ");
 
@@ -275,6 +276,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		StringBuilder hql = new StringBuilder();
 		hql.append("select av from Avaria av left join fetch av.veiculo veic ");
 		hql.append(" where veic.chassi = :txtchassi ");
+		hql.append(" and av.status.id <> '3' ");
 		hql.append(" and av.origem = :orAv ");
 		hql.append(" and av.dataLancamento <> :dataAv ");
 

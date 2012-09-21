@@ -205,7 +205,7 @@ public class ImportAvariaView extends BaseForm implements Serializable{
 				importService.importAvaria(new String(file.toByteArray()), fileName.getValue().toString());
 				showSuccessMessage(view.getLayout(), "Arquivo importado com sucesso...");
 			}catch (PromoveException pe) {
-				showErrorMessage(view, "Não foi possivel importar o arquivo de Vistorias.");
+				showErrorMessage(view.getLayout(), "Não foi possivel importar o arquivo de Vistorias.");
 			}
 		}
 	}

@@ -77,10 +77,14 @@ public class VeiculoSearchForm extends BaseForm{
 		cmbPeriodo = new ComboBox("Período por");
 		cmbPeriodo.addContainerProperty("label", String.class, null);
 		
-		i = cmbPeriodo.addItem(3);
+		i = cmbPeriodo.addItem(1);
 		i.getItemProperty("label").setValue("Data do veículo");
-		i = cmbPeriodo.addItem(4);
+		i = cmbPeriodo.addItem(2);
 		i.getItemProperty("label").setValue("Data de registro do veículo");
+		i = cmbPeriodo.addItem(3);
+		i.getItemProperty("label").setValue("Data da vistoria");
+		i = cmbPeriodo.addItem(4);
+		i.getItemProperty("label").setValue("Data de registro da vistoria");
 		
 		cmbPeriodo.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		cmbPeriodo.setImmediate(true);
