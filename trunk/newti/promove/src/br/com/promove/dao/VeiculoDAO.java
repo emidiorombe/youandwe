@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.promove.entity.Avaria;
+import br.com.promove.entity.Fabricante;
 import br.com.promove.entity.OrigemAvaria;
 import br.com.promove.entity.PieData;
 import br.com.promove.entity.Veiculo;
@@ -25,13 +26,13 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		return executeQuery(hql.toString(), 0, Integer.MAX_VALUE);
 	}
 
-	public List<Veiculo> getByFilter(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo) throws DAOException {
-		return getByFilter(veiculo, dtInicio, dtFim, periodo, "v.chassi"); 
+	public List<Veiculo> getByFilter(Veiculo veiculo, Date dtInicio, Date dtFim, Fabricante fabricante, Integer periodo) throws DAOException {
+		return getByFilter(veiculo, dtInicio, dtFim, periodo, fabricante, "v.chassi"); 
 	}
 
-	public List<Veiculo> getByFilter(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, String sort) throws DAOException {
+	public List<Veiculo> getByFilter(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, Fabricante fabricante, String sort) throws DAOException {
 		StringBuilder hql = new StringBuilder();
-		hql.append("select v from Veiculo v left JOIN FETCH v.modelo mod");
+		hql.append("select v from Veiculo v left JOIN FETCH v.modelo mod left JOIN FETCH mod.fabricante fab");
 		hql.append(" where v.tipo.id <> 9");
 		
 		if(veiculo.getChassi() != null && !veiculo.getChassi().equals("")) {
@@ -42,9 +43,11 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		if(veiculo.getModelo() != null && veiculo.getModelo().getId() != null) {
 			hql.append(" and v.modelo = :txtmodelo");
 			addParamToQuery("txtmodelo", veiculo.getModelo());
-		} else if(veiculo.getModelo() != null && veiculo.getModelo().getFabricante() != null) {
-			hql.append(" and mod.fabricante = :txtfabricante");
-			addParamToQuery("txtfabricante", veiculo.getModelo().getFabricante());
+		}
+		
+		if(fabricante != null && fabricante.getId() != null) {
+			hql.append(" and mod.fabricante = :txtFabricante");
+			addParamToQuery("txtFabricante", fabricante);
 		}
 		
 		if(veiculo.getCor() != null && veiculo.getCor().getId() != null) {
