@@ -1,3 +1,4 @@
+/*
 package br.com.promove.service;
 
 import java.io.FileOutputStream;
@@ -44,11 +45,6 @@ import br.com.promove.exportacao.AvariasExport;
 import br.com.promove.exportacao.CadastrosBasicosExport;
 import br.com.promove.utils.Config;
 
-/**
- * 
- * @author Rafael Nunes
- *
- */
 public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	private UsuarioDAO usuarioDAO;
 	private LocalAvariaDAO localDAO;
@@ -666,3 +662,4 @@ public class ExportacaoServiceImpl implements ExportacaoService, Serializable{
 	}
 
 }
+*/

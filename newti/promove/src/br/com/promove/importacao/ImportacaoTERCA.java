@@ -11,6 +11,7 @@ import br.com.promove.entity.Veiculo;
 import br.com.promove.exception.PromoveException;
 import br.com.promove.service.CadastroService;
 import br.com.promove.service.ServiceFactory;
+import br.com.promove.utils.DateUtils;
 
 public class ImportacaoTERCA {
 
@@ -35,7 +36,7 @@ public class ImportacaoTERCA {
 				v.setCor(cadastroService.getById(Cor.class, new Integer(97)));
 				v.setTipo(cadastroService.getById(TipoVeiculo.class, 1));
 				if (data != null) {
-					v.setDataLancamento(data);
+					v.setDataLancamento(DateUtils.montarDataInicialParaSQLQuery(data));
 				}
 				
 				if (campos[2] != null && !campos[2].trim().equals("")) {

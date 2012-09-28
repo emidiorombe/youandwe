@@ -383,13 +383,13 @@ public class CadastroService implements Serializable {
 		return lista;
 	}
 
-	public List<Veiculo> buscarVeiculoPorFiltro(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, String sort) throws PromoveException {
+	public List<Veiculo> buscarVeiculoPorFiltro(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, Fabricante fabricante, String sort) throws PromoveException {
 		List<Veiculo> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaHQLQuery(dtInicio); 
 			Date fim = DateUtils.montarDataFinalParaHQLQuery(dtFim); 
 			
-			lista = veiculoDAO.getByFilter(veiculo, init, fim, periodo, sort);
+			lista = veiculoDAO.getByFilter(veiculo, init, fim, periodo, fabricante, sort);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

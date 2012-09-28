@@ -43,6 +43,7 @@ public class VeiculoSearchForm extends BaseForm{
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
 	private ComboBox cmbPeriodo;
+	private ComboBox cmbFabricante;
 	private Button search;
 	private Button export;
 	private Button novaAvaria;
@@ -65,6 +66,27 @@ public class VeiculoSearchForm extends BaseForm{
 		search = new Button("Buscar", new VeiculoSearchListener());
 		export = new Button("Gerar Arquivo", new VeiculoSearchListener());
 		novaAvaria = new Button("Cadastrar Nova Avaria", new VeiculoSearchListener());
+		
+		cmbFabricante = new ComboBox("Fabricante");
+		cmbFabricante.addContainerProperty("label", String.class, null);
+		
+		try {
+			i = cmbFabricante.addItem(new Fabricante());
+			i.getItemProperty("label").setValue("Selecione...");
+			for(Fabricante fab: cadastroService.buscarTodosFabricantes()){
+				i = cmbFabricante.addItem(fab);
+				i.getItemProperty("label").setValue(fab.getNome());
+			}
+		} catch (PromoveException e) {
+			showErrorMessage(this, "Não foi possível buscar os Fabricantes");
+		}
+
+		cmbFabricante.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
+		cmbFabricante.setImmediate(true);
+		cmbFabricante.setNullSelectionAllowed(false);
+		cmbFabricante.setItemCaptionPropertyId("label");
+		//cmbFabricante.setWidth("200px");
+		cmbFabricante.setValue(cmbFabricante.getItemIds().iterator().next());
 		
 		txtDe = new PopupDateField("De");
 		txtDe.setLocale(new Locale("pt", "BR"));
@@ -95,6 +117,7 @@ public class VeiculoSearchForm extends BaseForm{
 
 		createFormBody(new BeanItem<Veiculo>(new Veiculo()));
 		layout.addComponent(this);
+		addField("cmbFabricante", cmbFabricante);
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
 		addField("cmbPeriodo", cmbPeriodo);
@@ -107,7 +130,7 @@ public class VeiculoSearchForm extends BaseForm{
 	public void createFormBody(BeanItem<Veiculo> item) {
 		setItemDataSource(item);
 		setFormFieldFactory(new VeiculoFieldFactory(this, item.getBean().getId() == null));
-		setVisibleItemProperties(new Object[]{"chassi", "modelo", "tipo", "navio"});
+		setVisibleItemProperties(new Object[]{"chassi", "tipo", "navio", "modelo"});
 		
 	}
 	
@@ -165,6 +188,7 @@ public class VeiculoSearchForm extends BaseForm{
 					Date de = txtDe.getValue() != null ? (Date)txtDe.getValue() : null;
 					Date ate = txtAte.getValue() != null ? (Date)txtAte.getValue() : null; 
 					Integer periodo = (Integer)cmbPeriodo.getValue();
+					Fabricante fabricante = (Fabricante)cmbFabricante.getValue();
 					BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
 					
 					if(item.getBean().getChassi() == null || item.getBean().getChassi().isEmpty()) {
@@ -173,7 +197,7 @@ public class VeiculoSearchForm extends BaseForm{
 								throw new IllegalArgumentException("Informe um chassi, navio ou período");
 					}
 					
-					List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate, periodo, "v.chassi");
+					List<Veiculo> list = cadastroService.buscarVeiculoPorFiltro(item.getBean(), de, ate, periodo, fabricante, "v.chassi");
 					
 					if(event.getButton() == search) {
 						view.getTables().getTableVeiculo().filterTable(list);
@@ -242,7 +266,7 @@ public class VeiculoSearchForm extends BaseForm{
 				}catch (PromoveException e) {
 					showErrorMessage(form, "Não foi possível buscar os Modelos");
 				}
-			}else if(propertyId.equals("fabricante")) {
+			/*}else if(propertyId.equals("fabricante")) {
 				try {
 					ComboBox c = new ComboBox("Fabricante");
 					c.addContainerProperty("label", String.class, null);
@@ -268,6 +292,7 @@ public class VeiculoSearchForm extends BaseForm{
 				}catch (PromoveException e) {
 					showErrorMessage(form, "Não foi possível buscar os Fabricantes");
 				}
+			*/
 			}else if(propertyId.equals("tipo")) {
 				ComboBox c = new ComboBox("Tipo de Veículo");
 				c.addContainerProperty("label", String.class, null);
