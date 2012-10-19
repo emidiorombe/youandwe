@@ -57,6 +57,20 @@ public class StringUtilities {
 		return null;
 	}
 
+	public static String removeErrorMessage(String msgErro, String fieldErro) {
+		String msg = msgErro;
+		
+		if (msgErro != null) {
+			String erros[] = msgErro.split(";");
+			for (String erro : erros) {
+				if(erro.startsWith(fieldErro)) {
+					msg.replaceAll(erro + ";", "");
+				}
+			}
+		}
+		return msg;
+	}
+
 	public static String getChassiFromErrorMessage(String msgErro) {
 		return getValueFromErrorMessage(msgErro, "Veiculo");
 	}
