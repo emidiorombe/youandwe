@@ -194,18 +194,18 @@ public class ErroImportAvariaForm extends BaseForm {
 						if (inc.getTipo() == null) {
 							String tipoAvaria = StringUtilities.getValueFromErrorMessage(inc.getMsgErro(), "Tipo");
 							inc.setTipo(tiposDescricao.get(tipoAvaria));
-							if (inc.getTipo() != null) StringUtilities.removeErrorMessage(inc.getMsgErro(), "Tipo");
 						}
+						if (inc.getTipo() != null)
+							inc.setMsgErro(StringUtilities.removeErrorMessage(inc.getMsgErro(), "Tipo"));
 						
 						if (inc.getLocal() == null) {
 							String localAvaria = StringUtilities.getValueFromErrorMessage(inc.getMsgErro(), "Local");
 							inc.setLocal(locaisDescricao.get(localAvaria));
-							if (inc.getLocal() != null) StringUtilities.removeErrorMessage(inc.getMsgErro(), "Local");
 						}
+						if (inc.getLocal() != null)
+							inc.setMsgErro(StringUtilities.removeErrorMessage(inc.getMsgErro(), "Local"));
 						
-						if (inc.getTipo() != null && inc.getLocal() != null) {
-							avariaService.salvarAvariaDeInconsistencias(inc, true);
-						}
+						avariaService.salvarAvariaDeInconsistencias(inc, true);
 					}
 					view.getTable().reloadTable();
 					showSuccessMessage(view, "Inconsistências salvas!");
@@ -226,15 +226,17 @@ public class ErroImportAvariaForm extends BaseForm {
 							String tipoAvaria = StringUtilities.getValueFromErrorMessage(inc.getMsgErro(), "Tipo");
 							inc.setTipo(tiposDescricao.get(tipoAvaria));
 						}
+						if (inc.getTipo() != null)
+							inc.setMsgErro(StringUtilities.removeErrorMessage(inc.getMsgErro(), "Tipo"));
 						
 						if (inc.getLocal() == null) {
 							String localAvaria = StringUtilities.getValueFromErrorMessage(inc.getMsgErro(), "Local");
 							inc.setLocal(locaisDescricao.get(localAvaria));
 						}
+						if (inc.getLocal() != null)
+							inc.setMsgErro(StringUtilities.removeErrorMessage(inc.getMsgErro(), "Local"));
 						
-						if (inc.getTipo() != null && inc.getLocal() != null) {
-							avariaService.salvarAvariaDeInconsistencias(inc, false);
-						}
+						avariaService.salvarAvariaDeInconsistencias(inc, false);
 					}
 					view.getTable().reloadTable();
 					showSuccessMessage(view, "Inconsistências salvas!");

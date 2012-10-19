@@ -488,40 +488,43 @@ public class AvariaService implements Serializable {
 
 	public void salvarAvariaDeInconsistencias(InconsistenciaAvaria inc, Boolean verificaData) throws PromoveException {
 		try {
-			Avaria avaria = inc.getAvaria();
-			List<Veiculo> list = null;
-			String chassi = avaria.getVeiculo() != null ? avaria.getVeiculo().getChassi() : 
-				(inc.getChassiInvalido() != null ? inc.getChassiInvalido() : StringUtilities.getChassiFromErrorMessage(inc.getMsgErro()));
-			
-			if (chassi.contains("000000000")) {
-				chassi = chassi.replace("000000000", "");
-				list = veiculoDAO.getByModeloFZAndData(chassi, avaria.getDataLancamento());
+			if (inc.getLocal() == null || inc.getTipo() == null)  {
+				inconsistenciaAvariaDAO.save(inc);
 			} else {
-				list = veiculoDAO.getByChassi(chassi);
-			}
-			
-			if (list.size() > 0) {
-				if (verificaData && this.buscarAvariaDuplicadaPorData(list, avaria).size() > 0) {
-					inc.setMsgErro("Existe vistoria em outra data!;");
-					inconsistenciaAvariaDAO.save(inc);
+				Avaria avaria = inc.getAvaria();
+				List<Veiculo> list = null;
+				String chassi = avaria.getVeiculo() != null ? avaria.getVeiculo().getChassi() : 
+					(inc.getChassiInvalido() != null ? inc.getChassiInvalido() : StringUtilities.getChassiFromErrorMessage(inc.getMsgErro()));
+				
+				if (chassi.contains("000000000")) {
+					chassi = chassi.replace("000000000", "");
+					list = veiculoDAO.getByModeloFZAndData(chassi, avaria.getDataLancamento());
 				} else {
-					if (buscarAvariaDuplicadaPorFiltros(list, avaria).size() == 0) {
-						avaria.setStatus(this.getById(StatusAvaria.class, 5));
-						avaria.setVeiculo(list.get(0));
-						avariaDAO.save(avaria);
-						List<FotoAvaria> fotos = fotoDAO.getByInconsistencia(inc.getId());
-						for (FotoAvaria foto : fotos) {
-							foto.setAvaria(avaria);
-							fotoDAO.saveWithId(foto);
+					list = veiculoDAO.getByChassi(chassi);
+				}
+				
+				if (list.size() > 0) {
+					if (verificaData && this.buscarAvariaDuplicadaPorData(list, avaria).size() > 0) {
+						inc.setMsgErro("Existe vistoria em outra data!;");
+						inconsistenciaAvariaDAO.save(inc);
+					} else {
+						if (buscarAvariaDuplicadaPorFiltros(list, avaria).size() == 0) {
+							avaria.setStatus(this.getById(StatusAvaria.class, 5));
+							avaria.setVeiculo(list.get(0));
+							avariaDAO.save(avaria);
+							List<FotoAvaria> fotos = fotoDAO.getByInconsistencia(inc.getId());
+							for (FotoAvaria foto : fotos) {
+								foto.setAvaria(avaria);
+								fotoDAO.saveWithId(foto);
+							}
 						}
+						inconsistenciaAvariaDAO.delete(inc);
 					}
-					inconsistenciaAvariaDAO.delete(inc);
 				}
 			}
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
-		
 	}
 
 	public Map<String, List<PieData>> buscarResumo(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, String item, String subitem, Boolean posterior, Boolean cancelados) throws PromoveException {

@@ -188,8 +188,10 @@ public class ExportacaoService implements Serializable {
 			    row.createCell(1).setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(lista.get(i).getDataLancamento()));
 			    row.createCell(2).setCellValue(lista.get(i).getHora());
 			    row.createCell(3).setCellValue(lista.get(i).getOrigem().getDescricao());
-			    row.createCell(4).setCellValue(lista.get(i).getLocal().getDescricao());
-			    row.createCell(5).setCellValue(lista.get(i).getTipo().getDescricao());
+			    if (lista.get(i).getLocal() != null && lista.get(i).getLocal().getDescricao() != null)
+			    	row.createCell(4).setCellValue(lista.get(i).getLocal().getDescricao());
+			    if (lista.get(i).getTipo() != null && lista.get(i).getTipo().getDescricao() != null)
+			    	row.createCell(5).setCellValue(lista.get(i).getTipo().getDescricao());
 			    row.createCell(6).setCellValue(lista.get(i).getExtensao().getDescricao());
 			    if (lista.get(i).getNivel() != null && lista.get(i).getNivel().getNome() != null)
 			    	row.createCell(7).setCellValue(lista.get(i).getNivel().getNome());
