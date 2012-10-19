@@ -52,9 +52,6 @@ public class ImportacaoSinistro {
 				continue;
 			}
 
-			if (chassi.equals("KMHTC61CBCU041049")) System.out.println("Ts " + campos[9].trim());
-			if (chassi.equals("KMHTC61CBCU041049")) System.out.println("Ls " + campos[13].trim());
-			
 			String[] tiposAvaria = campos[9].trim().replaceAll(" \\/ ", " \\| ").split("\\/");
 			String[] locaisAvaria = campos[13].trim().replaceAll(" \\/ ", " \\| ").split("\\/");
 
@@ -68,9 +65,6 @@ public class ImportacaoSinistro {
 					
 					String tipoAvaria = tiposAvaria[cont > tiposAvaria.length - 1 ? tiposAvaria.length - 1 : cont].trim().replaceAll(" \\| ", " \\/ ");
 					String localAvaria = locaisAvaria[cont > locaisAvaria.length - 1 ? locaisAvaria.length - 1 : cont].trim().replaceAll(" \\| ", " \\/ ");
-					
-					if (chassi.equals("KMHTC61CBCU041049")) System.out.println("T " + tipoAvaria);
-					if (chassi.equals("KMHTC61CBCU041049")) System.out.println("L " + localAvaria);
 					
 					//av.setTipo(tiposDescricao.get(campos[9].trim()));
 					av.setTipo(tiposDescricao.get(tipoAvaria));
