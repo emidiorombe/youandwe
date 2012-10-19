@@ -395,7 +395,7 @@ public class AvariaService implements Serializable {
 		return lista;
 	}
 
-	public List<Avaria> buscarAvariaDuplicadaPorData(List<Veiculo> veiculos,	Avaria av) throws PromoveException {
+	public List<Avaria> buscarAvariaDuplicadaPorData(List<Veiculo> veiculos, Avaria av) throws PromoveException {
 		List<Avaria> lista = null;
 		try {
 			lista = avariaDAO.getAvariasDuplicadasPorData(veiculos, av);

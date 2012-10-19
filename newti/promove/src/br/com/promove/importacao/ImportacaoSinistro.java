@@ -45,7 +45,6 @@ public class ImportacaoSinistro {
 		
 		for (String linha : csv) {
 			String[] campos = linha.replaceAll("\r", "; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ").split(";");
-			Avaria av = new Avaria();
 			
 			String chassi = campos[10].trim();
 			
@@ -53,10 +52,14 @@ public class ImportacaoSinistro {
 				continue;
 			}
 
+			if (chassi.equals("KMHTC61CBCU041049")) System.out.println("Ts " + campos[9].trim());
+			if (chassi.equals("KMHTC61CBCU041049")) System.out.println("Ls " + campos[13].trim());
+			
 			String[] tiposAvaria = campos[9].trim().replaceAll(" \\/ ", " \\| ").split("\\/");
 			String[] locaisAvaria = campos[13].trim().replaceAll(" \\/ ", " \\| ").split("\\/");
 
 			for (int cont = 0; cont < (tiposAvaria.length > locaisAvaria.length ? tiposAvaria.length : locaisAvaria.length); cont++) {
+				Avaria av = new Avaria();
 				
 				try {
 					av.setClima(climas.get(new Integer("4")));
@@ -65,6 +68,9 @@ public class ImportacaoSinistro {
 					
 					String tipoAvaria = tiposAvaria[cont > tiposAvaria.length - 1 ? tiposAvaria.length - 1 : cont].trim().replaceAll(" \\| ", " \\/ ");
 					String localAvaria = locaisAvaria[cont > locaisAvaria.length - 1 ? locaisAvaria.length - 1 : cont].trim().replaceAll(" \\| ", " \\/ ");
+					
+					if (chassi.equals("KMHTC61CBCU041049")) System.out.println("T " + tipoAvaria);
+					if (chassi.equals("KMHTC61CBCU041049")) System.out.println("L " + localAvaria);
 					
 					//av.setTipo(tiposDescricao.get(campos[9].trim()));
 					av.setTipo(tiposDescricao.get(tipoAvaria));
@@ -143,7 +149,11 @@ public class ImportacaoSinistro {
 		tiposDescricao = new HashMap<String, TipoAvaria>();
 		List<TipoAvaria> lista = avariaService.buscarTodosTipoAvaria();
 		for (TipoAvaria tipo : lista) {
-			tiposDescricao.put(tipo.getDescricaoSeguradora(), tipo);
+			if (tipo.getDescricaoSeguradora() != null && !tipo.getDescricaoSeguradora().isEmpty()) {
+				for (String descricao : tipo.getDescricaoSeguradora().split(";")) {
+					tiposDescricao.put(descricao, tipo);
+				}
+			}
 		}
 	}
 	
@@ -151,7 +161,11 @@ public class ImportacaoSinistro {
 		locaisDescricao = new HashMap<String, LocalAvaria>();
 		List<LocalAvaria> lista = avariaService.buscarTodosLocaisAvaria();
 		for (LocalAvaria local : lista) {
-			locaisDescricao.put(local.getDescricaoSeguradora(), local);
+			if (local.getDescricaoSeguradora() != null && !local.getDescricaoSeguradora().isEmpty()) {
+				for (String descricao : local.getDescricaoSeguradora().split(";")) {
+					locaisDescricao.put(descricao, local);
+				}
+			}
 		}
 	}
 	
@@ -166,10 +180,10 @@ public class ImportacaoSinistro {
 	private String verificaInconsistencias(Avaria av, String[] campos, String tipoAvaria, String localAvaria) {
 		String msgErro = "";
 		
-		if (av.getTipo() == null)
+		if (av.getTipo() == null || av.getTipo().getCodigo() == null)
 			msgErro += "Tipo " + tipoAvaria + " não existe;";
 		
-		if (av.getLocal() == null)
+		if (av.getLocal() == null || av.getLocal().getCodigo() == null)
 			msgErro += "Local " + localAvaria + " não existe;";
 		
 		return msgErro;

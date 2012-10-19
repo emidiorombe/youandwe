@@ -194,11 +194,13 @@ public class ErroImportAvariaForm extends BaseForm {
 						if (inc.getTipo() == null) {
 							String tipoAvaria = StringUtilities.getValueFromErrorMessage(inc.getMsgErro(), "Tipo");
 							inc.setTipo(tiposDescricao.get(tipoAvaria));
+							if (inc.getTipo() != null) StringUtilities.removeErrorMessage(inc.getMsgErro(), "Tipo");
 						}
 						
 						if (inc.getLocal() == null) {
 							String localAvaria = StringUtilities.getValueFromErrorMessage(inc.getMsgErro(), "Local");
 							inc.setLocal(locaisDescricao.get(localAvaria));
+							if (inc.getLocal() != null) StringUtilities.removeErrorMessage(inc.getMsgErro(), "Local");
 						}
 						
 						if (inc.getTipo() != null && inc.getLocal() != null) {
@@ -394,7 +396,11 @@ public class ErroImportAvariaForm extends BaseForm {
 		tiposDescricao = new HashMap<String, TipoAvaria>();
 		List<TipoAvaria> lista = avariaService.buscarTodosTipoAvaria();
 		for (TipoAvaria tipo : lista) {
-			tiposDescricao.put(tipo.getDescricaoSeguradora(), tipo);
+			if (tipo.getDescricaoSeguradora() != null && !tipo.getDescricaoSeguradora().isEmpty()) {
+				for (String descricao : tipo.getDescricaoSeguradora().split(";")) {
+					tiposDescricao.put(descricao, tipo);
+				}
+			}
 		}
 	}
 	
@@ -402,7 +408,11 @@ public class ErroImportAvariaForm extends BaseForm {
 		locaisDescricao = new HashMap<String, LocalAvaria>();
 		List<LocalAvaria> lista = avariaService.buscarTodosLocaisAvaria();
 		for (LocalAvaria local : lista) {
-			locaisDescricao.put(local.getDescricaoSeguradora(), local);
+			if (local.getDescricaoSeguradora() != null && !local.getDescricaoSeguradora().isEmpty()) {
+				for (String descricao : local.getDescricaoSeguradora().split(";")) {
+					locaisDescricao.put(descricao, local);
+				}
+			}
 		}
 	}
 }
