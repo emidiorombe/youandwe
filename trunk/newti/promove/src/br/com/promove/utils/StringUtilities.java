@@ -64,7 +64,7 @@ public class StringUtilities {
 			String erros[] = msgErro.split(";");
 			for (String erro : erros) {
 				if(erro.startsWith(fieldErro)) {
-					msg.replaceAll(erro + ";", "");
+					msg = msg.replaceAll(erro + ";", "");
 				}
 			}
 		}
