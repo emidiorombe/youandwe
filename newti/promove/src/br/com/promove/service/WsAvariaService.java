@@ -35,7 +35,7 @@ public class WsAvariaService {
 		List<Avaria> avarias = null;
 		
 		try {
-			avarias = avariaDAO.getAvariasPorFiltro(avaria, init, fim, 1, false, false, false, false, false, null, null, null, null);
+			avarias = avariaDAO.getAvariasPorFiltro(avaria, init, fim, 1, false, false, false, false, false, false, null, null, null, null);
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}

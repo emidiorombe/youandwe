@@ -28,7 +28,7 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 		return executeQuery(hql.toString(), 0, Integer.MAX_VALUE);
 	}
 
-	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, Boolean posterior, Boolean cancelados, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante, Usuario user) throws DAOException {
+	public List<Avaria> getAvariasPorFiltro(Avaria av, Date de, Date ate, Integer periodo, Boolean movimentacao, Boolean registradas, Boolean vistoriaFinal, Boolean posterior, Boolean sinistro, Boolean cancelados, OrigemAvaria oriAte, ResponsabilidadeAvaria responsabilidade, Fabricante fabricante, Usuario user) throws DAOException {
 		//if ((oriAte == null || oriAte.getId() == null) &&
 		//		av.getOrigem() != null && av.getOrigem().getId() != null) oriAte = av.getOrigem();
 		//if ((av.getOrigem() == null || av.getOrigem().getId() == null) && 
@@ -143,28 +143,34 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			
 			hql.append(" or ( (select max(av2a.origem.codigo) from Avaria av2a");
 			hql.append(" where av2a.veiculo = av.veiculo");
+			if (!sinistro) hql.append(" and av2a.origem.tipo <> '3'");
 			hql.append(" and av2a.status.id <> 3");
 			hql.append(" and av2a.local = av.local");
 			hql.append(" and av2a.tipo = av.tipo)");
 			hql.append(" = (select max(av3a.origem.codigo) from Avaria av3a");
 			hql.append(" where av3a.veiculo = av.veiculo");
+			if (!sinistro) hql.append(" and av3a.origem.tipo <> '3'");
 			hql.append(" and av3a.status.id <> 3)");
 			
 			hql.append(" and (select max(av2.dataLancamento) from Avaria av2");
 			hql.append(" where av2.veiculo = av.veiculo");
+			if (!sinistro) hql.append(" and av2.origem.tipo <> '3'");
 			hql.append(" and av2.status.id <> 3");
 			hql.append(" and av2.local = av.local");
 			hql.append(" and av2.tipo = av.tipo");
 			hql.append(" and av2.origem.codigo = (select max(av2a.origem.codigo) from Avaria av2a");
 			hql.append(" where av2a.veiculo = av.veiculo");
+			if (!sinistro) hql.append(" and av2a.origem.tipo <> '3'");
 			hql.append(" and av2a.status.id <> 3");
 			hql.append(" and av2a.local = av.local");
 			hql.append(" and av2a.tipo = av.tipo))");
 			hql.append(" = (select max(av3.dataLancamento) from Avaria av3");
 			hql.append(" where av3.veiculo = av.veiculo");
+			if (!sinistro) hql.append(" and av3.origem.tipo <> '3'");
 			hql.append(" and av3.status.id <> 3");
 			hql.append(" and av3.origem.codigo = (select max(av3a.origem.codigo) from Avaria av3a");
 			hql.append(" where av3a.veiculo = av.veiculo");
+			if (!sinistro) hql.append(" and av3a.origem.tipo <> '3'");
 			hql.append(" and av3a.status.id <> 3)) ))");
 		}
 		

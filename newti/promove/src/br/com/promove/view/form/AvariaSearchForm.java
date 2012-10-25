@@ -63,6 +63,7 @@ public class AvariaSearchForm extends BaseForm{
 	private CheckBox chkRegistradas;
 	private CheckBox chkVistoriaFinal;
 	private CheckBox chkPosterior;
+	private CheckBox chkSinistro;
 	private CheckBox chkCancelados;
 	private ComboBox cmbPeriodo;
 	private PromoveApplication app;
@@ -170,6 +171,9 @@ public class AvariaSearchForm extends BaseForm{
 		chkPosterior = new CheckBox();
 		chkPosterior.setCaption("Desconsiderar avarias sem ocorrência na última vistoria");
 		
+		chkSinistro = new CheckBox();
+		chkSinistro.setCaption("Considerar sinistro como última vistoria");
+		
 		chkCancelados = new CheckBox();
 		chkCancelados.setCaption("Considerar avarias canceladas");
 		
@@ -219,13 +223,14 @@ public class AvariaSearchForm extends BaseForm{
 		coluna1.addField("txtAte", txtAte);
 		coluna1.addField("cmbPeriodo", cmbPeriodo);
 		coluna1.addField("chkCancelados", chkCancelados);
+		coluna1.addField("chkVistoriaFinal", chkVistoriaFinal);
 		
 		coluna2.addField("cmbOrigemAte", cmbOrigemAte);
 		coluna2.addField("cmbResponsabilidade", cmbResponsabilidade);
 		coluna2.addField("chkMovimentacao", chkMovimentacao);
 		coluna2.addField("chkRegistradas", chkRegistradas);
-		coluna2.addField("chkVistoriaFinal", chkVistoriaFinal);
 		coluna2.addField("chkPosterior", chkPosterior);
+		coluna2.addField("chkSinistro", chkSinistro);
 		
 		colunas.addComponent(coluna1);
 		colunas.addComponent(coluna2);
@@ -519,6 +524,7 @@ public class AvariaSearchForm extends BaseForm{
 				Boolean registradas = (Boolean)chkRegistradas.getValue();
 				Boolean vistoriaFinal = (Boolean)chkVistoriaFinal.getValue();
 				Boolean posterior = (Boolean)chkPosterior.getValue();
+				Boolean sinistro = (Boolean)chkSinistro.getValue();
 				Boolean cancelados = (Boolean)chkCancelados.getValue();
 				BeanItem<Veiculo> veiculo = (BeanItem<Veiculo>)coluna1.getItemDataSource();
 				BeanItem<Avaria> avaria = (BeanItem<Avaria>)coluna2.getItemDataSource();
@@ -530,7 +536,7 @@ public class AvariaSearchForm extends BaseForm{
 							throw new IllegalArgumentException("Informe um chassi, navio ou período");
 				}
 				
-				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(avaria.getBean(), de, ate, periodo, movimentacao, registradas, vistoriaFinal, posterior, cancelados, oriAte, responsabilidade, fabricante, null);
+				List<Avaria> avarias = avariaService.buscarAvariaPorFiltros(avaria.getBean(), de, ate, periodo, movimentacao, registradas, vistoriaFinal, posterior, sinistro, cancelados, oriAte, responsabilidade, fabricante, null);
 
 				if(event.getButton() == search) {
 					view.getTable().filterTable(avarias);
