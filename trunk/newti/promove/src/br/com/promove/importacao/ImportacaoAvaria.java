@@ -146,7 +146,7 @@ public class ImportacaoAvaria {
 				
 				List<Veiculo> veiculos = null;
 				
-				if(chassi.contains("000000000")) {
+				if(chassi.contains("000000000") || chassi.length() == 8) {
 					chassi = chassi.replace("000000000", "");
 					
 					veiculos = cadastroService.buscarVeiculosPorModeloFZData(chassi, av.getDataLancamento());

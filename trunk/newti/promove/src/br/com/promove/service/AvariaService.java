@@ -496,7 +496,7 @@ public class AvariaService implements Serializable {
 				String chassi = avaria.getVeiculo() != null ? avaria.getVeiculo().getChassi() : 
 					(inc.getChassiInvalido() != null ? inc.getChassiInvalido() : StringUtilities.getChassiFromErrorMessage(inc.getMsgErro()));
 				
-				if (chassi.contains("000000000")) {
+				if (chassi.contains("000000000") || chassi.length() == 8) {
 					chassi = chassi.replace("000000000", "");
 					list = veiculoDAO.getByModeloFZAndData(chassi, avaria.getDataLancamento());
 				} else {
