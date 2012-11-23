@@ -45,7 +45,8 @@ public class ImportacaoTERCA {
 					
 					if (campos[3] != null && !campos[3].trim().equals("")) {
 						String valor = campos[3];
-						String separadorDecimal = valor.substring(valor.length() - 3, valor.length() - 2);
+						String separadorDecimal = "";
+						if (valor.length() >= 3) separadorDecimal = valor.substring(valor.length() - 3, valor.length() - 2);
 						if (separadorDecimal.equals(",")) {
 							valor = valor.replaceAll("\\.", "");
 							valor = valor.replaceAll(",", "\\.");
