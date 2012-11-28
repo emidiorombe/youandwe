@@ -50,6 +50,9 @@ public class InconsistenciaVeiculo implements Serializable{
 
 	private Double valorMercadoria;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataLancamento = new Date();
+	
 	@Transient
 	private Veiculo veiculo;
 	
@@ -62,8 +65,9 @@ public class InconsistenciaVeiculo implements Serializable{
 		this.codigoInterno = v.getCodigoInterno();
 		this.tipo = v.getTipo();
 		this.navio = v.getNavio();
+		this.dataLancamento = v.getDataLancamento();
+		this.valorMercadoria = v.getValorMercadoria();
 		this.msgErro = msgErro;
-		
 	}
 	
 	
@@ -184,6 +188,14 @@ public class InconsistenciaVeiculo implements Serializable{
 		return valorMercadoria;
 	}
 
+	public void setDataLancamento(Date dataLancamento) {
+		this.dataLancamento = dataLancamento;
+	}
+
+	public Date getDataLancamento() {
+		return dataLancamento;
+	}
+
 	public Veiculo getVeiculo() {
 		if(this.veiculo == null) {
 			Veiculo v = new Veiculo();
@@ -193,10 +205,11 @@ public class InconsistenciaVeiculo implements Serializable{
 			v.setChassi(chassi);
 			v.setChassiOriginal(chassiOriginal);
 			v.setCodigoInterno(codigoInterno);
-			v.setDataCadastro(dataCadastro);
+			//v.setDataCadastro(dataCadastro);
 			v.setTipo(tipo);
 			v.setNavio(navio);
 			v.setValorMercadoria(valorMercadoria);
+			v.setDataLancamento(dataLancamento);
 			this.veiculo = v;
 		}
 		return veiculo;
