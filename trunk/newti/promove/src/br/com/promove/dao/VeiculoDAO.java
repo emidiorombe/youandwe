@@ -149,7 +149,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		return lista;
 	}
 
-	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim) throws DAOException {
+	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, Boolean vistoriaFinal) throws DAOException {
 		//if ((oriFim == null || oriFim.getId() == null) &&
 		//		oriInicio != null && oriInicio.getId() != null) oriFim = oriInicio;
 		//if ((oriInicio == null || oriInicio.getId() == null) &&
@@ -190,7 +190,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			hql.append(" and v.tipo = :txttipo");
 			addParamToQuery("txttipo", veiculo.getTipo());
 		}
-		
+
 		if(veiculo.getNavio() != null && !veiculo.getNavio().equals("")) {
 			hql.append(" and v.navio = :txtnavio");
 			addParamToQuery("txtnavio", veiculo.getNavio().substring(0, veiculo.getNavio().length() - 13));
@@ -204,6 +204,14 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 				e.printStackTrace();
 				throw new DAOException("Data do navio inválida");
 			}
+		}
+		
+		if (vistoriaFinal && oriFim != null && oriFim.getId() != null) {
+			hql.append(" and exists (select av2 from Avaria av2");
+			hql.append(" where av2.veiculo = v");
+			hql.append(" and av2.status.id <> 3");
+			hql.append(" and av2.origem = :orgFinal)");
+			addParamToQuery("orgFinal", oriFim);
 		}
 		
 		hql.append(" order by v.chassi");
@@ -221,8 +229,8 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		hql.append(" where v.tipo.id <> 9");
 		
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
-			if (periodo == 3) hql.append(" and v.dataLancamento between :dtIni and :dtFim");
-			if (periodo == 4) hql.append(" and v.dataCadastro between :dtIni and :dtFim");
+			if (periodo == 1) hql.append(" and v.dataLancamento between :dtIni and :dtFim");
+			if (periodo == 2) hql.append(" and v.dataCadastro between :dtIni and :dtFim");
 			addParamToQuery("dtIni", dtInicio);
 			addParamToQuery("dtFim", dtFim);
 		}

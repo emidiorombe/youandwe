@@ -20,7 +20,7 @@ public class AuditoriaVistoriasView extends SplitPanel {
 		form.setView(this);
 		setFirstComponent(form.getLayout());
 		setSecondComponent(tables);
-		setSplitPosition(50);
+		setSplitPosition(55);
 		
 	}
 	

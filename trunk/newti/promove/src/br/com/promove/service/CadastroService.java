@@ -513,13 +513,13 @@ public class CadastroService implements Serializable {
 		return lista;
 	}
 
-	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate) throws PromoveException {
+	public List<Veiculo> buscarVeiculosAuditoria(Veiculo veiculo, Date de, Date ate, Integer periodo, OrigemAvaria oride, OrigemAvaria oriate, Boolean vistoriaFinal) throws PromoveException {
 		List<Veiculo> lista = null;
 		try {
 			Date init = DateUtils.montarDataInicialParaHQLQuery(de); 
 			Date fim = DateUtils.montarDataFinalParaHQLQuery(ate); 
 			
-			lista = veiculoDAO.buscarVeiculosAuditoria(veiculo, init, fim, periodo, oride, oriate);
+			lista = veiculoDAO.buscarVeiculosAuditoria(veiculo, init, fim, periodo, oride, oriate, vistoriaFinal);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}

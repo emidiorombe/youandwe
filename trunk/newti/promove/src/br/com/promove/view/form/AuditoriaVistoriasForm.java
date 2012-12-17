@@ -23,6 +23,7 @@ import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
@@ -47,6 +48,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 	private ComboBox cmbPeriodo;
 	private PopupDateField txtDe;
 	private PopupDateField txtAte;
+	private CheckBox chkVistoriaFinal;
 	private PromoveApplication app;
 	
 	public AuditoriaVistoriasForm(PromoveApplication app) {
@@ -139,6 +141,9 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		cmbPeriodo.setWidth("200px");
 		cmbPeriodo.setValue(cmbPeriodo.getItemIds().iterator().next());
 
+		chkVistoriaFinal = new CheckBox();
+		chkVistoriaFinal.setCaption("Considerar como base as vistorias no local final");
+		
 		createFormBody(new BeanItem<Veiculo>(new Veiculo()));
 		layout.addComponent(this);
 		addField("cmbOrigemDe", cmbOrigemDe);
@@ -146,6 +151,7 @@ public class AuditoriaVistoriasForm extends BaseForm{
 		addField("txtDe", txtDe);
 		addField("txtAte", txtAte);
 		addField("cmbPeriodo", cmbPeriodo);
+		addField("chkVistoriaFinal", chkVistoriaFinal);
 		layout.addComponent(createFooter());
 		layout.setSpacing(true);
 		layout.setMargin(false, true, false, true);
@@ -267,13 +273,14 @@ public class AuditoriaVistoriasForm extends BaseForm{
 				Integer periodo = (Integer)cmbPeriodo.getValue();
 				OrigemAvaria oride = (OrigemAvaria)cmbOrigemDe.getValue();
 				OrigemAvaria oriate = (OrigemAvaria)cmbOrigemAte.getValue();
+				Boolean vistoriaFinal = (Boolean)chkVistoriaFinal.getValue();
 				BeanItem<Veiculo> item = (BeanItem<Veiculo>)getItemDataSource();
 				
 				if(de == null || ate == null)
 					if(item.getBean().getNavio().isEmpty())
 						throw new IllegalArgumentException("Informe um navio ou período");
 				
-				List<Veiculo> veiculos = cadastroService.buscarVeiculosAuditoria(item.getBean(), de, ate, periodo, oride, oriate);
+				List<Veiculo> veiculos = cadastroService.buscarVeiculosAuditoria(item.getBean(), de, ate, periodo, oride, oriate, vistoriaFinal);
 				
 				if(event.getButton() == search) {
 					view.getTables().getTableVeiculo().filterTable(veiculos);
