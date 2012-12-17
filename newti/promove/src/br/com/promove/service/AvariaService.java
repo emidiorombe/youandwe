@@ -516,6 +516,7 @@ public class AvariaService implements Serializable {
 							for (FotoAvaria foto : fotos) {
 								foto.setAvaria(avaria);
 								fotoDAO.saveWithId(foto);
+								fotoDAO.flushSession();
 							}
 						}
 						inconsistenciaAvariaDAO.delete(inc);
