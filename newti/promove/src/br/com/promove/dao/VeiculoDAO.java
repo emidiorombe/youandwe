@@ -191,6 +191,14 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			addParamToQuery("txttipo", veiculo.getTipo());
 		}
 
+		if (vistoriaFinal && oriFim != null && oriFim.getId() != null) {
+			hql.append(" and exists (select av2 from Avaria av2");
+			hql.append(" where av2.veiculo = v");
+			hql.append(" and av2.status.id <> 3");
+			hql.append(" and av2.origem = :orgFinal)");
+			addParamToQuery("orgFinal", oriFim);
+		}
+		
 		if(veiculo.getNavio() != null && !veiculo.getNavio().equals("")) {
 			hql.append(" and v.navio = :txtnavio");
 			addParamToQuery("txtnavio", veiculo.getNavio().substring(0, veiculo.getNavio().length() - 13));
@@ -204,14 +212,6 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 				e.printStackTrace();
 				throw new DAOException("Data do navio inválida");
 			}
-		}
-		
-		if (vistoriaFinal && oriFim != null && oriFim.getId() != null) {
-			hql.append(" and exists (select av2 from Avaria av2");
-			hql.append(" where av2.veiculo = v");
-			hql.append(" and av2.status.id <> 3");
-			hql.append(" and av2.origem = :orgFinal)");
-			addParamToQuery("orgFinal", oriFim);
 		}
 		
 		hql.append(" order by v.chassi");
@@ -233,6 +233,14 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			if (periodo == 2) hql.append(" and v.dataCadastro between :dtIni and :dtFim");
 			addParamToQuery("dtIni", dtInicio);
 			addParamToQuery("dtFim", dtFim);
+		}
+		
+		if (vistoriaFinal && oriFim != null && oriFim.getId() != null) {
+			hql.append(" and exists (select av2 from Avaria av2");
+			hql.append(" where av2.veiculo = v");
+			hql.append(" and av2.status.id <> 3");
+			hql.append(" and av2.origem = :orgFinal)");
+			addParamToQuery("orgFinal", oriFim);
 		}
 		
 		if(veiculo.getTipo() != null && veiculo.getTipo().getId() != null) {
