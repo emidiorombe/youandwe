@@ -562,11 +562,15 @@ public class AvariaService implements Serializable {
 	}
 
 	public String listarAvariasPT(Date date) throws PromoveException {
+		
+		Date init = DateUtils.montarDataInicialParaHQLQuery(date); 
+		Date fim = DateUtils.montarDataFinalParaHQLQuery(date); 
+		
 		List<Avaria> lista = null;
 		try {
 			Avaria av = new Avaria();
 			av.setNivel(this.getById(NivelAvaria.class, 4));
-			lista = avariaDAO.getAvariasPorFiltro(av, date, date, 2, false, false, false, false, false, false, null, null, null, null);
+			lista = avariaDAO.getAvariasPorFiltro(av, init, fim, 2, false, false, false, false, false, false, null, null, null, null);
 		} catch (DAOException e) {
 			throw new PromoveException(e);
 		}
