@@ -157,6 +157,15 @@ public class ImportacaoAvaria {
 				//Se não existir o veículo, gravar a inconsistência
 				if(veiculos.size() == 0) {
 					msgErro += "Veiculo " + chassi + " não existe!;";
+				} else {
+					av.setVeiculo(veiculos.get(0));
+					
+					if(avariaService.buscarAvariaDuplicadaPorData(veiculos, av).size() > 0) {
+						msgErro += "Existe vistoria em outra data!;";
+					}
+				}
+				
+				if (!msgErro.isEmpty()) {
 					InconsistenciaAvaria inc = avariaService.salvarInconsistenciaImportAvaria(av, msgErro, node_av);
 					
 					Element node_fotos = ((Element)node_av).element("fotos");
@@ -170,17 +179,9 @@ public class ImportacaoAvaria {
 						avariaService.salvarFotoAvaria(foto, true);
 					}
 					
-				}else {
-					av.setVeiculo(veiculos.get(0));
+					//throw new Exception(msgErro);
 					
-					if (!msgErro.isEmpty()) {
-						throw new Exception(msgErro);
-					}
-					
-					if(avariaService.buscarAvariaDuplicadaPorData(veiculos, av).size() > 0) {
-						throw new Exception("Existe vistoria em outra data!;");
-					}
-					
+				} else {
 					if(avariaService.buscarAvariaDuplicadaPorFiltros(veiculos, av).size() > 0) {
 						//Ja existe essa avaria
 						continue;
