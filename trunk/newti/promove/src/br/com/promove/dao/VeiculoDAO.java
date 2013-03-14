@@ -229,7 +229,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		hql.append(" where v.tipo.id <> 9");
 		
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
-			if (periodo == 1) hql.append(" and v.dataLancamento between :dtIni and :dtFim");
+			if (periodo == 3) hql.append(" and v.dataLancamento between :dtIni and :dtFim");
 			if (periodo == 2) hql.append(" and v.dataCadastro between :dtIni and :dtFim");
 			addParamToQuery("dtIni", dtInicio);
 			addParamToQuery("dtFim", dtFim);
