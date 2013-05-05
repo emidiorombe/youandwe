@@ -143,34 +143,40 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			
 			hql.append(" or ( (select max(av2a.origem.codigo) from Avaria av2a");
 			hql.append(" where av2a.veiculo = av.veiculo");
-			if (!sinistro) hql.append(" and av2a.origem.tipo <> '3'");
+			//if (!sinistro) 
+			hql.append(" and av2a.origem.tipo <> '3'");
 			hql.append(" and av2a.status.id <> 3");
 			hql.append(" and av2a.local = av.local");
 			hql.append(" and av2a.tipo = av.tipo)");
 			hql.append(" = (select max(av3a.origem.codigo) from Avaria av3a");
 			hql.append(" where av3a.veiculo = av.veiculo");
-			if (!sinistro) hql.append(" and av3a.origem.tipo <> '3'");
+			//if (!sinistro) 
+			hql.append(" and av3a.origem.tipo <> '3'");
 			hql.append(" and av3a.status.id <> 3)");
 			
 			hql.append(" and (select max(av2.dataLancamento) from Avaria av2");
 			hql.append(" where av2.veiculo = av.veiculo");
-			if (!sinistro) hql.append(" and av2.origem.tipo <> '3'");
+			//if (!sinistro) 
+			hql.append(" and av2.origem.tipo <> '3'");
 			hql.append(" and av2.status.id <> 3");
 			hql.append(" and av2.local = av.local");
 			hql.append(" and av2.tipo = av.tipo");
 			hql.append(" and av2.origem.codigo = (select max(av2a.origem.codigo) from Avaria av2a");
 			hql.append(" where av2a.veiculo = av.veiculo");
-			if (!sinistro) hql.append(" and av2a.origem.tipo <> '3'");
+			//if (!sinistro) 
+			hql.append(" and av2a.origem.tipo <> '3'");
 			hql.append(" and av2a.status.id <> 3");
 			hql.append(" and av2a.local = av.local");
 			hql.append(" and av2a.tipo = av.tipo))");
 			hql.append(" = (select max(av3.dataLancamento) from Avaria av3");
 			hql.append(" where av3.veiculo = av.veiculo");
-			if (!sinistro) hql.append(" and av3.origem.tipo <> '3'");
+			//if (!sinistro) 
+			hql.append(" and av3.origem.tipo <> '3'");
 			hql.append(" and av3.status.id <> 3");
 			hql.append(" and av3.origem.codigo = (select max(av3a.origem.codigo) from Avaria av3a");
 			hql.append(" where av3a.veiculo = av.veiculo");
-			if (!sinistro) hql.append(" and av3a.origem.tipo <> '3'");
+			//if (!sinistro) 
+			hql.append(" and av3a.origem.tipo <> '3'");
 			hql.append(" and av3a.status.id <> 3)) ))");
 		}
 		
@@ -223,6 +229,13 @@ public class AvariaDAO extends BaseDAO<Integer, Avaria>{
 			hql.append(" and av2.origem.codigo = ori.codigo) ))");
 		}
 
+		if(sinistro) {
+			hql.append(" and exists (select av2 from Avaria av2");
+			hql.append(" where av2.veiculo = av.veiculo");
+			hql.append(" and av2.status.id <> 3");
+			hql.append(" and av2.origem.tipo = '3')");
+		}
+		
 		//hql.append(" order by av.origem.codigo, av.dataLancamento");
 		hql.append(" order by av.dataLancamento, av.origem.codigo");
 		return executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);

@@ -67,7 +67,7 @@ public class CadastrosBasicosExport {
 
 	private static void createLocalAvaria(Element root, List<LocalAvaria> list) {
 		for (LocalAvaria loc : list) {
-			if (loc.getCodigo() != 300) {
+			if (loc.getCodigo() != 300 && loc.getCodigo() != 1000) {
 				//TODO remover 300 fixo
 				Element el_local = root.addElement("local_avaria"); // peca
 				el_local.addAttribute("codigo", loc.getCodigo().toString());
@@ -95,7 +95,8 @@ public class CadastrosBasicosExport {
 
 	private static void createTipoAvaria(Element root, List<TipoAvaria> list) { 
 		for (TipoAvaria tipo : list) {
-			if (tipo.getMovimentacao() == false) {
+			//if (tipo.getMovimentacao() == false) {
+			if (tipo.getCodigo() != 300 && tipo.getCodigo() != 1000) {
 				Element el_tipo = root.addElement("tipo_avaria");
 				el_tipo.addAttribute("codigo", tipo.getCodigo().toString());
 				el_tipo.addElement("descricao").addText(tipo.getDescricao());

@@ -172,7 +172,8 @@ public class AvariaSearchForm extends BaseForm{
 		chkPosterior.setCaption("Desconsiderar avarias sem ocorrência na última vistoria");
 		
 		chkSinistro = new CheckBox();
-		chkSinistro.setCaption("Considerar sinistro como última vistoria");
+		//chkSinistro.setCaption("Considerar sinistro como última vistoria");
+		chkSinistro.setCaption("Considerar somente sinistros");
 		
 		chkCancelados = new CheckBox();
 		chkCancelados.setCaption("Considerar avarias canceladas");
