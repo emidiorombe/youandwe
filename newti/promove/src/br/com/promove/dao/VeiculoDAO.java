@@ -171,34 +171,23 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		
 		List<OrigemAvaria> listaOr = executeQuery(hql.toString(), paramsToQuery, 0, Integer.MAX_VALUE);
 
-		for (OrigemAvaria or : listaOr) {
-			origens.append(or.getDescricao() + ";");
-		}
-
 		hql = new StringBuilder();
 		hql.append("select v from Veiculo v");
 		hql.append(" where v.tipo.id <> 9");
 		hql.append(" and not exists (select av2 from Avaria av2");
 		hql.append(" where av2.veiculo = v)");
 		if(dtInicio != null && !dtInicio.equals("") && dtFim != null && !dtFim.equals("")) {
-			hql.append(" and v.dataCadastro between :dtIni and :dtFim");
+			if (periodo == 3) hql.append(" and v.dataLancamento between :dtIni and :dtFim");
+			if (periodo == 4) hql.append(" and v.dataCadastro between :dtIni and :dtFim");
 			addParamToQuery("dtIni", dtInicio);
 			addParamToQuery("dtFim", dtFim);
 		}
-		
+
 		if(veiculo.getTipo() != null && veiculo.getTipo().getId() != null) {
 			hql.append(" and v.tipo = :txttipo");
 			addParamToQuery("txttipo", veiculo.getTipo());
 		}
 
-		if (vistoriaFinal && oriFim != null && oriFim.getId() != null) {
-			hql.append(" and exists (select av2 from Avaria av2");
-			hql.append(" where av2.veiculo = v");
-			hql.append(" and av2.status.id <> 3");
-			hql.append(" and av2.origem = :orgFinal)");
-			addParamToQuery("orgFinal", oriFim);
-		}
-		
 		if(veiculo.getNavio() != null && !veiculo.getNavio().equals("")) {
 			hql.append(" and v.navio = :txtnavio");
 			addParamToQuery("txtnavio", veiculo.getNavio().substring(0, veiculo.getNavio().length() - 13));
@@ -213,6 +202,30 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 				throw new DAOException("Data do navio inválida");
 			}
 		}
+
+		hql.append(" and (");
+
+		for (OrigemAvaria or : listaOr) {
+			origens.append(or.getDescricao() + ";");
+
+			if (!vistoriaFinal || oriFim.equals(or)) {
+				hql.append(" or not exists (select av2 from Avaria av2");
+				hql.append(" where av2.veiculo = v");
+				hql.append(" and av2.status.id <> 3");
+				hql.append(" and av2.origem = :org" + or.getId().toString() + ")");
+				addParamToQuery("org" + or.getId().toString(), or);
+			}
+		}
+
+		hql.append(")");
+		
+		if (vistoriaFinal && oriFim != null && oriFim.getId() != null) {
+			hql.append(" and exists (select av2 from Avaria av2");
+			hql.append(" where av2.veiculo = v");
+			hql.append(" and av2.status.id <> 3");
+			hql.append(" and av2.origem = :orgFinal)");
+			addParamToQuery("orgFinal", oriFim);
+		}
 		
 		hql.append(" order by v.chassi");
 
@@ -221,9 +234,11 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		
 		for (Veiculo ve : listaVe) {
 			ve.setOrigensfaltantes(origens.toString());
-			lista.add(ve);
+			//lista.add(ve);
+			
 		}
 		
+		/*
 		hql = new StringBuilder();
 		hql.append("select av from Avaria av inner join fetch av.veiculo v");
 		hql.append(" where v.tipo.id <> 9");
@@ -269,7 +284,7 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 		
 		Veiculo ve = null;
 		
-		for (Avaria av : listaAv) {
+		for (Avaria av : listaVe) {
 			if (ve == null || !ve.equals(av.getVeiculo())) {
 				if (ve != null && !ve.getOrigensfaltantes().isEmpty()) lista.add(ve);  
 				ve = av.getVeiculo();
@@ -278,8 +293,9 @@ public class VeiculoDAO extends BaseDAO<Integer, Veiculo>{
 			ve.setOrigensfaltantes(ve.getOrigensfaltantes().replaceAll(av.getOrigem().getDescricao()+";", ""));
 		}
 		if (ve != null && !ve.getOrigensfaltantes().isEmpty()) lista.add(ve);
+		*/
 		
-		return lista;
+		return listaVe;
 	}
 
 	public Map<String, List<PieData>> buscarAnaliseResultado(Veiculo veiculo, Date dtInicio, Date dtFim, Integer periodo, OrigemAvaria oriInicio, OrigemAvaria oriFim, String item, Boolean vistoriaFinal, Boolean posterior, Boolean cancelados) throws DAOException {

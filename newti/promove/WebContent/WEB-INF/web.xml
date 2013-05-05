@@ -38,7 +38,7 @@
 	
 	<context-param>
 		<param-name>ctrc_ws_url</param-name>
-		<param-value>http://200.102.250.27:8088/ctrcws/ws/ctrc/por-data</param-value>
+		<param-value>http://187.53.243.152:8088/ctrcws/ws/ctrc/por-data</param-value>
 	</context-param>
 	
 	<context-param>
